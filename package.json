@@ -1,0 +1,23 @@
+{
+  "name": "inaturalist_api",
+  "version": "0.1.0",
+  "description": "inaturalist_api",
+  "main": "app.js",
+  "scripts": {
+    "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec --recursive"
+  },
+  "keywords": [
+    "elasticmaps"
+  ],
+  "author": "Patrick Leary <patrick.r.leary@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "elasticmaps": "~0.1.0",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.4",
+    "chai": "^2.3.0",
+    "istanbul": "^0.3.14"
+  }
+}
