@@ -1,5 +1,5 @@
 var expect = require( "chai" ).expect,
-    config = require( "../config" ),
+    config = require( "../config_example" ),
     InaturalistAPI = require( "../lib/inaturalist_api" ),
     req;
 
@@ -10,6 +10,7 @@ function stubRequest( ) {
 describe( "InaturalistAPI", function( ) {
   beforeEach( function( ) {
     stubReq = stubRequest( );
+    global.config = config;
   });
 
   describe( "filterDateRange", function( ) {
@@ -84,7 +85,7 @@ describe( "InaturalistAPI", function( ) {
       InaturalistAPI.filterPlace( stubReq, { place_id: 66 } );
       expect( stubReq.query.filtered.filter[0].geo_shape ).to.eql({
          _cache: true, geojson: { indexed_shape: { id: 66,
-          type: "place", index: config.elasticsearch.placeIndex,
+          type: "place", index: global.config.elasticsearch.placeIndex,
           path: "geometry_geojson" } } });
     });
 

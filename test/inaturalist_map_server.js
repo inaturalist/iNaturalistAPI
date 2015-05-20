@@ -1,5 +1,4 @@
 var expect = require( "chai" ).expect,
-    config = require( "../config" ),
     MapServer = require( "../lib/inaturalist_map_server" ),
     MapStyles = require( "../lib/inaturalist_map_styles" ),
     req;
