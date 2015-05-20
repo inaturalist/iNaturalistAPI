@@ -1,23 +1,30 @@
 {
   "name": "inaturalist_api",
   "version": "0.1.0",
-  "description": "inaturalist_api",
+  "description": "Node.js API for iNaturalist.org",
   "main": "app.js",
   "scripts": {
-    "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec --recursive"
+    "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec",
+    "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/inaturalist/iNaturalistAPI.git"
   },
   "keywords": [
-    "elasticmaps"
+    "inaturalist"
   ],
   "author": "Patrick Leary <patrick.r.leary@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "elasticmaps": "~0.1.0",
+    "elasticmaps": "~0.1.1",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
     "mocha": "^2.2.4",
     "chai": "^2.3.0",
-    "istanbul": "^0.3.14"
+    "istanbul": "^0.3.14",
+    "coveralls": "^2.11.2",
+    "mocha-lcov-reporter": "~0.0.2"
   }
 }

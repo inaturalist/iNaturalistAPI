@@ -2,6 +2,7 @@ iNaturalistAPI
 ==============
 
 [![Build Status](https://travis-ci.org/inaturalist/iNaturalistAPI.svg?branch=master)](https://travis-ci.org/inaturalist/iNaturalistAPI)
+[![Coverage Status](https://coveralls.io/repos/inaturalist/iNaturalistAPI/badge.svg?branch=master)](https://coveralls.io/r/inaturalist/iNaturalistAPI?branch=master)
 
 A Node.js map tile and data API for the iNaturalist.org website
 
