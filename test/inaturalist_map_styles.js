@@ -4,7 +4,7 @@ var expect = require( "chai" ).expect,
 describe( "InaturalistMapStyles", function( ) {
   describe( "heatmap", function( ) {
     it( "returns a style with the right name", function( ) {
-      expect( MapStyles.geogrid( ) ).to.include( "Style name='style'" );
+      expect( MapStyles.heatmap( ) ).to.include( "Style name='style'" );
     });
 
     it( "uses a heatmap styled colorize-alpha filter", function( ) {
@@ -13,12 +13,6 @@ describe( "InaturalistMapStyles", function( ) {
 
     it( "allows custom colors to be specified", function( ) {
       expect( MapStyles.heatmap( "purple" ) ).to.include( "purple" );
-    });
-  });
-
-  describe( "geogrid", function( ) {
-    it( "returns a style with the right name", function( ) {
-      expect( MapStyles.geogrid( ) ).to.include( "Style name='style'" );
     });
   });
 

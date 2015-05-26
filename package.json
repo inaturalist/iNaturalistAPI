@@ -1,6 +1,6 @@
 {
   "name": "inaturalist_api",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Node.js API for iNaturalist.org",
   "main": "app.js",
   "scripts": {
@@ -17,7 +17,7 @@
   "author": "Patrick Leary <patrick.r.leary@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "elasticmaps": "~0.1.1",
+    "elasticmaps": "~0.1.2",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
