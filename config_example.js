@@ -5,4 +5,4 @@ module.exports = {
     placeIndex: "places",
     geoPointField: "location"
   }
-}
+};
