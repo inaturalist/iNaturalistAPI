@@ -34,8 +34,9 @@ describe( "InaturalistAPI", function( ) {
       MapServer.prepareQuery( stubReq, function( ) {
         expect( stubReq.elastic_query.size ).to.eql( 0 );
         expect( stubReq.elastic_query.aggregations.zoom1 ).to.eql({
-          aggs: { geohash: { top_hits: { _source: { include: [
-            "id", "location", "taxon.iconic_taxon_id", "captive", "quality_grade" ] },
+          aggs: { geohash: { top_hits: { _source: false,
+            fielddata_fields: [
+            "id", "location", "taxon.iconic_taxon_id", "captive", "quality_grade" ],
             size: 1, sort: { id: { order: "desc" } } } } },
           geohash_grid: { field: "location", precision: 3, size: 50000 }
         });
@@ -48,8 +49,9 @@ describe( "InaturalistAPI", function( ) {
       MapServer.prepareQuery( stubReq, function( ) {
         expect( stubReq.elastic_query.size ).to.eql( 0 );
         expect( stubReq.elastic_query.aggregations.zoom1 ).to.eql({
-          aggs: { geohash: { top_hits: { _source: { include: [
-            "id", "location", "taxon.iconic_taxon_id", "captive", "quality_grade" ] },
+          aggs: { geohash: { top_hits: { _source: false,
+            fielddata_fields: [
+            "id", "location", "taxon.iconic_taxon_id", "captive", "quality_grade" ],
             size: 1, sort: { id: { order: "desc" } } } } },
           geohash_grid: { field: "location", precision: 3, size: 50000 }
         });
@@ -84,7 +86,7 @@ describe( "InaturalistAPI", function( ) {
     it( "can set the heatmap style", function( done ) {
       stubReq.params.style = "heatmap";
       MapServer.prepareStyle( stubReq, function( err, req ) {
-        expect( stubReq.style ).to.eql( MapStyles.heatmap( ) );
+        expect( stubReq.style ).to.eql( MapStyles.colorHeatmap( ) );
         done( );
       });
     });

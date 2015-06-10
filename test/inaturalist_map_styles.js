@@ -8,11 +8,17 @@ describe( "InaturalistMapStyles", function( ) {
     });
 
     it( "uses a heatmap styled colorize-alpha filter", function( ) {
-      expect( MapStyles.heatmap( ) ).to.include( "orange, red" );
+      expect( MapStyles.heatmap( ) ).to.include( "orange 0.97, red 0.99" );
+    });
+  });
+
+  describe( "colorHeatmap", function( ) {
+    it( "defaults to gray", function( ) {
+      expect( MapStyles.colorHeatmap( ) ).to.include( "#6E6E6E" );
     });
 
-    it( "allows custom colors to be specified", function( ) {
-      expect( MapStyles.heatmap( "purple" ) ).to.include( "purple" );
+    it( "uses a heatmap styled colorize-alpha filter", function( ) {
+      expect( MapStyles.colorHeatmap( "#555555") ).to.include( "#555555" );
     });
   });
 

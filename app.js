@@ -4,6 +4,7 @@ var ElasticMapper = require( "elasticmaps" ),
     config = require( "./config" );
 
 var server = ElasticMapper.server( _.extend( config, {
+  beforePrepareQuery: InaturalistMapserver.beforePrepareQuery,
   prepareQuery: InaturalistMapserver.prepareQuery,
   prepareStyle: InaturalistMapserver.prepareStyle
 }));
