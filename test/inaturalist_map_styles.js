@@ -12,13 +12,13 @@ describe( "InaturalistMapStyles", function( ) {
     });
   });
 
-  describe( "colorHeatmap", function( ) {
+  describe( "coloredPoints", function( ) {
     it( "defaults to gray", function( ) {
-      expect( MapStyles.colorHeatmap( ) ).to.include( "#6E6E6E" );
+      expect( MapStyles.coloredPoints( ) ).to.include( "#6E6E6E" );
     });
 
     it( "uses a heatmap styled colorize-alpha filter", function( ) {
-      expect( MapStyles.colorHeatmap( "#555555") ).to.include( "#555555" );
+      expect( MapStyles.coloredPoints( "#555555") ).to.include( "#555555" );
     });
   });
 

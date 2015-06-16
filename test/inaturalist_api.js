@@ -83,10 +83,8 @@ describe( "InaturalistAPI", function( ) {
   describe( "filterPlace", function( ) {
     it( "filters by place geometry", function( ) {
       InaturalistAPI.filterPlace( stubReq, { place_id: 66 } );
-      expect( stubReq.query.filtered.filter[0].geo_shape ).to.eql({
-         _cache: true, geojson: { indexed_shape: { id: 66,
-          type: "place", index: global.config.elasticsearch.placeIndex,
-          path: "geometry_geojson" } } });
+      expect( stubReq.query.filtered.filter[0] ).to.eql(
+        { term: { "place_ids": 66 } });
     });
 
     it( "does nothing without a place_id", function( ) {

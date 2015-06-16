@@ -13,24 +13,8 @@ describe( "InaturalistAPI", function( ) {
   });
 
   describe( "prepareQuery", function( ) {
-    it( "adds a proper elastic_query for points", function( done ) {
-      stubReq.params.style = "points";
-      MapServer.prepareQuery( stubReq, function( ) {
-        expect( stubReq.elastic_query ).to.eql({
-          sort: { id: "desc" },
-          fields: [ "id", "location", "taxon.iconic_taxon_id",
-            "captive", "quality_grade" ],
-          query: { filtered: {
-            query: { match: { mappable: true } },
-            filter: [ { not: { exists: { field: "private_location" } } } ] } },
-          size: 20000
-        });
-        done( );
-      });
-    });
-
-    it( "adds a proper elastic_query for geohashes", function( done ) {
-      stubReq.params.style = "geohash";
+    it( "adds a proper elastic_query for summaries", function( done ) {
+      stubReq.params.style = "summary";
       MapServer.prepareQuery( stubReq, function( ) {
         expect( stubReq.elastic_query.size ).to.eql( 0 );
         expect( stubReq.elastic_query.aggregations.zoom1 ).to.eql({
@@ -86,7 +70,7 @@ describe( "InaturalistAPI", function( ) {
     it( "can set the heatmap style", function( done ) {
       stubReq.params.style = "heatmap";
       MapServer.prepareStyle( stubReq, function( err, req ) {
-        expect( stubReq.style ).to.eql( MapStyles.colorHeatmap( ) );
+        expect( stubReq.style ).to.eql( MapStyles.heatmap( ) );
         done( );
       });
     });
