@@ -96,8 +96,10 @@ describe( "InaturalistAPI", function( ) {
   describe( "defaultMapFilters", function( ) {
     it( "returns the proper default filters", function( ) {
       expect( InaturalistAPI.defaultMapFilters( ) ).to.eql(
-        { filtered: { query: { match: { mappable: true } }, filter: [
-          { not: { exists: { field: "private_location" } } } ] } });
+        { filtered: {
+            query: { match: { mappable: true } },
+            filter: [ ]
+        } });
     });
   });
 
