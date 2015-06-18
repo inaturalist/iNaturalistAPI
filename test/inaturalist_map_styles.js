@@ -22,12 +22,6 @@ describe( "InaturalistMapStyles", function( ) {
     });
   });
 
-  describe( "grid", function( ) {
-    it( "returns a style with the right name", function( ) {
-      expect( MapStyles.grid( ) ).to.include( "Style name='style'" );
-    });
-  });
-
   describe( "points", function( ) {
     it( "returns a style with the right name", function( ) {
       expect( MapStyles.points( ) ).to.include( "Style name='style'" );

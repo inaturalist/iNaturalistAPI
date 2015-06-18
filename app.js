@@ -6,7 +6,8 @@ var ElasticMapper = require( "elasticmaps" ),
 var server = ElasticMapper.server( _.extend( config, {
   beforePrepareQuery: InaturalistMapserver.beforePrepareQuery,
   prepareQuery: InaturalistMapserver.prepareQuery,
-  prepareStyle: InaturalistMapserver.prepareStyle
+  prepareStyle: InaturalistMapserver.prepareStyle,
+  beforeSendResult: InaturalistMapserver.beforeSendResult
 }));
 
 var port = Number( process.env.PORT || 4000 );

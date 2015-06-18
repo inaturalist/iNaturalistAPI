@@ -7,9 +7,34 @@ function stubRequest( ) {
   return { query: { }, params: { } };
 }
 
+function stubResult( ) {
+  return {
+    setHeader: function( k, v ) { }
+  };
+}
+
 describe( "InaturalistAPI", function( ) {
   beforeEach( function( ) {
     stubReq = stubRequest( );
+    stubRes = stubResult( );
+  });
+
+  describe( "beforePrepareQuery", function( ) {
+    it( "does nothing if there is no taxon_id parameter", function( done ) {
+      stubReq.query.taxon_id = null;
+      MapServer.beforePrepareQuery( stubReq, function( err ) {
+        expect( err ).to.be.null;
+        done( );
+      });
+    });
+
+    it( "returns an error if the taxon does nto exist", function( done ) {
+      stubReq.query.taxon_id = 1;
+      MapServer.beforePrepareQuery( stubReq, function( err ) {
+        expect( err ).to.eql({ message: "Unknown taxonID 1", status: 500});
+        done( );
+      });
+    });
   });
 
   describe( "prepareQuery", function( ) {
@@ -57,12 +82,39 @@ describe( "InaturalistAPI", function( ) {
         done( );
       });
     });
+
+    it( "does filters out obscured coordinates at zoom 8", function( done ) {
+      stubReq.params.zoom = 8;
+      MapServer.prepareQuery( stubReq, function( err ) {
+        expect( stubReq.elastic_query.query.filtered.filter ).to.eql([
+          { not: { exists: { field: "private_location" } } }]);
+        done( );
+      });
+    });
   });
 
-  describe( "prepareQuery", function( ) {
+  describe( "prepareStyle", function( ) {
     it( "defaults to points style", function( done ) {
       MapServer.prepareStyle( stubReq, function( err, req ) {
         expect( stubReq.style ).to.eql( MapStyles.points( ) );
+        done( );
+      });
+    });
+
+    it( "can specify color of points style", function( done ) {
+      stubReq.query.color = "#123FED";
+      MapServer.prepareStyle( stubReq, function( err, req ) {
+        expect( stubReq.style ).to.eql(
+          MapStyles.coloredPoints( stubReq.query.color ) );
+        done( );
+      });
+    });
+
+    it( "infers color of points from taxon", function( done ) {
+      stubReq.taxon = { iconic_taxon_id: 1 };
+      MapServer.prepareStyle( stubReq, function( err, req ) {
+        expect( stubReq.style ).to.eql(
+          MapStyles.coloredPoints( "#1E90FF" ) );
         done( );
       });
     });
@@ -74,6 +126,51 @@ describe( "InaturalistAPI", function( ) {
         done( );
       });
     });
+
+    it( "can set the summary style", function( done ) {
+      stubReq.params.style = "summary";
+      MapServer.prepareStyle( stubReq, function( err, req ) {
+        expect( stubReq.style ).to.eql(
+          MapStyles.coloredHeatmap( "#6E6E6E", 8 ) );
+        done( );
+      });
+    });
+
+    it( "can set the colored_heatmap style", function( done ) {
+      stubReq.params.style = "colored_heatmap";
+      MapServer.prepareStyle( stubReq, function( err, req ) {
+        expect( stubReq.style ).to.eql( MapStyles.coloredHeatmap( ) );
+        done( );
+      });
+    });
+
+    it( "can specify color of colored_heatmap style", function( done ) {
+      stubReq.params.style = "colored_heatmap";
+      stubReq.query.color = "#123FED";
+      MapServer.prepareStyle( stubReq, function( err, req ) {
+        expect( stubReq.style ).to.eql(
+          MapStyles.coloredHeatmap( stubReq.query.color ) );
+        done( );
+      });
+    });
+
+    it( "infers color of colored_heatmap from taxon", function( done ) {
+      stubReq.params.style = "colored_heatmap";
+      stubReq.taxon = { iconic_taxon_id: 1 };
+      MapServer.prepareStyle( stubReq, function( err, req ) {
+        expect( stubReq.style ).to.eql(
+          MapStyles.coloredHeatmap( "#1E90FF" ) );
+        done( );
+      });
+    });
   });
 
+  describe( "beforeSendResult", function( ) {
+    it( "sets a Cache-Control header", function( done ) {
+      MapServer.beforeSendResult( stubReq, stubRes, function( ) {
+        // this isn't actually testing anything
+        done( );
+      });
+    });
+  });
 });
