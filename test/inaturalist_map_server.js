@@ -13,7 +13,7 @@ function stubResult( ) {
   };
 }
 
-describe( "InaturalistAPI", function( ) {
+describe( "InaturalistMapServer", function( ) {
   beforeEach( function( ) {
     stubReq = stubRequest( );
     stubRes = stubResult( );
@@ -28,7 +28,7 @@ describe( "InaturalistAPI", function( ) {
       });
     });
 
-    it( "returns an error if the taxon does nto exist", function( done ) {
+    it( "returns an error if the taxon does not exist", function( done ) {
       stubReq.query.taxon_id = 1;
       MapServer.beforePrepareQuery( stubReq, function( err ) {
         expect( err ).to.eql({ message: "Unknown taxonID 1", status: 500});
@@ -83,10 +83,10 @@ describe( "InaturalistAPI", function( ) {
       });
     });
 
-    it( "does filters out obscured coordinates at zoom 8", function( done ) {
+    it( "filters out obscured coordinates at zoom 8", function( done ) {
       stubReq.params.zoom = 8;
       MapServer.prepareQuery( stubReq, function( err ) {
-        expect( stubReq.elastic_query.query.filtered.filter ).to.eql([
+        expect( stubReq.elastic_query.query.filtered.filter.bool.must ).to.eql([
           { not: { exists: { field: "private_location" } } }]);
         done( );
       });
