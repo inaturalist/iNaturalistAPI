@@ -157,6 +157,11 @@ describe( "InaturalistAPI", function( ) {
         "created_at_details.year": 2009 });
     });
 
+    it( "filters by project_id", function( ) {
+      var eq = Q( { project_id: 3 } );
+      expect( eq.where ).to.eql({ project_ids: 3 });
+    });
+
     it( "filters by project_ids", function( ) {
       var eq = Q( { project_ids: [ 4, 5 ] } );
       expect( eq.where ).to.eql({ project_ids: [ 4, 5 ] });
@@ -314,6 +319,11 @@ describe( "InaturalistAPI", function( ) {
     it( "ignores bad updated_since values", function( ) {
       var eq = Q( { updated_since: "nonsense" } );
       expect( eq.filters ).to.eql([ ]);
+    });
+
+    it( "filters by id_above", function( ) {
+      var eq = Q( { id_above: 51 } );
+      expect( eq.filters ).to.eql([{ range: { id: { gt: 51 } } }]);
     });
 
     //
