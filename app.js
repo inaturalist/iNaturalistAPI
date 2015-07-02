@@ -31,6 +31,9 @@ app.get( "/observations/:id", routes.observations_show );
 app.get( "/map", function ( req, res ) {
   res.render( "map" );
 });
+app.get( "/facets", function ( req, res ) {
+  res.render( "facets" );
+});
 
 var port = Number( process.env.PORT || 4000 );
 server = app.listen( port, function( ) {
