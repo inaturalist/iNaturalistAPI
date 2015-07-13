@@ -326,6 +326,16 @@ describe( "InaturalistAPI", function( ) {
       expect( eq.filters ).to.eql([{ range: { id: { gt: 51 } } }]);
     });
 
+    it( "filters by reviewed true", function( ) {
+      var eq = Q( { reviewed: "true", viewer_id: 21 } );
+      expect( eq.where ).to.eql({ reviewed_by: 21 });
+    });
+
+    it( "filters by reviewed false", function( ) {
+      var eq = Q( { reviewed: "false", viewer_id: 21 } );
+      expect( eq.filters ).to.eql([{ not: { term: { reviewed_by: 21 }}}]);
+    });
+
     //
     // Sorting
     //
