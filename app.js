@@ -14,6 +14,10 @@ var app = ElasticMapper.server( _.extend( config, {
   beforeSendResult: InaturalistMapserver.beforeSendResult
 }));
 
+app.get( "/places/:place_id/:zoom/:x/:y.:format([a-z\.]+)", InaturalistMapserver.placesRoute );
+app.get( "/taxon_places/:taxon_id/:zoom/:x/:y.:format([a-z\.]+)", InaturalistMapserver.taxonPlacesRoute );
+app.get( "/taxon_ranges/:taxon_id/:zoom/:x/:y.:format([a-z\.]+)", InaturalistMapserver.taxonRangesRoute );
+
 app.use( bodyParser.json( ) );
 app.use( express.static( "public" ) );
 app.set( "view engine", "jade" );
