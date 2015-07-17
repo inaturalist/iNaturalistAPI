@@ -8,9 +8,13 @@ function stubRequest( ) {
 }
 
 function stubResult( ) {
-  return {
-    setHeader: function( k, v ) { }
-  };
+  res = { };
+  res.set = function( attr, val ) { };
+  res.setHeader = function( attr, val ) { };
+  res.status = function( val ) { return res; };
+  res.send = function( val ) { return res; };
+  res.end = function( ) { };
+  return res;
 }
 
 describe( "InaturalistMapServer", function( ) {
@@ -173,4 +177,29 @@ describe( "InaturalistMapServer", function( ) {
       });
     });
   });
+
+  describe( "placesRoute", function( ) {
+    it( "sets a Cache-Control header", function( ) {
+      MapServer.placesRoute( stubReq, stubRes, function( ) { });
+      expect( stubReq.params.style ).to.eq( "places" );
+      expect( stubReq.params.dataType ).to.eq( "postgis" );
+    });
+  });
+
+  describe( "taxonPlacesRoute", function( ) {
+    it( "sets a Cache-Control header", function( ) {
+      MapServer.taxonPlacesRoute( stubReq, stubRes, function( ) { });
+      expect( stubReq.params.style ).to.eq( "taxon_places" );
+      expect( stubReq.params.dataType ).to.eq( "postgis" );
+    });
+  });
+
+  describe( "taxonRangesRoute", function( ) {
+    it( "sets a Cache-Control header", function( ) {
+      MapServer.taxonRangesRoute( stubReq, stubRes, function( ) { });
+      expect( stubReq.params.style ).to.eq( "taxon_ranges" );
+      expect( stubReq.params.dataType ).to.eq( "postgis" );
+    });
+  });
+
 });

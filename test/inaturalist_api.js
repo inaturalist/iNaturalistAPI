@@ -149,6 +149,22 @@ describe( "InaturalistAPI", function( ) {
       expect( eq.where ).to.eql({ "observed_on_details.year": 2008 });
     });
 
+    it( "filters by observed_on", function( ) {
+      var eq = Q( { observed_on: "10-11-2009" } );
+      expect( eq.where ).to.eql({
+        "observed_on_details.day": 11,
+        "observed_on_details.month": 10,
+        "observed_on_details.year": 2009 });
+    });
+
+    it( "filters by on", function( ) {
+      var eq = Q( { on: "10-11-2009" } );
+      expect( eq.where ).to.eql({
+        "observed_on_details.day": 11,
+        "observed_on_details.month": 10,
+        "observed_on_details.year": 2009 });
+    });
+
     it( "filters by created_on", function( ) {
       var eq = Q( { created_on: "10-11-2009" } );
       expect( eq.where ).to.eql({
@@ -336,6 +352,21 @@ describe( "InaturalistAPI", function( ) {
       expect( eq.filters ).to.eql([{ not: { term: { reviewed_by: 21 }}}]);
     });
 
+    it( "filters by geoprivacy", function( ) {
+      var eq = Q( { geoprivacy: "whatever" } );
+      expect( eq.where ).to.eql({ geoprivacy: "whatever" });
+    });
+
+    it( "filters by geoprivacy open", function( ) {
+      var eq = Q( { geoprivacy: "open" } );
+      expect( eq.filters ).to.eql([{ not: { exists: { field: "geoprivacy" } } }]);
+    });
+
+    it( "filters by geoprivacy obscured_private", function( ) {
+      var eq = Q( { geoprivacy: "obscured_private" } );
+      expect( eq.where ).to.eql({ geoprivacy: [ "obscured", "private" ] });
+    });
+
     //
     // Sorting
     //
@@ -411,6 +442,15 @@ describe( "InaturalistAPI", function( ) {
   describe( "lookupTaxon", function( ) {
     it( "fetches results", function( done ) {
       InaturalistAPI.lookupTaxon( 1, function( err, rsp ) {
+        // this needs some work - fixtures, etc
+        done( );
+      });
+    });
+  });
+
+  describe( "observationsIndex", function( ) {
+    it( "fetches results", function( done ) {
+      InaturalistAPI.observationsIndex( { query: { } }, function( err, rsp ) {
         // this needs some work - fixtures, etc
         done( );
       });
