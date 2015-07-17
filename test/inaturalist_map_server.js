@@ -8,9 +8,9 @@ function stubRequest( ) {
 }
 
 function stubResult( ) {
-  res = { };
+  res = { headers: { } };
   res.set = function( attr, val ) { };
-  res.setHeader = function( attr, val ) { };
+  res.setHeader = function( attr, val ) { res.headers[ attr ] = val; };
   res.status = function( val ) { return res; };
   res.send = function( val ) { return res; };
   res.end = function( ) { };
@@ -171,8 +171,17 @@ describe( "InaturalistMapServer", function( ) {
 
   describe( "beforeSendResult", function( ) {
     it( "sets a Cache-Control header", function( done ) {
+      stubReq.params.style = "places";
       MapServer.beforeSendResult( stubReq, stubRes, function( ) {
-        // this isn't actually testing anything
+        expect( stubRes.headers["Cache-Control"] ).to.eq( "public, max-age=604800" );
+        done( );
+      });
+    });
+
+    it( "sets a Cache-Control header", function( done ) {
+      stubReq.query.ttl = 4;
+      MapServer.beforeSendResult( stubReq, stubRes, function( ) {
+        expect( stubRes.headers["Cache-Control"] ).to.eq( "public, max-age=4" );
         done( );
       });
     });
