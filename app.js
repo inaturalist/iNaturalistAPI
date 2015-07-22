@@ -32,6 +32,7 @@ app.use( function( req, res, next ) {
 app.get( "/", routes.index );
 app.get( "/observations", routes.observations_index );
 app.get( "/observations/:id", routes.observations_show );
+app.get( "/taxa/autocomplete", routes.taxa_autocomplete );
 app.get( "/map", function ( req, res ) {
   res.render( "map" );
 });
