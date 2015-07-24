@@ -14,7 +14,7 @@ describe( "InaturalistMapStyles", function( ) {
 
   describe( "coloredPoints", function( ) {
     it( "defaults to gray", function( ) {
-      expect( MapStyles.coloredPoints( ) ).to.include( "#6E6E6E" );
+      expect( MapStyles.coloredPoints( ) ).to.include( "#6e6e6e" );
     });
 
     it( "uses a heatmap styled colorize-alpha filter", function( ) {
@@ -24,7 +24,7 @@ describe( "InaturalistMapStyles", function( ) {
 
   describe( "points", function( ) {
     it( "returns a style with the right name", function( ) {
-      expect( MapStyles.points( ) ).to.include( "Style name='style'" );
+      expect( MapStyles.points( ) ).to.include( "Style name=\"style\"" );
     });
   });
 

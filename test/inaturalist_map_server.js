@@ -135,7 +135,7 @@ describe( "InaturalistMapServer", function( ) {
       stubReq.params.style = "summary";
       MapServer.prepareStyle( stubReq, function( err, req ) {
         expect( stubReq.style ).to.eql(
-          MapStyles.coloredHeatmap( "#6E6E6E", 8 ) );
+          MapStyles.coloredHeatmap( "#6e6e6e", 8 ) );
         done( );
       });
     });
