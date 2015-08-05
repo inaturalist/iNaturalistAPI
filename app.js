@@ -5,7 +5,14 @@ var ElasticMapper = require( "elasticmaps" ),
     jade = require( "jade" ),
     express = require( "express" ),
     bodyParser = require( "body-parser" ),
+    fs = require( "fs" ),
+    path = require( "path" ),
     config = require( "./config" );
+
+// NewRelic is stats module, which needs newrelic.js in the app root
+if( fs.existsSync( path.join(path.dirname(fs.realpathSync(__filename)), "newrelic.js") ) ) {
+  var newrelic = require( "newrelic" );
+}
 
 var app = ElasticMapper.server( _.extend( config, {
   beforePrepareQuery: InaturalistMapserver.beforePrepareQuery,

@@ -24,7 +24,8 @@
     "elasticsearch": "^4.0.2",
     "socket.io": "^1.3.5",
     "moment": "^2.10.3",
-    "jade": "^1.11.0"
+    "jade": "^1.11.0",
+    "newrelic": "~1.21.1"
   },
   "devDependencies": {
     "mocha": "^2.2.4",
