@@ -1,5 +1,8 @@
+**/.DS_Store
 .coveralls.yml
 coverage
 node_modules
 config.js
+newrelic.js
+newrelic_agent.log
 

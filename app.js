@@ -1,3 +1,10 @@
+var fs = require( "fs" ),
+    path = require( "path" );
+// NewRelic is stats module, which needs newrelic.js in the app root
+if( fs.existsSync( path.join(path.dirname(fs.realpathSync(__filename)), "newrelic.js") ) ) {
+  var newrelic = require( "newrelic" );
+}
+
 var ElasticMapper = require( "elasticmaps" ),
     InaturalistMapserver = require( "./lib/inaturalist_map_server" ),
     routes = require( "./lib/routes" ),
