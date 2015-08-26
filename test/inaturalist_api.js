@@ -405,7 +405,8 @@ describe( "InaturalistAPI", function( ) {
   describe( "defaultMapFields", function( ) {
     it( "returns the proper default select fields", function( ) {
       expect( InaturalistAPI.defaultMapFields( ) ).to.eql( [ "id", "location",
-       "taxon.iconic_taxon_id", "captive", "quality_grade" ]);
+       "taxon.iconic_taxon_id", "captive", "quality_grade", "geoprivacy",
+       "private_location" ]);
     });
   });
 

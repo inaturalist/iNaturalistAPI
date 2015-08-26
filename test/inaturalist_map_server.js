@@ -49,7 +49,8 @@ describe( "InaturalistMapServer", function( ) {
         expect( stubReq.elastic_query.aggregations.zoom1 ).to.eql({
           aggs: { geohash: { top_hits: { _source: false,
             fielddata_fields: [
-            "id", "location", "taxon.iconic_taxon_id", "captive", "quality_grade" ],
+              "id", "location", "taxon.iconic_taxon_id", "captive", "quality_grade",
+              "geoprivacy", "private_location" ],
             size: 1, sort: { id: { order: "desc" } } } } },
           geohash_grid: { field: "location", precision: 3, size: 50000 }
         });
@@ -64,7 +65,8 @@ describe( "InaturalistMapServer", function( ) {
         expect( stubReq.elastic_query.aggregations.zoom1 ).to.eql({
           aggs: { geohash: { top_hits: { _source: false,
             fielddata_fields: [
-            "id", "location", "taxon.iconic_taxon_id", "captive", "quality_grade" ],
+              "id", "location", "taxon.iconic_taxon_id", "captive", "quality_grade",
+              "geoprivacy", "private_location" ],
             size: 1, sort: { id: { order: "desc" } } } } },
           geohash_grid: { field: "location", precision: 3, size: 50000 }
         });
@@ -86,30 +88,21 @@ describe( "InaturalistMapServer", function( ) {
         done( );
       });
     });
-
-    it( "filters out obscured coordinates at zoom 8", function( done ) {
-      stubReq.params.zoom = 8;
-      MapServer.prepareQuery( stubReq, function( err ) {
-        expect( stubReq.elastic_query.query.filtered.filter.bool.must ).to.eql([
-          { not: { exists: { field: "private_location" } } }]);
-        done( );
-      });
-    });
   });
 
   describe( "prepareStyle", function( ) {
-    it( "defaults to points style", function( done ) {
+    it( "defaults to points markersAndCircles", function( done ) {
       MapServer.prepareStyle( stubReq, function( err, req ) {
-        expect( stubReq.style ).to.eql( MapStyles.points( ) );
+        expect( stubReq.style ).to.eql( MapStyles.markersAndCircles( ) );
         done( );
       });
     });
 
-    it( "can specify color of points style", function( done ) {
+    it( "can specify color of default style", function( done ) {
       stubReq.query.color = "#123FED";
       MapServer.prepareStyle( stubReq, function( err, req ) {
         expect( stubReq.style ).to.eql(
-          MapStyles.coloredPoints( stubReq.query.color ) );
+          MapStyles.markersAndCircles( stubReq.query.color ) );
         done( );
       });
     });
@@ -118,7 +111,7 @@ describe( "InaturalistMapServer", function( ) {
       stubReq.taxon = { iconic_taxon_id: 1 };
       MapServer.prepareStyle( stubReq, function( err, req ) {
         expect( stubReq.style ).to.eql(
-          MapStyles.coloredPoints( "#1E90FF" ) );
+          MapStyles.markersAndCircles( "#1E90FF" ) );
         done( );
       });
     });
@@ -135,7 +128,7 @@ describe( "InaturalistMapServer", function( ) {
       stubReq.params.style = "summary";
       MapServer.prepareStyle( stubReq, function( err, req ) {
         expect( stubReq.style ).to.eql(
-          MapStyles.coloredHeatmap( "#6e6e6e", 8 ) );
+          MapStyles.coloredHeatmap( "#6E6E6E", 8, 0.2 ) );
         done( );
       });
     });

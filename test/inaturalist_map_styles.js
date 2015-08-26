@@ -14,17 +14,11 @@ describe( "InaturalistMapStyles", function( ) {
 
   describe( "coloredPoints", function( ) {
     it( "defaults to gray", function( ) {
-      expect( MapStyles.coloredPoints( ) ).to.include( "#6e6e6e" );
+      expect( MapStyles.markersAndCircles( ) ).to.include( "#585858" );
     });
 
     it( "uses a heatmap styled colorize-alpha filter", function( ) {
-      expect( MapStyles.coloredPoints( "#555555") ).to.include( "#555555" );
-    });
-  });
-
-  describe( "points", function( ) {
-    it( "returns a style with the right name", function( ) {
-      expect( MapStyles.points( ) ).to.include( "Style name=\"style\"" );
+      expect( MapStyles.markersAndCircles( "#555555") ).to.include( "#555555" );
     });
   });
 
