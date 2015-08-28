@@ -24,3 +24,7 @@ before_script:
   - cp config.js.travis config.js
   - sleep 15
 
+notifications:
+  slack:
+    secure: GKSGe49zbPUs0yLV6BuSyJpiQryC8jBxv8VyOOWn63NVY6C5Jzn1aAX43Taoamamt0p973wx1hL061BZHnpKW6FU2Q8yEHve1fNT4m1nSwseTrvhGoI2rqEDMTa2oVlMBhj7rwzno5O7+/jTODUgRDhxM1MgWCXlYHXKS9dGT+k=
+
