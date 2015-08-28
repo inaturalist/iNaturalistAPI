@@ -3,13 +3,13 @@ language: node_js
 compiler: gcc
 
 node_js:
-  - "0.10"
+  - '0.10'
 
 services:
   - elasticsearch
 
 addons:
-  postgresql: "9.3"
+  postgresql: '9.3'
 
 before_install:
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
@@ -26,5 +26,5 @@ before_script:
 
 notifications:
   slack:
-    secure: GKSGe49zbPUs0yLV6BuSyJpiQryC8jBxv8VyOOWn63NVY6C5Jzn1aAX43Taoamamt0p973wx1hL061BZHnpKW6FU2Q8yEHve1fNT4m1nSwseTrvhGoI2rqEDMTa2oVlMBhj7rwzno5O7+/jTODUgRDhxM1MgWCXlYHXKS9dGT+k=
+    secure: ssW+kf5ZQudczXshwoLxSWkGrnYT7CNT9gIz1WPS6K4CHQM9WsuxZmF3bjdElV/huvhNmY0Ed2i1ByMzhcZdmgRxbbUyRfMpA2bnxILWKGvH4DAV8iFxI1VSzCIFhW9BMTbhgVoSLpVseETxtBJMkZYOL6Vmr8XRWFBTB969wCKEH6g5nRk3Q7g0F2d+AE7Tug9fPukurYBzX38rgyRQllIGrp2rCsUb4q4KoQoo26bGRpF2d80BS7fUS7Vk8FbkumD2FbuXzGweHfq8K647kbVu7zTqOAw1KfGy/c7JGwiqxr0+JM26RzJczUdM6Kral9qkPVGbyGkT1YgEOh8IvIlO0SQppEvQQhG6vl+qpobdI+zoDgxQISi+YiCJiOHG70bCmSh0GoiOHk9TMDRTSGGj3HfGK4p4xb6gg7KaTj2GcWcq31V6BuLlJuX03nj0wgSwUmEVicO+9soi4lT+CDp9ZoO3X9y/p8nO3nkbicZcuIWfBBmQrBxwl+nXlwrKGLC03SX7QuqVsvT/nuJBHSudC1kVuVLh+f3TuaCoyND9RyiVu0eVB1pFZ7Zq84XJIUp6u7AcJR8yVJozI0DZiyIj42Zumpe5f3lNy6UG9o+UBRkdnfk+zh3vMVupf0eEqaB05MyLBDyzD0LUQVsMKHdmCXvWCtJMZ3qIkQFgcS4=
 
