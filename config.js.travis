@@ -1,0 +1,14 @@
+module.exports = {
+  environment: "test",
+  elasticsearch: {
+    host: "localhost:9200",
+    searchIndex: "observations",
+    geoPointField: "location"
+  },
+  database: {
+    user: "postgres",
+    host: "127.0.0.1",
+    port: 5432,
+    dbname: "travis_ci_test"
+  }
+}

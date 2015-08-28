@@ -9,6 +9,9 @@ node_js:
 services:
   - elasticsearch
 
+addons:
+  postgresql: "9.3"
+
 before_install:
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo apt-get update
@@ -19,5 +22,6 @@ before_install:
   - sudo apt-get update -qq
 
 before_script:
+  - cp config.js.travis config.js
   - sleep 15
 
