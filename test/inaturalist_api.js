@@ -316,6 +316,11 @@ describe( "InaturalistAPI", function( ) {
       expect( eq.filters ).to.eql([{ not: { term: { project_ids: [ 6, 7 ] }}}]);
     });
 
+    it( "filters by featured observation", function( ) {
+      var eq = Q( { featured_observation_id: 8 } );
+      expect( eq.filters ).to.eql([{ not: { term: { id: 8 }}}]);
+    });
+
     it( "filters by identified true", function( ) {
       var eq = Q( { identified: "true" } );
       expect( eq.filters ).to.eql([{ exists: { field: "taxon" } }]);
