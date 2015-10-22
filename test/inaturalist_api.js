@@ -2,8 +2,10 @@ var expect = require( "chai" ).expect,
     moment = require( "moment" ),
     _ = require( "underscore" ),
     config = require( "../config_example" ),
+    util = require( "../lib/util" ),
     InaturalistAPI = require( "../lib/inaturalist_api" ),
-    req, Q;
+    Q = InaturalistAPI.paramsToElasticQuery,
+    req;
 
 describe( "InaturalistAPI", function( ) {
   beforeEach( function( ) {
@@ -20,8 +22,6 @@ describe( "InaturalistAPI", function( ) {
   });
 
   describe( "paramsToElasticQuery", function( ) {
-    beforeEach( function( ) { Q = InaturalistAPI.paramsToElasticQuery; });
-
     it( "filters by query", function( ) {
       var eq = Q( { q: "search" } );
       expect( eq.where ).to.eql({ multi_match: {
@@ -59,16 +59,6 @@ describe( "InaturalistAPI", function( ) {
         eql([ "place_guess" ]);
     });
 
-    it( "filters by user.id", function( ) {
-      var eq = Q( { user_id: 99 } );
-      expect( eq.where ).to.eql({ "user.id": 99 });
-    });
-
-    it( "filters by rank", function( ) {
-      var eq = Q( { rank: "species" } );
-      expect( eq.where ).to.eql({ "taxon.rank": "species" });
-    });
-
     it( "filters by taxon_id", function( ) {
       var eq = Q( { taxon_id: 88 } );
       expect( eq.where ).to.eql({ "taxon.ancestor_ids": 88 });
@@ -79,90 +69,95 @@ describe( "InaturalistAPI", function( ) {
       expect( eq.where ).to.eql({ "taxon.ancestor_ids": [ 3, 4, 5 ] });
     });
 
-    it( "filters by site_id", function( ) {
-      var eq = Q( { site_id: 22 } );
-      expect( eq.where ).to.eql({ site_id: 22 });
+    it( "filters by param values", function( ) {
+      _.each([ { http_param: "rank", es_field: "taxon.rank" },
+        { http_param: "user_id", es_field: "user.id" },
+        { http_param: "taxon_name", es_field: "taxon.names.name" },
+        { http_param: "day", es_field: "observed_on_details.day" },
+        { http_param: "month", es_field: "observed_on_details.month" },
+        { http_param: "year", es_field: "observed_on_details.year" },
+        { http_param: "place_id", es_field: "place_ids" },
+        { http_param: "site_id", es_field: "site_id" },
+        { http_param: "license", es_field: "license_code" },
+        { http_param: "photo_license", es_field: "photos.license_code" },
+        { http_param: "sound_license", es_field: "sounds.license_code" }
+      ], function( filter ) {
+        var qp = { };
+        // single values
+        qp[ filter.http_param ] = "test";
+        var eq = Q( qp );
+        var f = { term: { } };
+        f.term[ filter.es_field ] = "test";
+        expect( eq.filters ).to.eql([ f ]);
+        // multiple values
+        qp[ filter.http_param ] = [ "test1", "test2" ];
+        var eq = Q( qp );
+        var f = { terms: { } };
+        f.terms[ filter.es_field ] = [ "test1", "test2" ];
+        expect( eq.filters ).to.eql([ f ]);
+      });
     });
 
-    it( "filters by place_id", function( ) {
-      var eq = Q( { place_id: 23 } );
-      expect( eq.where ).to.eql({ place_ids: 23 });
+    it( "filters by booleans", function( ) {
+      _.each([ { http_param: "introduced", es_field: "taxon.introduced" },
+        { http_param: "threatened", es_field: "taxon.threatened" },
+        { http_param: "native", es_field: "taxon.native" },
+        { http_param: "endemic", es_field: "taxon.endemic" },
+        { http_param: "id_please", es_field: "id_please" },
+        { http_param: "out_of_range", es_field: "out_of_range" },
+        { http_param: "mappable", es_field: "mappable" },
+        { http_param: "verifiable", es_field: "verifiable" },
+        { http_param: "captive", es_field: "captive" }
+      ], function( filter ) {
+        var qp = { };
+        // true values
+        qp[ filter.http_param ] = "true";
+        var eq = Q( qp );
+        var f = { term: { } };
+        f.term[ filter.es_field ] = true;
+        expect( eq.filters ).to.eql([ f ]);
+        // false values
+        qp[ filter.http_param ] = "false";
+        eq = Q( qp );
+        f = { term: { } };
+        f.term[ filter.es_field ] = false;
+        expect( eq.filters ).to.eql([ f ]);
+      });
     });
 
-    it( "filters by id_please", function( ) {
-      var eq = Q( { has: [ "id_please" ] } );
-      expect( eq.where ).to.eql({ id_please: true });
-    });
-
-    it( "filters by out_of_range", function( ) {
-      var eq = Q( { out_of_range: "true" } );
-      expect( eq.where ).to.eql({ out_of_range: true });
-    });
-
-    it( "filters by mappable true", function( ) {
-      var eq = Q( { mappable: "true" } );
-      expect( eq.where ).to.eql({ mappable: true });
-    });
-
-    it( "filters by mappable false", function( ) {
-      var eq = Q( { mappable: "false" } );
-      expect( eq.where ).to.eql({ mappable: false });
-    });
-
-    it( "filters by captive true", function( ) {
-      var eq = Q( { captive: "true" } );
-      expect( eq.where ).to.eql({ captive: true });
-    });
-
-    it( "filters by captive false", function( ) {
-      var eq = Q( { captive: "false" } );
-      expect( eq.where ).to.eql({ captive: false });
-    });
-
-    it( "filters by license", function( ) {
-      var eq = Q( { license: "cc-by" } );
-      expect( eq.where ).to.eql({ license_code: "cc-by" });
-    });
-
-    it( "filters by photo license", function( ) {
-      var eq = Q( { photo_license: "cc-by-nc" } );
-      expect( eq.where ).to.eql({ "photos.license_code": "cc-by-nc" });
-    });
-
-    it( "filters by sound license", function( ) {
-      var eq = Q( { sound_license: "cc-by-sa" } );
-      expect( eq.where ).to.eql({ "sounds.license_code": "cc-by-sa" });
-    });
-
-    it( "filters by day", function( ) {
-      var eq = Q( { day: 6 } );
-      expect( eq.where ).to.eql({ "observed_on_details.day": 6 });
-    });
-
-    it( "filters by month", function( ) {
-      var eq = Q( { month: 7 } );
-      expect( eq.where ).to.eql({ "observed_on_details.month": 7 });
-    });
-
-    it( "filters by year", function( ) {
-      var eq = Q( { year: 2008 } );
-      expect( eq.where ).to.eql({ "observed_on_details.year": 2008 });
+    it( "filters by attribute presence", function( ) {
+      _.each([ { http_param: "photos", es_field: "photos.url" },
+        { http_param: "sounds", es_field: "sounds" },
+        { http_param: "geo", es_field: "geojson" },
+        { http_param: "identified", es_field: "taxon" }
+      ], function( filter ) {
+        var qp = { };
+        // true values
+        qp[ filter.http_param ] = "true";
+        var eq = Q( qp );
+        var f = { exists: { field: filter.es_field } };
+        expect( eq.filters ).to.eql([ f ]);
+        // false values
+        qp[ filter.http_param ] = "false";
+        eq = Q( qp );
+        expect( eq.filters ).to.eql([ { not: f } ]);
+      });
     });
 
     it( "filters by observed_on", function( ) {
       var eq = Q( { observed_on: "10-11-2009" } );
-      expect( eq.where ).to.eql({
-        "observed_on_details.day": 11,
-        "observed_on_details.month": 10,
-        "observed_on_details.year": 2009 });
+      expect( eq.filters ).to.eql([
+        { term: { "observed_on_details.day": 11 } },
+        { term: { "observed_on_details.month": 10 } },
+        { term: { "observed_on_details.year": 2009 } }]);
     });
 
     it( "filters by on", function( ) {
       var eq = Q( { on: "10-11-2009" } );
-      expect( eq.where ).to.eql({
-        "observed_on_details.day": 11,
-        "observed_on_details.month": 10,
-        "observed_on_details.year": 2009 });
+      expect( eq.filters ).to.eql([
+        { term: { "observed_on_details.day": 11 } },
+        { term: { "observed_on_details.month": 10 } },
+        { term: { "observed_on_details.year": 2009 } }]);
     });
 
     it( "filters by created_on", function( ) {
@@ -239,21 +234,6 @@ describe( "InaturalistAPI", function( ) {
         distance: "10km", location: { lat: 10, lon: 20 }}}]);
     });
 
-    it( "filters by photos", function( ) {
-      var eq = Q( { has: [ "photos" ] } );
-      expect( eq.filters ).to.eql([{ exists: { field: "photos.url" } }]);
-    });
-
-    it( "filters by sounds", function( ) {
-      var eq = Q( { has: [ "sounds" ] } );
-      expect( eq.filters ).to.eql([{ exists: { field: "sounds" } }]);
-    });
-
-    it( "filters by geo", function( ) {
-      var eq = Q( { has: [ "geo" ] } );
-      expect( eq.filters ).to.eql([{ exists: { field: "geojson" } }]);
-    });
-
     it( "filters by iconic_taxa", function( ) {
       var eq = Q( { iconic_taxa: [ "Animalia", "Plantae" ] } );
       expect( eq.where ).to.eql({ "taxon.iconic_taxon_id": [ "1", "47126" ] });
@@ -321,16 +301,6 @@ describe( "InaturalistAPI", function( ) {
       expect( eq.filters ).to.eql([{ not: { term: { id: 8 }}}]);
     });
 
-    it( "filters by identified true", function( ) {
-      var eq = Q( { identified: "true" } );
-      expect( eq.filters ).to.eql([{ exists: { field: "taxon" } }]);
-    });
-
-    it( "filters by identified false", function( ) {
-      var eq = Q( { identified: "false" } );
-      expect( eq.filters ).to.eql([{ not: { exists: { field: "taxon" } } }]);
-    });
-
     it( "filters by updated_since", function( ) {
       var eq = Q( { updated_since: "2015-01-02T00:00:00+00:00" } );
       expect( eq.filters ).to.eql([{ range: {
@@ -340,6 +310,13 @@ describe( "InaturalistAPI", function( ) {
     it( "ignores bad updated_since values", function( ) {
       var eq = Q( { updated_since: "nonsense" } );
       expect( eq.filters ).to.eql([ ]);
+    });
+
+    it( "filters by popular", function( ) {
+      var eq = Q( { popular: "true" } );
+      expect( eq.filters ).to.eql([{ range: { cached_votes_total: { gte: 1 } } }]);
+      eq = Q( { popular: "false" } );
+      expect( eq.filters ).to.eql([{ term: { cached_votes_total: 0 } }]);
     });
 
     it( "filters by id_above", function( ) {
