@@ -33,9 +33,9 @@ describe( "InaturalistMapServer", function( ) {
     });
 
     it( "returns an error if the taxon does not exist", function( done ) {
-      stubReq.query.taxon_id = 1;
+      stubReq.query.taxon_id = 999999999;
       MapServer.beforePrepareQuery( stubReq, function( err ) {
-        expect( err ).to.eql({ message: "Unknown taxonID 1", status: 500});
+        expect( err ).to.eql({ message: "Unknown taxonID 999999999", status: 500 });
         done( );
       });
     });

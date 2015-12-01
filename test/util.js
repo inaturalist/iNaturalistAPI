@@ -11,7 +11,8 @@ describe( "util", function( ) {
 
     it( "renders a custom exception", function( done ) {
       var e = { message: "testing", status: 501 };
-      var res = expectResult( 501, "testing", done );
+      // TODO: the message is now always Error when debug is off
+      var res = expectResult( 501, "Error", done );
       util.renderError( e, res );
     });
   });

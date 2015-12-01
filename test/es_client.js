@@ -3,28 +3,6 @@ var expect = require( "chai" ).expect,
 
 describe( "esClient", function( ) {
 
-  describe( "compileWheres", function( ) {
-    it( "requires an object", function( ) {
-      expect( esClient.compileWheres( ) ).to.eql([ ]);
-      expect( esClient.compileWheres({ }) ).to.eql([ ]);
-    });
-
-    it( "turns single values into matches", function( ) {
-      expect( esClient.compileWheres({ where: { id: 5 }})).to.
-        eql([{ match: { id: 5 } }]);
-    });
-
-    it( "turns multiple values into terms", function( ) {
-      expect( esClient.compileWheres({ where: { id: [ 6, 7 ] }})).to.
-        eql([{ terms: { id: [ 6, 7 ] } }]);
-    });
-
-    it( "keep objects in tact", function( ) {
-      expect( esClient.compileWheres({ where: { id: { some: "obj" }}})).to.
-        eql([{ id: { some: "obj" }}]);
-    });
-  });
-
   describe( "compileFilters", function( ) {
     it( "requires an object", function( ) {
       expect( esClient.compileFilters( ) ).to.eql([ ]);

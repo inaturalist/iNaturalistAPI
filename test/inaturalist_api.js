@@ -28,7 +28,7 @@ describe( "InaturalistAPI", function( ) {
 
     it( "queries multiple fields", function( ) {
       var eq = Q( { q: "search" } );
-      expect( eq.where ).to.eql({ multi_match: {
+      expect( eq.where ).to.eql([{ multi_match: {
         fields: [
           "taxon.names.name",
           "tags",
@@ -36,30 +36,30 @@ describe( "InaturalistAPI", function( ) {
           "place_guess"
         ],
         operator: "and",
-        query: "search" } });
+        query: "search" } }]);
     });
 
     it( "queries names", function( ) {
       var eq = Q( { q: "search", search_on: "names" } );
-      expect( eq.where.multi_match.fields ).to.
+      expect( eq.where[0].multi_match.fields ).to.
         eql([ "taxon.names.name" ]);
     });
 
     it( "queries tags", function( ) {
       var eq = Q( { q: "search", search_on: "tags" } );
-      expect( eq.where.multi_match.fields ).to.
+      expect( eq.where[0].multi_match.fields ).to.
         eql([ "tags" ]);
     });
 
     it( "queries descriptions", function( ) {
       var eq = Q( { q: "search", search_on: "description" } );
-      expect( eq.where.multi_match.fields ).to.
+      expect( eq.where[0].multi_match.fields ).to.
         eql([ "description" ]);
     });
 
     it( "queries places", function( ) {
       var eq = Q( { q: "search", search_on: "place" } );
-      expect( eq.where.multi_match.fields ).to.
+      expect( eq.where[0].multi_match.fields ).to.
         eql([ "place_guess" ]);
     });
 
@@ -264,10 +264,10 @@ describe( "InaturalistAPI", function( ) {
 
     it( "does nothing without an invalid date", function( ) {
       var eq = Q( { d1: "nonsense" } );
-      expect( eq.where ).to.eql( { } );
+      expect( eq.where ).to.eql( [ ] );
       expect( eq.filters ).to.eql( [ ] );
       var eq = Q( { d2: "nonsense" } );
-      expect( eq.where ).to.eql( { } );
+      expect( eq.where ).to.eql( [ ] );
       expect( eq.filters ).to.eql( [ ] );
     });
 
@@ -314,6 +314,53 @@ describe( "InaturalistAPI", function( ) {
     it( "ignores bad updated_since values", function( ) {
       var eq = Q( { updated_since: "nonsense" } );
       expect( eq.filters ).to.eql([ ]);
+    });
+
+    it( "filters by observation fields", function( ) {
+      eq = Q( { "field:habitat": null } );
+      expect( eq.where[0].nested.query.bool.must.length ).to.eql( 1 );
+      expect( eq.where[0].nested.query.bool.must[0].match[ "ofvs.name"] ).to.eql( "habitat" );
+    });
+
+    it( "filters by observation field values", function( ) {
+      eq = Q( { "field:habitat": "marine" } );
+      expect( eq.where[0].nested.query.bool.must.length ).to.eql( 2 );
+      expect( eq.where[0].nested.query.bool.must[0].match[ "ofvs.name"] ).to.eql( "habitat" );
+      expect( eq.where[0].nested.query.bool.must[1].match[ "ofvs.value"] ).to.eql( "marine" );
+    });
+
+    it( "filters by conservation status", function( ) {
+      eq = Q( { cs: "endangered" } );
+      expect( eq.where[0].nested.query.filtered.filter[0].missing.field ).
+        to.eql( "taxon.statuses.place_id" );
+      expect( eq.where[0].nested.query.filtered.query.bool.must[0].
+        terms["taxon.statuses.status" ][0] ).to.eql( "endangered" );
+    });
+
+    it( "filters by conservation status with a place", function( ) {
+      eq = Q( { cs: "endangered", place_id: 1 } );
+      expect( eq.where[0].nested.query.filtered.filter.bool.should[0].
+        terms["taxon.statuses.place_id"] ).to.eql( [ 1 ] );
+      expect( eq.where[0].nested.query.filtered.filter.bool.should[1].
+        missing.field ).to.eql( "taxon.statuses.place_id" );
+      expect( eq.where[0].nested.query.filtered.query.bool.must[0].
+        terms["taxon.statuses.status" ][0] ).to.eql( "endangered" );
+    });
+
+    it( "filters by iucn conservation status", function( ) {
+      eq = Q( { csi: "en" } );
+      expect( eq.where[0].nested.query.filtered.filter[0].missing.field ).
+        to.eql( "taxon.statuses.place_id" );
+      expect( eq.where[0].nested.query.filtered.query.bool.must[0].
+        terms["taxon.statuses.iucn" ][0] ).to.eql( 40 );
+    });
+
+    it( "filters by conservation status authority", function( ) {
+      eq = Q( { csa: "natureserve" } );
+      expect( eq.where[0].nested.query.filtered.filter[0].missing.field ).
+        to.eql( "taxon.statuses.place_id" );
+      expect( eq.where[0].nested.query.filtered.query.bool.must[0].
+        terms["taxon.statuses.authority" ][0] ).to.eql( "natureserve" );
     });
 
     it( "filters by popular", function( ) {
