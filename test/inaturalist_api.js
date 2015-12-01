@@ -22,7 +22,11 @@ describe( "InaturalistAPI", function( ) {
   });
 
   describe( "paramsToElasticQuery", function( ) {
-    it( "filters by query", function( ) {
+    //
+    // Queries
+    //
+
+    it( "queries multiple fields", function( ) {
       var eq = Q( { q: "search" } );
       expect( eq.where ).to.eql({ multi_match: {
         fields: [
@@ -59,14 +63,18 @@ describe( "InaturalistAPI", function( ) {
         eql([ "place_guess" ]);
     });
 
+    //
+    // Filters
+    //
+
     it( "filters by taxon_id", function( ) {
       var eq = Q( { taxon_id: 88 } );
-      expect( eq.where ).to.eql({ "taxon.ancestor_ids": 88 });
+      expect( eq.filters ).to.eql([{ terms: { "taxon.ancestor_ids": [ 88 ] } }]);
     });
 
     it( "filters by taxon_ids", function( ) {
       var eq = Q( { taxon_ids: [ 3, 4, 5 ] } );
-      expect( eq.where ).to.eql({ "taxon.ancestor_ids": [ 3, 4, 5 ] });
+      expect( eq.filters ).to.eql([{ terms: { "taxon.ancestor_ids": [ 3, 4, 5 ] } }]);
     });
 
     it( "filters by param values", function( ) {
@@ -86,8 +94,8 @@ describe( "InaturalistAPI", function( ) {
         // single values
         qp[ filter.http_param ] = "test";
         var eq = Q( qp );
-        var f = { term: { } };
-        f.term[ filter.es_field ] = "test";
+        var f = { terms: { } };
+        f.terms[ filter.es_field ] = [ "test" ];
         expect( eq.filters ).to.eql([ f ]);
         // multiple values
         qp[ filter.http_param ] = [ "test1", "test2" ];
@@ -113,8 +121,8 @@ describe( "InaturalistAPI", function( ) {
         // true values
         qp[ filter.http_param ] = "true";
         var eq = Q( qp );
-        var f = { term: { } };
-        f.term[ filter.es_field ] = true;
+        var f = { terms: { } };
+        f.terms[ filter.es_field ] = [ true ];
         expect( eq.filters ).to.eql([ f ]);
         // false values
         qp[ filter.http_param ] = "false";
@@ -147,74 +155,70 @@ describe( "InaturalistAPI", function( ) {
     it( "filters by observed_on", function( ) {
       var eq = Q( { observed_on: "10-11-2009" } );
       expect( eq.filters ).to.eql([
-        { term: { "observed_on_details.day": 11 } },
-        { term: { "observed_on_details.month": 10 } },
-        { term: { "observed_on_details.year": 2009 } }]);
+        { terms: { "observed_on_details.day": [ 11 ] } },
+        { terms: { "observed_on_details.month": [ 10 ] } },
+        { terms: { "observed_on_details.year": [ 2009 ] } }]);
     });
 
     it( "filters by on", function( ) {
       var eq = Q( { on: "10-11-2009" } );
       expect( eq.filters ).to.eql([
-        { term: { "observed_on_details.day": 11 } },
-        { term: { "observed_on_details.month": 10 } },
-        { term: { "observed_on_details.year": 2009 } }]);
+        { terms: { "observed_on_details.day": [ 11 ] } },
+        { terms: { "observed_on_details.month": [ 10 ] } },
+        { terms: { "observed_on_details.year": [ 2009 ] } }]);
     });
 
     it( "filters by created_on", function( ) {
       var eq = Q( { created_on: "10-11-2009" } );
-      expect( eq.where ).to.eql({
-        "created_at_details.day": 11,
-        "created_at_details.month": 10,
-        "created_at_details.year": 2009 });
+      expect( eq.filters ).to.eql([
+        { terms: { "created_at_details.day": [ 11 ] } },
+        { terms: { "created_at_details.month": [ 10 ] } },
+        { terms: { "created_at_details.year": [ 2009 ] } }]);
     });
 
     it( "filters by project_id", function( ) {
       var eq = Q( { project_id: 3 } );
-      expect( eq.where ).to.eql({ project_ids: 3 });
+      expect( eq.filters ).to.eql([{ terms: { project_ids: [ 3 ] } }]);
     });
 
     it( "filters by project_ids", function( ) {
       var eq = Q( { project_ids: [ 4, 5 ] } );
-      expect( eq.where ).to.eql({ project_ids: [ 4, 5 ] });
+      expect( eq.filters ).to.eql([{ terms: { project_ids: [ 4, 5 ] } }]);
     });
 
     it( "filters by lrank", function( ) {
       var eq = Q( { lrank: "family" } );
-      expect( eq.where ).to.eql({ range: {
-        "taxon.rank_level": { from: 30, to: 100 }}});
+      expect( eq.filters ).to.eql([{ range: {
+        "taxon.rank_level": { gte: 30, lte: 100 }}}]);
     });
 
     it( "filters by hrank", function( ) {
       var eq = Q( { hrank: "class" } );
-      expect( eq.where ).to.eql({ range: {
-        "taxon.rank_level": { from: 0, to: 50 }}});
+      expect( eq.filters ).to.eql([{ range: {
+        "taxon.rank_level": { gte: 0, lte: 50 }}}]);
     });
 
     it( "filters by quality grade except 'any'", function( ) {
       var eq = Q( { quality_grade: "research" } );
-      expect( eq.where ).to.eql({ quality_grade: "research" });
+      expect( eq.filters ).to.eql([{ terms: { quality_grade: [ "research" ] } }]);
       var eq = Q( { quality_grade: "any" } );
-      expect( eq.where ).to.eql({ });
+      expect( eq.filters ).to.eql([ ]);
     });
 
     it( "filters by identifications most_agree", function( ) {
       var eq = Q( { identifications: "most_agree" } );
-      expect( eq.where ).to.eql({ identifications_most_agree: true });
+      expect( eq.filters ).to.eql([{ terms: { identifications_most_agree: [ true ] } }]);
     });
 
     it( "filters by identifications some_agree", function( ) {
       var eq = Q( { identifications: "some_agree" } );
-      expect( eq.where ).to.eql({ identifications_some_agree: true });
+      expect( eq.filters ).to.eql([{ terms: { identifications_some_agree: [ true ] } }]);
     });
 
     it( "filters by identifications most_disagree", function( ) {
       var eq = Q( { identifications: "most_disagree" } );
-      expect( eq.where ).to.eql({ identifications_most_disagree: true });
+      expect( eq.filters ).to.eql([{ terms: { identifications_most_disagree: [ true ] } }]);
     });
-
-    //
-    // Filters
-    //
 
     it( "filters by bounding box", function( ) {
       var eq = Q( { nelat: 1, nelng: 2, swlat: 3, swlng: 4 } );
@@ -236,7 +240,7 @@ describe( "InaturalistAPI", function( ) {
 
     it( "filters by iconic_taxa", function( ) {
       var eq = Q( { iconic_taxa: [ "Animalia", "Plantae" ] } );
-      expect( eq.where ).to.eql({ "taxon.iconic_taxon_id": [ "1", "47126" ] });
+      expect( eq.filters ).to.eql([{ terms: { "taxon.iconic_taxon_id": [ "1", "47126" ] } }]);
     });
 
     it( "filters by unknown iconic_taxa", function( ) {
@@ -326,7 +330,7 @@ describe( "InaturalistAPI", function( ) {
 
     it( "filters by reviewed true", function( ) {
       var eq = Q( { reviewed: "true", viewer_id: 21 } );
-      expect( eq.where ).to.eql({ reviewed_by: 21 });
+      expect( eq.filters ).to.eql([{ terms: { reviewed_by: [ 21 ] } }]);
     });
 
     it( "filters by reviewed false", function( ) {
@@ -336,7 +340,7 @@ describe( "InaturalistAPI", function( ) {
 
     it( "filters by geoprivacy", function( ) {
       var eq = Q( { geoprivacy: "whatever" } );
-      expect( eq.where ).to.eql({ geoprivacy: "whatever" });
+      expect( eq.filters ).to.eql([{ terms: { geoprivacy: [ "whatever" ] } }]);
     });
 
     it( "filters by geoprivacy open", function( ) {
@@ -346,7 +350,7 @@ describe( "InaturalistAPI", function( ) {
 
     it( "filters by geoprivacy obscured_private", function( ) {
       var eq = Q( { geoprivacy: "obscured_private" } );
-      expect( eq.where ).to.eql({ geoprivacy: [ "obscured", "private" ] });
+      expect( eq.filters ).to.eql([{ terms: { geoprivacy: [ "obscured", "private" ] } }]);
     });
 
     //
