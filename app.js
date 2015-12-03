@@ -62,12 +62,9 @@ app.get( "/observations/species_count", routes.species_count );
 app.get( "/observations/species_counts", routes.species_counts );
 app.get( "/observations/:id", routes.observations_show );
 app.get( "/taxa/autocomplete", routes.taxa_autocomplete );
-app.get( "/map", function ( req, res ) {
-  res.render( "map" );
-});
-app.get( "/facets", function ( req, res ) {
-  res.render( "facets" );
-});
+app.get( "/taxa/:id", routes.taxa_show );
+app.get( "/places/nearby", routes.places_nearby );
+app.get( "/places/:id", routes.places_show );
 
 var port = Number( process.env.PORT || 4000 );
 server = app.listen( port, function( ) {
