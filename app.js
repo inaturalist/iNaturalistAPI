@@ -13,6 +13,7 @@ var ElasticMapper = require( "elasticmaps" ),
     jade = require( "jade" ),
     express = require( "express" ),
     bodyParser = require( "body-parser" ),
+    compression = require( "compression" ),
     config = require( "./config" );
 
 var app = ElasticMapper.server( _.extend( config, {
@@ -22,7 +23,7 @@ var app = ElasticMapper.server( _.extend( config, {
   beforeSendResult: InaturalistMapserver.beforeSendResult
 }));
 
-
+app.use( compression( ) );
 app.use( bodyParser.json( ) );
 app.use( express.static( "public" ) );
 app.set( "view engine", "jade" );

@@ -28,7 +28,8 @@
     "newrelic": "~1.21.1",
     "carto": "^0.14.1",
     "pg": "^4.4.3",
-    "simplify-geometry": "*"
+    "simplify-geometry": "~0.0.2",
+    "compression": "^1.6.0"
   },
   "devDependencies": {
     "mocha": "^2.2.4",
