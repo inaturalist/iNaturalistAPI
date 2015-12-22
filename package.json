@@ -30,7 +30,8 @@
     "pg": "^4.4.3",
     "simplify-geometry": "~0.0.2",
     "compression": "^1.6.0",
-    "sphericalmercator": "^1.0.4"
+    "sphericalmercator": "^1.0.4",
+    "memory-cache": "~0.1.4"
   },
   "devDependencies": {
     "mocha": "^2.2.4",
