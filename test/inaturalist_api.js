@@ -80,6 +80,7 @@ describe( "InaturalistAPI", function( ) {
     it( "filters by param values", function( ) {
       _.each([ { http_param: "rank", es_field: "taxon.rank" },
         { http_param: "user_id", es_field: "user.id" },
+        { http_param: "user_login", es_field: "user.login" },
         { http_param: "taxon_name", es_field: "taxon.names.name" },
         { http_param: "day", es_field: "observed_on_details.day" },
         { http_param: "month", es_field: "observed_on_details.month" },
@@ -91,17 +92,19 @@ describe( "InaturalistAPI", function( ) {
         { http_param: "sound_license", es_field: "sounds.license_code" }
       ], function( filter ) {
         var qp = { };
-        // single values
-        qp[ filter.http_param ] = "test";
+        // single values (user_id only accepts integers)
+        var v = (filter.http_param == "user_id") ? 99 : "test";
+        qp[ filter.http_param ] = v;
         var eq = Q( qp );
         var f = { terms: { } };
-        f.terms[ filter.es_field ] = [ "test" ];
+        f.terms[ filter.es_field ] = [ v ];
         expect( eq.filters ).to.eql([ f ]);
-        // multiple values
-        qp[ filter.http_param ] = [ "test1", "test2" ];
+        // multiple values (user_id only accepts integers)
+        v = (filter.http_param == "user_id") ? [ 98, 99 ] : [ "test1", "test2" ];
+        qp[ filter.http_param ] = v;
         var eq = Q( qp );
         var f = { terms: { } };
-        f.terms[ filter.es_field ] = [ "test1", "test2" ];
+        f.terms[ filter.es_field ] = v;
         expect( eq.filters ).to.eql([ f ]);
       });
     });
