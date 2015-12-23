@@ -45,7 +45,6 @@ app.get( "/taxon_ranges/:taxon_id/:zoom/:x/:y.:format([a-z\.]+)", InaturalistMap
 // JSON API routes
 app.get( "/", routes.index );
 app.get( "/observations", routes.observations_index );
-app.get( "/observations/stats", routes.observations_stats );
 app.get( "/observations/identifiers", routes.observations_identifiers );
 app.get( "/observations/observers", routes.observations_observers );
 app.get( "/observations/species_counts", routes.species_counts );
