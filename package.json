@@ -18,7 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.12.4",
-    "elasticmaps": "~0.1.11",
+    "elasticmaps": "~0.1.12",
     "underscore": "^1.8.3",
     "body-parser": "^1.12.4",
     "elasticsearch": "^4.0.2",
