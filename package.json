@@ -28,7 +28,6 @@
     "newrelic": "~1.21.1",
     "carto": "^0.14.1",
     "pg": "^4.4.3",
-    "simplify-geometry": "~0.0.2",
     "compression": "^1.6.0",
     "sphericalmercator": "^1.0.4",
     "memory-cache": "~0.1.4"
