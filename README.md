@@ -46,3 +46,10 @@ Render a PNG tile with points showing a heatmap summary of all pbservations matc
 /heatmap/:z/:x/:y.grid.json
 ```
 Return a [UTFGrid](https://github.com/mapbox/utfgrid-spec) representation of heatmap tile data.
+
+Caching
+-------
+
+This app does not perform any caching asside from setting relevant `Cache-
+Control` HTTP headers that can be used by a caching layer elsewhere in the
+stack.
