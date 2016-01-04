@@ -17,25 +17,29 @@ var ElasticMapper = require( "elasticmaps" ),
     compression = require( "compression" ),
     config = require( "./config" );
 
+var prepareApp = function( a ) {
+  a.use( compression( ) );
+  a.use( bodyParser.json( ) );
+  a.use( express.static( "public" ) );
+  a.set( "view engine", "jade" );
+  a.use( util.accessControlHeaders );
+  // lookup, and temporarily cache, a few instances
+  a.use( InaturalistAPI.lookupTaxonMiddleware );
+  a.use( InaturalistAPI.lookupPlaceMiddleware );
+  a.use( InaturalistAPI.lookupPreferredPlaceMiddleware );
+  a.use( InaturalistAPI.lookupProjectMiddleware );
+};
+
 var app = ElasticMapper.server( _.extend( config, {
-  beforePrepareQuery: InaturalistMapserver.beforePrepareQuery,
+  prepareApp: prepareApp,
   prepareQuery: InaturalistMapserver.prepareQuery,
   prepareStyle: InaturalistMapserver.prepareStyle,
   beforeSendResult: InaturalistMapserver.beforeSendResult
 }));
 
-app.use( compression( ) );
-app.use( bodyParser.json( ) );
-app.use( express.static( "public" ) );
-app.set( "view engine", "jade" );
-app.use( util.accessControlHeaders );
-// log request times
+// log request times. Doing this outside prepareApp since
+// elasticmaps will log its own requests, if config.debug = true
 app.use( util.timingMiddleware );
-// lookup, and temporarily cache, a few instances
-app.use( InaturalistAPI.lookupTaxonMiddleware );
-app.use( InaturalistAPI.lookupPlaceMiddleware );
-app.use( InaturalistAPI.lookupPreferredPlaceMiddleware );
-
 
 // map tile routes
 app.get( "/places/:place_id/:zoom/:x/:y.:format([a-z\.]+)", InaturalistMapserver.placesRoute );

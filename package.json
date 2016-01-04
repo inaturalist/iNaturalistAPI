@@ -18,7 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.12.4",
-    "elasticmaps": "~0.1.12",
+    "elasticmaps": "~0.1.13",
     "underscore": "^1.8.3",
     "body-parser": "^1.12.4",
     "elasticsearch": "^4.0.2",
@@ -30,7 +30,8 @@
     "pg": "^4.4.3",
     "compression": "^1.6.0",
     "sphericalmercator": "^1.0.4",
-    "memory-cache": "~0.1.4"
+    "memory-cache": "~0.1.4",
+    "squel": "^4.2.2"
   },
   "devDependencies": {
     "mocha": "^2.2.4",

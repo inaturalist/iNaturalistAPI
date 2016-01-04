@@ -4,8 +4,11 @@ var expect = require( "chai" ).expect,
     config = require( "../config_example" ),
     util = require( "../lib/util" ),
     InaturalistAPI = require( "../lib/inaturalist_api" ),
-    Q = InaturalistAPI.paramsToElasticQuery,
     req;
+
+var Q = function( params ) {
+  return InaturalistAPI.reqToElasticQuery({ query: params });
+};
 
 describe( "InaturalistAPI", function( ) {
   beforeEach( function( ) {
@@ -21,7 +24,7 @@ describe( "InaturalistAPI", function( ) {
     });
   });
 
-  describe( "paramsToElasticQuery", function( ) {
+  describe( "reqToElasticQuery", function( ) {
     //
     // Queries
     //
@@ -443,45 +446,6 @@ describe( "InaturalistAPI", function( ) {
       expect( InaturalistAPI.defaultMapFields( ) ).to.eql( [ "id", "location",
        "taxon.iconic_taxon_id", "captive", "quality_grade", "geoprivacy",
        "private_location" ]);
-    });
-  });
-
-  describe( "fetchIDs", function( ) {
-    it( "requires an ID", function( done ) {
-      InaturalistAPI.fetchIDs({ params: { } }, "obs", function( err, rsp ) {
-        expect( err ).to.eql({ messsage: "ID missing", status: "400" });
-        done( );
-      });
-    });
-
-    it( "requires an integer ID", function( done ) {
-      InaturalistAPI.fetchIDs({ params: { id: "what" } }, "obs", function( err, rsp ) {
-        expect( err ).to.eql({ messsage: "invalid ID", status: "400" });
-        done( );
-      });
-    });
-
-    it( "allows comma separated IDs", function( done ) {
-      InaturalistAPI.fetchIDs({ params: { id: _.range( 55 ).join(",") } }, "obs", function( err, rsp ) {
-        expect( err ).to.eql({ messsage: "too many IDs", status: "400" });
-        done( );
-      });
-    });
-
-    it( "fetches results", function( done ) {
-      InaturalistAPI.fetchIDs({ params: { id: "1" } }, "obs", function( err, rsp ) {
-        // this needs some work - fixtures, etc
-        done( );
-      });
-    });
-  });
-
-  describe( "lookupTaxon", function( ) {
-    it( "fetches results", function( done ) {
-      InaturalistAPI.lookupTaxon( 1, function( err, rsp ) {
-        // this needs some work - fixtures, etc
-        done( );
-      });
     });
   });
 
