@@ -19,6 +19,8 @@ before_install:
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.7 20
   - g++ --version
   - sudo apt-get update -qq
+  - sudo /usr/share/elasticsearch/bin/plugin install elasticsearch/elasticsearch-analysis-kuromoji/2.4.1
+  - sudo service elasticsearch restart
 
 before_script:
   - cp config.js.travis config.js
