@@ -4,7 +4,7 @@
     "properties" : {
       "created_at" : {
         "type" : "date",
-        "format" : "epoch_millis||dateOptionalTime"
+        "format" : "dateOptionalTime"
       },
       "id" : {
         "type" : "long"
@@ -53,11 +53,11 @@
       },
       "updated_at" : {
         "type" : "date",
-        "format" : "epoch_millis||dateOptionalTime"
+        "format" : "dateOptionalTime"
       },
       "viewed_at" : {
         "type" : "date",
-        "format" : "epoch_millis||dateOptionalTime"
+        "format" : "dateOptionalTime"
       }
     }
   }

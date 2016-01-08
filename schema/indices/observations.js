@@ -15,7 +15,7 @@
           },
           "created_at" : {
             "type" : "date",
-            "format" : "strict_date_optional_time||epoch_millis"
+            "format" : "dateOptionalTime"
           },
           "created_at_details" : {
             "properties" : {
@@ -59,7 +59,7 @@
       },
       "created_at" : {
         "type" : "date",
-        "format" : "epoch_millis||dateOptionalTime"
+        "format" : "dateOptionalTime"
       },
       "created_at_details" : {
         "properties" : {
@@ -148,7 +148,7 @@
           },
           "created_at" : {
             "type" : "date",
-            "format" : "strict_date_optional_time||epoch_millis"
+            "format" : "dateOptionalTime"
           },
           "created_at_details" : {
             "properties" : {
@@ -220,7 +220,7 @@
           },
           "created_at" : {
             "type" : "date",
-            "format" : "strict_date_optional_time||epoch_millis"
+            "format" : "dateOptionalTime"
           },
           "created_at_details" : {
             "properties" : {
@@ -274,7 +274,7 @@
       },
       "observed_on" : {
         "type" : "date",
-        "format" : "epoch_millis||dateOptionalTime"
+        "format" : "dateOptionalTime"
       },
       "observed_on_details" : {
         "properties" : {
@@ -319,7 +319,7 @@
           },
           "created_at" : {
             "type" : "date",
-            "format" : "strict_date_optional_time||epoch_millis"
+            "format" : "dateOptionalTime"
           },
           "created_at_details" : {
             "properties" : {
@@ -548,7 +548,7 @@
       },
       "time_observed_at" : {
         "type" : "date",
-        "format" : "epoch_millis||dateOptionalTime"
+        "format" : "dateOptionalTime"
       },
       "time_zone" : {
         "type" : "string"
@@ -558,7 +558,7 @@
       },
       "updated_at" : {
         "type" : "date",
-        "format" : "epoch_millis||dateOptionalTime"
+        "format" : "dateOptionalTime"
       },
       "uri" : {
         "type" : "string"

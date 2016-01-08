@@ -23,7 +23,7 @@
       },
       "created_at" : {
         "type" : "date",
-        "format" : "epoch_millis||dateOptionalTime"
+        "format" : "dateOptionalTime"
       },
       "default_photo" : {
         "properties" : {
