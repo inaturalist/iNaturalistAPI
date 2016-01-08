@@ -9,6 +9,7 @@ module.exports = {
     user: "postgres",
     host: "127.0.0.1",
     port: 5432,
+    geometry_field: "geom",
     dbname: "inaturalist_test"
   },
   debug: true
