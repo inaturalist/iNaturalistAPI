@@ -4,6 +4,7 @@ var expect = require( "chai" ).expect,
     config = require( "../config_example" ),
     util = require( "../lib/util" ),
     InaturalistAPI = require( "../lib/inaturalist_api" ),
+    testHelper = require( "../lib/test_helper" ),
     req;
 
 var Q = function( params ) {
@@ -13,6 +14,10 @@ var Q = function( params ) {
 describe( "InaturalistAPI", function( ) {
   beforeEach( function( ) {
     global.config = config;
+  });
+
+  it( "uses the test ENV", function( ) {
+    expect( process.env.NODE_ENV ).to.eq( "test" );
   });
 
   describe( "elasticResults", function( ) {

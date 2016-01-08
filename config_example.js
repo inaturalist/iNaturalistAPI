@@ -1,8 +1,7 @@
 module.exports = {
+  environment: "development",
   elasticsearch: {
     host: "localhost:9200",
-    searchIndex: "observations",
-    placeIndex: "places",
     geoPointField: "location"
   },
   database: {
@@ -15,7 +14,6 @@ module.exports = {
     password: "password",
     ssl: false
   },
-  environment: "production",
   tileSize: 512,
   debug: true
 };

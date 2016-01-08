@@ -22,6 +22,10 @@ before_install:
 
 before_script:
   - cp config.js.travis config.js
+  - psql -c 'create database inaturalist_test;' -U postgres
+  - psql -c 'CREATE EXTENSION postgis;' -U postgres -d inaturalist_test
+  - psql -c 'CREATE EXTENSION postgis_topology;' -U postgres -d inaturalist_test
+  - psql -f schema/database.sql -U postgres -d inaturalist_test
   - sleep 15
 
 notifications:
