@@ -25,7 +25,7 @@ describe( "Taxon", function( ) {
         { place_id: 111, establishment_means: "endemic" },
         { place_id: 444 },
         { place_id: 222, establishment_means: "introduced" } ]
-    })
+    });
   });
 
   describe( "constructor", function( ) {
@@ -72,7 +72,7 @@ describe( "Taxon", function( ) {
     });
 
     it( "returns null given an unknown ID", function( done ) {
-      Taxon.findByID( 5, function( err, t ) {
+      Taxon.findByID( 55555, function( err, t ) {
         expect( err ).to.eq( null );
         expect( t ).to.eq( false );
         done( );

@@ -2,13 +2,14 @@ module.exports = {
   environment: "test",
   elasticsearch: {
     host: "localhost:9200",
-    geoPointField: "location"
+    geoPointField: "location",
+    searchIndex: "test_observations"
   },
   database: {
     user: "postgres",
     host: "127.0.0.1",
     port: 5432,
-    dbname: "travis_ci_test"
+    dbname: "inaturalist_test"
   },
   debug: true
 }

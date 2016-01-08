@@ -12,21 +12,9 @@ var Q = function( params ) {
 };
 
 describe( "InaturalistAPI", function( ) {
-  beforeEach( function( ) {
-    global.config = config;
-  });
 
   it( "uses the test ENV", function( ) {
     expect( process.env.NODE_ENV ).to.eq( "test" );
-  });
-
-  describe( "elasticResults", function( ) {
-    it( "filters by user.id", function( done ) {
-      var eq = InaturalistAPI.elasticResults( { query: { } }, "observations", function( err, res ) {
-        // not testing anything yet
-        done( );
-      });
-    });
   });
 
   describe( "reqToElasticQuery", function( ) {
@@ -83,6 +71,16 @@ describe( "InaturalistAPI", function( ) {
     it( "filters by taxon_ids", function( ) {
       var eq = Q( { taxon_ids: [ 3, 4, 5 ] } );
       expect( eq.filters ).to.eql([{ terms: { "taxon.ancestor_ids": [ 3, 4, 5 ] } }]);
+    });
+
+    it( "turns has[] into params", function( ) {
+      var eq = Q( { has: [ "photos" ] } );
+      expect( eq.filters ).to.eql([{ exists: { field: "photos.url" } }]);
+    });
+
+    it( "filters by user login", function( ) {
+      var eq = Q( { user_id: "aname" } );
+      expect( eq.filters ).to.eql([{ terms: { "user.login": [ "aname" ] } }]);
     });
 
     it( "filters by param values", function( ) {
@@ -192,6 +190,40 @@ describe( "InaturalistAPI", function( ) {
       expect( eq.filters ).to.eql([{ terms: { project_ids: [ 3 ] } }]);
     });
 
+    it( "filters by project_id and ignores bad pcid values", function( ) {
+      var eq = Q( { project_id: 3, pcid: "bad" } );
+      expect( eq.filters ).to.eql([{ terms: { project_ids: [ 3 ] } }]);
+    });
+
+    it( "filters by project_id and pcid=true", function( ) {
+      var eq = Q( { project_id: 3, pcid: "true" } );
+      expect( eq.filters ).to.eql([
+        { terms: { project_ids: [ 3 ] } },
+        { terms: { project_ids_with_curator_id: [ 3 ] }}]);
+    });
+
+    it( "filters by project_id and pcid=false", function( ) {
+      var eq = Q( { project_id: 3, pcid: "false" } );
+      expect( eq.filters ).to.eql([
+        { terms: { project_ids: [ 3 ] } },
+        { terms: { project_ids_without_curator_id: [ 3 ] }}]);
+    });
+
+    it( "ignores bad pcid values", function( ) {
+      var eq = Q( { pcid: "bad" } );
+      expect( eq.filters ).to.be.empty;
+    });
+
+    it( "filters by pcid=true", function( ) {
+      var eq = Q( { pcid: "true" } );
+      expect( eq.filters ).to.eql([{ exists: { field: "project_ids_with_curator_id" } }]);
+    });
+
+    it( "filters by pcid=false", function( ) {
+      var eq = Q( { pcid: "false" } );
+      expect( eq.filters ).to.eql([{ exists: { field: "project_ids_without_curator_id" } }]);
+    });
+
     it( "filters by project_ids", function( ) {
       var eq = Q( { project_ids: [ 4, 5 ] } );
       expect( eq.filters ).to.eql([{ terms: { project_ids: [ 4, 5 ] } }]);
@@ -213,7 +245,7 @@ describe( "InaturalistAPI", function( ) {
       var eq = Q( { quality_grade: "research" } );
       expect( eq.filters ).to.eql([{ terms: { quality_grade: [ "research" ] } }]);
       var eq = Q( { quality_grade: "any" } );
-      expect( eq.filters ).to.eql([ ]);
+      expect( eq.filters ).to.be.empty;
     });
 
     it( "filters by identifications most_agree", function( ) {
@@ -275,11 +307,11 @@ describe( "InaturalistAPI", function( ) {
 
     it( "does nothing without an invalid date", function( ) {
       var eq = Q( { d1: "nonsense" } );
-      expect( eq.where ).to.eql( [ ] );
-      expect( eq.filters ).to.eql( [ ] );
+      expect( eq.where ).to.be.empty;
+      expect( eq.filters ).to.be.empty;
       var eq = Q( { d2: "nonsense" } );
-      expect( eq.where ).to.eql( [ ] );
-      expect( eq.filters ).to.eql( [ ] );
+      expect( eq.where ).to.be.empty;
+      expect( eq.filters ).to.be.empty;
     });
 
     it( "defaults d2 to today", function( ) {
@@ -324,7 +356,7 @@ describe( "InaturalistAPI", function( ) {
 
     it( "ignores bad updated_since values", function( ) {
       var eq = Q( { updated_since: "nonsense" } );
-      expect( eq.filters ).to.eql([ ]);
+      expect( eq.filters ).to.be.empty;
     });
 
     it( "filters by observation fields", function( ) {
@@ -366,6 +398,11 @@ describe( "InaturalistAPI", function( ) {
         terms["taxon.statuses.iucn" ][0] ).to.eql( 40 );
     });
 
+    it( "ignores bad values for csi", function( ) {
+      eq = Q( { csi: "bad" } );
+      expect( eq.where ).to.be.empty;
+    });
+
     it( "filters by conservation status authority", function( ) {
       eq = Q( { csa: "natureserve" } );
       expect( eq.where[0].nested.query.filtered.filter[0].missing.field ).
@@ -394,6 +431,11 @@ describe( "InaturalistAPI", function( ) {
     it( "filters by reviewed false", function( ) {
       var eq = Q( { reviewed: "false", viewer_id: 21 } );
       expect( eq.filters ).to.eql([{ not: { term: { reviewed_by: 21 }}}]);
+    });
+
+    it( "ignored bad values for reviewed", function( ) {
+      var eq = Q( { reviewed: "bad", viewer_id: 21 } );
+      expect( eq.filters ).to.be.empty;
     });
 
     it( "filters by geoprivacy", function( ) {
@@ -460,6 +502,43 @@ describe( "InaturalistAPI", function( ) {
         // this needs some work - fixtures, etc
         done( );
       });
+    });
+  });
+
+  describe( "localeOpts", function( ) {
+    it( "defaults to en", function( ) {
+      var opts = InaturalistAPI.localeOpts({ query: { } });
+      expect( opts.locale ).to.eq( "en" );
+    });
+
+    it( "uses the specified locale", function( ) {
+      var opts = InaturalistAPI.localeOpts({ query: { locale: "de" } });
+      expect( opts.locale ).to.eq( "de" );
+    });
+
+    it( "sets places", function( ) {
+      var req = { query: { }, inat: { place: "PL", preferredPlace: "PPL" } };
+      var opts = InaturalistAPI.localeOpts( req );
+      expect( opts.place ).to.eq( "PL" );
+      expect( opts.preferredPlace ).to.eq( "PPL" );
+    });
+  });
+
+  describe( "methodValidationError", function( ) {
+    it( "returns an error if ID is missing", function( ) {
+      expect( InaturalistAPI.methodValidationError({ params: { } })).
+        to.deep.eq({ messsage: "ID missing", status: "400" });
+    });
+
+    it( "returns an error if ID is malformed", function( ) {
+      expect( InaturalistAPI.methodValidationError({ params: { id: "string" } })).
+        to.deep.eq({ messsage: "invalid ID", status: "400" });
+      expect( InaturalistAPI.methodValidationError({ params: { id: "1200--" } })).
+        to.deep.eq({ messsage: "invalid ID", status: "400" });
+      expect( InaturalistAPI.methodValidationError({ params: { id: "1" } })).
+        to.be.undefined;
+      expect( InaturalistAPI.methodValidationError({ params: { id: "1,4,100" } })).
+        to.be.undefined;
     });
   });
 
