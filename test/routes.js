@@ -20,7 +20,7 @@ describe( "routes", function( ) {
     it( "returns json", function( done ) {
       request( app ).get( "/observations" ).
         expect( "Content-Type", /json/ ).expect( 200, done );
-    })
+    });
   });
 
   describe( "observationsIdentifiers", function( ) {
@@ -115,9 +115,53 @@ describe( "routes", function( ) {
   });
 
   describe( "placesNearby", function( ) {
+    before( function( done ) {
+      var places = [
+        { index:  { _index: "test_places", _type: "place" } },
+        { id: 1, name: "United States", display_name_autocomplete: "United States",
+          location: "48.8907012939,-116.9820022583",
+          admin_level: 0, bbox_area: 5500, geometry_geojson: {
+            type: "Polygon", coordinates: [[
+              [ -125, 50 ], [ -65, 50 ], [ -65, 25 ], [ -125, 25 ], [ -125, 50 ]]] } },
+        { index:  { _index: "test_places", _type: "place" } },
+        { id: 2, name: "Massachusetts", display_name_autocomplete: "Massachusetts",
+          location: "42.0368995667,-71.6835021973",
+          admin_level: 1, bbox_area: 6, geometry_geojson: {
+            type: "Polygon", coordinates: [[
+              [ -73.5, 42.75 ], [ -70, 42.75 ], [ -70, 41.5 ], [ -73.5, 41.5 ], [ -73.5, 42.75 ]]] } },
+        { index:  { _index: "test_places", _type: "place" } },
+        { id: 3, name: "Community", display_name_autocomplete: "Community",
+          admin_level: null, bbox_area: 6, geometry_geojson: {
+            type: "Polygon", coordinates: [[
+              [ -73.5, 42.75 ], [ -70, 42.75 ], [ -70, 41.5 ], [ -73.5, 41.5 ], [ -73.5, 42.75 ]]] } }
+      ];
+      esClient.connection.bulk({
+        index: "test_places",
+        type: "place",
+        body: places,
+        refresh: true
+      }, function( err, response ) {
+        done( );
+      });
+    });
+
     it( "returns json", function( done ) {
       request( app ).get( "/places/nearby" ).
         expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "returns standard and community places", function( done ) {
+      request( app ).get( "/places/nearby?swlat=41&swlng=-73&nelat=43&nelng=-70" ).
+        expect( function( res ) {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 3 );
+          expect( res.body.total_results ).to.eq( 3 );
+          expect( res.body.results.standard.length ).to.eq( 2 );
+          expect( res.body.results.community.length ).to.eq( 1 );
+          expect( res.body.results.standard[ 0 ].name ).to.eq( "United States" );
+          expect( res.body.results.standard[ 1 ].name ).to.eq( "Massachusetts" );
+          expect( res.body.results.community[ 0 ].name ).to.eq( "Community" );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
   });
 

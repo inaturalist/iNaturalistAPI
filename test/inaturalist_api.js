@@ -3,6 +3,8 @@ var expect = require( "chai" ).expect,
     _ = require( "underscore" ),
     config = require( "../config_example" ),
     util = require( "../lib/util" ),
+    esClient = require( "../lib/es_client" ),
+    Taxon = require( "../lib/models/taxon" ),
     InaturalistAPI = require( "../lib/inaturalist_api" ),
     testHelper = require( "../lib/test_helper" ),
     req;
@@ -539,6 +541,35 @@ describe( "InaturalistAPI", function( ) {
         to.be.undefined;
       expect( InaturalistAPI.methodValidationError({ params: { id: "1,4,100" } })).
         to.be.undefined;
+    });
+  });
+
+  describe( "lookupInstance", function( ) {
+    before( function( done ) {
+      esClient.connection.create({
+        index: "test_taxa",
+        type: "taxon",
+        body: { id: 999, name: "ataxon" },
+        refresh: true
+      }, function( err, response ) {
+        done( );
+      });
+    });
+
+    it( "looks up instances", function( ) {
+      var req = { query: { taxon_id: 999 } };
+      InaturalistAPI.lookupInstance( req, "taxon_id", Taxon.findByID, function( err, t ) {
+        expect( err ).to.be.null;
+        expect( t.id ).to.eq( 999 );
+      });
+    });
+
+    it( "returns an error if they don't exist", function( ) {
+      var req = { query: { taxon_id: 1000 } };
+      InaturalistAPI.lookupInstance( req, "taxon_id", Taxon.findByID, function( err, t ) {
+        expect( err ).to.deep.eq({ message: "Unknown taxon_id 1000", status: 422 });
+        expect( t ).to.be.undefined;
+      });
     });
   });
 
