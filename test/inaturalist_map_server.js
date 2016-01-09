@@ -23,24 +23,6 @@ describe( "InaturalistMapServer", function( ) {
     stubRes = stubResult( );
   });
 
-  describe( "beforePrepareQuery", function( ) {
-    it( "does nothing if there is no taxon_id parameter", function( done ) {
-      stubReq.query.taxon_id = null;
-      MapServer.beforePrepareQuery( stubReq, function( err ) {
-        expect( err ).to.be.null;
-        done( );
-      });
-    });
-
-    it( "returns an error if the taxon does not exist", function( done ) {
-      stubReq.query.taxon_id = 999999999;
-      MapServer.beforePrepareQuery( stubReq, function( err ) {
-        expect( err ).to.eql({ message: "Unknown taxonID 999999999", status: 500 });
-        done( );
-      });
-    });
-  });
-
   describe( "prepareQuery", function( ) {
     it( "adds a proper elastic_query for summaries", function( done ) {
       stubReq.params.style = "summary";
@@ -108,7 +90,7 @@ describe( "InaturalistMapServer", function( ) {
     });
 
     it( "infers color of points from taxon", function( done ) {
-      stubReq.taxon = { iconic_taxon_id: 1 };
+      stubReq.inat = { taxon: { iconic_taxon_id: 1 } };
       MapServer.prepareStyle( stubReq, function( err, req ) {
         expect( stubReq.style ).to.eql(
           MapStyles.markersAndCircles( "#1E90FF" ) );
@@ -153,7 +135,7 @@ describe( "InaturalistMapServer", function( ) {
 
     it( "infers color of colored_heatmap from taxon", function( done ) {
       stubReq.params.style = "colored_heatmap";
-      stubReq.taxon = { iconic_taxon_id: 1 };
+      stubReq.inat = { taxon: { iconic_taxon_id: 1 } };
       MapServer.prepareStyle( stubReq, function( err, req ) {
         expect( stubReq.style ).to.eql(
           MapStyles.coloredHeatmap( "#1E90FF" ) );

@@ -5,9 +5,6 @@ compiler: gcc
 node_js:
   - '0.10'
 
-services:
-  - elasticsearch
-
 addons:
   postgresql: '9.3'
 
@@ -19,9 +16,17 @@ before_install:
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.7 20
   - g++ --version
   - sudo apt-get update -qq
+  - curl -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.1.1/elasticsearch-2.1.1.deb && sudo dpkg -i --force-confnew elasticsearch-2.1.1.deb
+  - sudo /usr/share/elasticsearch/bin/plugin install analysis-kuromoji
+  - sudo /usr/share/elasticsearch/bin/plugin install delete-by-query
+  - sudo service elasticsearch start
 
 before_script:
   - cp config.js.travis config.js
+  - psql -c 'create database inaturalist_test;' -U postgres
+  - psql -c 'CREATE EXTENSION postgis;' -U postgres -d inaturalist_test
+  - psql -c 'CREATE EXTENSION postgis_topology;' -U postgres -d inaturalist_test
+  - psql -f schema/database.sql -U postgres -d inaturalist_test
   - sleep 15
 
 notifications:

@@ -1,9 +1,9 @@
 module.exports = {
+  environment: "development",
   elasticsearch: {
     host: "localhost:9200",
-    searchIndex: "observations",
-    placeIndex: "places",
-    geoPointField: "location"
+    geoPointField: "location",
+    searchIndex: "development_observations"
   },
   database: {
     user: "username",
@@ -11,11 +11,10 @@ module.exports = {
     port: 5432,
     geometry_field: "geom",
     srid: 4326,
-    dbname: "inaturalist_production",
+    dbname: "inaturalist_development",
     password: "password",
     ssl: false
   },
-  environment: "production",
   tileSize: 512,
   debug: true
 };
