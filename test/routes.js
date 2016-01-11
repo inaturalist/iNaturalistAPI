@@ -7,6 +7,37 @@ var expect = require( "chai" ).expect,
 
 describe( "routes", function( ) {
 
+  before( function( done ) {
+    var observations = [
+      { index:  { _index: "test_observations", _type: "observation" } },
+      { id: 1, user: { id: 2 }, created_at: "2015-12-31T00:00:00", private_location: "1,2",
+        taxon: { id: 5, ancestry: "1,2,3,4,5" },
+        private_geojson: { type: "Point", coordinates: [ "2", "1" ] } },
+      { index:  { _index: "test_observations", _type: "observation" } },
+      { id: 2, user: { id: 5 }, created_at: "2016-01-01T01:00:00", private_location: "2,3",
+        taxon: { id: 4, ancestry: "1,2,3,4" },
+        non_owner_ids: { user_id: 2 },
+        private_geojson: { type: "Point", coordinates: [ "3", "2" ] } }
+    ];
+    esClient.connection.bulk({
+      index: "test_observations",
+      type: "observation",
+      body: observations,
+      refresh: true,
+    }, function( err, response ) {
+      done( );
+    });
+  });
+
+  before( function( done ) {
+    pgClient.connection.query( "TRUNCATE TABLE users", function( err, result ) {
+      pgClient.connection.query( "INSERT INTO users (id, login, icon_content_type) VALUES ($1, $2, $3)",
+        [ 2, "a-user", "jpeg" ], function( err, result ) {
+          done( );
+      });
+    });
+  });
+
   describe( "index", function( ) {
     it( "shows the app name", function( done ) {
       request( app ).get( "/" ).
@@ -17,9 +48,24 @@ describe( "routes", function( ) {
   });
 
   describe( "observationsIndex", function( ) {
+
     it( "returns json", function( done ) {
       request( app ).get( "/observations" ).
         expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "looks up users from the DB", function( done ) {
+      request( app ).get( "/observations" ).
+      expect( function( res ) {
+        expect( res.body.total_results ).to.eq( 2 );
+        expect( res.body.results[ 0 ].id ).to.eq( 2 );
+        expect( res.body.results[ 0 ].user.id ).to.eq( 5 );
+        expect( res.body.results[ 0 ].user.login ).to.be.undefined;
+        expect( res.body.results[ 1 ].id ).to.eq( 1 );
+        expect( res.body.results[ 1 ].user.id ).to.eq( 2 );
+        // login comes from the DB
+        expect( res.body.results[ 1 ].user.login ).to.eq( "a-user" );
+      }).expect( 200, done );
     });
   });
 
