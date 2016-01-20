@@ -109,25 +109,25 @@ describe( "Taxon", function( ) {
     });
   });
 
-  describe( "preferredCommonName", function( ) {
+  describe( "conservationStatus", function( ) {
     it( "returns the global status by default", function( ) {
-      expect( t.conservationStatus( ) ).to.eq( "NT" );
+      expect( t.conservationStatus( ) ).to.deep.eq({ place_id: null, iucn: 20 });
     });
 
     it( "returns the status given a place", function( ) {
       p = { id: 222 };
-      expect( t.conservationStatus( p ) ).to.eq( "CR" );
+      expect( t.conservationStatus( p ) ).to.deep.eq({ place_id: 222, iucn: 50 });
     });
 
     it( "returns the status from an ancestor place", function( ) {
       p = { id: 333, ancestor_place_ids: [ 111, 333 ] };
-      expect( t.conservationStatus( p ) ).to.eq( "VU" );
+      expect( t.conservationStatus( p ) ).to.deep.eq({ place_id: 111, iucn: 30 });
     });
 
     it( "skips least concerns", function( ) {
       // 20 is still OK
       var t2 = new Taxon({ statuses: [{ iucn: 20 }] });
-      expect( t2.conservationStatus( ) ).to.eq( "NT" );
+      expect( t2.conservationStatus( ) ).to.deep.eq({ iucn: 20 });
       // 10 is not threatened enough
       t2 = new Taxon({ statuses: [{ iucn: 10 }] });
       expect( t2.conservationStatus( ) ).to.be.undefined;
@@ -141,12 +141,12 @@ describe( "Taxon", function( ) {
 
     it( "returns the means given a place", function( ) {
       p = { id: 222 };
-      expect( t.establishmentMeans( p ) ).to.eq( "introduced" );
+      expect( t.establishmentMeans( p ) ).to.deep.eq({ place_id: 222, establishment_means: "introduced" });
     });
 
     it( "returns the means from an ancestor place", function( ) {
       p = { id: 333, ancestor_place_ids: [ 111, 333 ] };
-      expect( t.establishmentMeans( p ) ).to.eq( "endemic" );
+      expect( t.establishmentMeans( p ) ).to.deep.eq({ place_id: 111, establishment_means: "endemic" });
     });
 
     it( "skips listed taxa without means", function( ) {
