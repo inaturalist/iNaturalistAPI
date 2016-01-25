@@ -164,7 +164,7 @@ describe( "InaturalistAPI", function( ) {
     });
 
     it( "filters by observed_on", function( ) {
-      var eq = Q( { observed_on: "10-11-2009" } );
+      var eq = Q( { observed_on: "2009-10-11" } );
       expect( eq.filters ).to.eql([
         { terms: { "observed_on_details.day": [ 11 ] } },
         { terms: { "observed_on_details.month": [ 10 ] } },
@@ -172,7 +172,7 @@ describe( "InaturalistAPI", function( ) {
     });
 
     it( "filters by on", function( ) {
-      var eq = Q( { on: "10-11-2009" } );
+      var eq = Q( { on: "2009-10-11" } );
       expect( eq.filters ).to.eql([
         { terms: { "observed_on_details.day": [ 11 ] } },
         { terms: { "observed_on_details.month": [ 10 ] } },
@@ -180,7 +180,7 @@ describe( "InaturalistAPI", function( ) {
     });
 
     it( "filters by created_on", function( ) {
-      var eq = Q( { created_on: "10-11-2009" } );
+      var eq = Q( { created_on: "2009-10-11" } );
       expect( eq.filters ).to.eql([
         { terms: { "created_at_details.day": [ 11 ] } },
         { terms: { "created_at_details.month": [ 10 ] } },
@@ -296,14 +296,14 @@ describe( "InaturalistAPI", function( ) {
     });
 
     it( "filters observed_on by date", function( ) {
-      var eq = Q( { d1: "2015-01-01", d2: "2015-02-02" } );
-      expect( eq.filters[0].or[0].and[0].range.observed_on ).to.eql(
-        { gte: "2015-01-01T00:00:00+00:00",
-          lte: "2015-02-02T00:00:00+00:00" });
-      expect( eq.filters[0].or[0].and[1].exists.field ).to.eql( "time_observed_at" );
-      expect( eq.filters[0].or[1].and[0].range.observed_on ).to.eql(
+      var eq = Q( { d1: "2015-01-01T00:00:00+00:00", d2: "2015-02-02T23:59:59+00:00" } );
+      expect( eq.filters[0].or[0].and[0].range.time_observed_at ).to.eql(
         { gte: "2015-01-01T00:00:00+00:00",
           lte: "2015-02-02T23:59:59+00:00" });
+      expect( eq.filters[0].or[0].and[1].exists.field ).to.eql( "time_observed_at" );
+      expect( eq.filters[0].or[1].and[0].range["observed_on_details.date"] ).to.eql(
+        { gte: "2015-01-01",
+          lte: "2015-02-02" });
       expect( eq.filters[0].or[1].and[1].missing.field ).to.eql( "time_observed_at" );
     });
 
@@ -316,28 +316,18 @@ describe( "InaturalistAPI", function( ) {
       expect( eq.filters ).to.be.empty;
     });
 
-    it( "defaults d2 to today", function( ) {
+    it( "defaults d2 to tomorrow", function( ) {
       var eq = Q( { d1: "2015-01-01" } );
-      expect( eq.filters[0].or[0].and[0].range.observed_on ).to.eql(
-        { gte: "2015-01-01T00:00:00+00:00",
-          lte: moment.utc( ).format( ) });
-      expect( eq.filters[0].or[0].and[1].exists.field ).to.eql( "time_observed_at" );
-      expect( eq.filters[0].or[1].and[0].range.observed_on ).to.eql(
-        { gte: "2015-01-01T00:00:00+00:00",
-          lte: moment.utc( ).endOf( "day" ).format( ) });
-      expect( eq.filters[0].or[1].and[1].missing.field ).to.eql( "time_observed_at" );
+      expect( eq.filters[0].range["observed_on_details.date"] ).to.eql(
+        { gte: "2015-01-01",
+          lte: moment.utc( ).add( 2, "day").format( "YYYY-MM-DD" ) });
     });
 
-    it( "defaults d1 to 1800-1-1", function( ) {
+    it( "defaults d1 to 1800-01-01", function( ) {
       var eq = Q( { d2: "2015-02-02" } );
-      expect( eq.filters[0].or[0].and[0].range.observed_on ).to.eql(
-        { gte: "1800-01-01T00:00:00+00:00",
-          lte: "2015-02-02T00:00:00+00:00" });
-      expect( eq.filters[0].or[0].and[1].exists.field ).to.eql( "time_observed_at" );
-      expect( eq.filters[0].or[1].and[0].range.observed_on ).to.eql(
-        { gte: "1800-01-01T00:00:00+00:00",
-          lte: "2015-02-02T23:59:59+00:00" });
-      expect( eq.filters[0].or[1].and[1].missing.field ).to.eql( "time_observed_at" );
+      expect( eq.filters[0].range["observed_on_details.date"] ).to.eql(
+        { gte: "1800-01-01",
+          lte: "2015-02-02" });
     });
 
     it( "filters by not_in_project", function( ) {
@@ -470,7 +460,14 @@ describe( "InaturalistAPI", function( ) {
 
     it( "sorts by observed_on", function( ) {
       var eq = Q({ order_by: "observed_on" });
-      expect( eq.sort ).to.eql( { observed_on: "desc"} );
+      expect( eq.sort ).to.eql({
+        created_at: "desc",
+        "observed_on_details.date": "desc",
+        time_observed_at: {
+          missing: "_last",
+          order: "desc"
+        }
+      });
     });
 
     it( "sorts by species_guess", function( ) {
