@@ -125,7 +125,6 @@ describe( "InaturalistAPI", function( ) {
         { http_param: "id_please", es_field: "id_please" },
         { http_param: "out_of_range", es_field: "out_of_range" },
         { http_param: "mappable", es_field: "mappable" },
-        { http_param: "verifiable", es_field: "verifiable" },
         { http_param: "captive", es_field: "captive" }
       ], function( filter ) {
         var qp = { };
@@ -161,6 +160,18 @@ describe( "InaturalistAPI", function( ) {
         eq = Q( qp );
         expect( eq.filters ).to.eql([ { not: f } ]);
       });
+    });
+
+    it( "filters by verifiable true", function( ) {
+      var eq = Q( { verifiable: "true" } );
+      expect( eq.filters ).to.eql([
+        { terms: { quality_grade: [ "research", "needs_id" ] } }]);
+    });
+
+    it( "filters by verifiable false", function( ) {
+      var eq = Q( { verifiable: "false" } );
+      expect( eq.filters ).to.eql([ { not:
+        { terms: { quality_grade: [ "research", "needs_id" ] } } }]);
     });
 
     it( "filters by observed_on", function( ) {
