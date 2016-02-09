@@ -10,7 +10,14 @@ var expect = require( "chai" ).expect,
     req;
 
 var Q = function( params ) {
-  return InaturalistAPI.reqToElasticQuery({ query: params });
+  var queryString = _.reduce( params,
+    function ( components, value, key ) {
+      components.push( key + "=" + (value ? encodeURIComponent( value ) : "") );
+      return components;
+    }, [ ] ).join( "&" );
+  return InaturalistAPI.reqToElasticQuery({ query: params, _parsedUrl: {
+    query: queryString
+  }});
 };
 
 describe( "InaturalistAPI", function( ) {
