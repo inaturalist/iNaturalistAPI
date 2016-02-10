@@ -4,17 +4,35 @@ var expect = require( "chai" ).expect,
     User = require( "../../lib/models/user" );
 
 describe( "User", function( ) {
-
-  describe( "assignToObject", function( ) {
-    before( function( done ) {
-      pgClient.connection.query( "TRUNCATE TABLE users", function( err, result ) {
-        pgClient.connection.query(
-          "INSERT INTO users (id, login, icon_content_type, icon_file_name) VALUES ($1, $2, $3, $4)",
-          [ 123, "a-user", "image/jpeg", "img.jpg" ], function( err, result ) {
-            done( );
-        });
+  before( function( done ) {
+    pgClient.connection.query( "TRUNCATE TABLE users", function( err, result ) {
+      pgClient.connection.query(
+        "INSERT INTO users (id, login, icon_content_type, icon_file_name) VALUES ($1, $2, $3, $4)",
+        [ 123, "a-user", "image/jpeg", "img.jpg" ], function( err, result ) {
+          done( );
       });
     });
+  });
+
+  describe( "findByLogin", function( ) {
+    it( "returns a user given an login", function( done ) {
+      User.findByLogin( "a-user", function( err, u ) {
+        expect( u.id ).to.eq( 123 );
+        expect( u.login ).to.eq( "a-user" );
+        done( );
+      });
+    });
+
+    it( "returns a user from the cache", function( done ) {
+      User.findByLogin( "a-user", function( err, u ) {
+        expect( u.id ).to.eq( 123 );
+        expect( u.login ).to.eq( "a-user" );
+        done( );
+      });
+    });
+  });
+
+  describe( "assignToObject", function( ) {
 
     it( "assigns user instances to objects", function( done ) {
       var o = { 1: { }, 123: { }, 444: { } };
@@ -28,6 +46,7 @@ describe( "User", function( ) {
       });
     });
   });
+
 
   describe( "iconUrl", function( ) {
     it( "returns nothing if there is no icon", function( ) {
