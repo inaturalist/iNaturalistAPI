@@ -7,17 +7,17 @@ var expect = require( "chai" ).expect,
     Taxon = require( "../lib/models/taxon" ),
     InaturalistAPI = require( "../lib/inaturalist_api" ),
     testHelper = require( "../lib/test_helper" ),
-    req;
+    req, eq;
 
-var Q = function( params ) {
+var Q = function( params, callback ) {
   var queryString = _.reduce( params,
     function ( components, value, key ) {
       components.push( key + "=" + (value ? encodeURIComponent( value ) : "") );
       return components;
     }, [ ] ).join( "&" );
-  return InaturalistAPI.reqToElasticQuery({ query: params, _parsedUrl: {
+  InaturalistAPI.reqToElasticQuery({ query: params, _parsedUrl: {
     query: queryString
-  }});
+  }}, callback );
 };
 
 describe( "InaturalistAPI", function( ) {
@@ -32,7 +32,7 @@ describe( "InaturalistAPI", function( ) {
     //
 
     it( "queries multiple fields", function( ) {
-      var eq = Q( { q: "search" } );
+      Q( { q: "search" }, function( e, q ) { eq = q; } );
       expect( eq.where ).to.eql([{ multi_match: {
         fields: [
           "taxon.names.name",
@@ -45,25 +45,25 @@ describe( "InaturalistAPI", function( ) {
     });
 
     it( "queries names", function( ) {
-      var eq = Q( { q: "search", search_on: "names" } );
+      Q( { q: "search", search_on: "names" }, function( e, q ) { eq = q; } );
       expect( eq.where[0].multi_match.fields ).to.
         eql([ "taxon.names.name" ]);
     });
 
     it( "queries tags", function( ) {
-      var eq = Q( { q: "search", search_on: "tags" } );
+      Q( { q: "search", search_on: "tags" }, function( e, q ) { eq = q; } );
       expect( eq.where[0].multi_match.fields ).to.
         eql([ "tags" ]);
     });
 
     it( "queries descriptions", function( ) {
-      var eq = Q( { q: "search", search_on: "description" } );
+      Q( { q: "search", search_on: "description" }, function( e, q ) { eq = q; } );
       expect( eq.where[0].multi_match.fields ).to.
         eql([ "description" ]);
     });
 
     it( "queries places", function( ) {
-      var eq = Q( { q: "search", search_on: "place" } );
+      Q( { q: "search", search_on: "place" }, function( e, q ) { eq = q; } );
       expect( eq.where[0].multi_match.fields ).to.
         eql([ "place_guess" ]);
     });
@@ -73,22 +73,22 @@ describe( "InaturalistAPI", function( ) {
     //
 
     it( "filters by taxon_id", function( ) {
-      var eq = Q( { taxon_id: 88 } );
+      Q( { taxon_id: 88 }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ terms: { "taxon.ancestor_ids": [ 88 ] } }]);
     });
 
     it( "filters by taxon_ids", function( ) {
-      var eq = Q( { taxon_ids: [ 3, 4, 5 ] } );
+      Q( { taxon_ids: [ 3, 4, 5 ] }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ terms: { "taxon.ancestor_ids": [ 3, 4, 5 ] } }]);
     });
 
     it( "turns has[] into params", function( ) {
-      var eq = Q( { has: [ "photos" ] } );
+      Q( { has: [ "photos" ] }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ exists: { field: "photos.url" } }]);
     });
 
     it( "filters by user login", function( ) {
-      var eq = Q( { user_id: "aname" } );
+      Q( { user_id: "aname" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ terms: { "user.login": [ "aname" ] } }]);
     });
 
@@ -110,14 +110,14 @@ describe( "InaturalistAPI", function( ) {
         // single values (user_id only accepts integers)
         var v = (filter.http_param == "user_id") ? 99 : "test";
         qp[ filter.http_param ] = v;
-        var eq = Q( qp );
+        Q( qp, function( e, q ) { eq = q; } );
         var f = { terms: { } };
         f.terms[ filter.es_field ] = [ v ];
         expect( eq.filters ).to.eql([ f ]);
         // multiple values (user_id only accepts integers)
         v = (filter.http_param == "user_id") ? [ 98, 99 ] : [ "test1", "test2" ];
         qp[ filter.http_param ] = v;
-        var eq = Q( qp );
+        Q( qp, function( e, q ) { eq = q; } );
         var f = { terms: { } };
         f.terms[ filter.es_field ] = v;
         expect( eq.filters ).to.eql([ f ]);
@@ -137,13 +137,13 @@ describe( "InaturalistAPI", function( ) {
         var qp = { };
         // true values
         qp[ filter.http_param ] = "true";
-        var eq = Q( qp );
+        Q( qp, function( e, q ) { eq = q; } );
         var f = { terms: { } };
         f.terms[ filter.es_field ] = [ true ];
         expect( eq.filters ).to.eql([ f ]);
         // false values
         qp[ filter.http_param ] = "false";
-        eq = Q( qp );
+        Q( qp, function( e, q ) { eq = q; } );
         f = { term: { } };
         f.term[ filter.es_field ] = false;
         expect( eq.filters ).to.eql([ f ]);
@@ -159,30 +159,30 @@ describe( "InaturalistAPI", function( ) {
         var qp = { };
         // true values
         qp[ filter.http_param ] = "true";
-        var eq = Q( qp );
+        Q( qp, function( e, q ) { eq = q; } );
         var f = { exists: { field: filter.es_field } };
         expect( eq.filters ).to.eql([ f ]);
         // false values
         qp[ filter.http_param ] = "false";
-        eq = Q( qp );
+        Q( qp, function( e, q ) { eq = q; } );
         expect( eq.filters ).to.eql([ { not: f } ]);
       });
     });
 
     it( "filters by verifiable true", function( ) {
-      var eq = Q( { verifiable: "true" } );
+      Q( { verifiable: "true" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([
         { terms: { quality_grade: [ "research", "needs_id" ] } }]);
     });
 
     it( "filters by verifiable false", function( ) {
-      var eq = Q( { verifiable: "false" } );
+      Q( { verifiable: "false" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([ { not:
         { terms: { quality_grade: [ "research", "needs_id" ] } } }]);
     });
 
     it( "filters by observed_on", function( ) {
-      var eq = Q( { observed_on: "2009-10-11" } );
+      Q( { observed_on: "2009-10-11" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([
         { terms: { "observed_on_details.day": [ 11 ] } },
         { terms: { "observed_on_details.month": [ 10 ] } },
@@ -190,7 +190,7 @@ describe( "InaturalistAPI", function( ) {
     });
 
     it( "filters by on", function( ) {
-      var eq = Q( { on: "2009-10-11" } );
+      Q( { on: "2009-10-11" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([
         { terms: { "observed_on_details.day": [ 11 ] } },
         { terms: { "observed_on_details.month": [ 10 ] } },
@@ -198,7 +198,7 @@ describe( "InaturalistAPI", function( ) {
     });
 
     it( "filters by created_on", function( ) {
-      var eq = Q( { created_on: "2009-10-11" } );
+      Q( { created_on: "2009-10-11" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([
         { terms: { "created_at_details.day": [ 11 ] } },
         { terms: { "created_at_details.month": [ 10 ] } },
@@ -206,115 +206,116 @@ describe( "InaturalistAPI", function( ) {
     });
 
     it( "filters by project_id", function( ) {
-      var eq = Q( { project_id: 3 } );
+      Q( { project_id: 3 }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ terms: { project_ids: [ 3 ] } }]);
     });
 
     it( "filters by project_id and ignores bad pcid values", function( ) {
-      var eq = Q( { project_id: 3, pcid: "bad" } );
+      Q( { project_id: 3, pcid: "bad" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ terms: { project_ids: [ 3 ] } }]);
     });
 
     it( "filters by project_id and pcid=true", function( ) {
-      var eq = Q( { project_id: 3, pcid: "true" } );
+      Q( { project_id: 3, pcid: "true" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([
         { terms: { project_ids: [ 3 ] } },
         { terms: { project_ids_with_curator_id: [ 3 ] }}]);
     });
 
     it( "filters by project_id and pcid=false", function( ) {
-      var eq = Q( { project_id: 3, pcid: "false" } );
+      Q( { project_id: 3, pcid: "false" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([
         { terms: { project_ids: [ 3 ] } },
         { terms: { project_ids_without_curator_id: [ 3 ] }}]);
     });
 
     it( "ignores bad pcid values", function( ) {
-      var eq = Q( { pcid: "bad" } );
+      Q( { pcid: "bad" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.be.empty;
     });
 
     it( "filters by pcid=true", function( ) {
-      var eq = Q( { pcid: "true" } );
+      Q( { pcid: "true" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ exists: { field: "project_ids_with_curator_id" } }]);
     });
 
     it( "filters by pcid=false", function( ) {
-      var eq = Q( { pcid: "false" } );
+      Q( { pcid: "false" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ exists: { field: "project_ids_without_curator_id" } }]);
     });
 
     it( "filters by project_ids", function( ) {
-      var eq = Q( { project_ids: [ 4, 5 ] } );
+      Q( { project_ids: [ 4, 5 ] }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ terms: { project_ids: [ 4, 5 ] } }]);
     });
 
     it( "filters by lrank", function( ) {
-      var eq = Q( { lrank: "family" } );
+      Q( { lrank: "family" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ range: {
         "taxon.rank_level": { gte: 30, lte: 100 }}}]);
     });
 
     it( "filters by hrank", function( ) {
-      var eq = Q( { hrank: "class" } );
+      Q( { hrank: "class" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ range: {
         "taxon.rank_level": { gte: 0, lte: 50 }}}]);
     });
 
     it( "filters by quality grade except 'any'", function( ) {
-      var eq = Q( { quality_grade: "research" } );
+      Q( { quality_grade: "research" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ terms: { quality_grade: [ "research" ] } }]);
-      var eq = Q( { quality_grade: "any" } );
+      Q( { quality_grade: "any" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.be.empty;
     });
 
     it( "filters by identifications most_agree", function( ) {
-      var eq = Q( { identifications: "most_agree" } );
+      Q( { identifications: "most_agree" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ terms: { identifications_most_agree: [ true ] } }]);
     });
 
     it( "filters by identifications some_agree", function( ) {
-      var eq = Q( { identifications: "some_agree" } );
+      Q( { identifications: "some_agree" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ terms: { identifications_some_agree: [ true ] } }]);
     });
 
     it( "filters by identifications most_disagree", function( ) {
-      var eq = Q( { identifications: "most_disagree" } );
+      Q( { identifications: "most_disagree" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ terms: { identifications_most_disagree: [ true ] } }]);
     });
 
     it( "filters by bounding box", function( ) {
-      var eq = Q( { nelat: 1, nelng: 2, swlat: 3, swlng: 4 } );
+      Q( { nelat: 1, nelng: 2, swlat: 3, swlng: 4 }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ envelope: { geojson: {
         nelat: 1, nelng: 2, swlat: 3, swlng: 4 }}}]);
     });
 
     it( "filters by point and radius", function( ) {
-      var eq = Q( { lat: 10, lng: 20, radius: 30 } );
+      Q( { lat: 10, lng: 20, radius: 30 }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ geo_distance: {
         distance: "30km", location: { lat: 10, lon: 20 }}}]);
     });
 
     it( "defaults to a radius of 10k", function( ) {
-      var eq = Q( { lat: 10, lng: 20 } );
+      Q( { lat: 10, lng: 20 }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ geo_distance: {
         distance: "10km", location: { lat: 10, lon: 20 }}}]);
     });
 
     it( "filters by iconic_taxa", function( ) {
-      var eq = Q( { iconic_taxa: [ "Animalia", "Plantae" ] } );
+      Q( { iconic_taxa: [ "Animalia", "Plantae" ] }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ terms: { "taxon.iconic_taxon_id": [ "1", "47126" ] } }]);
     });
 
     it( "filters by unknown iconic_taxa", function( ) {
-      var eq = Q( { iconic_taxa: [ "Animalia", "Plantae", "unknown" ] } );
+      Q( { iconic_taxa: [ "Animalia", "Plantae", "unknown" ] }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ bool: { should: [
         { terms: { "taxon.iconic_taxon_id": [ "1", "47126" ] } },
         { missing: { field: "taxon.iconic_taxon_id" }}]}}]);
     });
 
     it( "filters observed_on by date", function( ) {
-      var eq = Q( { d1: "2015-01-01T00:00:00+00:00", d2: "2015-02-02T23:59:59+00:00" } );
+      Q( { d1: "2015-01-01T00:00:00+00:00", d2: "2015-02-02T23:59:59+00:00" },
+        function( e, q ) { eq = q; } );
       expect( eq.filters[0].or[0].and[0].range.time_observed_at ).to.eql(
         { gte: "2015-01-01T00:00:00+00:00",
           lte: "2015-02-02T23:59:59+00:00" });
@@ -326,64 +327,64 @@ describe( "InaturalistAPI", function( ) {
     });
 
     it( "does nothing without an invalid date", function( ) {
-      var eq = Q( { d1: "nonsense" } );
+      Q( { d1: "nonsense" }, function( e, q ) { eq = q; } );
       expect( eq.where ).to.be.empty;
       expect( eq.filters ).to.be.empty;
-      var eq = Q( { d2: "nonsense" } );
+      Q( { d2: "nonsense" }, function( e, q ) { eq = q; } );
       expect( eq.where ).to.be.empty;
       expect( eq.filters ).to.be.empty;
     });
 
     it( "defaults d2 to tomorrow", function( ) {
-      var eq = Q( { d1: "2015-01-01" } );
+      Q( { d1: "2015-01-01" }, function( e, q ) { eq = q; } );
       expect( eq.filters[0].range["observed_on_details.date"] ).to.eql(
         { gte: "2015-01-01",
           lte: moment.utc( ).add( 2, "day").format( "YYYY-MM-DD" ) });
     });
 
     it( "defaults d1 to 1800-01-01", function( ) {
-      var eq = Q( { d2: "2015-02-02" } );
+      Q( { d2: "2015-02-02" }, function( e, q ) { eq = q; } );
       expect( eq.filters[0].range["observed_on_details.date"] ).to.eql(
         { gte: "1800-01-01",
           lte: "2015-02-02" });
     });
 
     it( "filters by not_in_project", function( ) {
-      var eq = Q( { not_in_project: [ 6, 7 ] } );
+      Q( { not_in_project: [ 6, 7 ] }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ not: { term: { project_ids: [ 6, 7 ] }}}]);
     });
 
     it( "filters by featured observation", function( ) {
-      var eq = Q( { featured_observation_id: 8 } );
+      Q( { featured_observation_id: 8 }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ not: { term: { id: 8 }}}]);
     });
 
     it( "filters by updated_since", function( ) {
-      var eq = Q( { updated_since: "2015-01-02T00:00:00+00:00" } );
+      Q( { updated_since: "2015-01-02T00:00:00+00:00" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ range: {
         updated_at: { gte: "2015-01-02T00:00:00+00:00" } } }]);
     });
 
     it( "ignores bad updated_since values", function( ) {
-      var eq = Q( { updated_since: "nonsense" } );
+      Q( { updated_since: "nonsense" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.be.empty;
     });
 
     it( "filters by observation fields", function( ) {
-      eq = Q( { "field:habitat": null } );
+      Q( { "field:habitat": null }, function( e, q ) { eq = q; } );
       expect( eq.where[0].nested.query.bool.must.length ).to.eql( 1 );
       expect( eq.where[0].nested.query.bool.must[0].match[ "ofvs.name"] ).to.eql( "habitat" );
     });
 
     it( "filters by observation field values", function( ) {
-      eq = Q( { "field:habitat": "marine" } );
+      Q( { "field:habitat": "marine" }, function( e, q ) { eq = q; } );
       expect( eq.where[0].nested.query.bool.must.length ).to.eql( 2 );
       expect( eq.where[0].nested.query.bool.must[0].match[ "ofvs.name"] ).to.eql( "habitat" );
       expect( eq.where[0].nested.query.bool.must[1].match[ "ofvs.value"] ).to.eql( "marine" );
     });
 
     it( "filters by conservation status", function( ) {
-      eq = Q( { cs: "endangered" } );
+      Q( { cs: "endangered" }, function( e, q ) { eq = q; } );
       expect( eq.where[0].nested.query.filtered.filter[0].missing.field ).
         to.eql( "taxon.statuses.place_id" );
       expect( eq.where[0].nested.query.filtered.query.bool.must[0].
@@ -391,7 +392,7 @@ describe( "InaturalistAPI", function( ) {
     });
 
     it( "filters by conservation status with a place", function( ) {
-      eq = Q( { cs: "endangered", place_id: 1 } );
+      Q( { cs: "endangered", place_id: 1 }, function( e, q ) { eq = q; } );
       expect( eq.where[0].nested.query.filtered.filter.bool.should[0].
         terms["taxon.statuses.place_id"] ).to.eql( [ 1 ] );
       expect( eq.where[0].nested.query.filtered.filter.bool.should[1].
@@ -401,7 +402,7 @@ describe( "InaturalistAPI", function( ) {
     });
 
     it( "filters by iucn conservation status", function( ) {
-      eq = Q( { csi: "en" } );
+      Q( { csi: "en" }, function( e, q ) { eq = q; } );
       expect( eq.where[0].nested.query.filtered.filter[0].missing.field ).
         to.eql( "taxon.statuses.place_id" );
       expect( eq.where[0].nested.query.filtered.query.bool.must[0].
@@ -409,12 +410,12 @@ describe( "InaturalistAPI", function( ) {
     });
 
     it( "ignores bad values for csi", function( ) {
-      eq = Q( { csi: "bad" } );
+      Q( { csi: "bad" }, function( e, q ) { eq = q; } );
       expect( eq.where ).to.be.empty;
     });
 
     it( "filters by conservation status authority", function( ) {
-      eq = Q( { csa: "natureserve" } );
+      Q( { csa: "natureserve" }, function( e, q ) { eq = q; } );
       expect( eq.where[0].nested.query.filtered.filter[0].missing.field ).
         to.eql( "taxon.statuses.place_id" );
       expect( eq.where[0].nested.query.filtered.query.bool.must[0].
@@ -422,44 +423,44 @@ describe( "InaturalistAPI", function( ) {
     });
 
     it( "filters by popular", function( ) {
-      var eq = Q( { popular: "true" } );
+      Q( { popular: "true" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ range: { cached_votes_total: { gte: 1 } } }]);
-      eq = Q( { popular: "false" } );
+      Q( { popular: "false" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ term: { cached_votes_total: 0 } }]);
     });
 
     it( "filters by id_above", function( ) {
-      var eq = Q( { id_above: 51 } );
+      Q( { id_above: 51 }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ range: { id: { gt: 51 } } }]);
     });
 
     it( "filters by reviewed true", function( ) {
-      var eq = Q( { reviewed: "true", viewer_id: 21 } );
+      Q( { reviewed: "true", viewer_id: 21 }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ terms: { reviewed_by: [ 21 ] } }]);
     });
 
     it( "filters by reviewed false", function( ) {
-      var eq = Q( { reviewed: "false", viewer_id: 21 } );
+      Q( { reviewed: "false", viewer_id: 21 }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ not: { term: { reviewed_by: 21 }}}]);
     });
 
     it( "ignored bad values for reviewed", function( ) {
-      var eq = Q( { reviewed: "bad", viewer_id: 21 } );
+      Q( { reviewed: "bad", viewer_id: 21 }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.be.empty;
     });
 
     it( "filters by geoprivacy", function( ) {
-      var eq = Q( { geoprivacy: "whatever" } );
+      Q( { geoprivacy: "whatever" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ terms: { geoprivacy: [ "whatever" ] } }]);
     });
 
     it( "filters by geoprivacy open", function( ) {
-      var eq = Q( { geoprivacy: "open" } );
+      Q( { geoprivacy: "open" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ not: { exists: { field: "geoprivacy" } } }]);
     });
 
     it( "filters by geoprivacy obscured_private", function( ) {
-      var eq = Q( { geoprivacy: "obscured_private" } );
+      Q( { geoprivacy: "obscured_private" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ terms: { geoprivacy: [ "obscured", "private" ] } }]);
     });
 
@@ -467,17 +468,17 @@ describe( "InaturalistAPI", function( ) {
     // Sorting
     //
     it( "sorts by created_at desc by default", function( ) {
-      var eq = Q({ });
+      Q({ }, function( e, q ) { eq = q; } );
       expect( eq.sort ).to.eql( { created_at: "desc"} );
     });
 
     it( "allows sorting asc", function( ) {
-      var eq = Q({ order: "asc" });
+      Q({ order: "asc" }, function( e, q ) { eq = q; } );
       expect( eq.sort ).to.eql( { created_at: "asc"} );
     });
 
     it( "sorts by observed_on", function( ) {
-      var eq = Q({ order_by: "observed_on" });
+      Q({ order_by: "observed_on" }, function( e, q ) { eq = q; } );
       expect( eq.sort ).to.eql({
         created_at: "desc",
         "observed_on_details.date": "desc",
@@ -489,17 +490,17 @@ describe( "InaturalistAPI", function( ) {
     });
 
     it( "sorts by species_guess", function( ) {
-      var eq = Q({ order_by: "species_guess" });
+      Q({ order_by: "species_guess" }, function( e, q ) { eq = q; } );
       expect( eq.sort ).to.eql( { species_guess: "desc"} );
     });
 
     it( "sorts by votes", function( ) {
-      var eq = Q({ order_by: "votes" });
+      Q({ order_by: "votes" }, function( e, q ) { eq = q; } );
       expect( eq.sort ).to.eql( { cached_votes_total: "desc"} );
     });
 
     it( "sorts by id", function( ) {
-      var eq = Q({ order_by: "id" });
+      Q({ order_by: "id" }, function( e, q ) { eq = q; } );
       expect( eq.sort ).to.eql( { id: "desc"} );
     });
 
