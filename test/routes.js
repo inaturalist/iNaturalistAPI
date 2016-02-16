@@ -11,7 +11,7 @@ describe( "routes", function( ) {
     var observations = [
       { index:  { _index: "test_observations", _type: "observation" } },
       { id: 1, user: { id: 123 }, created_at: "2015-12-31T00:00:00", private_location: "1,2",
-        taxon: { id: 5, ancestry: "1,2,3,4,5" },
+        taxon: { id: 5, ancestry: "1,2,3,4,5" }, project_ids: [ "543" ],
         private_geojson: { type: "Point", coordinates: [ "2", "1" ] } },
       { index:  { _index: "test_observations", _type: "observation" } },
       { id: 2, user: { id: 5 }, created_at: "2016-01-01T01:00:00", private_location: "2,3",
@@ -31,11 +31,13 @@ describe( "routes", function( ) {
 
   before( function( done ) {
     pgClient.connection.query( "TRUNCATE TABLE users", function( err, result ) {
-      pgClient.connection.query( "INSERT INTO users (id, login, icon_content_type) VALUES ($1, $2, $3)",
-        [ 123, "a-user", "jpeg" ], function( err, result ) {
-          done( );
-      });
-    });
+    pgClient.connection.query( "TRUNCATE TABLE projects", function( err, result ) {
+    pgClient.connection.query( "INSERT INTO users (id, login, icon_content_type) VALUES ($1, $2, $3)",
+      [ 123, "a-user", "jpeg" ], function( err, result ) {
+    pgClient.connection.query( "INSERT INTO projects (id, slug, title) VALUES ($1, $2, $3)",
+      [ 543, "a-project", "A Project" ], function( err, result ) {
+        done( );
+    });});});});
   });
 
   describe( "index", function( ) {
@@ -48,7 +50,6 @@ describe( "routes", function( ) {
   });
 
   describe( "observationsIndex", function( ) {
-
     it( "returns json", function( done ) {
       request( app ).get( "/observations" ).
         expect( "Content-Type", /json/ ).expect( 200, done );
@@ -72,6 +73,20 @@ describe( "routes", function( ) {
       request( app ).get( "/observations?user_id=a-user" ).
       expect( function( res ) {
         expect( res.body.total_results ).to.eq( 1 );
+      }).expect( 200, done );
+    });
+
+    it( "finds looks up projects", function( done ) {
+      request( app ).get( "/observations?projects=a-project" ).
+      expect( function( res ) {
+        expect( res.body.total_results ).to.eq( 1 );
+      }).expect( 200, done );
+    });
+
+    it( "ignores missing projects", function( done ) {
+      request( app ).get( "/observations?projects=nonsense" ).
+      expect( function( res ) {
+        expect( res.body.total_results ).to.eq( 2 );
       }).expect( 200, done );
     });
   });

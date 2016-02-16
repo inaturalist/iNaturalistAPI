@@ -30,10 +30,16 @@ describe( "User", function( ) {
         done( );
       });
     });
+
+    it( "returns false for missing users", function( done ) {
+      User.findByLogin( "nonsense", function( err, u ) {
+        expect( u ).to.be.false;
+        done( );
+      });
+    });
   });
 
   describe( "assignToObject", function( ) {
-
     it( "assigns user instances to objects", function( done ) {
       var o = { 1: { }, 123: { }, 444: { } };
       User.assignToObject( o, function( err, withUsers ) {
@@ -46,7 +52,6 @@ describe( "User", function( ) {
       });
     });
   });
-
 
   describe( "iconUrl", function( ) {
     it( "returns nothing if there is no icon", function( ) {
@@ -74,6 +79,14 @@ describe( "User", function( ) {
         icon_file_name: "open-uri20110111-11111-111111" })).to.match( /50-medium.jpeg$/ );
       expect( User.iconUrl({ id: 50, icon_content_type: "jpeg",
         icon_file_name: "data" })).to.match( /50-medium.jpeg$/ );
+    });
+
+    it( "some exceptions", function( ) {
+      var globalPrefix = global.config.userImagePrefix;
+      global.config.userImagePrefix = null;
+      expect( User.iconUrl({ id: 50, icon_content_type: "jpeg", icon_file_name: "image.jpeg" })).
+        to.eq( "http://www.inaturalist.org/attachments/users/icons/50-medium.jpeg" );
+      global.config.userImagePrefix = globalPrefix;
     });
   });
 

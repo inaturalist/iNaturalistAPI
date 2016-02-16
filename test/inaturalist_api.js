@@ -5,28 +5,50 @@ var expect = require( "chai" ).expect,
     util = require( "../lib/util" ),
     esClient = require( "../lib/es_client" ),
     Taxon = require( "../lib/models/taxon" ),
+    Project = require( "../lib/models/project" ),
     InaturalistAPI = require( "../lib/inaturalist_api" ),
     testHelper = require( "../lib/test_helper" ),
     req, eq;
 
 var Q = function( params, callback ) {
+  var inat = params.inat;
+  delete params.inat;
   var queryString = _.reduce( params,
     function ( components, value, key ) {
       components.push( key + "=" + (value ? encodeURIComponent( value ) : "") );
       return components;
     }, [ ] ).join( "&" );
-  InaturalistAPI.reqToElasticQuery({ query: params, _parsedUrl: {
-    query: queryString
-  }}, callback );
+  InaturalistAPI.reqToElasticQuery({ query: params, inat:inat,
+    _parsedUrl: { query: queryString }}, callback );
 };
 
 describe( "InaturalistAPI", function( ) {
+  before( function( done ) {
+    testHelper.projectWithRules( done );
+  });
 
   it( "uses the test ENV", function( ) {
     expect( process.env.NODE_ENV ).to.eq( "test" );
   });
 
   describe( "reqToElasticQuery", function( ) {
+    it( "can apply params from project rules", function( done ) {
+      Project.findByID( 543, function( err, p ) {
+        Q( { inat: { apply_project_rules_for: p } }, function( e, q ) {
+          util.pp(q);
+          expect( q.filters ).to.include({ terms: { place_ids: [ 222, 333 ] }});
+          expect( q.filters ).to.include({ terms: { "taxon.ancestor_ids": [ 444, 555 ] }});
+          expect( q.filters ).to.include({ term: { captive: false }});
+          expect( q.filters ).to.include({ exists: { field: "photos.url" }});
+          expect( q.filters ).to.include({ exists: { field: "sounds" }});
+          expect( q.filters ).to.include({ exists: { field: "geojson" }});
+          expect( q.filters ).to.include({ exists: { field: "taxon" }});
+          // plus a complicated date filter, and the list_id filter yet-to-be-implemented
+          done( );
+        });
+      });
+    });
+
     //
     // Queries
     //

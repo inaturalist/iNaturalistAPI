@@ -1,9 +1,20 @@
 var expect = require( "chai" ).expect,
     _ = require( "underscore" ),
+    util = require( "../../lib/util" ),
+    pgClient = require( "../../lib/pg_client" ),
     esClient = require( "../../lib/es_client" ),
     Place = require( "../../lib/models/place" );
 
 describe( "Place", function( ) {
+  before( function( done ) {
+    pgClient.connection.query( "TRUNCATE TABLE places", function( err, result ) {
+      pgClient.connection.query(
+        "INSERT INTO places (id, display_name) VALUES ($1, $2)",
+        [ 432, "a-place" ], function( err, result ) {
+          done( );
+      });
+    });
+  });
 
   describe( "constructor", function( ) {
     it( "creates a place", function( ) {
@@ -56,4 +67,18 @@ describe( "Place", function( ) {
       });
     });
   });
+
+  describe( "assignToObject", function( ) {
+    it( "assigns place instances to objects", function( done ) {
+      var o = { 1: { }, 123: { }, 432: { } };
+      Place.assignToObject( o, function( err, withPlaces ) {
+        expect( _.keys( withPlaces ) ).to.deep.eq([ "1", "123", "432" ]);
+        expect( withPlaces[ "1" ].display_name ).to.be.undefined;
+        expect( withPlaces[ "123" ].display_name ).to.be.undefined;
+        expect( withPlaces[ "432" ].display_name ).to.eq( "a-place" );
+        done( );
+      });
+    });
+  });
+
 });
