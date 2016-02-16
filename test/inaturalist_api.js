@@ -35,7 +35,6 @@ describe( "InaturalistAPI", function( ) {
     it( "can apply params from project rules", function( done ) {
       Project.findByID( 543, function( err, p ) {
         Q( { inat: { apply_project_rules_for: p } }, function( e, q ) {
-          util.pp(q);
           expect( q.filters ).to.include({ terms: { place_ids: [ 222, 333 ] }});
           expect( q.filters ).to.include({ terms: { "taxon.ancestor_ids": [ 444, 555 ] }});
           expect( q.filters ).to.include({ term: { captive: false }});
@@ -369,6 +368,14 @@ describe( "InaturalistAPI", function( ) {
       expect( eq.filters[0].range["observed_on_details.date"] ).to.eql(
         { gte: "1800-01-01",
           lte: "2015-02-02" });
+    });
+
+    it( "filters created_at time", function( ) {
+      Q( { created_d1: "2015-01-01T00:00:00+00:00", created_d2: "2015-02-02T23:59:59+00:00" },
+        function( e, q ) { eq = q; } );
+      expect( eq.filters[0].range.created_at ).to.eql(
+        { gte: "2015-01-01T00:00:00+00:00",
+          lte: "2015-02-02T23:59:59+00:00" });
     });
 
     it( "filters by not_in_project", function( ) {

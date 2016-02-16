@@ -2,6 +2,13 @@ var expect = require( "chai" ).expect,
     esClient = require( "../lib/es_client" );
 
 describe( "esClient", function( ) {
+  describe( "connect", function( ) {
+    it( "returns the open connection", function( ) {
+      var connection1 = esClient.connect( );
+      var connection2 = esClient.connect( );
+      expect( connection1 ).to.eql( connection2 );
+    });
+  });
 
   describe( "compileFilters", function( ) {
     it( "requires an object", function( ) {

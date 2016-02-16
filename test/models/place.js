@@ -1,19 +1,13 @@
 var expect = require( "chai" ).expect,
     _ = require( "underscore" ),
     util = require( "../../lib/util" ),
-    pgClient = require( "../../lib/pg_client" ),
+    testHelper = require( "../../lib/test_helper" ),
     esClient = require( "../../lib/es_client" ),
     Place = require( "../../lib/models/place" );
 
 describe( "Place", function( ) {
   before( function( done ) {
-    pgClient.connection.query( "TRUNCATE TABLE places", function( err, result ) {
-      pgClient.connection.query(
-        "INSERT INTO places (id, display_name) VALUES ($1, $2)",
-        [ 432, "a-place" ], function( err, result ) {
-          done( );
-      });
-    });
+    testHelper.createPlace( done );
   });
 
   describe( "constructor", function( ) {

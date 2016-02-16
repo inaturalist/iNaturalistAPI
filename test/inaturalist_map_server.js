@@ -70,6 +70,15 @@ describe( "InaturalistMapServer", function( ) {
         done( );
       });
     });
+
+    it( "returns an error when style is unknown for postgis queries", function( done ) {
+      stubReq.params.style = "nonsense";
+      stubReq.params.dataType = "postgis";
+      MapServer.prepareQuery( stubReq, function( err ) {
+        expect( err ).to.eql({ message: "unknown style: nonsense", status: 404 });
+        done( );
+      });
+    });
   });
 
   describe( "prepareStyle", function( ) {
@@ -186,4 +195,16 @@ describe( "InaturalistMapServer", function( ) {
     });
   });
 
+  describe( "taxonPlacesQuery", function( ) {
+    it( "sets admin_level based on zoom", function( ) {
+      var q = MapServer.taxonPlacesQuery({ params: { zoom: 1 } });
+      expect( q ).to.include( "p.admin_level = 0" );
+      q = MapServer.taxonPlacesQuery({ params: { zoom: 4 } });
+      expect( q ).to.include( "p.admin_level = 1" );
+      q = MapServer.taxonPlacesQuery({ params: { zoom: 6 } });
+      expect( q ).to.include( "p.admin_level = 2" );
+      q = MapServer.taxonPlacesQuery({ params: { zoom: 11 } });
+      expect( q ).to.include( "p.admin_level = 3" );
+    });
+  });
 });

@@ -1,5 +1,6 @@
 var expect = require( "chai" ).expect,
     request = require( "supertest" ),
+    testHelper = require( "../lib/test_helper" ),
     pgClient = require( "../lib/pg_client" ),
     esClient = require( "../lib/es_client" ),
     iNaturalistAPI = require( "../lib/inaturalist_api" ),
@@ -40,6 +41,65 @@ describe( "routes", function( ) {
     });});});});
   });
 
+  before( function( done ) {
+    testHelper.createPlace( done );
+  });
+
+  before( function( done ) {
+    var taxa = [
+      { index:  { _index: "test_taxa", _type: "taxon" } },
+      { id: 1, names: [{ name_autocomplete: "Los", exact: "Los" }], observations_count: 50, is_active: true,
+        statuses: [ { place_id: 432, iucn: 30 } ],
+        listed_taxa: [ { place_id: 432, establishment_means: "endemic" } ] },
+      { index:  { _index: "test_taxa", _type: "taxon" } },
+      { id: 2, names: [{ name_autocomplete: "Los", exact: "Los" }], observations_count: 50, is_active: false },
+      { index:  { _index: "test_taxa", _type: "taxon" } },
+      { id: 3, names: [{ name_autocomplete: "Los lobos", exact: "Los lobos" }], observations_count: 100, is_active: true },
+      { index:  { _index: "test_taxa", _type: "taxon" } },
+      { id: 4, names: [{ name_autocomplete: "眼紋疏廣蠟蟬", exact: "眼紋疏廣蠟蟬" }], observations_count: 200, is_active: true }
+    ];
+    esClient.connection.bulk({
+      index: "test_taxa",
+      type: "taxon",
+      body: taxa,
+      refresh: true
+    }, function( err, response ) {
+      done( );
+    });
+  });
+
+  before( function( done ) {
+    var places = [
+      { index:  { _index: "test_places", _type: "place" } },
+      { id: 1, name: "United States", display_name_autocomplete: "United States",
+        location: "48.8907012939,-116.9820022583",
+        admin_level: 0, bbox_area: 5500, geometry_geojson: {
+          type: "Polygon", coordinates: [[
+            [ -125, 50 ], [ -65, 50 ], [ -65, 25 ], [ -125, 25 ], [ -125, 50 ]]] } },
+      { index:  { _index: "test_places", _type: "place" } },
+      { id: 2, name: "Massachusetts", display_name_autocomplete: "Massachusetts",
+        location: "42.0368995667,-71.6835021973",
+        admin_level: 1, bbox_area: 6, geometry_geojson: {
+          type: "Polygon", coordinates: [[
+            [ -73.5, 42.75 ], [ -70, 42.75 ], [ -70, 41.5 ], [ -73.5, 41.5 ], [ -73.5, 42.75 ]]] } },
+      { index:  { _index: "test_places", _type: "place" } },
+      { id: 3, name: "Community", display_name_autocomplete: "Community",
+        admin_level: null, bbox_area: 6, geometry_geojson: {
+          type: "Polygon", coordinates: [[
+            [ -73.5, 42.75 ], [ -70, 42.75 ], [ -70, 41.5 ], [ -73.5, 41.5 ], [ -73.5, 42.75 ]]] } },
+      { index:  { _index: "test_places", _type: "place" } },
+      { id: 432, name: "a-place", display_name_autocomplete: "a-place" }
+    ];
+    esClient.connection.bulk({
+      index: "test_places",
+      type: "place",
+      body: places,
+      refresh: true
+    }, function( err, response ) {
+      done( );
+    });
+  });
+
   describe( "index", function( ) {
     it( "shows the app name", function( done ) {
       request( app ).get( "/" ).
@@ -76,8 +136,29 @@ describe( "routes", function( ) {
       }).expect( 200, done );
     });
 
-    it( "finds looks up projects", function( done ) {
+    it( "finds observations by user_id", function( done ) {
+      request( app ).get( "/observations?user_id=123" ).
+      expect( function( res ) {
+        expect( res.body.total_results ).to.eq( 1 );
+      }).expect( 200, done );
+    });
+
+    it( "looks up projects by slug", function( done ) {
       request( app ).get( "/observations?projects=a-project" ).
+      expect( function( res ) {
+        expect( res.body.total_results ).to.eq( 1 );
+      }).expect( 200, done );
+    });
+
+    it( "looks up not_in_project by slug", function( done ) {
+      request( app ).get( "/observations?not_in_project=a-project" ).
+      expect( function( res ) {
+        expect( res.body.total_results ).to.eq( 1 );
+      }).expect( 200, done );
+    });
+
+    it( "looks up multiple projects", function( done ) {
+      request( app ).get( "/observations?projects[]=nonsense&projects[]=a-project" ).
       expect( function( res ) {
         expect( res.body.total_results ).to.eq( 1 );
       }).expect( 200, done );
@@ -120,27 +201,6 @@ describe( "routes", function( ) {
   });
 
   describe( "taxaAutocomplete", function( ) {
-    before( function( done ) {
-      var taxa = [
-        { index:  { _index: "test_taxa", _type: "taxon" } },
-        { id: 1, names: [{ name_autocomplete: "Los", exact: "Los" }], observations_count: 50, is_active: true },
-        { index:  { _index: "test_taxa", _type: "taxon" } },
-        { id: 2, names: [{ name_autocomplete: "Los", exact: "Los" }], observations_count: 50, is_active: false },
-        { index:  { _index: "test_taxa", _type: "taxon" } },
-        { id: 3, names: [{ name_autocomplete: "Los lobos", exact: "Los lobos" }], observations_count: 100, is_active: true },
-        { index:  { _index: "test_taxa", _type: "taxon" } },
-        { id: 4, names: [{ name_autocomplete: "眼紋疏廣蠟蟬", exact: "眼紋疏廣蠟蟬" }], observations_count: 200, is_active: true },
-      ];
-      esClient.connection.bulk({
-        index: "test_taxa",
-        type: "taxon",
-        body: taxa,
-        refresh: true
-      }, function( err, response ) {
-        done( );
-      });
-    });
-
     it( "returns json", function( done ) {
       request( app ).get( "/taxa/autocomplete" ).
         expect( "Content-Type", /json/ ).expect( 200, done );
@@ -173,6 +233,28 @@ describe( "routes", function( ) {
           expect( res.body.results[ 0 ].id ).to.eq( 2 );
         }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "can return all taxa", function( done ) {
+      request( app ).get( "/taxa/autocomplete?q=los&is_active=any" ).
+        expect( function( res ) {
+          expect( res.body.total_results ).to.eq( 3 );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "returns no more than 30 per page", function( done ) {
+      request( app ).get( "/taxa/autocomplete?q=los&per_page=50" ).
+        expect( function( res ) {
+          expect( res.body.per_page ).to.eq( 30 );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "returns default per_page of 30 if fewer than 1 were requested", function( done ) {
+      request( app ).get( "/taxa/autocomplete?q=los&per_page=-1" ).
+        expect( function( res ) {
+          expect( res.body.per_page ).to.eq( 30 );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
   });
 
   describe( "taxaShow", function( ) {
@@ -180,39 +262,22 @@ describe( "routes", function( ) {
       request( app ).get( "/taxa/1" ).
         expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "populates preferred means and status", function( done ) {
+      request( app ).get( "/taxa/1?preferred_place_id=432" ).
+        expect( function( res ) {
+          var taxon = res.body.results[0];
+          expect( taxon.id ).to.eq( 1 );
+          expect( taxon.conservation_status.status ).to.eq( "VU" );
+          expect( taxon.conservation_status.place.id ).to.eq( 432 );
+          expect( taxon.establishment_means.establishment_means ).to.eq( "endemic" );
+          expect( taxon.establishment_means.place.id ).to.eq( 432 );
+          expect( taxon.preferred_establishment_means ).to.eq( "endemic" );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
   });
 
   describe( "placesNearby", function( ) {
-    before( function( done ) {
-      var places = [
-        { index:  { _index: "test_places", _type: "place" } },
-        { id: 1, name: "United States", display_name_autocomplete: "United States",
-          location: "48.8907012939,-116.9820022583",
-          admin_level: 0, bbox_area: 5500, geometry_geojson: {
-            type: "Polygon", coordinates: [[
-              [ -125, 50 ], [ -65, 50 ], [ -65, 25 ], [ -125, 25 ], [ -125, 50 ]]] } },
-        { index:  { _index: "test_places", _type: "place" } },
-        { id: 2, name: "Massachusetts", display_name_autocomplete: "Massachusetts",
-          location: "42.0368995667,-71.6835021973",
-          admin_level: 1, bbox_area: 6, geometry_geojson: {
-            type: "Polygon", coordinates: [[
-              [ -73.5, 42.75 ], [ -70, 42.75 ], [ -70, 41.5 ], [ -73.5, 41.5 ], [ -73.5, 42.75 ]]] } },
-        { index:  { _index: "test_places", _type: "place" } },
-        { id: 3, name: "Community", display_name_autocomplete: "Community",
-          admin_level: null, bbox_area: 6, geometry_geojson: {
-            type: "Polygon", coordinates: [[
-              [ -73.5, 42.75 ], [ -70, 42.75 ], [ -70, 41.5 ], [ -73.5, 41.5 ], [ -73.5, 42.75 ]]] } }
-      ];
-      esClient.connection.bulk({
-        index: "test_places",
-        type: "place",
-        body: places,
-        refresh: true
-      }, function( err, response ) {
-        done( );
-      });
-    });
-
     it( "returns json", function( done ) {
       request( app ).get( "/places/nearby" ).
         expect( "Content-Type", /json/ ).expect( 200, done );
