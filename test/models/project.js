@@ -1,31 +1,26 @@
 var expect = require( "chai" ).expect,
     _ = require( "underscore" ),
-    pgClient = require( "../../lib/pg_client" ),
+    testHelper = require( "../../lib/test_helper" ),
     Project = require( "../../lib/models/project" );
 
 describe( "Project", function( ) {
 
-  describe( "findByID", function( ) {
-    before( function( done ) {
-      pgClient.connection.query( "TRUNCATE TABLE projects", function( err, result ) {
-        pgClient.connection.query( "INSERT INTO projects (id, slug, title) VALUES ($1, $2, $3)",
-          [ 123, "a-project", "A Project"], function( err, result ) {
-            done( );
-        });
-      });
-    });
+  before( function( done ) {
+    testHelper.projectWithRules( done );
+  });
 
+  describe( "findByID", function( ) {
     it( "returns a project given an ID", function( done ) {
-      Project.findByID( 123, function( err, p ) {
-        expect( p.id ).to.eq( 123 );
+      Project.findByID( 543, function( err, p ) {
+        expect( p.id ).to.eq( 543 );
         expect( p.title ).to.eq( "A Project" );
         done( );
       });
     });
 
     it( "returns a project from the cache", function( done ) {
-      Project.findByID( 123, function( err, p ) {
-        expect( p.id ).to.eq( 123 );
+      Project.findByID( 543, function( err, p ) {
+        expect( p.id ).to.eq( 543 );
         expect( p.title ).to.eq( "A Project" );
         done( );
       });
@@ -33,7 +28,7 @@ describe( "Project", function( ) {
 
     it( "returns a project given a slug", function( done ) {
       Project.findByID( "a-project", function( err, p ) {
-        expect( p.id ).to.eq( 123 );
+        expect( p.id ).to.eq( 543 );
         expect( p.title ).to.eq( "A Project" );
         done( );
       });
@@ -52,6 +47,52 @@ describe( "Project", function( ) {
         expect( err ).to.eq( null );
         expect( p ).to.eq( false );
         done( );
+      });
+    });
+  });
+
+  describe( "searchParams", function( ) {
+    it( "returns params for project rules", function( done ) {
+      Project.findByID( 543, function( err, p ) {
+        p.searchParams( function( err, params) {
+          expect( params.d1 ).to.eq( "2016-02-02T02:22:22+00:00" );
+          expect( params.d2 ).to.eq( "2016-05-05T05:55:55+00:00" );
+          expect( params.list_id ).to.eq( 999 );
+          expect( params.identified ).to.eq( "true" );
+          expect( params.captive ).to.eq( "false" );
+          expect( params.has ).to.deep.eq([ "geo", "photos", "sounds" ]);
+          expect( params.taxon_ids ).to.deep.eq([ 444, 555 ]);
+          expect( params.place_id ).to.deep.eq([ 222, 333 ]);
+          done( );
+        });
+      });
+    });
+
+    it( "can use dates instead of times", function( done ) {
+      Project.findByID( 543, function( err, p ) {
+        p.date_range_preference = true;
+        p.searchParams( function( err, params) {
+          expect( params.d1 ).to.eq( "2016-02-02" );
+          expect( params.d2 ).to.eq( "2016-05-05" );
+          done( );
+        });
+      });
+    });
+
+    it( "doesn't params if the rules don't apply", function( done ) {
+      Project.findByID( 543, function( err, p ) {
+        p.rules = [ ];
+        p.start_time = null;
+        p.end_time = null;
+        p.list = null;
+        p.searchParams( function( err, params) {
+          expect( params.d1 ).to.be.undefined;
+          expect( params.d2 ).to.be.undefined;
+          expect( params.list_id ).to.be.undefined;
+          expect( params.taxon_ids ).to.be.undefined;
+          expect( params.place_id ).to.be.undefined;
+          done( );
+        });
       });
     });
   });
