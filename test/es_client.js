@@ -59,4 +59,21 @@ describe( "esClient", function( ) {
     });
   });
 
+  describe( "searchHash", function( ) {
+    it( "defaults to 30 per page", function( ) {
+      var h = esClient.searchHash({ });
+      expect( h.size ).to.eq( 30 );
+    });
+
+    it( "maxes out at 200 per page", function( ) {
+      var h = esClient.searchHash({ per_page: 500 });
+      expect( h.size ).to.eq( 200 );
+    });
+
+    it( "can return a custom field list", function( ) {
+      var h = esClient.searchHash({ fields: [ "id", "name" ] });
+      expect( h.fields ).to.deep.eq([ "id", "name" ]);
+    });
+  });
+
 });

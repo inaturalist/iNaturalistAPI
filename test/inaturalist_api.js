@@ -6,6 +6,7 @@ var expect = require( "chai" ).expect,
     esClient = require( "../lib/es_client" ),
     Taxon = require( "../lib/models/taxon" ),
     Project = require( "../lib/models/project" ),
+    List = require( "../lib/models/list" ),
     InaturalistAPI = require( "../lib/inaturalist_api" ),
     testHelper = require( "../lib/test_helper" ),
     req, eq;
@@ -36,13 +37,22 @@ describe( "InaturalistAPI", function( ) {
       Project.findByID( 543, function( err, p ) {
         Q( { inat: { apply_project_rules_for: p } }, function( e, q ) {
           expect( q.filters ).to.include({ terms: { place_ids: [ 222, 333 ] }});
-          expect( q.filters ).to.include({ terms: { "taxon.ancestor_ids": [ 444, 555 ] }});
+          expect( q.filters ).to.include({ terms: { "taxon.ancestor_ids": [ 444, 555, 987, 876 ] }});
           expect( q.filters ).to.include({ term: { captive: false }});
           expect( q.filters ).to.include({ exists: { field: "photos.url" }});
           expect( q.filters ).to.include({ exists: { field: "sounds" }});
           expect( q.filters ).to.include({ exists: { field: "geojson" }});
           expect( q.filters ).to.include({ exists: { field: "taxon" }});
-          // plus a complicated date filter, and the list_id filter yet-to-be-implemented
+          // plus a complicated date filter
+          done( );
+        });
+      });
+    });
+
+    it( "queries a list's taxon_ids", function( done ) {
+      List.findByID( 999, function( err, l ) {
+        Q( { inat: { list: l } }, function( e, q ) {
+          expect( q.filters ).to.include({ terms: { "taxon.ancestor_ids": [ 987, 876 ] }});
           done( );
         });
       });
