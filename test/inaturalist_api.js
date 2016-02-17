@@ -37,7 +37,7 @@ describe( "InaturalistAPI", function( ) {
       Project.findByID( 543, function( err, p ) {
         Q( { inat: { apply_project_rules_for: p } }, function( e, q ) {
           expect( q.filters ).to.include({ terms: { place_ids: [ 222, 333 ] }});
-          expect( q.filters ).to.include({ terms: { "taxon.ancestor_ids": [ 444, 555, 987, 876 ] }});
+          expect( q.filters ).to.include({ terms: { "taxon.ancestor_ids": [ 444, 555, 876, 987 ] }});
           expect( q.filters ).to.include({ term: { captive: false }});
           expect( q.filters ).to.include({ exists: { field: "photos.url" }});
           expect( q.filters ).to.include({ exists: { field: "sounds" }});
@@ -52,7 +52,7 @@ describe( "InaturalistAPI", function( ) {
     it( "queries a list's taxon_ids", function( done ) {
       List.findByID( 999, function( err, l ) {
         Q( { inat: { list: l } }, function( e, q ) {
-          expect( q.filters ).to.include({ terms: { "taxon.ancestor_ids": [ 987, 876 ] }});
+          expect( q.filters ).to.include({ terms: { "taxon.ancestor_ids": [ 876, 987 ] }});
           done( );
         });
       });
@@ -203,13 +203,13 @@ describe( "InaturalistAPI", function( ) {
     it( "filters by verifiable true", function( ) {
       Q( { verifiable: "true" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([
-        { terms: { quality_grade: [ "research", "needs_id" ] } }]);
+        { terms: { quality_grade: [ "needs_id", "research" ] } }]);
     });
 
     it( "filters by verifiable false", function( ) {
       Q( { verifiable: "false" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([ { not:
-        { terms: { quality_grade: [ "research", "needs_id" ] } } }]);
+        { terms: { quality_grade: [ "needs_id", "research" ] } } }]);
     });
 
     it( "filters by observed_on", function( ) {
