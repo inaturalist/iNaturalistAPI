@@ -157,7 +157,7 @@ describe( "InaturalistMapServer", function( ) {
     it( "sets a Cache-Control header", function( done ) {
       stubReq.params.style = "places";
       MapServer.beforeSendResult( stubReq, stubRes, function( ) {
-        expect( stubRes.headers["Cache-Control"] ).to.eq( "public, max-age=604800" );
+        expect( stubRes.headers["Cache-Control"] ).to.eq( "public, max-age=3600" );
         done( );
       });
     });

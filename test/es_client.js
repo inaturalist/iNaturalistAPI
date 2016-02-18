@@ -2,6 +2,17 @@ var expect = require( "chai" ).expect,
     esClient = require( "../lib/es_client" );
 
 describe( "esClient", function( ) {
+  before( function( done ) {
+    esClient.connection.create({
+      index: "test_taxa",
+      type: "taxon",
+      body: { id: 9898, name: "ataxon" },
+      refresh: true
+    }, function( err, response ) {
+      done( );
+    });
+  });
+
   describe( "connect", function( ) {
     it( "returns the open connection", function( ) {
       var connection1 = esClient.connect( );
@@ -10,22 +21,49 @@ describe( "esClient", function( ) {
     });
   });
 
+  describe( "search", function( ) {
+    it( "can specify source fields to return", function( done ) {
+      esClient.search( "taxa", { body: {
+        query: { filtered: { filter: { term: { id: 9898 } } } } },
+        _source: [ "id" ], size: 1 },
+        function( err, results ) {
+          expect( results.hits.total ).to.eql( 1 );
+          expect( results.hits.hits[0]._source.id ).to.eql( 9898 );
+          expect( results.hits.hits[0]._source.name ).to.be.undefined;
+          done( );
+        }
+      );
+    });
+
+    it( "can choose not to return source", function( done ) {
+      esClient.search( "taxa", { body: {
+        query: { filtered: { filter: { term: { id: 9898 } } } } },
+        _source: false, size: 1 },
+        function( err, results ) {
+          expect( results.hits.total ).to.eql( 1 );
+          expect( results.hits.hits[0]._source ).to.be.undefined;
+          done( );
+        }
+      );
+    });
+  });
+
   describe( "compileFilters", function( ) {
     it( "requires an object", function( ) {
       expect( esClient.compileFilters( ) ).to.eql([ ]);
       expect( esClient.compileFilters({ }) ).to.eql([ ]);
-      expect( esClient.compileFilters({ filters: [
-        { a: 1, b: 2 }]})).to.eql([ ]);
+      expect( esClient.compileFilters([
+        { a: 1, b: 2 }])).to.eql([ ]);
     });
 
     it( "compiles basic filters", function( ) {
-      expect( esClient.compileFilters({ filters: [ { id: 1 } ]})).to.
+      expect( esClient.compileFilters([ { id: 1 } ])).to.
         eql([{ id: 1 }]);
     });
 
     it( "compiles envelope filters", function( ) {
-      expect( esClient.compileFilters({ filters: [ { envelope: {
-        geojson: { nelat: 5 } }}]})).to.eql([{
+      expect( esClient.compileFilters([ { envelope: {
+        geojson: { nelat: 5 } }}])).to.eql([{
           geo_shape: { geojson: { shape: {
             coordinates: [ [ -180, -90 ], [ 180, 5 ] ],
             type: "envelope" }}}}]);
@@ -76,4 +114,11 @@ describe( "esClient", function( ) {
     });
   });
 
+  describe( "createIndexIfNotExists", function( ) {
+    it( "doesn't throw an error if the index exists", function( ) {
+      esClient.createIndexIfNotExists({ name: "observations" }, function( err ) {
+        expect( err ).to.be.undefined;
+      });
+    });
+  });
 });

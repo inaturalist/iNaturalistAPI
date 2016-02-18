@@ -15,10 +15,13 @@ describe( "routes", function( ) {
         taxon: { id: 5, ancestry: "1,2,3,4,5" }, project_ids: [ "543" ],
         private_geojson: { type: "Point", coordinates: [ "2", "1" ] } },
       { index:  { _index: "test_observations", _type: "observation" } },
-      { id: 2, user: { id: 5 }, created_at: "2016-01-01T01:00:00", private_location: "2,3",
+      { id: 2, user: { id: 5 }, created_at: "2016-01-01T01:00:00", location: "2,3",
         taxon: { id: 4, ancestry: "1,2,3,4" },
         non_owner_ids: { user_id: 123 },
-        private_geojson: { type: "Point", coordinates: [ "3", "2" ] } }
+        place_guess: "Montana",
+        private_geojson: { type: "Point", coordinates: [ "3", "2" ] } },
+      { index:  { _index: "test_observations", _type: "observation" } },
+      { id: 333, user: { id: 333 }, geoprivacy: "obscured", place_guess: "Idaho" }
     ];
     esClient.connection.bulk({
       index: "test_observations",
@@ -118,7 +121,7 @@ describe( "routes", function( ) {
     it( "looks up observation users from the DB", function( done ) {
       request( app ).get( "/observations" ).
       expect( function( res ) {
-        expect( res.body.total_results ).to.eq( 2 );
+        expect( res.body.total_results ).to.eq( 3 );
         expect( res.body.results[ 0 ].id ).to.eq( 2 );
         expect( res.body.results[ 0 ].user.id ).to.eq( 5 );
         expect( res.body.results[ 0 ].user.login ).to.be.undefined;
@@ -153,7 +156,7 @@ describe( "routes", function( ) {
     it( "looks up not_in_project by slug", function( done ) {
       request( app ).get( "/observations?not_in_project=a-project" ).
       expect( function( res ) {
-        expect( res.body.total_results ).to.eq( 1 );
+        expect( res.body.total_results ).to.eq( 2 );
       }).expect( 200, done );
     });
 
@@ -167,7 +170,16 @@ describe( "routes", function( ) {
     it( "ignores missing projects", function( done ) {
       request( app ).get( "/observations?projects=nonsense" ).
       expect( function( res ) {
-        expect( res.body.total_results ).to.eq( 2 );
+        expect( res.body.total_results ).to.eq( 3 );
+      }).expect( 200, done );
+    });
+
+    it( "strips place guess from obscured observations", function( done ) {
+      request( app ).get( "/observations?geoprivacy=obscured_private" ).
+      expect( function( res ) {
+        expect( res.body.total_results ).to.eq( 1 );
+        expect( res.body.results[ 0 ].id ).to.eq( 333 );
+        expect( res.body.results[ 0 ].place_guess ).to.be.undefined;
       }).expect( 200, done );
     });
   });

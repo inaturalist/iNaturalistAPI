@@ -52,17 +52,29 @@ describe( "Project", function( ) {
   });
 
   describe( "searchParams", function( ) {
+    it( "returns false if none exists", function( done ) {
+      var p = new Project({ id: "3333" });
+      p.projectList( function( err, l ) {
+        expect( err ).to.be.null;
+        expect( l ).to.be.false;
+        done( );
+      });
+    });
+  });
+
+  describe( "searchParams", function( ) {
     it( "returns params for project rules", function( done ) {
       Project.findByID( 543, function( err, p ) {
         p.searchParams( function( err, params) {
           expect( params.d1 ).to.eq( "2016-02-02T02:22:22+00:00" );
           expect( params.d2 ).to.eq( "2016-05-05T05:55:55+00:00" );
-          expect( params.list_id ).to.eq( 999 );
           expect( params.identified ).to.eq( "true" );
           expect( params.captive ).to.eq( "false" );
           expect( params.has ).to.deep.eq([ "geo", "photos", "sounds" ]);
-          expect( params.taxon_ids ).to.deep.eq([ 444, 555 ]);
+          // some of these come from the project list
+          expect( params.taxon_ids.sort( ) ).to.deep.eq([ 444, 555, 876, 987 ]);
           expect( params.place_id ).to.deep.eq([ 222, 333 ]);
+          expect( params.verifiable ).to.eq( "true" );
           done( );
         });
       });
@@ -91,6 +103,7 @@ describe( "Project", function( ) {
           expect( params.list_id ).to.be.undefined;
           expect( params.taxon_ids ).to.be.undefined;
           expect( params.place_id ).to.be.undefined;
+          expect( params.verifiable ).to.be.undefined;
           done( );
         });
       });

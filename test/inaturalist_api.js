@@ -49,6 +49,22 @@ describe( "InaturalistAPI", function( ) {
       });
     });
 
+    it( "can apply inverse project rules", function( done ) {
+      Project.findByID( 543, function( err, p ) {
+        Q( { inat: { not_matching_project_rules_for: p } }, function( e, q ) {
+          expect( q.inverse_filters ).to.include({ terms: { place_ids: [ 222, 333 ] }});
+          expect( q.inverse_filters ).to.include({ terms: { "taxon.ancestor_ids": [ 444, 555, 876, 987 ] }});
+          expect( q.inverse_filters ).to.include({ term: { captive: false }});
+          expect( q.inverse_filters ).to.include({ exists: { field: "photos.url" }});
+          expect( q.inverse_filters ).to.include({ exists: { field: "sounds" }});
+          expect( q.inverse_filters ).to.include({ exists: { field: "geojson" }});
+          expect( q.inverse_filters ).to.include({ exists: { field: "taxon" }});
+          // plus a complicated date filter
+          done( );
+        });
+      });
+    });
+
     it( "queries a list's taxon_ids", function( done ) {
       List.findByID( 999, function( err, l ) {
         Q( { inat: { list: l } }, function( e, q ) {
@@ -516,7 +532,7 @@ describe( "InaturalistAPI", function( ) {
       expect( eq.sort ).to.eql( { created_at: "asc"} );
     });
 
-    it( "sorts by observed_on", function( ) {
+    it( "sorts by observed_on desc", function( ) {
       Q({ order_by: "observed_on" }, function( e, q ) { eq = q; } );
       expect( eq.sort ).to.eql({
         created_at: "desc",
@@ -524,6 +540,18 @@ describe( "InaturalistAPI", function( ) {
         time_observed_at: {
           missing: "_last",
           order: "desc"
+        }
+      });
+    });
+
+    it( "sorts by observed_on asc", function( ) {
+      Q({ order_by: "observed_on", order: "asc" }, function( e, q ) { eq = q; } );
+      expect( eq.sort ).to.eql({
+        created_at: "asc",
+        "observed_on_details.date": "asc",
+        time_observed_at: {
+          missing: "_first",
+          order: "asc"
         }
       });
     });
@@ -611,21 +639,60 @@ describe( "InaturalistAPI", function( ) {
       });
     });
 
-    it( "looks up instances", function( ) {
+    it( "looks up instances", function( done ) {
       var req = { query: { taxon_id: 999 } };
       InaturalistAPI.lookupInstance( req, "taxon_id", Taxon.findByID, function( err, t ) {
         expect( err ).to.be.null;
         expect( t.id ).to.eq( 999 );
+        done( );
       });
     });
 
-    it( "returns an error if they don't exist", function( ) {
+    it( "returns an error if they don't exist", function( done ) {
       var req = { query: { taxon_id: 1000 } };
       InaturalistAPI.lookupInstance( req, "taxon_id", Taxon.findByID, function( err, t ) {
         expect( err ).to.deep.eq({ message: "Unknown taxon_id 1000", status: 422 });
         expect( t ).to.be.undefined;
+        done( );
       });
     });
   });
 
+  describe( "placesNearbyQueryBody", function( ) {
+    it( "community queries use min area of 1.5", function( ) {
+      var req = { query: { community: true,
+        nelat: 0.0001, nelng: 0.00011, swlat: 0.0001, swlng: 0.00011 } };
+      var body = InaturalistAPI.placesNearbyQueryBody( req );
+      var filters = body.query.bool.filter;
+      expect( filters ).to.include({ range: { bbox_area: { lte: 1.5, gt: 0 } } });
+    });
+
+    it( "limits max latitude to 90", function( ) {
+      var req = { query: { community: true,
+        nelat: 100, nelng: 100, swlat: 100, swlng: 100 } };
+      var body = InaturalistAPI.placesNearbyQueryBody( req );
+      var filters = body.query.bool.filter;
+      expect( filters ).to.include({ geo_shape: {
+        geometry_geojson: {
+          shape: {
+            type: "envelope",
+            coordinates: [
+              [ 100, 90 ],
+              [ 100, 90 ] ] }}}});
+    });
+
+    it( "limits min latitude to -90", function( ) {
+      var req = { query: { community: true,
+        nelat: -100, nelng: -100, swlat: -100, swlng: -100 } };
+      var body = InaturalistAPI.placesNearbyQueryBody( req );
+      var filters = body.query.bool.filter;
+      expect( filters ).to.include({ geo_shape: {
+        geometry_geojson: {
+          shape: {
+            type: "envelope",
+            coordinates: [
+              [ -100, -90 ],
+              [ -100, -90 ] ] }}}});
+    });
+  });
 });
