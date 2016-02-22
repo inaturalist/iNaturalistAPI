@@ -196,6 +196,11 @@ describe( "routes", function( ) {
       request( app ).get( "/observations/observers" ).
         expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "accepts an order_by param", function( done ) {
+      request( app ).get( "/observations/observers?order_by=species_count" ).
+        expect( "Content-Type", /json/ ).expect( 200, done );
+    });
   });
 
   describe( "observationsSpeciesCounts", function( ) {
