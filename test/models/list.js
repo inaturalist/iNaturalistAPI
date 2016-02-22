@@ -47,7 +47,7 @@ describe( "List", function( ) {
     it( "returns taxonIDs", function( done ) {
       List.findByID( 301, function( err, l ) {
         l.taxonIDs( function( err, ids ) {
-          expect( ids ).to.deep.eq([ 401, 402 ]);
+          expect( ids.sort( ) ).to.deep.eq([ 401, 402 ]);
           done( );
         });
       });
@@ -56,7 +56,7 @@ describe( "List", function( ) {
     it( "returns cached taxonIDs", function( done ) {
       List.findByID( 301, function( err, l ) {
         l.taxonIDs( function( err, ids ) {
-          expect( ids ).to.deep.eq([ 401, 402 ]);
+          expect( ids.sort( ) ).to.deep.eq([ 401, 402 ]);
           done( );
         });
       });
