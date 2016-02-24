@@ -36,8 +36,8 @@ describe( "routes", function( ) {
   before( function( done ) {
     pgClient.connection.query( "TRUNCATE TABLE users", function( err, result ) {
     pgClient.connection.query( "TRUNCATE TABLE projects", function( err, result ) {
-    pgClient.connection.query( "INSERT INTO users (id, login, icon_content_type) VALUES ($1, $2, $3)",
-      [ 123, "a-user", "jpeg" ], function( err, result ) {
+    pgClient.connection.query( "INSERT INTO users (id, login, name, icon_content_type) VALUES ($1, $2, $3, $4)",
+      [ 123, "a-user", "A User", "jpeg" ], function( err, result ) {
     pgClient.connection.query( "INSERT INTO projects (id, slug, title) VALUES ($1, $2, $3)",
       [ 543, "a-project", "A Project" ], function( err, result ) {
         done( );
@@ -129,6 +129,7 @@ describe( "routes", function( ) {
         expect( res.body.results[ 1 ].user.id ).to.eq( 123 );
         // login comes from the DB
         expect( res.body.results[ 1 ].user.login ).to.eq( "a-user" );
+        expect( res.body.results[ 1 ].user.name ).to.eq( "A User" );
       }).expect( 200, done );
     });
 
@@ -200,6 +201,12 @@ describe( "routes", function( ) {
     it( "accepts an order_by param", function( done ) {
       request( app ).get( "/observations/observers?order_by=species_count" ).
         expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "includes user name field", function( ) {
+      request( app ).get( "/observations/observers" ).expect( function( res ) {
+        expect( res.results[0].user.name ).to.eq( "A User" );
+      });
     });
   });
 
