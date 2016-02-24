@@ -104,11 +104,20 @@ describe( "routes", function( ) {
   });
 
   describe( "index", function( ) {
-    it( "shows the app name", function( done ) {
+    it( "redirects to /docs", function( done ) {
       request( app ).get( "/" ).
-        expect( "Content-Type", /text\/html/ ).
-        expect( "iNaturalist API" ).
-        expect( 200, done );
+        expect( "Location", "docs", done);
+    });
+  });
+
+  describe( "swaggerJSON", function( ) {
+    it( "renders the swagger JSON file", function( done ) {
+      request( app ).get( "/swagger.json" ).
+        expect( function( res ) {
+          expect( res.body.swagger ).to.eq( "2.0" );
+          expect( res.body.info.title ).to.eq( "iNaturalist API" );
+        }).
+        expect( "Content-Type", /json/ ).expect( 200, done );
     });
   });
 
