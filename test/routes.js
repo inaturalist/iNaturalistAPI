@@ -104,15 +104,29 @@ describe( "routes", function( ) {
   });
 
   describe( "index", function( ) {
-    it( "redirects to /docs", function( done ) {
+    it( "redirects to /v1/docs", function( done ) {
       request( app ).get( "/" ).
-        expect( "Location", "docs", done);
+        expect( "Location", "/v1/docs", done);
+    });
+  });
+
+  describe( "docs", function( ) {
+    it( "redirects to /v1/docs", function( done ) {
+      request( app ).get( "/docs" ).
+        expect( "Location", "/v1/docs", done);
+    });
+  });
+
+  describe( "swaggerRedirect", function( ) {
+    it( "redirects to /v1/swagger.json", function( done ) {
+      request( app ).get( "/swagger.json" ).
+        expect( "Location", "/v1/swagger.json", done);
     });
   });
 
   describe( "swaggerJSON", function( ) {
     it( "renders the swagger JSON file", function( done ) {
-      request( app ).get( "/swagger.json" ).
+      request( app ).get( "/v1/swagger.json" ).
         expect( function( res ) {
           expect( res.body.swagger ).to.eq( "2.0" );
           expect( res.body.info.title ).to.eq( "iNaturalist API" );
