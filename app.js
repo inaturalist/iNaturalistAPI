@@ -1,3 +1,4 @@
+/* eslint no-console: 0 */
 var fs = require( "fs" ),
     path = require( "path" );
 
@@ -5,12 +6,12 @@ var fs = require( "fs" ),
 // do as little as possible before loading NewRelic
 var newrelic_path = path.join( path.dirname( fs.realpathSync( __filename ) ), "newrelic.js" );
 if( fs.existsSync( newrelic_path ) ) {
-  var newrelic = require( "newrelic" );
+  require( "newrelic" );
 }
 
 var InaturalistAPI = require( "./lib/inaturalist_api" );
 var app = InaturalistAPI.server( );
 var port = Number( process.env.PORT || 4000 );
-server = app.listen( port, function( ) {
+app.listen( port, function( ) {
   console.log( "Listening on " + port );
 });

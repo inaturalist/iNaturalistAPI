@@ -1,0 +1,5 @@
+coverage/**
+public/**
+swagger-ui/**
+schema/**
+

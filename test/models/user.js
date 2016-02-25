@@ -5,10 +5,10 @@ var expect = require( "chai" ).expect,
 
 describe( "User", function( ) {
   before( function( done ) {
-    pgClient.connection.query( "TRUNCATE TABLE users", function( err, result ) {
+    pgClient.connection.query( "TRUNCATE TABLE users", function( ) {
       pgClient.connection.query(
         "INSERT INTO users (id, login, icon_content_type, icon_file_name) VALUES ($1, $2, $3, $4)",
-        [ 123, "a-user", "image/jpeg", "img.jpg" ], function( err, result ) {
+        [ 123, "a-user", "image/jpeg", "img.jpg" ], function( ) {
           done( );
       });
     });

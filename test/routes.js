@@ -27,19 +27,19 @@ describe( "routes", function( ) {
       index: "test_observations",
       type: "observation",
       body: observations,
-      refresh: true,
-    }, function( err, response ) {
+      refresh: true
+    }, function( ) {
       done( );
     });
   });
 
   before( function( done ) {
-    pgClient.connection.query( "TRUNCATE TABLE users", function( err, result ) {
-    pgClient.connection.query( "TRUNCATE TABLE projects", function( err, result ) {
+    pgClient.connection.query( "TRUNCATE TABLE users", function( ) {
+    pgClient.connection.query( "TRUNCATE TABLE projects", function( ) {
     pgClient.connection.query( "INSERT INTO users (id, login, icon_content_type) VALUES ($1, $2, $3)",
-      [ 123, "a-user", "jpeg" ], function( err, result ) {
+      [ 123, "a-user", "jpeg" ], function( ) {
     pgClient.connection.query( "INSERT INTO projects (id, slug, title) VALUES ($1, $2, $3)",
-      [ 543, "a-project", "A Project" ], function( err, result ) {
+      [ 543, "a-project", "A Project" ], function( ) {
         done( );
     });});});});
   });
@@ -66,7 +66,7 @@ describe( "routes", function( ) {
       type: "taxon",
       body: taxa,
       refresh: true
-    }, function( err, response ) {
+    }, function( ) {
       done( );
     });
   });
@@ -98,7 +98,7 @@ describe( "routes", function( ) {
       type: "place",
       body: places,
       refresh: true
-    }, function( err, response ) {
+    }, function( ) {
       done( );
     });
   });
@@ -388,5 +388,4 @@ describe( "routes", function( ) {
       });
     });
   });
-
 });

@@ -1,6 +1,5 @@
 var expect = require( "chai" ).expect,
     _ = require( "underscore" ),
-    util = require( "../../lib/util" ),
     testHelper = require( "../../lib/test_helper" ),
     esClient = require( "../../lib/es_client" ),
     Place = require( "../../lib/models/place" );
@@ -24,8 +23,8 @@ describe( "Place", function( ) {
         index: "test_places",
         type: "place",
         body: { id: 123, name: "itsname" },
-        refresh: true,
-      }, function( err, response ) {
+        refresh: true
+      }, function( ) {
         done( );
       });
     });
@@ -47,7 +46,7 @@ describe( "Place", function( ) {
     });
 
     it( "returns an error given a bad ID", function( done ) {
-      Place.findByID( "notanint", function( err, t ) {
+      Place.findByID( "notanint", function( err ) {
         expect( err ).to.deep.eq({ messsage: "invalid place_id", status: "422" });
         done( );
       });
@@ -74,5 +73,4 @@ describe( "Place", function( ) {
       });
     });
   });
-
 });
