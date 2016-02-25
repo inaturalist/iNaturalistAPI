@@ -10,7 +10,7 @@ describe( "pgClient", function( ) {
     it( "fails if it can't connect", function( ) {
       process.env.NODE_ENV = "nonsense";
       pgClient.connection = null;
-      var connection = pgClient.connect( function( err, connection ) {
+      pgClient.connect( function( err, connection ) {
         expect( err ).not.to.be.null;
         expect( connection ).to.be.undefined;
       });

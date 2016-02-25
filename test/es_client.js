@@ -8,7 +8,7 @@ describe( "esClient", function( ) {
       type: "taxon",
       body: { id: 9898, name: "ataxon" },
       refresh: true
-    }, function( err, response ) {
+    }, function( ) {
       done( );
     });
   });

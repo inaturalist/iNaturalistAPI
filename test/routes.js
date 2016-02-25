@@ -27,19 +27,19 @@ describe( "routes", function( ) {
       index: "test_observations",
       type: "observation",
       body: observations,
-      refresh: true,
-    }, function( err, response ) {
+      refresh: true
+    }, function( ) {
       done( );
     });
   });
 
   before( function( done ) {
-    pgClient.connection.query( "TRUNCATE TABLE users", function( err, result ) {
-    pgClient.connection.query( "TRUNCATE TABLE projects", function( err, result ) {
+    pgClient.connection.query( "TRUNCATE TABLE users", function( ) {
+    pgClient.connection.query( "TRUNCATE TABLE projects", function( ) {
     pgClient.connection.query( "INSERT INTO users (id, login, name, icon_content_type) VALUES ($1, $2, $3, $4)",
-      [ 123, "a-user", "A User", "jpeg" ], function( err, result ) {
+      [ 123, "a-user", "A User", "jpeg" ], function( ) {
     pgClient.connection.query( "INSERT INTO projects (id, slug, title) VALUES ($1, $2, $3)",
-      [ 543, "a-project", "A Project" ], function( err, result ) {
+      [ 543, "a-project", "A Project" ], function( ) {
         done( );
     });});});});
   });
@@ -66,7 +66,7 @@ describe( "routes", function( ) {
       type: "taxon",
       body: taxa,
       refresh: true
-    }, function( err, response ) {
+    }, function( ) {
       done( );
     });
   });
@@ -98,17 +98,40 @@ describe( "routes", function( ) {
       type: "place",
       body: places,
       refresh: true
-    }, function( err, response ) {
+    }, function( ) {
       done( );
     });
   });
 
   describe( "index", function( ) {
-    it( "shows the app name", function( done ) {
+    it( "redirects to /v1/docs", function( done ) {
       request( app ).get( "/" ).
-        expect( "Content-Type", /text\/html/ ).
-        expect( "iNaturalist API" ).
-        expect( 200, done );
+        expect( "Location", "/v1/docs", done);
+    });
+  });
+
+  describe( "docs", function( ) {
+    it( "redirects to /v1/docs", function( done ) {
+      request( app ).get( "/docs" ).
+        expect( "Location", "/v1/docs", done);
+    });
+  });
+
+  describe( "swaggerRedirect", function( ) {
+    it( "redirects to /v1/swagger.json", function( done ) {
+      request( app ).get( "/swagger.json" ).
+        expect( "Location", "/v1/swagger.json", done);
+    });
+  });
+
+  describe( "swaggerJSON", function( ) {
+    it( "renders the swagger JSON file", function( done ) {
+      request( app ).get( "/v1/swagger.json" ).
+        expect( function( res ) {
+          expect( res.body.swagger ).to.eq( "2.0" );
+          expect( res.body.info.title ).to.eq( "iNaturalist API" );
+        }).
+        expect( "Content-Type", /json/ ).expect( 200, done );
     });
   });
 
@@ -386,5 +409,4 @@ describe( "routes", function( ) {
       });
     });
   });
-
 });

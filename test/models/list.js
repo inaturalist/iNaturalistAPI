@@ -1,6 +1,4 @@
 var expect = require( "chai" ).expect,
-    _ = require( "underscore" ),
-    testHelper = require( "../../lib/test_helper" ),
     pgClient = require( "../../lib/pg_client" ),
     List = require( "../../lib/models/list" );
 
@@ -8,11 +6,11 @@ describe( "List", function( ) {
 
   before( function( done ) {
     pgClient.connection.query( "INSERT INTO lists (id, title) VALUES ($1, $2)",
-      [ 301, "A List" ], function( err, result ) {
+      [ 301, "A List" ], function( ) {
     pgClient.connection.query( "INSERT INTO listed_taxa (taxon_id, list_id) VALUES ($1, $2)",
-      [ 401, 301 ], function( err, result ) {
+      [ 401, 301 ], function( ) {
     pgClient.connection.query( "INSERT INTO listed_taxa (taxon_id, list_id) VALUES ($1, $2)",
-      [ 402, 301 ], function( err, result ) {
+      [ 402, 301 ], function( ) {
       done( );
     });});});
   });

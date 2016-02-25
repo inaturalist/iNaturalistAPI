@@ -1,18 +1,18 @@
 var expect = require( "chai" ).expect,
     MapServer = require( "../lib/inaturalist_map_server" ),
     MapStyles = require( "../lib/inaturalist_map_styles" ),
-    req;
+    stubReq, stubRes;
 
 function stubRequest( ) {
   return { query: { }, params: { } };
 }
 
 function stubResult( ) {
-  res = { headers: { } };
-  res.set = function( attr, val ) { };
+  var res = { headers: { } };
+  res.set = function( ) { };
   res.setHeader = function( attr, val ) { res.headers[ attr ] = val; };
-  res.status = function( val ) { return res; };
-  res.send = function( val ) { return res; };
+  res.status = function( ) { return res; };
+  res.send = function( ) { return res; };
   res.end = function( ) { };
   return res;
 }
@@ -83,7 +83,7 @@ describe( "InaturalistMapServer", function( ) {
 
   describe( "prepareStyle", function( ) {
     it( "defaults to points markersAndCircles", function( done ) {
-      MapServer.prepareStyle( stubReq, function( err, req ) {
+      MapServer.prepareStyle( stubReq, function( ) {
         expect( stubReq.style ).to.eql( MapStyles.markersAndCircles( ) );
         done( );
       });
@@ -91,7 +91,7 @@ describe( "InaturalistMapServer", function( ) {
 
     it( "can specify color of default style", function( done ) {
       stubReq.query.color = "#123FED";
-      MapServer.prepareStyle( stubReq, function( err, req ) {
+      MapServer.prepareStyle( stubReq, function( ) {
         expect( stubReq.style ).to.eql(
           MapStyles.markersAndCircles( stubReq.query.color ) );
         done( );
@@ -100,7 +100,7 @@ describe( "InaturalistMapServer", function( ) {
 
     it( "infers color of points from taxon", function( done ) {
       stubReq.inat = { taxon: { iconic_taxon_id: 1 } };
-      MapServer.prepareStyle( stubReq, function( err, req ) {
+      MapServer.prepareStyle( stubReq, function( ) {
         expect( stubReq.style ).to.eql(
           MapStyles.markersAndCircles( "#1E90FF" ) );
         done( );
@@ -109,7 +109,7 @@ describe( "InaturalistMapServer", function( ) {
 
     it( "can set the heatmap style", function( done ) {
       stubReq.params.style = "heatmap";
-      MapServer.prepareStyle( stubReq, function( err, req ) {
+      MapServer.prepareStyle( stubReq, function( ) {
         expect( stubReq.style ).to.eql( MapStyles.heatmap( ) );
         done( );
       });
@@ -117,7 +117,7 @@ describe( "InaturalistMapServer", function( ) {
 
     it( "can set the summary style", function( done ) {
       stubReq.params.style = "summary";
-      MapServer.prepareStyle( stubReq, function( err, req ) {
+      MapServer.prepareStyle( stubReq, function( ) {
         expect( stubReq.style ).to.eql(
           MapStyles.coloredHeatmap( "#6E6E6E", 8, 0.2 ) );
         done( );
@@ -126,7 +126,7 @@ describe( "InaturalistMapServer", function( ) {
 
     it( "can set the colored_heatmap style", function( done ) {
       stubReq.params.style = "colored_heatmap";
-      MapServer.prepareStyle( stubReq, function( err, req ) {
+      MapServer.prepareStyle( stubReq, function( ) {
         expect( stubReq.style ).to.eql( MapStyles.coloredHeatmap( ) );
         done( );
       });
@@ -135,7 +135,7 @@ describe( "InaturalistMapServer", function( ) {
     it( "can specify color of colored_heatmap style", function( done ) {
       stubReq.params.style = "colored_heatmap";
       stubReq.query.color = "#123FED";
-      MapServer.prepareStyle( stubReq, function( err, req ) {
+      MapServer.prepareStyle( stubReq, function( ) {
         expect( stubReq.style ).to.eql(
           MapStyles.coloredHeatmap( stubReq.query.color ) );
         done( );
@@ -145,7 +145,7 @@ describe( "InaturalistMapServer", function( ) {
     it( "infers color of colored_heatmap from taxon", function( done ) {
       stubReq.params.style = "colored_heatmap";
       stubReq.inat = { taxon: { iconic_taxon_id: 1 } };
-      MapServer.prepareStyle( stubReq, function( err, req ) {
+      MapServer.prepareStyle( stubReq, function( ) {
         expect( stubReq.style ).to.eql(
           MapStyles.coloredHeatmap( "#1E90FF" ) );
         done( );

@@ -44,8 +44,8 @@ describe( "util", function( ) {
 });
 
 function expectResult( status, message, done ) {
-  var header_attr, header_val, status, content;
-  res = { };
+  var header_attr, header_val, content;
+  var res = { };
   res.set = function( attr, val ) {
     header_attr = attr;
     header_val = val;

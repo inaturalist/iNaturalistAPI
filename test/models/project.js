@@ -1,5 +1,4 @@
 var expect = require( "chai" ).expect,
-    _ = require( "underscore" ),
     testHelper = require( "../../lib/test_helper" ),
     Project = require( "../../lib/models/project" );
 

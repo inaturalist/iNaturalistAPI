@@ -1,15 +1,13 @@
 var expect = require( "chai" ).expect,
     moment = require( "moment" ),
     _ = require( "underscore" ),
-    config = require( "../config_example" ),
-    util = require( "../lib/util" ),
     esClient = require( "../lib/es_client" ),
     Taxon = require( "../lib/models/taxon" ),
     Project = require( "../lib/models/project" ),
     List = require( "../lib/models/list" ),
     InaturalistAPI = require( "../lib/inaturalist_api" ),
     testHelper = require( "../lib/test_helper" ),
-    req, eq;
+    eq;
 
 var Q = function( params, callback ) {
   var inat = params.inat;
@@ -165,7 +163,7 @@ describe( "InaturalistAPI", function( ) {
         v = (filter.http_param == "user_id") ? [ 98, 99 ] : [ "test1", "test2" ];
         qp[ filter.http_param ] = v;
         Q( qp, function( e, q ) { eq = q; } );
-        var f = { terms: { } };
+        f = { terms: { } };
         f.terms[ filter.es_field ] = v;
         expect( eq.filters ).to.eql([ f ]);
       });
@@ -583,7 +581,7 @@ describe( "InaturalistAPI", function( ) {
 
   describe( "observationsIndex", function( ) {
     it( "fetches results", function( done ) {
-      InaturalistAPI.observationsIndex( { query: { } }, function( err, rsp ) {
+      InaturalistAPI.observationsIndex( { query: { } }, function( ) {
         // this needs some work - fixtures, etc
         done( );
       });
@@ -634,7 +632,7 @@ describe( "InaturalistAPI", function( ) {
         type: "taxon",
         body: { id: 999, name: "ataxon" },
         refresh: true
-      }, function( err, response ) {
+      }, function( ) {
         done( );
       });
     });
