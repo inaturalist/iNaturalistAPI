@@ -47,7 +47,7 @@ describe( "Place", function( ) {
 
     it( "returns an error given a bad ID", function( done ) {
       Place.findByID( "notanint", function( err ) {
-        expect( err ).to.deep.eq({ messsage: "invalid place_id", status: "422" });
+        expect( err ).to.deep.eq({ messsage: "invalid place_id", status: 422 });
         done( );
       });
     });

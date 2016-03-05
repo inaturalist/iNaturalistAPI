@@ -66,7 +66,7 @@ describe( "Taxon", function( ) {
 
     it( "returns an error given a bad ID", function( done ) {
       Taxon.findByID( "notanint", function( err ) {
-        expect( err ).to.deep.eq({ messsage: "invalid taxon_id", status: "422" });
+        expect( err ).to.deep.eq({ messsage: "invalid taxon_id", status: 422 });
         done( );
       });
     });

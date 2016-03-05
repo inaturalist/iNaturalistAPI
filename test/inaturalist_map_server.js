@@ -58,7 +58,7 @@ describe( "InaturalistMapServer", function( ) {
 
     it( "returns an error when style is missing", function( done ) {
       MapServer.prepareQuery( stubReq, function( err ) {
-        expect( err ).to.eql({ message: "unknown style: undefined", status: 404 });
+        expect( err ).to.eql({ error: "unknown style: undefined", status: 404 });
         done( );
       });
     });
@@ -66,7 +66,7 @@ describe( "InaturalistMapServer", function( ) {
     it( "returns an error when style is unknown", function( done ) {
       stubReq.params.style = "nonsense";
       MapServer.prepareQuery( stubReq, function( err ) {
-        expect( err ).to.eql({ message: "unknown style: nonsense", status: 404 });
+        expect( err ).to.eql({ error: "unknown style: nonsense", status: 404 });
         done( );
       });
     });
@@ -75,7 +75,7 @@ describe( "InaturalistMapServer", function( ) {
       stubReq.params.style = "nonsense";
       stubReq.params.dataType = "postgis";
       MapServer.prepareQuery( stubReq, function( err ) {
-        expect( err ).to.eql({ message: "unknown style: nonsense", status: 404 });
+        expect( err ).to.eql({ error: "unknown style: nonsense", status: 404 });
         done( );
       });
     });

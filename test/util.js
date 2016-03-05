@@ -5,21 +5,14 @@ describe( "util", function( ) {
 
   describe( "renderError", function( ) {
     it( "renders a generic exception", function( done ) {
-      var res = expectResult( 500, "Error", done );
+      var res = expectError({ error: "Error", status: 500 }, done );
       util.renderError( "      testing renderError", res );
     });
 
     it( "renders a custom exception", function( done ) {
-      var e = { message: "testing", status: 501 };
-      var res = expectResult( 501, "testing", done );
+      var e = { error: "testing", status: 501 };
+      var res = expectError( e, done );
       util.renderError( e, res );
-    });
-  });
-
-  describe( "renderMessage", function( ) {
-    it( "renders a response message with proper status", function( done ) {
-      var res = expectResult( 123, "the message", done );
-      util.renderMessage( res, "the message", 123 );
     });
   });
 
@@ -41,29 +34,34 @@ describe( "util", function( ) {
     });
   });
 
+  describe( "localeOpts", function( ) {
+    it( "defaults to en", function( ) {
+      var opts = util.localeOpts({ query: { } });
+      expect( opts.locale ).to.eq( "en" );
+    });
+
+    it( "uses the specified locale", function( ) {
+      var opts = util.localeOpts({ query: { locale: "de" } });
+      expect( opts.locale ).to.eq( "de" );
+    });
+
+    it( "sets places", function( ) {
+      var req = { query: { }, inat: { place: "PL", preferredPlace: "PPL" } };
+      var opts = util.localeOpts( req );
+      expect( opts.place ).to.eq( "PL" );
+      expect( opts.preferredPlace ).to.eq( "PPL" );
+    });
+  });
+
 });
 
-function expectResult( status, message, done ) {
-  var header_attr, header_val, content;
-  var res = { };
-  res.set = function( attr, val ) {
-    header_attr = attr;
-    header_val = val;
-  };
-  res.status = function( val ) {
-    status = val;
-    return res;
-  };
-  res.send = function( val ) {
-    content = val;
-    return res;
-  };
-  res.end = function( ) {
-    expect( header_attr ).to.eq( "Content-Type" );
-    expect( header_val ).to.eq( "text/html" );
-    expect( status ).to.eq( status );
-    expect( content ).to.eq( message );
-    done( );
+function expectError( e, done ) {
+  var res = {
+    status: function( ) { },
+    jsonp : function( j ) {
+      expect( j ).to.deep.eq( e );
+      done( );
+    }
   };
   return res;
 }
