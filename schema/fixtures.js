@@ -62,7 +62,7 @@
           "created_at": "2015-12-31T00:00:00",
           "private_location": "1,2",
           "taxon": { "id": 5, "ancestry": "1,2,3,4,5" },
-          "project_ids": [ "543" ],
+          "project_ids": [ 543 ],
           "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
         },
         {
@@ -80,6 +80,20 @@
           "user": { "id": 333 },
           "geoprivacy": "obscured",
           "place_guess": "Idaho"
+        }
+      ]
+    },
+    "projects": {
+      "project": [
+        {
+          "id": 1,
+          "title": "Project One",
+          "title_autocomplete": "Project One"
+        },
+        {
+          "id": 2,
+          "title": "Project Two",
+          "title_autocomplete": "Project Two"
         }
       ]
     },
@@ -143,6 +157,20 @@
     }
   },
   "postgresql": {
+    "identifications": [
+      {
+        "observation_id": 1,
+        "taxon_id": 5,
+        "user_id": 123,
+        "body": "id1"
+      },
+      {
+        "observation_id": 1,
+        "taxon_id": 5,
+        "user_id": 5,
+        "body": "id2"
+      }
+    ],
     "lists": [
       {
         "id": 301,
@@ -251,6 +279,11 @@
       }
     ],
     "users": [
+      {
+        "id": 5,
+        "login": "b-user",
+        "name": "B User"
+      },
       {
         "id": 123,
         "login": "a-user",
