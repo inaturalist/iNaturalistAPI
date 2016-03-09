@@ -1,14 +1,8 @@
 var expect = require( "chai" ).expect,
-    esClient = require( "../lib/es_client" ),
     Taxon = require( "../lib/models/taxon" ),
-    InaturalistAPI = require( "../lib/inaturalist_api" ),
-    testHelper = require( "../lib/test_helper" );
+    InaturalistAPI = require( "../lib/inaturalist_api" );
 
 describe( "InaturalistAPI", function( ) {
-  before( function( done ) {
-    testHelper.projectWithRules( done );
-  });
-
   it( "uses the test ENV", function( ) {
     expect( process.env.NODE_ENV ).to.eq( "test" );
   });
@@ -32,17 +26,6 @@ describe( "InaturalistAPI", function( ) {
   });
 
   describe( "lookupInstance", function( ) {
-    before( function( done ) {
-      esClient.connection.create({
-        index: "test_taxa",
-        type: "taxon",
-        body: { id: 999, name: "ataxon" },
-        refresh: true
-      }, function( ) {
-        done( );
-      });
-    });
-
     it( "looks up instances", function( done ) {
       var req = { query: { taxon_id: 999 } };
       InaturalistAPI.lookupInstance( req, "taxon_id", Taxon.findByID, function( err, t ) {

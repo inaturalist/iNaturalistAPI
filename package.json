@@ -33,7 +33,8 @@
     "async": "^1.5.1",
     "node.extend": "^1.1.5",
     "yamljs": "^0.2.5",
-    "ejs": "^2.4.1"
+    "ejs": "^2.4.1",
+    "bluebird": "^3.3.4"
   },
   "devDependencies": {
     "mocha": "^2.2.4",

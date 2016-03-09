@@ -1,19 +1,7 @@
 var expect = require( "chai" ).expect,
-    _ = require( "underscore" ),
-    pgClient = require( "../../lib/pg_client" ),
     User = require( "../../lib/models/user" );
 
 describe( "User", function( ) {
-  before( function( done ) {
-    pgClient.connection.query( "TRUNCATE TABLE users", function( ) {
-      pgClient.connection.query(
-        "INSERT INTO users (id, login, icon_content_type, icon_file_name) VALUES ($1, $2, $3, $4)",
-        [ 123, "a-user", "image/jpeg", "img.jpg" ], function( ) {
-          done( );
-      });
-    });
-  });
-
   describe( "findByLogin", function( ) {
     it( "returns a user given an login", function( done ) {
       User.findByLogin( "a-user", function( err, u ) {

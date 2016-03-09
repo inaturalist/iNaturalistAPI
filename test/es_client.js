@@ -2,16 +2,6 @@ var expect = require( "chai" ).expect,
     esClient = require( "../lib/es_client" );
 
 describe( "esClient", function( ) {
-  before( function( done ) {
-    esClient.connection.create({
-      index: "test_taxa",
-      type: "taxon",
-      body: { id: 9898, name: "ataxon" },
-      refresh: true
-    }, function( ) {
-      done( );
-    });
-  });
 
   describe( "connect", function( ) {
     it( "returns the open connection", function( ) {

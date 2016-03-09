@@ -3,7 +3,7 @@ var expect = require( "chai" ).expect,
     _ = require( "underscore" ),
     Project = require( "../../../lib/models/project" ),
     List = require( "../../../lib/models/list" ),
-    testHelper = require( "../../../lib/test_helper" ),
+    // testHelper = require( "../../../lib/test_helper" ),
     ObservationsController = require( "../../../lib/controllers/v1/observations_controller" ),
     eq;
 
@@ -20,10 +20,6 @@ var Q = function( params, callback ) {
 };
 
 describe( "InaturalistAPI", function( ) {
-  before( function( done ) {
-    testHelper.projectWithRules( done );
-  });
-
   it( "uses the test ENV", function( ) {
     expect( process.env.NODE_ENV ).to.eq( "test" );
   });

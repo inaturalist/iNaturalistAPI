@@ -1,12 +1,7 @@
 var expect = require( "chai" ).expect,
-    testHelper = require( "../../lib/test_helper" ),
     Project = require( "../../lib/models/project" );
 
 describe( "Project", function( ) {
-
-  before( function( done ) {
-    testHelper.projectWithRules( done );
-  });
 
   describe( "findByID", function( ) {
     it( "returns a project given an ID", function( done ) {
