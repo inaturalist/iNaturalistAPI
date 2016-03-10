@@ -29,8 +29,7 @@ describe( "ESModel", function( ) {
     it( "returns errors", function( done ) {
       var o = { user_id: 1 };
       ESModel.fetchBelongsTo([ o ], User, null, function( err ) {
-        expect( err.message ).to.eq(
-          "[index_not_found_exception] no such index" );
+        expect( err.message ).to.include( "index_not_found_exception" );
         done( );
       });
     });

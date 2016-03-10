@@ -1,5 +1,4 @@
-var expect = require( "chai" ).expect,
-    request = require( "supertest" ),
+var request = require( "supertest" ),
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
     app = iNaturalistAPI.server( );
 

@@ -1,5 +1,6 @@
 var expect = require( "chai" ).expect,
     request = require( "supertest" ),
+    querystring = require( "querystring" ),
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
     app = iNaturalistAPI.server( );
 
@@ -24,7 +25,7 @@ describe( "Taxa", function( ) {
     });
 
     it( "searches japanese characters", function( done ) {
-      request( app ).get( "/v1/taxa/autocomplete?q=眼紋疏廣蠟蟬" ).
+      request( app ).get( "/v1/taxa/autocomplete?q=" + querystring.escape( "眼紋疏廣蠟蟬" ) ).
         expect( function( res ) {
           expect( res.body.total_results ).to.eq( 1 );
           expect( res.body.results[ 0 ].matched_term ).to.eq( "眼紋疏廣蠟蟬" );
