@@ -1,6 +1,5 @@
 var expect = require( "chai" ).expect,
     _ = require( "underscore" ),
-    esClient = require( "../../lib/es_client" ),
     Taxon = require( "../../lib/models/taxon" ),
     t, p;
 
@@ -30,51 +29,40 @@ describe( "Taxon", function( ) {
 
   describe( "constructor", function( ) {
     it( "creates a Taxon", function( ) {
-      var t = new Taxon({ id: 111, name: "itsname" });
-      expect( t.id ).to.eq( 111 );
-      expect( t.name ).to.eq( "itsname" );
+      var tax = new Taxon({ id: 111, name: "itsname" });
+      expect( tax.id ).to.eq( 111 );
+      expect( tax.name ).to.eq( "itsname" );
     });
   });
 
   describe( "findByID", function( ) {
-    before( function( done ) {
-      esClient.connection.create({
-        index: "test_taxa",
-        type: "taxon",
-        body: { id: 123, name: "itsname" },
-        refresh: true
-      }, function( ) {
-        done( );
-      });
-    });
-
     it( "returns a taxon given an ID", function( done ) {
-      Taxon.findByID( 123, function( err, t ) {
-        expect( t.id ).to.eq( 123 );
-        expect( t.name ).to.eq( "itsname" );
+      Taxon.findByID( 123, function( err, tax ) {
+        expect( tax.id ).to.eq( 123 );
+        expect( tax.name ).to.eq( "itsname" );
         done( );
       });
     });
 
     it( "returns a taxon from the cache", function( done ) {
-      Taxon.findByID( 123, function( err, t ) {
-        expect( t.id ).to.eq( 123 );
-        expect( t.name ).to.eq( "itsname" );
+      Taxon.findByID( 123, function( err, tax ) {
+        expect( tax.id ).to.eq( 123 );
+        expect( tax.name ).to.eq( "itsname" );
         done( );
       });
     });
 
     it( "returns an error given a bad ID", function( done ) {
       Taxon.findByID( "notanint", function( err ) {
-        expect( err ).to.deep.eq({ messsage: "invalid taxon_id", status: "422" });
+        expect( err ).to.deep.eq({ messsage: "invalid taxon_id", status: 422 });
         done( );
       });
     });
 
     it( "returns null given an unknown ID", function( done ) {
-      Taxon.findByID( 55555, function( err, t ) {
+      Taxon.findByID( 55555, function( err, tax ) {
         expect( err ).to.eq( null );
-        expect( t ).to.eq( false );
+        expect( tax ).to.eq( false );
         done( );
       });
     });

@@ -3,7 +3,7 @@ language: node_js
 compiler: gcc
 
 node_js:
-  - '0.10'
+  - "5.8.0"
 
 addons:
   postgresql: '9.3'

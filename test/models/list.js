@@ -1,22 +1,10 @@
 var expect = require( "chai" ).expect,
-    pgClient = require( "../../lib/pg_client" ),
     List = require( "../../lib/models/list" );
 
 describe( "List", function( ) {
 
-  before( function( done ) {
-    pgClient.connection.query( "INSERT INTO lists (id, title) VALUES ($1, $2)",
-      [ 301, "A List" ], function( ) {
-    pgClient.connection.query( "INSERT INTO listed_taxa (taxon_id, list_id) VALUES ($1, $2)",
-      [ 401, 301 ], function( ) {
-    pgClient.connection.query( "INSERT INTO listed_taxa (taxon_id, list_id) VALUES ($1, $2)",
-      [ 402, 301 ], function( ) {
-      done( );
-    });});});
-  });
-
   describe( "findByID", function( ) {
-    it( "returns a project given an ID", function( done ) {
+    it( "returns a list given an ID", function( done ) {
       List.findByID( 301, function( err, l ) {
         expect( l.id ).to.eq( 301 );
         expect( l.title ).to.eq( "A List" );
@@ -24,7 +12,7 @@ describe( "List", function( ) {
       });
     });
 
-    it( "returns a project from the cache", function( done ) {
+    it( "returns a list from the cache", function( done ) {
       List.findByID( 301, function( err, p ) {
         expect( p.id ).to.eq( 301 );
         expect( p.title ).to.eq( "A List" );

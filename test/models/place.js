@@ -1,14 +1,8 @@
 var expect = require( "chai" ).expect,
     _ = require( "underscore" ),
-    testHelper = require( "../../lib/test_helper" ),
-    esClient = require( "../../lib/es_client" ),
     Place = require( "../../lib/models/place" );
 
 describe( "Place", function( ) {
-  before( function( done ) {
-    testHelper.createPlace( done );
-  });
-
   describe( "constructor", function( ) {
     it( "creates a place", function( ) {
       var p = new Place({ id: 111, name: "itsname" });
@@ -18,17 +12,6 @@ describe( "Place", function( ) {
   });
 
   describe( "findByID", function( ) {
-    before( function( done ) {
-      esClient.connection.create({
-        index: "test_places",
-        type: "place",
-        body: { id: 123, name: "itsname" },
-        refresh: true
-      }, function( ) {
-        done( );
-      });
-    });
-
     it( "returns a place given an ID", function( done ) {
       Place.findByID( 123, function( err, p ) {
         expect( p.id ).to.eq( 123 );
@@ -47,7 +30,7 @@ describe( "Place", function( ) {
 
     it( "returns an error given a bad ID", function( done ) {
       Place.findByID( "notanint", function( err ) {
-        expect( err ).to.deep.eq({ messsage: "invalid place_id", status: "422" });
+        expect( err ).to.deep.eq({ messsage: "invalid place_id", status: 422 });
         done( );
       });
     });

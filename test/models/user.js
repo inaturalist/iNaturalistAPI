@@ -1,19 +1,7 @@
 var expect = require( "chai" ).expect,
-    _ = require( "underscore" ),
-    pgClient = require( "../../lib/pg_client" ),
     User = require( "../../lib/models/user" );
 
 describe( "User", function( ) {
-  before( function( done ) {
-    pgClient.connection.query( "TRUNCATE TABLE users", function( ) {
-      pgClient.connection.query(
-        "INSERT INTO users (id, login, icon_content_type, icon_file_name) VALUES ($1, $2, $3, $4)",
-        [ 123, "a-user", "image/jpeg", "img.jpg" ], function( ) {
-          done( );
-      });
-    });
-  });
-
   describe( "findByLogin", function( ) {
     it( "returns a user given an login", function( done ) {
       User.findByLogin( "a-user", function( err, u ) {
@@ -34,20 +22,6 @@ describe( "User", function( ) {
     it( "returns false for missing users", function( done ) {
       User.findByLogin( "nonsense", function( err, u ) {
         expect( u ).to.be.false;
-        done( );
-      });
-    });
-  });
-
-  describe( "assignToObject", function( ) {
-    it( "assigns user instances to objects", function( done ) {
-      var o = { 1: { }, 123: { }, 444: { } };
-      User.assignToObject( o, function( err, withUsers ) {
-        expect( _.keys( withUsers ) ).to.deep.eq([ "1", "123", "444" ]);
-        expect( withUsers[ "1" ].user ).to.be.undefined;
-        expect( withUsers[ "444" ].user ).to.be.undefined;
-        expect( withUsers[ "123" ].user ).to.not.be.undefined;
-        expect( withUsers[ "123" ].user.login ).to.eq( "a-user" );
         done( );
       });
     });
