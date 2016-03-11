@@ -30,6 +30,7 @@ describe( "Tileserver", function( ) {
 
   describe( "summary", function( ) {
     it( "renders summary tiles", function( done ) {
+      this.timeout( 5000 );
       request( app ).get( "/v1/summary/1/0/0.png" ).
       expect( "Content-Type", /png/ ).
       expect( 200, done );
@@ -38,6 +39,7 @@ describe( "Tileserver", function( ) {
 
   describe( "heatmap", function( ) {
     it( "renders heatmap tiles", function( done ) {
+      this.timeout( 5000 );
       request( app ).get( "/v1/heatmap/1/0/0.png" ).
       expect( "Content-Type", /png/ ).
       expect( 200, done );
@@ -46,6 +48,7 @@ describe( "Tileserver", function( ) {
 
   describe( "colored heatmap", function( ) {
     it( "renders colored_heatmap tiles", function( done ) {
+      this.timeout( 5000 );
       request( app ).get( "/v1/colored_heatmap/1/0/0.png" ).
       expect( "Content-Type", /png/ ).
       expect( 200, done );
