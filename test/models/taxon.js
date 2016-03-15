@@ -145,19 +145,19 @@ describe( "Taxon", function( ) {
 
   describe( "prepareForResponse", function( ) {
     it( "skips listed taxa without means", function( ) {
-      var t2 = _.extend( { }, t );
+      var t2 = new Taxon( t );
       t2.prepareForResponse( );
       expect( t2.preferred_common_name ).to.eq( "BestEnglish" );
     });
 
     it( "defaults to strict locale check", function( ) {
-      var t2 = _.extend( { }, t );
+      var t2 = new Taxon( t );
       t2.prepareForResponse({ locale: "de" });
       expect( t2.preferred_common_name ).to.be.undefined;
     });
 
     it( "can default to English", function( ) {
-      var t2 = _.extend( { }, t );
+      var t2 = new Taxon( t );
       t2.prepareForResponse({ locale: "de", defaultToEnglish: true });
       expect( t2.preferred_common_name ).to.eq( "BestEnglish" );
     });

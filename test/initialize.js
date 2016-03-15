@@ -1,4 +1,5 @@
-var testHelper = require( "../lib/test_helper" );
+var Taxon = require( "../lib/models/taxon" ),
+    testHelper = require( "../lib/test_helper" );
 
 before( function( done ) {
   this.timeout( 10000 );
@@ -9,11 +10,12 @@ before( function( done ) {
 
 before( function( done ) {
   this.timeout( 10000 );
-  testHelper.loadPostgresqlFixtures( done );
+  testHelper.loadPostgresqlFixtures( function( ) {
+    Taxon.loadIconicTaxa( done );
+  });
 });
 
 after( function( done ) {
   this.timeout( 10000 );
   testHelper.deleteIndices( done );
 });
-

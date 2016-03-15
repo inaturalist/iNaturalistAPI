@@ -1,4 +1,5 @@
 var expect = require( "chai" ).expect,
+    Taxon = require( "../lib/models/taxon" ),
     MapServer = require( "../lib/inaturalist_map_server" ),
     MapStyles = require( "../lib/inaturalist_map_styles" ),
     stubReq, stubRes;
@@ -18,6 +19,7 @@ function stubResult( ) {
 }
 
 describe( "InaturalistMapServer", function( ) {
+
   beforeEach( function( ) {
     stubReq = stubRequest( );
     stubRes = stubResult( );
@@ -99,7 +101,7 @@ describe( "InaturalistMapServer", function( ) {
     });
 
     it( "infers color of points from taxon", function( done ) {
-      stubReq.inat = { taxon: { iconic_taxon_id: 1 } };
+      stubReq.inat = { taxon: { iconic_taxon_id: Taxon.iconicTaxonID( "Animalia" ) } };
       MapServer.prepareStyle( stubReq, function( ) {
         expect( stubReq.style ).to.eql(
           MapStyles.markersAndCircles( "#1E90FF" ) );
@@ -144,7 +146,7 @@ describe( "InaturalistMapServer", function( ) {
 
     it( "infers color of colored_heatmap from taxon", function( done ) {
       stubReq.params.style = "colored_heatmap";
-      stubReq.inat = { taxon: { iconic_taxon_id: 1 } };
+      stubReq.inat = { taxon: { iconic_taxon_id: Taxon.iconicTaxonID( "Animalia" ) } };
       MapServer.prepareStyle( stubReq, function( ) {
         expect( stubReq.style ).to.eql(
           MapStyles.coloredHeatmap( "#1E90FF" ) );

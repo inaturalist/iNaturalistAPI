@@ -83,6 +83,15 @@ describe( "Observations", function( ) {
         expect( res.body.results[ 0 ].place_guess ).to.be.undefined;
       }).expect( 200, done );
     });
+
+    it( "return iconic taxon names", function( done ) {
+      request( app ).get( "/v1/observations?id=1" ).
+      expect( function( res ) {
+        expect( res.body.total_results ).to.eq( 1 );
+        expect( res.body.results[ 0 ].taxon.iconic_taxon_id ).to.eq( 101 );
+        expect( res.body.results[ 0 ].taxon.iconic_taxon_name ).to.eq( "Actinopterygii" );
+      }).expect( 200, done );
+    });
   });
 
   describe( "identifiers", function( ) {

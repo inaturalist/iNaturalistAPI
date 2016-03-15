@@ -126,6 +126,10 @@
           "is_active": true
         },
         {
+          "id": 5,
+          "iconic_taxon_id": 101
+        },
+        {
           "id": 123,
           "name": "itsname",
           "names": [
@@ -290,6 +294,60 @@
         "name": "A User",
         "icon_content_type": "image/jpeg",
         "icon_file_name": "img.jpg"
+      }
+    ],
+    "taxa": [
+      {
+        "id": 101,
+        "name": "Actinopterygii"
+      },
+      {
+        "id": 102,
+        "name": "Amphibia"
+      },
+      {
+        "id": 103,
+        "name": "Animalia"
+      },
+      {
+        "id": 104,
+        "name": "Arachnida"
+      },
+      {
+        "id": 105,
+        "name": "Aves"
+      },
+      {
+        "id": 106,
+        "name": "Chromista"
+      },
+      {
+        "id": 107,
+        "name": "Insecta"
+      },
+      {
+        "id": 108,
+        "name": "Fungi"
+      },
+      {
+        "id": 109,
+        "name": "Mammalia"
+      },
+      {
+        "id": 110,
+        "name": "Mollusca"
+      },
+      {
+        "id": 111,
+        "name": "Plantae"
+      },
+      {
+        "id": 112,
+        "name": "Protozoa"
+      },
+      {
+        "id": 113,
+        "name": "Reptilia"
       }
     ]
   }

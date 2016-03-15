@@ -342,13 +342,13 @@ describe( "InaturalistAPI", function( ) {
 
     it( "filters by iconic_taxa", function( ) {
       Q( { iconic_taxa: [ "Animalia", "Plantae" ] }, function( e, q ) { eq = q; } );
-      expect( eq.filters ).to.eql([{ terms: { "taxon.iconic_taxon_id": [ "1", "47126" ] } }]);
+      expect( eq.filters ).to.eql([{ terms: { "taxon.iconic_taxon_id": [ 103, 111 ] } }]);
     });
 
     it( "filters by unknown iconic_taxa", function( ) {
       Q( { iconic_taxa: [ "Animalia", "Plantae", "unknown" ] }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ bool: { should: [
-        { terms: { "taxon.iconic_taxon_id": [ "1", "47126" ] } },
+        { terms: { "taxon.iconic_taxon_id": [ 103, 111 ] } },
         { missing: { field: "taxon.iconic_taxon_id" }}]}}]);
     });
 
