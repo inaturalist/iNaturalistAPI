@@ -25,6 +25,13 @@ describe( "User", function( ) {
         done( );
       });
     });
+
+    it( "returns nothing given nothing", function( done ) {
+      User.findByLogin( undefined, function( err, u ) {
+        expect( u ).to.be.undefined;
+        done( );
+      });
+    });
   });
 
   describe( "iconUrl", function( ) {

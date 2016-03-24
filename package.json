@@ -45,6 +45,7 @@
     "istanbul": "^0.4.2",
     "mocha": "^2.4.5",
     "mocha-lcov-reporter": "^1.2.0",
+    "sinon": "^1.17.3",
     "supertest": "^1.2.0"
   }
 }

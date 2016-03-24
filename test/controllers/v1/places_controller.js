@@ -38,5 +38,14 @@ describe( "PlacesController", function( ) {
               [ -100, -90 ],
               [ -100, -90 ] ] }}}});
     });
+
+    it( "limits min latitude to -90", function( ) {
+      var req = { query: { name: "Massachusetts",
+        nelat: 0.0001, nelng: 0.00011, swlat: 0.0001, swlng: 0.00011 } };
+      var body = PlacesController.nearbyQueryBody( req );
+      var must = body.query.bool.must;
+      expect( must ).to.include({ match: {
+        display_name_autocomplete: "Massachusetts" }});
+    });
   });
 });
