@@ -1,7 +1,9 @@
 var expect = require( "chai" ).expect,
+    sinon = require( "sinon" ),
     request = require( "supertest" ),
     _ = require( "underscore" ),
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
+    Project = require( "../../../lib/models/project" ),
     app = iNaturalistAPI.server( );
 
 describe( "Projects Routes", function( ) {
@@ -59,4 +61,52 @@ describe( "Projects Routes", function( ) {
         }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
   });
+
+  describe( "members", function( ) {
+    it( "returns an error given an unknown project ID", function( done ) {
+      request( app ).get( "/v1/projects/888/members" ).
+        expect( function( res ) {
+          expect( res.body.error ).to.eq( "Unknown project_id" );
+          expect( res.body.status ).to.eq( 422 );
+        }).expect( "Content-Type", /json/ ).expect( 422, done );
+    });
+
+    it( "returns an empty response if not given a query", function( done ) {
+      request( app ).get( "/v1/projects/543/members" ).
+        expect( function( res ) {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 3 );
+          expect( res.body.total_results ).to.eq( 3 );
+          expect( res.body.results.length ).to.eq( 3 );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "defaults to page 1", function( done ) {
+      request( app ).get( "/v1/projects/543/members?page=-1" ).
+        expect( function( res ) {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 3 );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "can filter by curators", function( done ) {
+      request( app ).get( "/v1/projects/543/members?role=curator" ).
+        expect( function( res ) {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 2 );
+          expect( res.body.results[0].user.id ).to.eq( 123 );
+          expect( res.body.results[1].user.id ).to.eq( 6 );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "can filter by manager", function( done ) {
+      request( app ).get( "/v1/projects/543/members?role=manager" ).
+        expect( function( res ) {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( res.body.results[0].user.id ).to.eq( 6 );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+  });
+
 });

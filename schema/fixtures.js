@@ -61,7 +61,7 @@
           "user": { "id": 123 },
           "created_at": "2015-12-31T00:00:00",
           "private_location": "1,2",
-          "taxon": { "id": 5, "ancestry": "1,2,3,4,5" },
+          "taxon": { "id": 5, "min_species_ancestry": "1,2,3,4,5" },
           "project_ids": [ 543 ],
           "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
         },
@@ -70,8 +70,8 @@
           "user": { "id": 5 },
           "created_at": "2016-01-01T01:00:00",
           "location": "2,3",
-          "taxon": { "id": 4, "ancestry": "1,2,3,4" },
-          "non_owner_ids":[{ "user_id": 123 }],
+          "taxon": { "id": 4, "min_species_ancestry": "1,2,3,4" },
+          "non_owner_ids":[{ "user": { "id": 123 } }],
           "place_guess": "Montana",
           "private_geojson": { "type": "Point", "coordinates": [ "3", "2" ] }
         },
@@ -211,11 +211,30 @@
         "display_name": "a-place"
       }
     ],
+    "project_users": [
+      {
+        "project_id": 543,
+        "user_id": 5,
+        "observations_count": 1000
+      },
+      {
+        "project_id": 543,
+        "user_id": 6,
+        "observations_count": 800
+      },
+      {
+        "project_id": 543,
+        "user_id": 123,
+        "role": "curator",
+        "observations_count": 900
+      }
+    ],
     "projects": [
       {
         "id": 543,
         "slug": "a-project",
         "title": "A Project",
+        "user_id": 6,
         "start_time": "2016-02-02 2:22:22",
         "end_time": "2016-05-05 5:55:55"
       }
@@ -287,6 +306,13 @@
         "id": 5,
         "login": "b-user",
         "name": "B User"
+      },
+      {
+        "id": 6,
+        "login": "z-user",
+        "name": "Z User",
+        "icon_content_type": "image/jpeg",
+        "icon_file_name": "img.jpg"
       },
       {
         "id": 123,
