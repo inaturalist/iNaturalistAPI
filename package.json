@@ -26,6 +26,7 @@
     "elasticmaps": "^0.2.0",
     "elasticsearch": "^10.1.3",
     "express": "^4.13.4",
+    "geoip-lite": "*",
     "inaturalistjs": "inaturalist/inaturalistjs",
     "jade": "^1.11.0",
     "jsonwebtoken": "^5.7.0",
