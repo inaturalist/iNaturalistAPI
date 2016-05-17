@@ -68,35 +68,15 @@
           if(window.SwaggerTranslator) {
             window.SwaggerTranslator.translate();
           }
-
-          addApiKeyAuthorization();
         },
         onFailure: function(data) {
           log("Unable to Load SwaggerUI");
         },
         docExpansion: "none",
         jsonEditor: false,
-        apisSorter: "alpha",
         defaultModelRendering: 'schema',
         showRequestHeaders: false
       });
-
-      function addApiKeyAuthorization(){
-        var key = encodeURIComponent($('#input_apiKey')[0].value);
-        if(key && key.trim() != "") {
-            var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("api_key", key, "query");
-            window.swaggerUi.api.clientAuthorizations.add("api_key", apiKeyAuth);
-            log("added key " + key);
-        }
-      }
-
-      $('#input_apiKey').change(addApiKeyAuthorization);
-
-      // if you have an apiKey you would like to pre-populate on the page for demonstration purposes...
-      /*
-        var apiKey = "myApiKeyXXXX123456789";
-        $('#input_apiKey').val(apiKey);
-      */
 
       window.swaggerUi.load();
 
@@ -119,11 +99,11 @@
 </head>
 
 <body class="swagger-section">
-<div id="custom_header">
+<div id='custom_header'>
   <div class="swagger-ui-wrap">
-    <a href="http://www.inaturalist.org">
-      <img alt="iNaturalist.org" src="http://static.inaturalist.org/sites/1-logo.png"/>
-    </a>
+   <a href="http://www.inaturalist.org">
+     <img alt="iNaturalist.org" src="http://static.inaturalist.org/sites/1-logo.png"/>
+   </a>
   </div>
 </div>
 
