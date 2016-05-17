@@ -1,5 +1,4 @@
 var expect = require( "chai" ).expect,
-    _ = require( "underscore" ),
     Taxon = require( "../../lib/models/taxon" ),
     t, p;
 
