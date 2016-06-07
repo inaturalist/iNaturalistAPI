@@ -421,6 +421,9 @@
           "license_code" : {
             "type" : "string",
             "analyzer" : "keyword_analyzer"
+          },
+          "native_sound_id" : {
+            "type" : "string"
           }
         }
       },

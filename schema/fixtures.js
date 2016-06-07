@@ -80,6 +80,16 @@
           "user": { "id": 333 },
           "geoprivacy": "obscured",
           "place_guess": "Idaho"
+        },
+        {
+          "id": 4,
+          "user": { "id": 333 },
+          "sounds": {
+            "id": 1,
+            "license_code": "CC-BY",
+            "attribution": "Slartibartfast",
+            "native_sound_id": 123
+          }
         }
       ]
     },

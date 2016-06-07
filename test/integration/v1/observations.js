@@ -1,7 +1,10 @@
 var expect = require( "chai" ).expect,
     request = require( "supertest" ),
+    fs = require( "fs" ),
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
     app = iNaturalistAPI.server( );
+
+var fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 describe( "Observations", function( ) {
 
@@ -21,7 +24,7 @@ describe( "Observations", function( ) {
     it( "looks up observation users from the DB", function( done ) {
       request( app ).get( "/v1/observations" ).
       expect( function( res ) {
-        expect( res.body.total_results ).to.eq( 3 );
+        expect( res.body.total_results ).to.eq( fixtures.elasticsearch.observations.observation.length );
         expect( res.body.results[ 0 ].id ).to.eq( 2 );
         expect( res.body.results[ 0 ].user.id ).to.eq( 5 );
         expect( res.body.results[ 0 ].user.login ).to.eq( "b-user" );
@@ -57,7 +60,7 @@ describe( "Observations", function( ) {
     it( "looks up not_in_project by slug", function( done ) {
       request( app ).get( "/v1/observations?not_in_project=a-project" ).
       expect( function( res ) {
-        expect( res.body.total_results ).to.eq( 2 );
+        expect( res.body.total_results ).to.eq( fixtures.elasticsearch.observations.observation.length - 1 );
       }).expect( 200, done );
     });
 
@@ -71,7 +74,7 @@ describe( "Observations", function( ) {
     it( "ignores missing projects", function( done ) {
       request( app ).get( "/v1/observations?projects=nonsense" ).
       expect( function( res ) {
-        expect( res.body.total_results ).to.eq( 3 );
+        expect( res.body.total_results ).to.eq( fixtures.elasticsearch.observations.observation.length );
       }).expect( 200, done );
     });
 
@@ -92,6 +95,19 @@ describe( "Observations", function( ) {
         expect( res.body.results[ 0 ].taxon.iconic_taxon_name ).to.eq( "Actinopterygii" );
       }).expect( 200, done );
     });
+
+    it( "filters by sounds", function( done ) {
+      request( app ).get( "/v1/observations?sounds=true" ).
+      expect( function( res ) {
+        expect( res.body.results.length ).to.eq( 1 );
+      } ).expect( 200, done );
+    } );
+    it( "includes soundcloud identifiers", function( done ) {
+      request( app ).get( "/v1/observations?sounds=true" ).
+      expect( function( res ) {
+        expect( res.body.results.native_sound_id ).to.be.defined;
+      } ).expect( 200, done );
+    } );
   });
 
   describe( "identifiers", function( ) {
