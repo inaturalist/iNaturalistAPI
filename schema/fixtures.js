@@ -54,6 +54,15 @@
         }
       ]
     },
+    "observation_fields": {
+      "observation_field": [
+        {
+          "id": 1,
+          "name": "fieldname",
+          "name_autocomplete": "fieldnameautocomplete"
+        }
+      ]
+    },
     "observations": {
       "observation": [
         {
@@ -166,6 +175,17 @@
         {
           "id": 9898,
           "name": "ataxon"
+        }
+      ]
+    },
+    "users": {
+      "user": [
+        {
+          "id": 1,
+          "login": "userlogin",
+          "login_autocomplete": "userloginautocomplete",
+          "name": "username",
+          "name_autocomplete": "usernameautocomplete"
         }
       ]
     }

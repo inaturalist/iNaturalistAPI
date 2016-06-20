@@ -5,7 +5,7 @@ var expect = require( "chai" ).expect,
 
 describe( "DBModel", function( ) {
   describe( "fetchBelongsTo", function( ) {
-    it( "fetchs belongs to associations with ids", function( done ) {
+    it( "fetches belongs to associations with ids", function( done ) {
       var o = { user_id: 123 };
       DBModel.fetchBelongsTo([ o ], User, function( ) {
         expect( o.user ).to.not.be.undefined;
@@ -15,7 +15,7 @@ describe( "DBModel", function( ) {
       });
     });
 
-    it( "fetchs belongs to associations with objects", function( done ) {
+    it( "fetches belongs to associations with objects", function( done ) {
       var o = { user: { id: 123, existingData: "something" } };
       DBModel.fetchBelongsTo([ o ], User, function( ) {
         expect( o.user ).to.not.be.undefined;

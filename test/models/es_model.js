@@ -1,11 +1,11 @@
 var expect = require( "chai" ).expect,
     Taxon = require( "../../lib/models/taxon" ),
-    User = require( "../../lib/models/user" ),
+    Identification = require( "../../lib/models/identification" ),
     ESModel = require( "../../lib/models/es_model" );
 
 describe( "ESModel", function( ) {
   describe( "fetchBelongsTo", function( ) {
-    it( "fetchs belongs to associations with ids", function( done ) {
+    it( "fetches belongs to associations with ids", function( done ) {
       var o = { taxon_id: 1 };
       ESModel.fetchBelongsTo([ o ], Taxon, null, function( ) {
         expect( o.taxon ).to.not.be.undefined;
@@ -15,7 +15,7 @@ describe( "ESModel", function( ) {
       });
     });
 
-    it( "fetchs belongs to associations with ids", function( done ) {
+    it( "fetches belongs to associations with ids", function( done ) {
       var o = { taxon: { id: 1, existingData: "something" } };
       ESModel.fetchBelongsTo([ o ], Taxon, null, function( ) {
         expect( o.taxon ).to.not.be.undefined;
@@ -27,8 +27,8 @@ describe( "ESModel", function( ) {
     });
 
     it( "returns errors", function( done ) {
-      var o = { user_id: 1 };
-      ESModel.fetchBelongsTo([ o ], User, null, function( err ) {
+      var o = { identification_id: 1 };
+      ESModel.fetchBelongsTo([ o ], Identification, null, function( err ) {
         expect( err.message ).to.include( "index_not_found_exception" );
         done( );
       });
