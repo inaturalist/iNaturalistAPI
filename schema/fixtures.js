@@ -70,7 +70,8 @@
           "user": { "id": 123 },
           "created_at": "2015-12-31T00:00:00",
           "private_location": "1,2",
-          "taxon": { "id": 5, "min_species_ancestry": "1,2,3,4,5" },
+          "taxon": { "id": 5, "iconic_taxon_id": 1,
+            "min_species_ancestry": "1,2,3,4,5", "rank_level": 10 },
           "project_ids": [ 543 ],
           "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
         },
@@ -87,6 +88,7 @@
         {
           "id": 333,
           "user": { "id": 333 },
+          "private_location": "1,2",
           "geoprivacy": "obscured",
           "place_guess": "Idaho"
         },
@@ -193,12 +195,14 @@
   "postgresql": {
     "identifications": [
       {
+        "id": 102,
         "observation_id": 1,
         "taxon_id": 5,
         "user_id": 123,
         "body": "id1"
       },
       {
+        "id": 103,
         "observation_id": 1,
         "taxon_id": 5,
         "user_id": 5,
