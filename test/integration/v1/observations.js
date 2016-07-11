@@ -78,15 +78,6 @@ describe( "Observations", function( ) {
       }).expect( 200, done );
     });
 
-    it( "strips place guess from obscured observations", function( done ) {
-      request( app ).get( "/v1/observations?geoprivacy=obscured_private" ).
-      expect( function( res ) {
-        expect( res.body.total_results ).to.eq( 1 );
-        expect( res.body.results[ 0 ].id ).to.eq( 333 );
-        expect( res.body.results[ 0 ].place_guess ).to.be.undefined;
-      }).expect( 200, done );
-    });
-
     it( "return iconic taxon names", function( done ) {
       request( app ).get( "/v1/observations?id=1" ).
       expect( function( res ) {
