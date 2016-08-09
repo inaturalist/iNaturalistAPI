@@ -187,4 +187,21 @@ describe( "Observations", function( ) {
         expect( "Content-Type", /json/ ).expect( 200, done );
     });
   });
+
+  describe( "updates", function( ) {
+    it( "fails for unauthenticated requests", function( done ) {
+      request( app ).get( "/v1/observations/updates" ).expect( function( res, err ) {
+        expect( res.error.text ).to.eq( '{"error":"Unauthorized","status":401}' );
+      }).expect( "Content-Type", /json/ ).expect( 401, done );
+    });
+
+    it( "allows authenticated requests", function( done ) {
+      var token = jwt.sign({ user_id: 123 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/updates" ).set( "Authorization", token ).expect( ( res ) => {
+        expect( res.err ).to.be.undefined;
+      }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+  });
+
 });

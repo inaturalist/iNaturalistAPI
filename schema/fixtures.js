@@ -188,6 +188,11 @@
           "login_autocomplete": "userloginautocomplete",
           "name": "username",
           "name_autocomplete": "usernameautocomplete"
+        },
+        {
+          "id": 5,
+          "login": "b-user",
+          "name": "B User"
         }
       ]
     }
