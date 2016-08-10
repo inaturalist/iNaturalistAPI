@@ -11,6 +11,8 @@ SET client_min_messages = warning;
 
 SET search_path = public, pg_catalog;
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 --
 -- Name: box2d; Type: SHELL TYPE; Schema: public; Owner: -
 --
@@ -8141,7 +8143,8 @@ CREATE TABLE comments (
     parent_type character varying(255),
     body text,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -9166,7 +9169,8 @@ CREATE TABLE identifications (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     current boolean DEFAULT true,
-    taxon_change_id integer
+    taxon_change_id integer,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -9509,7 +9513,8 @@ CREATE TABLE observation_field_values (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     user_id integer,
-    updater_id integer
+    updater_id integer,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -9612,7 +9617,7 @@ CREATE TABLE observation_photos (
     "position" integer,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    uuid character varying(255)
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -9761,7 +9766,7 @@ CREATE TABLE observations (
     captive boolean DEFAULT false,
     community_taxon_id integer,
     site_id integer,
-    uuid character varying(255),
+    uuid uuid DEFAULT uuid_generate_v4()
     public_positional_accuracy integer,
     mappable boolean DEFAULT false,
     cached_votes_total integer DEFAULT 0,
@@ -10267,7 +10272,8 @@ CREATE TABLE project_observations (
     updated_at timestamp without time zone,
     curator_identification_id integer,
     tracking_code character varying(255),
-    user_id integer
+    user_id integer,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
