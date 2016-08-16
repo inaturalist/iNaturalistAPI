@@ -1,7 +1,10 @@
+"use strict";
 var expect = require( "chai" ).expect,
     request = require( "supertest" ),
     fs = require( "fs" ),
+    jwt = require( "jsonwebtoken" ),
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
+    config = require( "../../../config.js" ),
     app = iNaturalistAPI.server( );
 
 var fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
@@ -10,8 +13,27 @@ describe( "Observations", function( ) {
 
   describe( "show", function( ) {
     it( "returns json", function( done ) {
-      request( app ).get( "/v1/observations/1" ).
-        expect( "Content-Type", /json/ ).expect( 200, done );
+      request( app ).get( "/v1/observations/1" ).expect( function( res ) {
+        expect( res.body.results[ 0 ].identifications.length ).to.be.above( 0 );
+        // unauthenticated users don't get private info
+        expect( res.body.results[ 0 ].private_location ).to.be.undefined;
+      }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "shows authenticated users their own private info", function( done ) {
+      var token = jwt.sign({ user_id: 123 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/1" ).set( "Authorization", token ).expect( ( res ) => {
+        expect( res.body.results[ 0 ].private_location ).to.not.be.undefined;
+      }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "does not show authenticated users others' private info", function( done ) {
+      var token = jwt.sign({ user_id: 123 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/333" ).set( "Authorization", token ).expect( ( res ) => {
+        expect( res.body.results[ 0 ].private_location ).to.be.undefined;
+      }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
   });
 
@@ -28,6 +50,8 @@ describe( "Observations", function( ) {
         expect( res.body.results[ 0 ].id ).to.eq( 2 );
         expect( res.body.results[ 0 ].user.id ).to.eq( 5 );
         expect( res.body.results[ 0 ].user.login ).to.eq( "b-user" );
+        // identifications are not part of the default search response
+        expect( res.body.results[ 0 ].identifications ).to.be.undefined;
         expect( res.body.results[ 1 ].id ).to.eq( 1 );
         expect( res.body.results[ 1 ].user.id ).to.eq( 123 );
         // login comes from the DB
@@ -93,12 +117,20 @@ describe( "Observations", function( ) {
         expect( res.body.results.length ).to.eq( 1 );
       } ).expect( 200, done );
     } );
+
     it( "includes soundcloud identifiers", function( done ) {
       request( app ).get( "/v1/observations?sounds=true" ).
       expect( function( res ) {
         expect( res.body.results.native_sound_id ).to.be.defined;
       } ).expect( 200, done );
     } );
+
+    it( "can return full details on searches", function( done ) {
+      request( app ).get( "/v1/observations?id=1&details=all" ).
+      expect( function( res ) {
+        expect( res.body.results[ 0 ].identifications.length ).to.be.above( 0 );
+      }).expect( 200, done );
+    });
   });
 
   describe( "identifiers", function( ) {
@@ -126,10 +158,41 @@ describe( "Observations", function( ) {
     });
   });
 
-  describe( "speciesCounts", function( ) {
+  describe( "species_counts", function( ) {
     it( "returns json", function( done ) {
       request( app ).get( "/v1/observations/species_counts" ).
         expect( "Content-Type", /json/ ).expect( 200, done );
     });
   });
+
+  describe( "iconic_taxa_counts", function( ) {
+    it( "returns json", function( done ) {
+      request( app ).get( "/v1/observations/iconic_taxa_counts" ).
+        expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+  });
+
+  describe( "iconic_taxa_species_counts", function( ) {
+    it( "returns json", function( done ) {
+      request( app ).get( "/v1/observations/iconic_taxa_species_counts" ).
+        expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+  });
+
+  describe( "updates", function( ) {
+    it( "fails for unauthenticated requests", function( done ) {
+      request( app ).get( "/v1/observations/updates" ).expect( function( res, err ) {
+        expect( res.error.text ).to.eq( '{"error":"Unauthorized","status":401}' );
+      }).expect( "Content-Type", /json/ ).expect( 401, done );
+    });
+
+    it( "allows authenticated requests", function( done ) {
+      var token = jwt.sign({ user_id: 123 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/updates" ).set( "Authorization", token ).expect( ( res ) => {
+        expect( res.err ).to.be.undefined;
+      }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+  });
+
 });

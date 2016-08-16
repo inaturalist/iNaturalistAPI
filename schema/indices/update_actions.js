@@ -1,10 +1,10 @@
 {
-  "update" : {
+  "update_action" : {
     "dynamic" : "true",
     "properties" : {
       "created_at" : {
         "type" : "date",
-        "format" : "dateOptionalTime"
+        "format" : "strict_date_optional_time||epoch_millis"
       },
       "id" : {
         "type" : "long"
@@ -23,21 +23,6 @@
       "notifier_type" : {
         "type" : "string"
       },
-      "query" : {
-        "properties" : {
-          "range" : {
-            "properties" : {
-              "id" : {
-                "properties" : {
-                  "lte" : {
-                    "type" : "long"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
       "resource_id" : {
         "type" : "long"
       },
@@ -48,16 +33,11 @@
         "type" : "string",
         "analyzer" : "keyword_analyzer"
       },
-      "subscriber_id" : {
+      "subscriber_ids" : {
         "type" : "long"
       },
-      "updated_at" : {
-        "type" : "date",
-        "format" : "dateOptionalTime"
-      },
-      "viewed_at" : {
-        "type" : "date",
-        "format" : "dateOptionalTime"
+      "viewed_subscriber_ids" : {
+        "type" : "long"
       }
     }
   }

@@ -8,4 +8,15 @@ describe( "Identification", function( ) {
       expect( i.id ).to.eq( 111 );
     });
   });
+
+  describe( "preloadInto", function( ) {
+    it( "adds Identification instances", function( done ) {
+      var arr = [ { identification_id: 102 } ];
+      Identification.preloadInto( arr, { }, () => {
+        expect( arr[0].identification ).to.not.be.undefined;
+        done( );
+      } );
+    });
+  });
+
 });
