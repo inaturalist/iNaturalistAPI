@@ -127,6 +127,20 @@ describe( "Observations", function( ) {
       } ).expect( 200, done );
     } );
 
+    it( "filters by captive", function( done ) {
+      request( app ).get( "/v1/observations?sounds=true" ).
+      expect( function( res ) {
+        expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.be.defined;
+      } ).expect( 200, done );
+    } );
+
+    it( "filters by not captive", function( done ) {
+      request( app ).get( "/v1/observations?captive=false" ).
+      expect( function( res ) {
+        expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.eq( -1 );
+      } ).expect( 200, done );
+    } );
+
     it( "includes soundcloud identifiers", function( done ) {
       request( app ).get( "/v1/observations?sounds=true" ).
       expect( function( res ) {

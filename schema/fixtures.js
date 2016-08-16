@@ -101,6 +101,14 @@
             "attribution": "Slartibartfast",
             "native_sound_id": 123
           }
+        },
+        {
+          "id": 5,
+          "user": { "id": 333 },
+          "private_location": "3,4",
+          "private_geojson": { "type": "Point", "coordinates": [ "4", "3" ] },
+          "place_guess": "Tangerina",
+          "captive": true
         }
       ]
     },
