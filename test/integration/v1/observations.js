@@ -102,21 +102,21 @@ describe( "Observations", function( ) {
       }).expect( 200, done );
     });
 
-    it( "strips place guess from obscured observations", function( done ) {
-      request( app ).get( "/v1/observations?geoprivacy=obscured_private" ).
-      expect( function( res ) {
-        expect( res.body.total_results ).to.eq( 1 );
-        expect( res.body.results[ 0 ].id ).to.eq( 333 );
-        expect( res.body.results[ 0 ].place_guess ).to.be.undefined;
-      }).expect( 200, done );
-    });
-
     it( "return iconic taxon names", function( done ) {
       request( app ).get( "/v1/observations?id=1" ).
       expect( function( res ) {
         expect( res.body.total_results ).to.eq( 1 );
         expect( res.body.results[ 0 ].taxon.iconic_taxon_id ).to.eq( 101 );
         expect( res.body.results[ 0 ].taxon.iconic_taxon_name ).to.eq( "Actinopterygii" );
+      }).expect( 200, done );
+    });
+
+    it( "does not strips place guess from obscured observations", function( done ) {
+      request( app ).get( "/v1/observations?geoprivacy=obscured_private" ).
+      expect( function( res ) {
+        expect( res.body.total_results ).to.eq( 1 );
+        expect( res.body.results[ 0 ].id ).to.eq( 333 );
+        expect( res.body.results[ 0 ].place_guess ).to.eq( "Idaho" );
       }).expect( 200, done );
     });
 
