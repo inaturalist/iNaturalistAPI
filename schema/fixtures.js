@@ -109,12 +109,14 @@
         {
           "id": 1,
           "title": "Project One",
-          "title_autocomplete": "Project One"
+          "title_autocomplete": "Project One",
+          "location": "11,12"
         },
         {
           "id": 2,
           "title": "Project Two",
-          "title_autocomplete": "Project Two"
+          "title_autocomplete": "Project Two",
+          "location": "21,22"
         }
       ]
     },
@@ -198,6 +200,26 @@
     }
   },
   "postgresql": {
+    "deleted_observations": [
+      {
+        "user_id": 1,
+        "observation_id": 1000,
+        "created_at": "2016-01-01 00:00:00",
+        "updated_at": "2016-01-01 00:00:00"
+      },
+      {
+        "user_id": 1,
+        "observation_id": 1001,
+        "created_at": "2016-02-01 00:00:00",
+        "updated_at": "2016-01-01 00:00:00"
+      },
+      {
+        "user_id": 1,
+        "observation_id": 1002,
+        "created_at": "2016-03-01 00:00:00",
+        "updated_at": "2016-01-01 00:00:00"
+      }
+    ],
     "identifications": [
       {
         "id": 102,

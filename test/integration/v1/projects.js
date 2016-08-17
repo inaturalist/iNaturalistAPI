@@ -17,6 +17,8 @@ describe( "Projects Routes", function( ) {
           expect( res.body.results.length ).to.eq( 1 );
           expect( project.id ).to.eq( 1 );
           expect( project.title ).to.eq( "Project One" );
+          expect( project.latitude ).to.eq( "11" );
+          expect( project.longitude ).to.eq( "12" );
         }
       ).expect( "Content-Type", /json/ ).expect( 200, done );
     });

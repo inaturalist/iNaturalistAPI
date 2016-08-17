@@ -190,7 +190,7 @@ describe( "Observations", function( ) {
 
   describe( "updates", function( ) {
     it( "fails for unauthenticated requests", function( done ) {
-      request( app ).get( "/v1/observations/updates" ).expect( function( res, err ) {
+      request( app ).get( "/v1/observations/updates" ).expect( function( res ) {
         expect( res.error.text ).to.eq( '{"error":"Unauthorized","status":401}' );
       }).expect( "Content-Type", /json/ ).expect( 401, done );
     });
@@ -198,8 +198,38 @@ describe( "Observations", function( ) {
     it( "allows authenticated requests", function( done ) {
       var token = jwt.sign({ user_id: 123 }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/updates" ).set( "Authorization", token ).expect( ( res ) => {
+      request( app ).get( "/v1/observations/updates" ).set( "Authorization", token ).expect( res => {
         expect( res.err ).to.be.undefined;
+      }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+  });
+
+  describe( "deleted", function( ) {
+    it( "fails for unauthenticated requests", function( done ) {
+      request( app ).get( "/v1/observations/deleted" ).expect( function( res ) {
+        expect( res.error.text ).to.eq( '{"error":"Unauthorized","status":401}' );
+      }).expect( "Content-Type", /json/ ).expect( 401, done );
+    });
+
+    it( "returns an empty array without a since param", function( done ) {
+      var token = jwt.sign({ user_id: 1 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/deleted" ).set( "Authorization", token ).
+      expect( function( res ) {
+        expect( res.body.total_results ).to.eq( 0 );
+        expect( res.body.page ).to.eq( 1 );
+        expect( res.body.per_page ).to.eq( 500 );
+        expect( res.body.results.length ).to.eq( 0 );
+      }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "returns observations deleted since date", function( done ) {
+      var token = jwt.sign({ user_id: 1 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/deleted?since=2016-01-01" ).set( "Authorization", token ).
+      expect( function( res ) {
+        expect( res.body.total_results ).to.eq( 3 );
+        expect( res.body.results.length ).to.eq( 3 );
       }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
   });

@@ -41,7 +41,7 @@ describe( "routes", function( ) {
     it( "renders a robots.txt file", function( done ) {
       request( app ).get( "/robots.txt" ).
         expect( function( res ) {
-          expect( res.text ).to.eq( "User-agent: *\nDisallow: /" );
+          expect( res.text ).to.eq( "User-agent: *\nAllow: /v1/docs\nDisallow: /" );
         }).expect( "Content-Type", /plain/ ).expect( 200, done );
     });
   });
