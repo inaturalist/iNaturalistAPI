@@ -81,6 +81,38 @@ describe( "InaturalistMapServer", function( ) {
         done( );
       });
     });
+
+    it( "always sets mappable=true", function( done) {
+      stubReq.params.style = "summary";
+      MapServer.prepareQuery( stubReq, function( ) {
+        expect( stubReq.query.mappable ).to.eql( "true" );
+        done( );
+      });
+    } );
+
+    it( "defaults to captive=false", function( done) {
+      stubReq.params.style = "summary";
+      MapServer.prepareQuery( stubReq, function( ) {
+        expect( stubReq.query.captive ).to.eql( "false" );
+        done( );
+      });
+    } );
+    it( "allows captive=true", function( done ) {
+      stubReq.params.style = "summary";
+      stubReq.query.captive = "true";
+      MapServer.prepareQuery( stubReq, function( something, newReq ) {
+        expect( newReq.query.captive ).to.eql( "true" );
+        done( );
+      });
+    } );
+    it( "allows captive=any", function( done ) {
+      stubReq.params.style = "summary";
+      stubReq.query.captive = "any";
+      MapServer.prepareQuery( stubReq, function( ) {
+        expect( stubReq.query.captive ).to.eq( "any" );
+        done( );
+      });
+    } );
   });
 
   describe( "prepareStyle", function( ) {
