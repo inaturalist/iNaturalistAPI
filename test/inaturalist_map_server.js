@@ -109,7 +109,7 @@ describe( "InaturalistMapServer", function( ) {
       stubReq.params.style = "summary";
       stubReq.query.captive = "any";
       MapServer.prepareQuery( stubReq, function( ) {
-        expect( stubReq.query.captive ).to.be.undefined;
+        expect( stubReq.query.captive ).to.eq( "any" );
         done( );
       });
     } );
