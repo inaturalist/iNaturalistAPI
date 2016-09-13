@@ -70,8 +70,13 @@
           "user": { "id": 123 },
           "created_at": "2015-12-31T00:00:00",
           "private_location": "1,2",
-          "taxon": { "id": 5, "iconic_taxon_id": 1,
-            "min_species_ancestry": "1,2,3,4,5", "rank_level": 10 },
+          "taxon": {
+            "id": 5,
+            "iconic_taxon_id": 1,
+            "ancestor_ids": [1,2,3,4,5],
+            "min_species_ancestry": "1,2,3,4,5",
+            "rank_level": 10
+          },
           "project_ids": [ 543 ],
           "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
         },
@@ -80,7 +85,11 @@
           "user": { "id": 5 },
           "created_at": "2016-01-01T01:00:00",
           "location": "2,3",
-          "taxon": { "id": 4, "min_species_ancestry": "1,2,3,4" },
+          "taxon": {
+            "id": 4,
+            "ancestor_ids": [1,2,3,4],
+            "min_species_ancestry": "1,2,3,4"
+          },
           "non_owner_ids":[{ "user": { "id": 123 } }],
           "place_guess": "Montana",
           "private_geojson": { "type": "Point", "coordinates": [ "3", "2" ] }
@@ -95,8 +104,13 @@
         {
           "id": 4,
           "user": { "id": 333 },
-          "taxon": { "id": 123, "iconic_taxon_id": 1,
-            "min_species_ancestry": "11,22,33,123", "rank_level": 10 },
+          "taxon": {
+            "id": 123,
+            "iconic_taxon_id": 1,
+            "ancestor_ids": [11,22,33,123],
+            "min_species_ancestry": "11,22,33,123",
+            "rank_level": 10
+          },
           "sounds": {
             "id": 1,
             "license_code": "CC-BY",
@@ -107,8 +121,13 @@
         {
           "id": 5,
           "user": { "id": 333 },
-          "taxon": { "id": 123, "iconic_taxon_id": 1,
-            "min_species_ancestry": "11,22,33,123", "rank_level": 10 },
+          "taxon": {
+            "id": 123,
+            "iconic_taxon_id": 1,
+            "ancestor_ids": [11,22,33,123],
+            "min_species_ancestry": "11,22,33,123",
+            "rank_level": 10
+          },
           "private_location": "3,4",
           "private_geojson": { "type": "Point", "coordinates": [ "4", "3" ] },
           "place_guess": "Tangerina",

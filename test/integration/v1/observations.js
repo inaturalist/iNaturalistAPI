@@ -74,6 +74,30 @@ describe( "Observations", function( ) {
       }).expect( 200, done );
     });
 
+    it( "finds observations by taxon_id", function( done ) {
+      request( app ).get( "/v1/observations?taxon_id=4" ).
+      expect( function( res ) {
+        expect( res.body.results.map( function( r ) { return r.id } ) ).to.contain( 1 );
+      }).expect( 200, done );
+    } );
+
+    it( "finds observations by without_taxon_id", function( done) {
+      request( app ).get( "/v1/observations?taxon_id=4&without_taxon_id=5" ).
+      expect( function( res ) {
+        expect( res.body.results.map( function( r ) { return r.id } ) ).to.contain( 2 );
+        expect( res.body.results.map( function( r ) { return r.id } ) ).not.to.contain( 1 );
+      }).expect( 200, done );
+    } );
+
+    it( "finds observations by multiple without_taxon_id", function( done) {
+      request( app ).get( "/v1/observations?without_taxon_id=4,5" ).
+      expect( function( res ) {
+        expect( res.body.results.map( function( r ) { return r.id } ) ).to.contain( 333 );
+        expect( res.body.results.map( function( r ) { return r.id } ) ).not.to.contain( 2 );
+        expect( res.body.results.map( function( r ) { return r.id } ) ).not.to.contain( 1 );
+      }).expect( 200, done );
+    } );
+
     it( "looks up projects by slug", function( done ) {
       request( app ).get( "/v1/observations?projects=a-project" ).
       expect( function( res ) {
