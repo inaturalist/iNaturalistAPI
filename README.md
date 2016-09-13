@@ -11,3 +11,8 @@ Our API is documented using the [Swagger](http://swagger.io/)/[OpenAPI](https://
 
 Run all: `npm test`
 Filter by pattern: `NODE_ENV=test ./node_modules/mocha/bin/_mocha --recursive --fgrep observations`
+
+# Updating Documentation
+
+Edit `lib/views/swagger_v*.yml.ejs`
+
