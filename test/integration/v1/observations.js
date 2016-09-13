@@ -203,6 +203,20 @@ describe( "Observations", function( ) {
       request( app ).get( "/v1/observations/species_counts" ).
         expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "sorts by count desc by default", function( done ) {
+      request( app ).get( "/v1/observations/species_counts" ).expect( function( res ) {
+        expect( res.body.results[0].count ).to.eq( 2 );
+        expect( res.body.results[1].count ).to.eq( 1 );
+      }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "can sort by count asc", function( done ) {
+      request( app ).get( "/v1/observations/species_counts?order=asc" ).expect( function( res ) {
+        expect( res.body.results[0].count ).to.eq( 1 );
+        expect( res.body.results[1].count ).to.eq( 2 );
+      }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
   });
 
   describe( "iconic_taxa_counts", function( ) {

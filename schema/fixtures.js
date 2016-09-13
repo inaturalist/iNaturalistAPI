@@ -98,6 +98,8 @@
           "user": { "id": 333 },
           "created_at": "1500-01-01T05:00:00",
           "observed_on": "1500-01-01T05:00:00",
+          "taxon": { "id": 123, "iconic_taxon_id": 1,
+            "min_species_ancestry": "11,22,33,123", "rank_level": 10 },
           "sounds": {
             "id": 1,
             "license_code": "CC-BY",
@@ -108,6 +110,8 @@
         {
           "id": 5,
           "user": { "id": 333 },
+          "taxon": { "id": 123, "iconic_taxon_id": 1,
+            "min_species_ancestry": "11,22,33,123", "rank_level": 10 },
           "private_location": "3,4",
           "private_geojson": { "type": "Point", "coordinates": [ "4", "3" ] },
           "place_guess": "Tangerina",
