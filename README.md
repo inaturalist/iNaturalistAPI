@@ -6,3 +6,13 @@
 Our API is documented using the [Swagger](http://swagger.io/)/[OpenAPI](https://github.com/OAI/OpenAPI-Specification) 2.0 [specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md). Check out the [Swagger UI](https://github.com/swagger-api/swagger-ui) documentation viewer at http://api.inaturalist.org/docs.
 
 #### http://api.inaturalist.org
+
+# Running Tests
+
+Run all: `npm test`
+Filter by pattern: `NODE_ENV=test ./node_modules/mocha/bin/_mocha --recursive --fgrep observations`
+
+# Updating Documentation
+
+Edit `lib/views/swagger_v*.yml.ejs`
+
