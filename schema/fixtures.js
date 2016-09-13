@@ -88,6 +88,7 @@
         {
           "id": 333,
           "user": { "id": 333 },
+          "created_at": "2010-01-01T02:00:00",
           "private_location": "1,2",
           "geoprivacy": "obscured",
           "place_guess": "Idaho"
@@ -95,6 +96,8 @@
         {
           "id": 4,
           "user": { "id": 333 },
+          "created_at": "1500-01-01T05:00:00",
+          "observed_on": "1500-01-01T05:00:00",
           "sounds": {
             "id": 1,
             "license_code": "CC-BY",

@@ -166,6 +166,13 @@ describe( "Observations", function( ) {
     });
   });
 
+  describe( "histogram", function( ) {
+    it( "returns json", function( done ) {
+      request( app ).get( "/v1/observations/histogram" ).
+        expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+  });
+
   describe( "identifiers", function( ) {
     it( "returns json", function( done ) {
       request( app ).get( "/v1/observations/identifiers" ).
