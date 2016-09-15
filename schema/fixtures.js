@@ -131,6 +131,7 @@
             "min_species_ancestry": "11,22,33,123",
             "rank_level": 10
           },
+          "location": "50,50",
           "private_location": "3,4",
           "private_geojson": { "type": "Point", "coordinates": [ "4", "3" ] },
           "place_guess": "Tangerina",

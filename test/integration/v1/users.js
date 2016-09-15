@@ -63,4 +63,34 @@ describe( "Users", function( ) {
     });
   });
 
+  describe( "nearbyUnobservedSpecies", function( ) {
+    it( "requires lat", function( done ) {
+      request( app ).get( "/v1/users/1/nearby_unobserved_species" ).
+        expect( function( res ) {
+          expect( res.body.error ).to.eq( "Must include lat" );
+          expect( res.body.status ).to.eq( 422 );
+        }).expect( "Content-Type", /json/ ).expect( 422, done );
+    });
+
+    it( "requires lng", function( done ) {
+      request( app ).get( "/v1/users/1/nearby_unobserved_species?lat=10" ).
+        expect( function( res ) {
+          expect( res.body.error ).to.eq( "Must include lng" );
+          expect( res.body.status ).to.eq( 422 );
+        }).expect( "Content-Type", /json/ ).expect( 422, done );
+    });
+
+    it( "returns nearby taxa", function( done ) {
+      request( app ).get( "/v1/users/1/nearby_unobserved_species?lat=50&lng=50" ).
+        expect( function( res ) {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results[0].count ).to.eq( 1 );
+          expect( res.body.results[0].taxon.id ).to.eq( 123 );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+ });
+
+
 });
