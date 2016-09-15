@@ -213,6 +213,10 @@
         {
           "id": 9898,
           "name": "ataxon"
+        },
+        {
+          "id": 10001,
+          "name": "DetailsTaxon"
         }
       ]
     },
@@ -234,6 +238,18 @@
     }
   },
   "postgresql": {
+    "conservation_statuses": [
+      {
+        "taxon_id": 10001,
+        "place_id": 432,
+        "authority": "cs-authority",
+        "status": "cs-status",
+        "iucn": 20,
+        "description": "cs-description",
+        "created_at": "2016-01-01 00:00:00",
+        "updated_at": "2016-01-01 00:00:00"
+      }
+    ],
     "deleted_observations": [
       {
         "user_id": 1,
@@ -280,6 +296,10 @@
         "title": "AProjectList",
         "project_id": 543,
         "type": "ProjectList"
+      },
+      {
+        "id": 1000,
+        "title": "DetailsListedTaxonList"
       }
     ],
     "listed_taxa": [
@@ -298,11 +318,17 @@
       {
         "taxon_id": 876,
         "list_id": 999
+      },
+      {
+        "taxon_id": 10001,
+        "list_id": 1000,
+        "place_id": 432
       }
     ],
     "places": [
       {
         "id": 432,
+        "name": "a-place",
         "display_name": "a-place"
       }
     ],
