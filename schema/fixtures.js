@@ -425,6 +425,11 @@
     ],
     "users": [
       {
+        "id": 1,
+        "login": "userlogin",
+        "name": "username"
+      },
+      {
         "id": 5,
         "login": "b-user",
         "name": "B User"

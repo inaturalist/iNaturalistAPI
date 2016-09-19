@@ -63,18 +63,4 @@ describe( "Users", function( ) {
     });
   });
 
-  describe( "unobservedSpecies", function( ) {
-    it( "returns nearby taxa", function( done ) {
-      request( app ).get( "/v1/users/1/unobserved_species?lat=50&lng=50" ).
-        expect( function( res ) {
-          expect( res.body.page ).to.eq( 1 );
-          expect( res.body.per_page ).to.eq( 1 );
-          expect( res.body.total_results ).to.eq( 1 );
-          expect( res.body.results[0].count ).to.eq( 1 );
-          expect( res.body.results[0].taxon.id ).to.eq( 123 );
-        }).expect( "Content-Type", /json/ ).expect( 200, done );
-    });
- });
-
-
 });
