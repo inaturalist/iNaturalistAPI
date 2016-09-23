@@ -58,32 +58,56 @@
       "identification": [
         {
           "id": 102,
-          "observation": {
-            "id": 1
-           },
-          "taxon": {
-            "id": 5
-           },
           "user": {
             "id": 123
            },
           "body": "id1",
           "category": "leading",
-          "current": true
+          "current": true,
+          "current_taxon": false,
+          "taxon": {
+            "id": 5,
+            "iconic_taxon_id": 1,
+            "ancestor_ids": [1,2,3,4,5],
+            "min_species_ancestry": "1,2,3,4,5",
+            "rank_level": 10
+          },
+          "observation": {
+            "id": 1,
+            "taxon": {
+              "id": 5,
+              "iconic_taxon_id": 1,
+              "ancestor_ids": [1,2,3,4,5],
+              "min_species_ancestry": "1,2,3,4,5",
+              "rank_level": 10
+            }
+          }
         },
         {
-          "observation": {
-            "id": 1
-           },
-          "taxon": {
-            "id": 5
-           },
           "user": {
             "id": 5
            },
           "body": "id2",
           "category": "maverick",
-          "current": true
+          "current": true,
+          "current_taxon": true,
+          "taxon": {
+            "id": 5,
+            "iconic_taxon_id": 1,
+            "ancestor_ids": [1,2,3,4,5],
+            "min_species_ancestry": "1,2,3,4,5",
+            "rank_level": 10
+          },
+          "observation": {
+            "id": 1,
+            "taxon": {
+              "id": 5,
+              "iconic_taxon_id": 1,
+              "ancestor_ids": [1,2,3,4,5],
+              "min_species_ancestry": "1,2,3,4,5",
+              "rank_level": 10
+            }
+          }
         }
       ]
     },

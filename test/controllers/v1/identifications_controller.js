@@ -44,7 +44,6 @@ describe( "IdentificationsController", function( ) {
 
     it( "can set current to false", function( ) {
       Q( { current: "false" }, function( e, q ) { eq = q; } );
-      util.pp(eq);
       expect( _.detect( eq.filters, f => {
         return f.terms && f.terms.current && f.terms.current[0] === "false";
       })).to.not.be.undefined;
@@ -119,6 +118,18 @@ describe( "IdentificationsController", function( ) {
     it( "shows identifications", function( done ) {
       IdentificationsController.categories( { query: { } }, function( ) {
         // this needs some work - fixtures, etc
+        done( );
+      });
+    });
+  });
+
+
+  describe( "speciesCounts", function( ) {
+    it( "returns taxa", function( done ) {
+      IdentificationsController.speciesCounts( { query: { } }, ( e, r ) => {
+        expect(r.total_results).to.eq(1);
+        expect(r.results[0].count).to.eq(2);
+        expect(r.results[0].taxon.id).to.eq(5);
         done( );
       });
     });

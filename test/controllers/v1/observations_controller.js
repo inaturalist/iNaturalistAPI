@@ -562,7 +562,6 @@ describe( "ObservationsController", function( ) {
 
     it( "filters by changed_since date", function( ) {
       Q( { changed_since: "2015-01-02T00:00:00+00:00" }, function( e, q ) { eq = q; } );
-      util.pp(eq);
       expect( eq.where[0].nested.query.filtered.query.bool.must[0] ).to.eql({
         range: { "field_change_times.changed_at": {
           gte: "2015-01-02T00:00:00+00:00" } }
