@@ -1,6 +1,6 @@
 var expect = require( "chai" ).expect,
     Taxon = require( "../../lib/models/taxon" ),
-    Identification = require( "../../lib/models/identification" ),
+    List = require( "../../lib/models/list" ),
     ESModel = require( "../../lib/models/es_model" );
 
 describe( "ESModel", function( ) {
@@ -27,8 +27,8 @@ describe( "ESModel", function( ) {
     });
 
     it( "returns errors", function( done ) {
-      var o = { identification_id: 1 };
-      ESModel.fetchBelongsTo([ o ], Identification, { }, function( err ) {
+      var o = { list_id: 1 };
+      ESModel.fetchBelongsTo([ o ], List, { }, function( err ) {
         expect( err.message ).to.include( "index_not_found_exception" );
         done( );
       });

@@ -2,6 +2,7 @@ var expect = require( "chai" ).expect,
     moment = require( "moment" ),
     _ = require( "underscore" ),
     observations = require( "inaturalistjs" ).observations,
+    util = require( "../../../lib/util" ),
     testHelper = require( "../../../lib/test_helper" ),
     Observation = require( "../../../lib/models/observation" ),
     Project = require( "../../../lib/models/project" ),
@@ -557,6 +558,36 @@ describe( "ObservationsController", function( ) {
     it( "filters by geoprivacy obscured_private", function( ) {
       Q( { geoprivacy: "obscured_private" }, function( e, q ) { eq = q; } );
       expect( eq.filters ).to.eql([{ terms: { geoprivacy: [ "obscured", "private" ] } }]);
+    });
+
+    it( "filters by changed_since date", function( ) {
+      Q( { changed_since: "2015-01-02T00:00:00+00:00" }, function( e, q ) { eq = q; } );
+      util.pp(eq);
+      expect( eq.where[0].nested.query.filtered.query.bool.must[0] ).to.eql({
+        range: { "field_change_times.changed_at": {
+          gte: "2015-01-02T00:00:00+00:00" } }
+      });
+    });
+
+    it( "does nothing with an invalid changed_since date", function( ) {
+      Q( { changed_since: "whenever" }, function( e, q ) { eq = q; } );
+      expect( eq.where.length ).to.eq( 0 );
+    });
+
+    it( "filters by changed_fields", function( ) {
+      Q( { changed_since: "2015-01-02T00:00:00+00:00", changed_fields: "description" },
+        function( e, q ) { eq = q; } );
+      expect( eq.where[0].nested.query.filtered.query.bool.must[1] ).to.eql({
+        terms: { "field_change_times.field_name": [ "description" ] }
+      });
+    });
+
+    it( "filters by changed_fields", function( ) {
+      Q( { changed_since: "2015-01-02T00:00:00+00:00", change_project_id: "4" },
+        function( e, q ) { eq = q; } );
+      expect( eq.where[0].nested.query.filtered.query.bool.must[1].or[0] ).to.eql({
+        terms: { "field_change_times.project_id": [ "4" ] }
+      });
     });
 
     //

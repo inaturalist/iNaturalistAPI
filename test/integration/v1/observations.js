@@ -242,7 +242,7 @@ describe( "Observations", function( ) {
       }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
 
-    it( "returns nearby taxa", function( done ) {
+    it( "returns taxa unobserved by a user", function( done ) {
       request( app ).get( "/v1/observations/species_counts?unobserved_by_user_id=1&lat=50&lng=50" ).
         expect( function( res ) {
           expect( res.body.page ).to.eq( 1 );
