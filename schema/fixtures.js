@@ -74,6 +74,9 @@
           },
           "observation": {
             "id": 1,
+            "user": {
+              "id": 123
+            },
             "taxon": {
               "id": 5,
               "iconic_taxon_id": 1,
@@ -100,6 +103,9 @@
           },
           "observation": {
             "id": 1,
+            "user": {
+              "id": 5
+            },
             "taxon": {
               "id": 5,
               "iconic_taxon_id": 1,

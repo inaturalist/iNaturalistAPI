@@ -466,6 +466,12 @@ describe( "ObservationsController", function( ) {
       expect( eq.filters ).to.be.empty;
     });
 
+    it( "filters by observed_after", function( ) {
+      Q( { observed_after: "2015-01-02T00:00:00+00:00" }, function( e, q ) { eq = q; } );
+      expect( eq.filters ).to.eql([{ range: {
+        observed_on: { gte: "2015-01-02T00:00:00+00:00" } } }]);
+    });
+
     it( "filters by observation fields", function( ) {
       Q( { "field:habitat": null }, function( e, q ) { eq = q; } );
       expect( eq.where[0].nested.query.bool.must.length ).to.eql( 1 );
