@@ -14,8 +14,8 @@ describe( "esClient", function( ) {
   describe( "search", function( ) {
     it( "can specify source fields to return", function( done ) {
       esClient.search( "taxa", { body: {
-        query: { filtered: { filter: { term: { id: 9898 } } } } },
-        _source: [ "id" ], size: 1 },
+        query: { filtered: { filter: { term: { id: 9898 } } } }, _source: [ "id" ] },
+        size: 1 },
         function( err, results ) {
           expect( results.hits.total ).to.eql( 1 );
           expect( results.hits.hits[0]._source.id ).to.eql( 9898 );
@@ -27,8 +27,8 @@ describe( "esClient", function( ) {
 
     it( "can choose not to return source", function( done ) {
       esClient.search( "taxa", { body: {
-        query: { filtered: { filter: { term: { id: 9898 } } } } },
-        _source: false, size: 1 },
+        query: { filtered: { filter: { term: { id: 9898 } } } }, _source: false },
+        size: 1 },
         function( err, results ) {
           expect( results.hits.total ).to.eql( 1 );
           expect( results.hits.hits[0]._source ).to.be.undefined;

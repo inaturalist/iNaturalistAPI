@@ -54,6 +54,69 @@
         }
       ]
     },
+    "identifications": {
+      "identification": [
+        {
+          "id": 102,
+          "user": {
+            "id": 123
+           },
+          "body": "id1",
+          "category": "leading",
+          "current": true,
+          "current_taxon": false,
+          "taxon": {
+            "id": 5,
+            "iconic_taxon_id": 1,
+            "ancestor_ids": [1,2,3,4,5],
+            "min_species_ancestry": "1,2,3,4,5",
+            "rank_level": 10
+          },
+          "observation": {
+            "id": 1,
+            "user": {
+              "id": 123
+            },
+            "taxon": {
+              "id": 5,
+              "iconic_taxon_id": 1,
+              "ancestor_ids": [1,2,3,4,5],
+              "min_species_ancestry": "1,2,3,4,5",
+              "rank_level": 10
+            }
+          }
+        },
+        {
+          "user": {
+            "id": 5
+           },
+          "body": "id2",
+          "category": "maverick",
+          "current": true,
+          "current_taxon": true,
+          "taxon": {
+            "id": 5,
+            "iconic_taxon_id": 1,
+            "ancestor_ids": [1,2,3,4,5],
+            "min_species_ancestry": "1,2,3,4,5",
+            "rank_level": 10
+          },
+          "observation": {
+            "id": 1,
+            "user": {
+              "id": 5
+            },
+            "taxon": {
+              "id": 5,
+              "iconic_taxon_id": 1,
+              "ancestor_ids": [1,2,3,4,5],
+              "min_species_ancestry": "1,2,3,4,5",
+              "rank_level": 10
+            }
+          }
+        }
+      ]
+    },
     "observation_fields": {
       "observation_field": [
         {
@@ -131,6 +194,7 @@
             "min_species_ancestry": "11,22,33,123",
             "rank_level": 10
           },
+          "location": "50,50",
           "private_location": "3,4",
           "private_geojson": { "type": "Point", "coordinates": [ "4", "3" ] },
           "place_guess": "Tangerina",
@@ -144,13 +208,17 @@
           "id": 1,
           "title": "Project One",
           "title_autocomplete": "Project One",
-          "location": "11,12"
+          "title_exact": "Project One",
+          "location": "11,12",
+          "user_ids": [ 1, 5, 123 ]
         },
         {
           "id": 2,
           "title": "Project Two",
           "title_autocomplete": "Project Two",
-          "location": "21,22"
+          "title_exact": "Project Two",
+          "location": "21,22",
+          "user_ids": [ 123 ]
         }
       ]
     },
@@ -158,6 +226,7 @@
       "taxon": [
         {
           "id": 1,
+          "ancestor_ids": [ 1 ],
           "names": [{ "name_autocomplete": "Los", "exact": "Los" }],
           "observations_count": 50,
           "is_active": true,
@@ -166,12 +235,16 @@
         },
         {
           "id": 2,
+          "parent_id": 1,
+          "ancestor_ids": [ 1, 2 ],
           "names": [{ "name_autocomplete": "Los", "exact": "Los" }],
           "observations_count": 50,
           "is_active": false
         },
         {
           "id": 3,
+          "parent_id": 2,
+          "ancestor_ids": [ 1, 2, 3 ],
           "names": [{ "name_autocomplete": "Los lobos", "exact": "Los lobos" }],
           "observations_count": 100,
           "is_active": true
@@ -213,6 +286,10 @@
         {
           "id": 9898,
           "name": "ataxon"
+        },
+        {
+          "id": 10001,
+          "name": "DetailsTaxon"
         }
       ]
     },
@@ -229,11 +306,28 @@
           "id": 5,
           "login": "b-user",
           "name": "B User"
+        },
+        {
+          "id": 123,
+          "login": "a-user",
+          "name": "A User"
         }
       ]
     }
   },
   "postgresql": {
+    "conservation_statuses": [
+      {
+        "taxon_id": 10001,
+        "place_id": 432,
+        "authority": "cs-authority",
+        "status": "cs-status",
+        "iucn": 20,
+        "description": "cs-description",
+        "created_at": "2016-01-01 00:00:00",
+        "updated_at": "2016-01-01 00:00:00"
+      }
+    ],
     "deleted_observations": [
       {
         "user_id": 1,
@@ -280,6 +374,10 @@
         "title": "AProjectList",
         "project_id": 543,
         "type": "ProjectList"
+      },
+      {
+        "id": 1000,
+        "title": "DetailsListedTaxonList"
       }
     ],
     "listed_taxa": [
@@ -298,11 +396,17 @@
       {
         "taxon_id": 876,
         "list_id": 999
+      },
+      {
+        "taxon_id": 10001,
+        "list_id": 1000,
+        "place_id": 432
       }
     ],
     "places": [
       {
         "id": 432,
+        "name": "a-place",
         "display_name": "a-place"
       }
     ],
@@ -397,6 +501,11 @@
       }
     ],
     "users": [
+      {
+        "id": 1,
+        "login": "userlogin",
+        "name": "username"
+      },
       {
         "id": 5,
         "login": "b-user",

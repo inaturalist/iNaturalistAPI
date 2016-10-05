@@ -1,21 +1,176 @@
-var identifications = require( "inaturalistjs" ).identifications,
+"use strict";
+var _ = require( "underscore" ),
+    expect = require( "chai" ).expect,
+    identifications = require( "inaturalistjs" ).identifications,
+    util = require( "../../../lib/util" ),
     testHelper = require( "../../../lib/test_helper" ),
     Identification = require( "../../../lib/models/identification" ),
-    IdentificationsController = require( "../../../lib/controllers/v1/identifications_controller" );
+    IdentificationsController = require( "../../../lib/controllers/v1/identifications_controller" ),
+    eq;
 
-describe( "IdentificationsController", function( ) {
-  it( "creates", function( done ) {
+var Q = ( params, callback ) => {
+  var queryString = _.reduce( params, ( components, value, key ) => {
+    components.push( key + "=" + ( value ? encodeURIComponent( value ) : "") );
+    return components;
+  }, [ ] ).join( "&" );
+  IdentificationsController.reqToElasticQuery({ query: params,
+    _parsedUrl: { query: queryString }}, callback );
+};
+
+describe( "IdentificationsController", ( ) => {
+  it( "creates", done => {
     testHelper.testInatJSPreload(
       IdentificationsController, identifications, "create", Identification, done );
   });
 
-  it( "updates", function( done ) {
+  it( "updates", done => {
     testHelper.testInatJSPreload(
       IdentificationsController, identifications, "update", Identification, done );
   });
 
-  it( "deletes", function( done ) {
+  it( "deletes", done => {
     testHelper.testInatJSNoPreload(
       IdentificationsController, identifications, "delete", done );
   });
+
+  describe( "reqToElasticQuery", ( ) => {
+    it( "defaults to current=true", ( ) => {
+      Q( { }, ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.terms && f.terms.current && f.terms.current[0] === "true";
+      })).to.not.be.undefined;
+    });
+
+    it( "can set current to false", ( ) => {
+      Q( { current: "false" }, ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.terms && f.terms.current && f.terms.current[0] === "false";
+      })).to.not.be.undefined;
+    });
+
+    it( "filters by taxon_id", ( ) => {
+      Q( { taxon_id: 88 }, ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.terms && f.terms["taxon.ancestor_ids"] &&
+          f.terms["taxon.ancestor_ids"][0] === 88;
+      })).to.not.be.undefined;
+    });
+
+    it( "filters by user login", ( ) => {
+      Q( { user_id: "a-user" }, ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.terms && f.terms["user.login"] &&
+          f.terms["user.login"][0] === "a-user"
+      })).to.not.be.undefined;
+    });
+
+    it( "filters by boolean true params", ( ) => {
+      Q( { current_taxon: "true" }, ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.terms && f.terms.current_taxon && f.terms.current_taxon[0] === true;
+      })).to.not.be.undefined;
+    });
+
+    it( "filters by boolean false params", ( ) => {
+      Q( { current_taxon: "false" }, ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.term && f.term.current_taxon === false;
+      })).to.not.be.undefined;
+    });
+
+    it( "filters by without_taxon_id", ( ) => {
+      Q( { without_taxon_id: 89 }, ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.not && f.not.terms && f.not.terms["taxon.ancestor_ids"] &&
+          f.not.terms["taxon.ancestor_ids"][0] === 89;
+      })).to.not.be.undefined;
+    });
+
+    it( "filters by without_observation_taxon_id", ( ) => {
+      Q( { without_observation_taxon_id: 90 }, ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.not && f.not.terms && f.not.terms["observation.taxon.ancestor_ids"] &&
+          f.not.terms["observation.taxon.ancestor_ids"][0] === 90;
+      })).to.not.be.undefined;
+    });
+
+    it( "sorts by created_at desc by default", ( ) => {
+      Q( { }, ( e, q ) => ( eq = q ) );
+      expect( eq.sort ).to.deep.eq( { created_at: "desc" } );
+    });
+
+    it( "can sort ascending", ( ) => {
+      Q( { order: "asc" }, ( e, q ) => ( eq = q ) );
+      expect( eq.sort ).to.deep.eq( { created_at: "asc" } );
+    });
+
+    it( "can sort by id", ( ) => {
+      Q( { order_by: "id" }, ( e, q ) => ( eq = q ) );
+      expect( eq.sort ).to.deep.eq( { id: "desc" } );
+    });
+  });
+
+  describe( "search", ( ) => {
+    it( "returns identifications", done => {
+      IdentificationsController.search( { query: { } }, ( e, r ) => {
+        expect(r.total_results).to.eq(2);
+        done( );
+      });
+    });
+  });
+
+  describe( "show", ( ) => {
+    it( "returns identifications", done => {
+      IdentificationsController.show( { params: { id: "102" }, query: { } }, ( e, r ) => {
+        expect(r.total_results).to.eq(1);
+        done( );
+      });
+    });
+  });
+
+  describe( "categories", ( ) => {
+    it( "returns identification counts grouped by category", done => {
+      IdentificationsController.categories( { query: { } }, ( e, r ) => {
+        expect(r.total_results).to.eq(2);
+        expect(r.results[0].category).to.eq( "leading" );
+        expect(r.results[0].count).to.eq(1);
+        done( );
+      });
+    });
+  });
+
+
+  describe( "speciesCounts", ( ) => {
+    it( "returns taxa", done => {
+      IdentificationsController.speciesCounts( { query: { } }, ( e, r ) => {
+        expect(r.total_results).to.eq(1);
+        expect(r.results[0].count).to.eq(2);
+        expect(r.results[0].taxon.id).to.eq(5);
+        done( );
+      });
+    });
+  });
+
+  describe( "identifiers", ( ) => {
+    it( "returns identification counts grouped by identifier", done => {
+      IdentificationsController.identifiers( { query: { } }, ( e, r ) => {
+        expect(r.total_results).to.eq(2);
+        expect(r.results[0].count).to.eq(1);
+        expect(r.results[0].user.id).to.not.be.undefined;
+        done( );
+      });
+    });
+  });
+
+  describe( "observers", ( ) => {
+    it( "returns identification counts grouped by observer", done => {
+      IdentificationsController.observers( { query: { } }, ( e, r ) => {
+        expect(r.total_results).to.eq(2);
+        expect(r.results[0].count).to.eq(1);
+        expect(r.results[0].user.id).to.not.be.undefined;
+        done( );
+      });
+    });
+  });
+
 });

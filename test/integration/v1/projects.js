@@ -60,6 +60,14 @@ describe( "Projects Routes", function( ) {
           expect( res.body.results[1].title ).to.eq( "Project Two" );
         }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "can filter by member_id", function( done ) {
+      request( app ).get( "/v1/projects/autocomplete?member_id=123" ).
+        expect( function( res ) {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 2 );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
   });
 
   describe( "members", function( ) {

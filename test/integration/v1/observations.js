@@ -241,6 +241,17 @@ describe( "Observations", function( ) {
         expect( res.body.results[1].count ).to.eq( 2 );
       }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "returns taxa unobserved by a user", function( done ) {
+      request( app ).get( "/v1/observations/species_counts?unobserved_by_user_id=1&lat=50&lng=50" ).
+        expect( function( res ) {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results[0].count ).to.eq( 1 );
+          expect( res.body.results[0].taxon.id ).to.eq( 123 );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
   });
 
   describe( "iconic_taxa_counts", function( ) {

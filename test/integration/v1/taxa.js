@@ -80,5 +80,39 @@ describe( "Taxa", function( ) {
           expect( taxon.preferred_establishment_means ).to.eq( "endemic" );
         }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "populates conservation_statuses and listed_taxa", function( done ) {
+      request( app ).get( "/v1/taxa/10001" ).
+        expect( function( res ) {
+          var taxon = res.body.results[0];
+          expect( taxon.id ).to.eq( 10001 );
+          expect( taxon.conservation_statuses.length ).to.eq( 1 );
+          expect( taxon.conservation_statuses[0].place.name ).to.eq( "a-place" );
+          expect( taxon.listed_taxa.length ).to.eq( 1 );
+          expect( taxon.listed_taxa[0].place.name ).to.eq( "a-place" );
+          expect( taxon.listed_taxa[0].list.title ).to.eq( "DetailsListedTaxonList" );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "populates ancestors", function( done ) {
+      request( app ).get( "/v1/taxa/3" ).
+        expect( function( res ) {
+          var taxon = res.body.results[0];
+          expect( taxon.id ).to.eq( 3 );
+          expect( taxon.ancestors.length ).to.eq( 2 );
+          expect( taxon.ancestors[0].id ).to.eq( 1 );
+          expect( taxon.ancestors[1].id ).to.eq( 2 );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "populates children", function( done ) {
+      request( app ).get( "/v1/taxa/2" ).
+        expect( function( res ) {
+          var taxon = res.body.results[0];
+          expect( taxon.id ).to.eq( 2 );
+          expect( taxon.children.length ).to.eq( 1 );
+          expect( taxon.children[0].id ).to.eq( 3 );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
   });
 });
