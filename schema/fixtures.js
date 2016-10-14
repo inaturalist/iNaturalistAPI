@@ -400,7 +400,8 @@
       {
         "taxon_id": 10001,
         "list_id": 1000,
-        "place_id": 432
+        "place_id": 432,
+        "establishment_means": "endemic"
       }
     ],
     "places": [
