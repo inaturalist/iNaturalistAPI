@@ -230,7 +230,7 @@
           "names": [{ "name_autocomplete": "Los", "exact": "Los" }],
           "observations_count": 50,
           "is_active": true,
-          "statuses": [ { "place_id": 432, "iucn": 30 } ],
+          "statuses": [ { "place_id": 432, "iucn": 30, "authority": "IUCN Red List", "status": "VU" } ],
           "listed_taxa": [ { "place_id": 432, "establishment_means": "endemic" } ]
         },
         {
