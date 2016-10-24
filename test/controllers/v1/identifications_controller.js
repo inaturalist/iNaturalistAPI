@@ -94,6 +94,86 @@ describe( "IdentificationsController", ( ) => {
       })).to.not.be.undefined;
     });
 
+    it( "filters by booleans true", ( ) => {
+      Q( { is_change: "true" }, ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.exists && f.exists.field === "taxon_change_id";
+      })).to.not.be.undefined;
+    });
+
+    it( "filters by booleans false", ( ) => {
+      Q( { is_change: "false" }, ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.not && f.not.exists && f.not.exists.field === "taxon_change_id";
+      })).to.not.be.undefined;
+    });
+
+    it( "filters by lrank", ( ) => {
+      Q( { lrank: "species" }, ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.range && f.range["taxon.rank_level"] &&
+          f.range["taxon.rank_level"].gte === 10 &&
+          f.range["taxon.rank_level"].lte === 100;
+      })).to.not.be.undefined;
+    });
+
+    it( "filters by hrank", ( ) => {
+      Q( { hrank: "family" }, ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.range && f.range["taxon.rank_level"] &&
+          f.range["taxon.rank_level"].gte === 0 &&
+          f.range["taxon.rank_level"].lte === 30;
+      })).to.not.be.undefined;
+    });
+
+    it( "filters by observation_lrank", ( ) => {
+      Q( { observation_lrank: "species" },
+        ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.range && f.range["observation.taxon.rank_level"] &&
+          f.range["observation.taxon.rank_level"].gte === 10 &&
+          f.range["observation.taxon.rank_level"].lte === 100;
+      })).to.not.be.undefined;
+    });
+
+    it( "filters by observation_hrank", ( ) => {
+      Q( { observation_hrank: "family" },
+        ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.range && f.range["observation.taxon.rank_level"] &&
+          f.range["observation.taxon.rank_level"].gte === 0 &&
+          f.range["observation.taxon.rank_level"].lte === 30;
+      })).to.not.be.undefined;
+    });
+
+    it( "filters by d1/d2", ( ) => {
+      Q( { d1: "2016-01-01T01:00:00", d2: "2017-01-01T01:00:00" }, ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.range && f.range.created_at &&
+          f.range.created_at.gte === "2016-01-01T01:00:00+00:00" &&
+          f.range.created_at.lte === "2017-01-01T01:00:00+00:00";
+      })).to.not.be.undefined;
+    });
+
+    it( "filters by observed_d1/d2", ( ) => {
+      Q( { observed_d1: "2016-01-01T01:00:00", observed_d2: "2017-01-01T01:00:00" },
+        ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.or && f.or[0].and[0].range["observation.time_observed_at"];
+      })).to.not.be.undefined;
+    });
+
+    it( "filters by observation_created_d1/d2", ( ) => {
+      Q( { observation_created_d1: "2016-01-01T01:00:00",
+           observation_created_d2: "2017-01-01T01:00:00" },
+         ( e, q ) => ( eq = q ) );
+      expect( _.detect( eq.filters, f => {
+        return f.range && f.range["observation.created_at"] &&
+          f.range["observation.created_at"].gte === "2016-01-01T01:00:00+00:00" &&
+          f.range["observation.created_at"].lte === "2017-01-01T01:00:00+00:00";
+      })).to.not.be.undefined;
+    });
+
     it( "sorts by created_at desc by default", ( ) => {
       Q( { }, ( e, q ) => ( eq = q ) );
       expect( eq.sort ).to.deep.eq( { created_at: "desc" } );
@@ -143,8 +223,8 @@ describe( "IdentificationsController", ( ) => {
   describe( "speciesCounts", ( ) => {
     it( "returns taxa", done => {
       IdentificationsController.speciesCounts( { query: { } }, ( e, r ) => {
-        expect(r.total_results).to.eq(1);
-        expect(r.results[0].count).to.eq(2);
+        expect(r.total_results).to.eq(2);
+        expect(r.results[0].count).to.above(0);
         expect(r.results[0].taxon.id).to.eq(5);
         done( );
       });

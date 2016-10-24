@@ -87,19 +87,25 @@
           }
         },
         {
+          "id": 103,
           "user": {
             "id": 5
            },
           "body": "id2",
           "category": "maverick",
           "current": true,
-          "current_taxon": true,
+          "current_taxon": false,
           "taxon": {
             "id": 5,
-            "iconic_taxon_id": 1,
+            "iconic_taxon_id": 101,
             "ancestor_ids": [1,2,3,4,5],
             "min_species_ancestry": "1,2,3,4,5",
-            "rank_level": 10
+            "rank_level": 10,
+            "rank": "species",
+            "is_active": true,
+            "min_species_ancestors": [
+              { "id": 1 }, { "id": 2 }, { "id": 3 }, { "id": 4 }, { "id": 5 }
+            ]
           },
           "observation": {
             "id": 1,
@@ -107,11 +113,13 @@
               "id": 5
             },
             "taxon": {
-              "id": 5,
-              "iconic_taxon_id": 1,
-              "ancestor_ids": [1,2,3,4,5],
-              "min_species_ancestry": "1,2,3,4,5",
-              "rank_level": 10
+              "id": 6,
+              "iconic_taxon_id": 101,
+              "ancestor_ids": [1,2,3,4,6],
+              "min_species_ancestry": "1,2,3,4,6",
+              "rank_level": 10,
+              "rank": "species",
+              "is_active": true
             }
           }
         }
@@ -257,7 +265,13 @@
         },
         {
           "id": 5,
-          "iconic_taxon_id": 101
+          "iconic_taxon_id": 101,
+          "is_active": true
+        },
+        {
+          "id": 6,
+          "iconic_taxon_id": 101,
+          "is_active": true
         },
         {
           "id": 123,
