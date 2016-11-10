@@ -74,6 +74,30 @@ describe( "Observations", function( ) {
       }).expect( 200, done );
     });
 
+    it( "finds observations by taxon_id", function( done ) {
+      request( app ).get( "/v1/observations?taxon_id=4" ).
+      expect( function( res ) {
+        expect( res.body.results.map( function( r ) { return r.id } ) ).to.contain( 1 );
+      }).expect( 200, done );
+    } );
+
+    it( "finds observations by without_taxon_id", function( done) {
+      request( app ).get( "/v1/observations?taxon_id=4&without_taxon_id=5" ).
+      expect( function( res ) {
+        expect( res.body.results.map( function( r ) { return r.id } ) ).to.contain( 2 );
+        expect( res.body.results.map( function( r ) { return r.id } ) ).not.to.contain( 1 );
+      }).expect( 200, done );
+    } );
+
+    it( "finds observations by multiple without_taxon_id", function( done) {
+      request( app ).get( "/v1/observations?without_taxon_id=4,5" ).
+      expect( function( res ) {
+        expect( res.body.results.map( function( r ) { return r.id } ) ).to.contain( 333 );
+        expect( res.body.results.map( function( r ) { return r.id } ) ).not.to.contain( 2 );
+        expect( res.body.results.map( function( r ) { return r.id } ) ).not.to.contain( 1 );
+      }).expect( 200, done );
+    } );
+
     it( "looks up projects by slug", function( done ) {
       request( app ).get( "/v1/observations?projects=a-project" ).
       expect( function( res ) {
@@ -166,6 +190,13 @@ describe( "Observations", function( ) {
     });
   });
 
+  describe( "histogram", function( ) {
+    it( "returns json", function( done ) {
+      request( app ).get( "/v1/observations/histogram" ).
+        expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+  });
+
   describe( "identifiers", function( ) {
     it( "returns json", function( done ) {
       request( app ).get( "/v1/observations/identifiers" ).
@@ -209,6 +240,17 @@ describe( "Observations", function( ) {
         expect( res.body.results[0].count ).to.eq( 1 );
         expect( res.body.results[1].count ).to.eq( 2 );
       }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "returns taxa unobserved by a user", function( done ) {
+      request( app ).get( "/v1/observations/species_counts?unobserved_by_user_id=1&lat=50&lng=50" ).
+        expect( function( res ) {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results[0].count ).to.eq( 1 );
+          expect( res.body.results[0].taxon.id ).to.eq( 123 );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
   });
 

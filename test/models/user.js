@@ -44,29 +44,29 @@ describe( "User", function( ) {
     });
 
     it( "recognizes standard extensions", function( ) {
-      expect( User.iconUrl({ id: 50, icon_content_type: "jpeg" }) ).to.match( /50-medium.jpg$/ );
-      expect( User.iconUrl({ id: 50, icon_content_type: "png" }) ).to.match( /50-medium.png$/ );
-      expect( User.iconUrl({ id: 50, icon_content_type: "gif" }) ).to.match( /50-medium.gif$/ );
-      expect( User.iconUrl({ id: 50, icon_content_type: "bmp" }) ).to.match( /50-medium.bmp$/ );
-      expect( User.iconUrl({ id: 50, icon_content_type: "tiff" }) ).to.match( /50-medium.tiff$/ );
+      expect( User.iconUrl({ id: 50, icon_content_type: "jpeg" }) ).to.match( /50\/medium.jpg$/ );
+      expect( User.iconUrl({ id: 50, icon_content_type: "png" }) ).to.match( /50\/medium.png$/ );
+      expect( User.iconUrl({ id: 50, icon_content_type: "gif" }) ).to.match( /50\/medium.gif$/ );
+      expect( User.iconUrl({ id: 50, icon_content_type: "bmp" }) ).to.match( /50\/medium.bmp$/ );
+      expect( User.iconUrl({ id: 50, icon_content_type: "tiff" }) ).to.match( /50\/medium.tiff$/ );
     });
 
     it( "some exceptions", function( ) {
       expect( User.iconUrl({ id: 50, icon_content_type: "jpeg",
-        icon_file_name: "image.jpeg" })).to.match( /50-medium.jpeg$/ );
+        icon_file_name: "image.jpeg" })).to.match( /50\/medium.jpeg$/ );
       expect( User.iconUrl({ id: 50, icon_content_type: "jpeg",
-        icon_file_name: "stringio.txt" })).to.match( /50-medium.jpeg$/ );
+        icon_file_name: "stringio.txt" })).to.match( /50\/medium.jpeg$/ );
       expect( User.iconUrl({ id: 50, icon_content_type: "jpeg",
-        icon_file_name: "open-uri20110111-11111-111111" })).to.match( /50-medium.jpeg$/ );
+        icon_file_name: "open-uri20110111-11111-111111" })).to.match( /50\/medium.jpeg$/ );
       expect( User.iconUrl({ id: 50, icon_content_type: "jpeg",
-        icon_file_name: "data" })).to.match( /50-medium.jpeg$/ );
+        icon_file_name: "data" })).to.match( /50\/medium.jpeg$/ );
     });
 
     it( "some exceptions", function( ) {
       var globalPrefix = global.config.userImagePrefix;
       global.config.userImagePrefix = null;
       expect( User.iconUrl({ id: 50, icon_content_type: "jpeg", icon_file_name: "image.jpeg" })).
-        to.eq( "http://www.inaturalist.org/attachments/users/icons/50-medium.jpeg" );
+        to.eq( "http://static.inaturalist.org/attachments/users/icons/50/medium.jpeg" );
       global.config.userImagePrefix = globalPrefix;
     });
   });

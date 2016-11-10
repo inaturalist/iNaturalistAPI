@@ -54,6 +54,77 @@
         }
       ]
     },
+    "identifications": {
+      "identification": [
+        {
+          "id": 102,
+          "user": {
+            "id": 123
+           },
+          "body": "id1",
+          "category": "leading",
+          "current": true,
+          "current_taxon": false,
+          "taxon": {
+            "id": 5,
+            "iconic_taxon_id": 1,
+            "ancestor_ids": [1,2,3,4,5],
+            "min_species_ancestry": "1,2,3,4,5",
+            "rank_level": 10
+          },
+          "observation": {
+            "id": 1,
+            "user": {
+              "id": 123
+            },
+            "taxon": {
+              "id": 5,
+              "iconic_taxon_id": 1,
+              "ancestor_ids": [1,2,3,4,5],
+              "min_species_ancestry": "1,2,3,4,5",
+              "rank_level": 10
+            }
+          }
+        },
+        {
+          "id": 103,
+          "user": {
+            "id": 5
+           },
+          "body": "id2",
+          "category": "maverick",
+          "current": true,
+          "current_taxon": false,
+          "taxon": {
+            "id": 5,
+            "iconic_taxon_id": 101,
+            "ancestor_ids": [1,2,3,4,5],
+            "min_species_ancestry": "1,2,3,4,5",
+            "rank_level": 10,
+            "rank": "species",
+            "is_active": true,
+            "min_species_ancestors": [
+              { "id": 1 }, { "id": 2 }, { "id": 3 }, { "id": 4 }, { "id": 5 }
+            ]
+          },
+          "observation": {
+            "id": 1,
+            "user": {
+              "id": 5
+            },
+            "taxon": {
+              "id": 6,
+              "iconic_taxon_id": 101,
+              "ancestor_ids": [1,2,3,4,6],
+              "min_species_ancestry": "1,2,3,4,6",
+              "rank_level": 10,
+              "rank": "species",
+              "is_active": true
+            }
+          }
+        }
+      ]
+    },
     "observation_fields": {
       "observation_field": [
         {
@@ -70,8 +141,13 @@
           "user": { "id": 123 },
           "created_at": "2015-12-31T00:00:00",
           "private_location": "1,2",
-          "taxon": { "id": 5, "iconic_taxon_id": 1,
-            "min_species_ancestry": "1,2,3,4,5", "rank_level": 10 },
+          "taxon": {
+            "id": 5,
+            "iconic_taxon_id": 1,
+            "ancestor_ids": [1,2,3,4,5],
+            "min_species_ancestry": "1,2,3,4,5",
+            "rank_level": 10
+          },
           "project_ids": [ 543 ],
           "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
         },
@@ -80,7 +156,11 @@
           "user": { "id": 5 },
           "created_at": "2016-01-01T01:00:00",
           "location": "2,3",
-          "taxon": { "id": 4, "min_species_ancestry": "1,2,3,4" },
+          "taxon": {
+            "id": 4,
+            "ancestor_ids": [1,2,3,4],
+            "min_species_ancestry": "1,2,3,4"
+          },
           "non_owner_ids":[{ "user": { "id": 123 } }],
           "place_guess": "Montana",
           "private_geojson": { "type": "Point", "coordinates": [ "3", "2" ] }
@@ -88,6 +168,7 @@
         {
           "id": 333,
           "user": { "id": 333 },
+          "created_at": "2010-01-01T02:00:00",
           "private_location": "1,2",
           "geoprivacy": "obscured",
           "place_guess": "Idaho"
@@ -95,8 +176,15 @@
         {
           "id": 4,
           "user": { "id": 333 },
-          "taxon": { "id": 123, "iconic_taxon_id": 1,
-            "min_species_ancestry": "11,22,33,123", "rank_level": 10 },
+          "created_at": "1500-01-01T05:00:00",
+          "observed_on": "1500-01-01T05:00:00",
+          "taxon": {
+            "id": 123,
+            "iconic_taxon_id": 1,
+            "ancestor_ids": [11,22,33,123],
+            "min_species_ancestry": "11,22,33,123",
+            "rank_level": 10
+          },
           "sounds": {
             "id": 1,
             "license_code": "CC-BY",
@@ -107,8 +195,14 @@
         {
           "id": 5,
           "user": { "id": 333 },
-          "taxon": { "id": 123, "iconic_taxon_id": 1,
-            "min_species_ancestry": "11,22,33,123", "rank_level": 10 },
+          "taxon": {
+            "id": 123,
+            "iconic_taxon_id": 1,
+            "ancestor_ids": [11,22,33,123],
+            "min_species_ancestry": "11,22,33,123",
+            "rank_level": 10
+          },
+          "location": "50,50",
           "private_location": "3,4",
           "private_geojson": { "type": "Point", "coordinates": [ "4", "3" ] },
           "place_guess": "Tangerina",
@@ -122,13 +216,17 @@
           "id": 1,
           "title": "Project One",
           "title_autocomplete": "Project One",
-          "location": "11,12"
+          "title_exact": "Project One",
+          "location": "11,12",
+          "user_ids": [ 1, 5, 123 ]
         },
         {
           "id": 2,
           "title": "Project Two",
           "title_autocomplete": "Project Two",
-          "location": "21,22"
+          "title_exact": "Project Two",
+          "location": "21,22",
+          "user_ids": [ 123 ]
         }
       ]
     },
@@ -136,20 +234,25 @@
       "taxon": [
         {
           "id": 1,
+          "ancestor_ids": [ 1 ],
           "names": [{ "name_autocomplete": "Los", "exact": "Los" }],
           "observations_count": 50,
           "is_active": true,
-          "statuses": [ { "place_id": 432, "iucn": 30 } ],
+          "statuses": [ { "place_id": 432, "iucn": 30, "authority": "IUCN Red List", "status": "VU" } ],
           "listed_taxa": [ { "place_id": 432, "establishment_means": "endemic" } ]
         },
         {
           "id": 2,
+          "parent_id": 1,
+          "ancestor_ids": [ 1, 2 ],
           "names": [{ "name_autocomplete": "Los", "exact": "Los" }],
           "observations_count": 50,
           "is_active": false
         },
         {
           "id": 3,
+          "parent_id": 2,
+          "ancestor_ids": [ 1, 2, 3 ],
           "names": [{ "name_autocomplete": "Los lobos", "exact": "Los lobos" }],
           "observations_count": 100,
           "is_active": true
@@ -162,7 +265,13 @@
         },
         {
           "id": 5,
-          "iconic_taxon_id": 101
+          "iconic_taxon_id": 101,
+          "is_active": true
+        },
+        {
+          "id": 6,
+          "iconic_taxon_id": 101,
+          "is_active": true
         },
         {
           "id": 123,
@@ -191,6 +300,10 @@
         {
           "id": 9898,
           "name": "ataxon"
+        },
+        {
+          "id": 10001,
+          "name": "DetailsTaxon"
         }
       ]
     },
@@ -207,11 +320,28 @@
           "id": 5,
           "login": "b-user",
           "name": "B User"
+        },
+        {
+          "id": 123,
+          "login": "a-user",
+          "name": "A User"
         }
       ]
     }
   },
   "postgresql": {
+    "conservation_statuses": [
+      {
+        "taxon_id": 10001,
+        "place_id": 432,
+        "authority": "cs-authority",
+        "status": "cs-status",
+        "iucn": 20,
+        "description": "cs-description",
+        "created_at": "2016-01-01 00:00:00",
+        "updated_at": "2016-01-01 00:00:00"
+      }
+    ],
     "deleted_observations": [
       {
         "user_id": 1,
@@ -258,6 +388,10 @@
         "title": "AProjectList",
         "project_id": 543,
         "type": "ProjectList"
+      },
+      {
+        "id": 1000,
+        "title": "DetailsListedTaxonList"
       }
     ],
     "listed_taxa": [
@@ -276,11 +410,18 @@
       {
         "taxon_id": 876,
         "list_id": 999
+      },
+      {
+        "taxon_id": 10001,
+        "list_id": 1000,
+        "place_id": 432,
+        "establishment_means": "endemic"
       }
     ],
     "places": [
       {
         "id": 432,
+        "name": "a-place",
         "display_name": "a-place"
       }
     ],
@@ -375,6 +516,11 @@
       }
     ],
     "users": [
+      {
+        "id": 1,
+        "login": "userlogin",
+        "name": "username"
+      },
       {
         "id": 5,
         "login": "b-user",
