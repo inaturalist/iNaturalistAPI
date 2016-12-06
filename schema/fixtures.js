@@ -266,7 +266,9 @@
           "ancestor_ids": [ 1001, 1, 2, 3 ],
           "names": [{ "name_autocomplete": "Los lobos", "exact": "Los lobos" }],
           "observations_count": 100,
-          "is_active": true
+          "is_active": true,
+          "taxon_changes_count": 1,
+          "taxon_schemes_count": 1
         },
         {
           "id": 4,
