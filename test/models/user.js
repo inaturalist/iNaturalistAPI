@@ -66,7 +66,7 @@ describe( "User", function( ) {
       var globalPrefix = global.config.userImagePrefix;
       global.config.userImagePrefix = null;
       expect( User.iconUrl({ id: 50, icon_content_type: "jpeg", icon_file_name: "image.jpeg" })).
-        to.eq( "http://static.inaturalist.org/attachments/users/icons/50/medium.jpeg" );
+        to.eq( "https://static.inaturalist.org/attachments/users/icons/50/medium.jpeg" );
       global.config.userImagePrefix = globalPrefix;
     });
   });
