@@ -723,9 +723,9 @@
       "resolved": "https://registry.npmjs.org/ejs/-/ejs-2.4.1.tgz"
     },
     "elasticmaps": {
-      "version": "0.2.1",
-      "from": "elasticmaps@>=0.2.1 <0.3.0",
-      "resolved": "https://registry.npmjs.org/elasticmaps/-/elasticmaps-0.2.1.tgz"
+      "version": "0.2.2",
+      "from": "elasticmaps@>=0.2.2 <0.3.0",
+      "resolved": "https://registry.npmjs.org/elasticmaps/-/elasticmaps-0.2.2.tgz"
     },
     "elasticsearch": {
       "version": "10.1.3",
