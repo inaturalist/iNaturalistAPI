@@ -46,4 +46,14 @@ describe( "routes", function( ) {
     });
   });
 
+  describe( "ping", function( ) {
+    it( "renders a ping response", function( done ) {
+      request( app ).get( "/v1/ping" ).
+        expect( function( res ) {
+          console.log(res.body)
+          expect( res.body.status ).to.eq( "available" );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+  });
+
 });
