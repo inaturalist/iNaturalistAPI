@@ -114,5 +114,21 @@ describe( "Taxa", function( ) {
           expect( taxon.children[0].id ).to.eq( 3 );
         }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "returns taxon_changes_count", function( done ) {
+      request( app ).get( "/v1/taxa/3" ).
+        expect( function( res ) {
+          var taxon = res.body.results[0];
+          expect( taxon.taxon_changes_count ).to.eq( 1 );
+        } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+    
+    it( "returns taxon_schemes_count", function( done ) {
+      request( app ).get( "/v1/taxa/3" ).
+        expect( function( res ) {
+          var taxon = res.body.results[0];
+          expect( taxon.taxon_schemes_count ).to.eq( 1 );
+        } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
   });
 });

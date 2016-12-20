@@ -233,8 +233,17 @@
     "taxa": {
       "taxon": [
         {
+          "id": 1001,
+          "ancestor_ids": [ 1001 ],
+          "name": "Life",
+          "names": [{ "name_autocomplete": "Life", "exact": "Life" }],
+          "observations_count": 50,
+          "is_active": true
+        },
+        {
           "id": 1,
-          "ancestor_ids": [ 1 ],
+          "name": "Los",
+          "ancestor_ids": [ 1001, 1 ],
           "names": [{ "name_autocomplete": "Los", "exact": "Los" }],
           "observations_count": 50,
           "is_active": true,
@@ -243,19 +252,23 @@
         },
         {
           "id": 2,
+          "name": "Los",
           "parent_id": 1,
-          "ancestor_ids": [ 1, 2 ],
+          "ancestor_ids": [ 1001, 1, 2 ],
           "names": [{ "name_autocomplete": "Los", "exact": "Los" }],
           "observations_count": 50,
           "is_active": false
         },
         {
           "id": 3,
+          "name": "Los lobos",
           "parent_id": 2,
-          "ancestor_ids": [ 1, 2, 3 ],
+          "ancestor_ids": [ 1001, 1, 2, 3 ],
           "names": [{ "name_autocomplete": "Los lobos", "exact": "Los lobos" }],
           "observations_count": 100,
-          "is_active": true
+          "is_active": true,
+          "taxon_changes_count": 1,
+          "taxon_schemes_count": 1
         },
         {
           "id": 4,
