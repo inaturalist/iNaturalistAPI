@@ -8,13 +8,27 @@ describe( "Taxon", function( ) {
     t = new Taxon({
       id: 123,
       names: [
-        { name: "BestEnglish", locale: "en" },
-        { name: "BestInAmerica", locale: "en", place_taxon_names: [
-          { place_id: 111 }
+        { name: "BestEnglish", locale: "en", position: 0 },
+        { name: "BestInAmerica", locale: "en", position: 1, place_taxon_names: [
+          { place_id: 111, position: 0 }
         ] },
-        { name: "BestInCalifornia", locale: "en", place_taxon_names: [
-          { place_id: 222 }
-        ] } ],
+        {
+          name: "BestInCalifornia",
+          locale: "en",
+          position: 3,
+          place_taxon_names: [
+            { place_id: 222, position: 0 }
+          ]
+        },
+        {
+          name: "SecondBestInCalifornia",
+          locale: "en",
+          position: 2,
+          place_taxon_names: [
+            { place_id: 222, position: 1 }
+          ]
+        }
+      ],
       statuses: [
         { place_id: null, iucn: 20 },
         { place_id: 111, iucn: 30 },
