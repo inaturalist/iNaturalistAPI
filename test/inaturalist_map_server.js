@@ -31,8 +31,8 @@ describe( "InaturalistMapServer", function( ) {
       MapServer.prepareQuery( stubReq, function( ) {
         expect( stubReq.elastic_query.size ).to.eql( 0 );
         expect( stubReq.elastic_query.aggregations.zoom1 ).to.eql({
-          aggs: { geohash: { top_hits: { _source: false,
-            fielddata_fields: [
+          aggs: { geohash: { top_hits: {
+            _source: [
               "id", "location", "taxon.iconic_taxon_id", "captive", "quality_grade",
               "geoprivacy", "private_location" ],
             size: 1, sort: { id: { order: "desc" } } } } },
@@ -47,8 +47,8 @@ describe( "InaturalistMapServer", function( ) {
       MapServer.prepareQuery( stubReq, function( ) {
         expect( stubReq.elastic_query.size ).to.eql( 0 );
         expect( stubReq.elastic_query.aggregations.zoom1 ).to.eql({
-          aggs: { geohash: { top_hits: { _source: false,
-            fielddata_fields: [
+          aggs: { geohash: { top_hits: {
+            _source: [
               "id", "location", "taxon.iconic_taxon_id", "captive", "quality_grade",
               "geoprivacy", "private_location" ],
             size: 1, sort: { id: { order: "desc" } } } } },

@@ -28,7 +28,6 @@ before_install:
   - sudo /usr/share/elasticsearch/bin/plugin install analysis-kuromoji
   - sudo /usr/share/elasticsearch/bin/plugin install delete-by-query
   - sudo service elasticsearch start
-  - rm npm-shrinkwrap.json
 
 before_script:
   - cp config.js.travis config.js
