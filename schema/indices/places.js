@@ -23,6 +23,9 @@
       "geometry_geojson" : {
         "type" : "geo_shape"
       },
+      "bounding_box_geojson" : {
+        "type" : "geo_shape"
+      },
       "id" : {
         "type" : "integer"
       },

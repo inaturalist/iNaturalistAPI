@@ -91,6 +91,17 @@ describe( "Places", function( ) {
           expect( res.body.results[0].name ).to.eq( "United States" );
         }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "includes a bounding box if there's a geometry", function( done ) {
+      request( app ).get( "/v1/places/autocomplete?q=Massachusetts" ).
+        expect( function( res ) {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results[0].name ).to.eq( "Massachusetts" );
+          expect( res.body.results[0].bounding_box_geojson ).not.to.be.undefined;
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    } )
   });
 
 });
