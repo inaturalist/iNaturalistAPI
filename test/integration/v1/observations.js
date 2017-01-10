@@ -188,6 +188,26 @@ describe( "Observations", function( ) {
         expect( res.body.results[ 0 ].identifications.length ).to.be.above( 0 );
       }).expect( 200, done );
     });
+
+    it( "returns a bounding box if you request one", function( done ) {
+     request( app ).get( "/v1/observations?return_bounds=true" ).
+     expect( function( res ) {
+      expect( res.body.total_bounds ).to.be.defined;
+      expect( res.body.total_bounds.swlng ).to.be.defined;
+     } ).expect( 200, done );
+    } );
+    it( "doesn't return a bounding box if you don't request one", function( done ) {
+      request( app ).get( "/v1/observations" ).
+      expect( function( res ) {
+       expect( res.body.total_bounds ).to.be.undefined;
+      } ).expect( 200, done );
+    } );
+    it( "doesn't return a bounding box if there are no observations", function( done ) {
+      request( app ).get( "/v1/observations?user_id=9999" ).
+      expect( function( res ) {
+       expect( res.body.total_bounds ).to.be.undefined;
+      } ).expect( 200, done );
+    } );
   });
 
   describe( "histogram", function( ) {
