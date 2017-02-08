@@ -32,9 +32,9 @@ describe( "InaturalistMapServer", function( ) {
         expect( stubReq.elastic_query.size ).to.eql( 0 );
         expect( stubReq.elastic_query.aggregations.zoom1 ).to.eql({
           aggs: { geohash: { top_hits: {
-            _source: [
+            _source: { includes: [
               "id", "location", "taxon.iconic_taxon_id", "captive", "quality_grade",
-              "geoprivacy", "private_location" ],
+              "geoprivacy", "private_location" ] },
             size: 1, sort: { id: { order: "desc" } } } } },
           geohash_grid: { field: "location", precision: 3, size: 50000 }
         });
@@ -48,9 +48,9 @@ describe( "InaturalistMapServer", function( ) {
         expect( stubReq.elastic_query.size ).to.eql( 0 );
         expect( stubReq.elastic_query.aggregations.zoom1 ).to.eql({
           aggs: { geohash: { top_hits: {
-            _source: [
+            _source: { includes: [
               "id", "location", "taxon.iconic_taxon_id", "captive", "quality_grade",
-              "geoprivacy", "private_location" ],
+              "geoprivacy", "private_location" ] },
             size: 1, sort: { id: { order: "desc" } } } } },
           geohash_grid: { field: "location", precision: 3, size: 50000 }
         });
