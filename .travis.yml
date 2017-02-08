@@ -23,8 +23,9 @@ addons:
 before_install:
   - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.0.deb && sudo dpkg -i --force-confnew elasticsearch-5.2.0.deb
   - echo $JAVA_HOME
-  - unset JAVA_HOME
+  - export $JAVA_HOME='/usr'
   - echo $JAVA_HOME
+  - sudo cat /usr/share/elasticsearch/bin/elasticsearch-plugin
   - sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-kuromoji
   - sudo service elasticsearch start
 
