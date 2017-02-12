@@ -1,0 +1,49 @@
+doctype html
+html( lang="en" )
+  head
+    title= Testvision
+    link( rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" )
+    link( rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.3/themes/default/style.min.css" )
+    script( src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" )
+    script( src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.3/jstree.min.js" )
+    style.
+      h1 {
+        font-size: 18px;
+      }
+      .fixed {
+        position: fixed
+      }
+      img {
+        max-width: 250px;
+        max-height: 250px;
+      }
+      .similar {
+        margin-bottom: 40px;
+      }
+      .jstree-themeicon-custom {
+        background-size: cover !important;
+        background-position: center !important;
+      }
+  body
+    div.container-fluid
+      div.row
+        div.col-xs-3
+          div.fixed
+            h4 Observation
+            img( src="/" + tempfilepath )
+            div.taxon
+              a( href="http://www.inaturalist.org/taxa/" + observation.taxon.id )= observation.taxon.name
+        div.col-xs-3
+          h4 Similar By Photo
+          each match in similarByPhoto
+            div.similar
+              img( src=match.taxon.default_photo.medium_url )
+              div.taxon
+                a( href="http://www.inaturalist.org/taxa/" + match.taxon.id )= match.taxon.name
+              div.score Score: #{ match.score }
+        div.col-xs-3
+          h4 Classification
+          div#similarTree
+    script( type="text/javascript" ).
+       var data = !{ JSON.stringify( jstreeData ) };
+       $( "#similarTree" ).jstree({ core: { data: data } } );
