@@ -1,12 +1,9 @@
-sudo: required
-
 language: node_js
+
+compiler: gcc
 
 node_js:
   - "5.8.0"
-
-jdk:
-  - oraclejdk8
 
 env:
   - CXX=g++-4.8
@@ -17,16 +14,19 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
-      - oracle-java8-set-default
   postgresql: '9.3'
 
 before_install:
-  - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.0.deb && sudo dpkg -i --force-confnew elasticsearch-5.2.0.deb
-  - echo $JAVA_HOME
-  - export JAVA_HOME='/usr'
-  - echo $JAVA_HOME
-  - sudo cat /usr/share/elasticsearch/bin/elasticsearch-plugin
-  - sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-kuromoji
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo apt-get update
+  - sudo apt-get install gcc-4.7 g++-4.7
+  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.7 20
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.7 20
+  - g++ --version
+  - sudo apt-get update -qq
+  - curl -O https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.1.1/elasticsearch-2.1.1.deb && sudo dpkg -i --force-confnew elasticsearch-2.1.1.deb
+  - sudo /usr/share/elasticsearch/bin/plugin install analysis-kuromoji
+  - sudo /usr/share/elasticsearch/bin/plugin install delete-by-query
   - sudo service elasticsearch start
 
 before_script:

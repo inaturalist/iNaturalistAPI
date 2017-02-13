@@ -3,19 +3,22 @@
     "dynamic": "true",
     "properties": {
       "body": {
-        "type": "text",
+        "type": "string",
         "analyzer": "ascii_snowball_analyzer"
       },
       "category": {
-        "type": "keyword"
+        "type": "string",
+        "analyzer": "keyword_analyzer"
       },
       "created_at": {
-        "type": "date"
+        "type": "date",
+        "format": "strict_date_optional_time||epoch_millis"
       },
       "created_at_details": {
         "properties": {
           "date": {
-            "type": "date"
+            "type": "date",
+            "format": "strict_date_optional_time||epoch_millis"
           },
           "day": {
             "type": "long"
@@ -49,12 +52,14 @@
             "type": "boolean"
           },
           "created_at": {
-            "type": "date"
+            "type": "date",
+            "format": "strict_date_optional_time||epoch_millis"
           },
           "created_at_details": {
             "properties": {
               "date": {
-                "type": "date"
+                "type": "date",
+                "format": "strict_date_optional_time||epoch_millis"
               },
               "day": {
                 "type": "long"
@@ -77,12 +82,14 @@
             "type": "long"
           },
           "observed_on": {
-            "type": "date"
+            "type": "date",
+            "format": "strict_date_optional_time||epoch_millis"
           },
           "observed_on_details": {
             "properties": {
               "date": {
-                "type": "date"
+                "type": "date",
+                "format": "strict_date_optional_time||epoch_millis"
               },
               "day": {
                 "type": "long"
@@ -105,7 +112,7 @@
             "type": "long"
           },
           "quality_grade": {
-            "type": "keyword"
+            "type": "string"
           },
           "site_id": {
             "type": "long"
@@ -116,7 +123,7 @@
                 "type": "long"
               },
               "ancestry": {
-                "type": "keyword"
+                "type": "string"
               },
               "iconic_taxon_id": {
                 "type": "long"
@@ -128,22 +135,16 @@
                 "type": "boolean"
               },
               "min_species_ancestry": {
-                "type": "keyword"
+                "type": "string"
               },
               "name": {
-                "type": "text",
-                "fields": {
-                  "keyword": {
-                    "type": "keyword",
-                    "ignore_above": 256
-                  }
-                }
+                "type": "string"
               },
               "parent_id": {
                 "type": "long"
               },
               "rank": {
-                "type": "keyword"
+                "type": "string"
               },
               "rank_level": {
                 "type": "long"
@@ -151,7 +152,8 @@
             }
           },
           "time_observed_at": {
-            "type": "date"
+            "type": "date",
+            "format": "strict_date_optional_time||epoch_millis"
           },
           "user": {
             "properties": {
@@ -159,12 +161,12 @@
                 "type": "long"
               },
               "login": {
-                "type": "keyword"
+                "type": "string"
               }
             }
           },
           "uuid": {
-            "type": "keyword"
+            "type": "string"
           }
         }
       },
@@ -177,7 +179,7 @@
             "type": "long"
           },
           "ancestry": {
-            "type": "keyword"
+            "type": "string"
           },
           "iconic_taxon_id": {
             "type": "long"
@@ -188,30 +190,17 @@
           "is_active": {
             "type": "boolean"
           },
-          "min_species_ancestors": {
-            "properties": {
-              "id": {
-                "type": "long"
-              }
-            }
-          },
           "min_species_ancestry": {
-            "type": "keyword"
+            "type": "string"
           },
           "name": {
-            "type": "text",
-            "fields": {
-              "keyword": {
-                "type": "keyword",
-                "ignore_above": 256
-              }
-            }
+            "type": "string"
           },
           "parent_id": {
             "type": "long"
           },
           "rank": {
-            "type": "keyword"
+            "type": "string"
           },
           "rank_level": {
             "type": "long"
@@ -224,12 +213,12 @@
             "type": "long"
           },
           "login": {
-            "type": "keyword"
+            "type": "string"
           }
         }
       },
       "uuid": {
-        "type": "text",
+        "type": "string",
         "analyzer": "keyword_analyzer"
       }
     }

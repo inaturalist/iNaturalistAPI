@@ -723,14 +723,14 @@
       "resolved": "https://registry.npmjs.org/ejs/-/ejs-2.4.1.tgz"
     },
     "elasticmaps": {
-      "version": "1.0.0",
+      "version": "0.3.0",
       "from": "inaturalist/elasticmaps",
-      "resolved": "git://github.com/inaturalist/elasticmaps.git#9cde5e6a7e36a28d14dc5a4d6c46857f9675b80f"
+      "resolved": "git://github.com/inaturalist/elasticmaps.git#9030b2e91bc6fa2798d5de5434e876bd009f63f5"
     },
     "elasticsearch": {
-      "version": "12.1.1",
-      "from": "elasticsearch@>=12.1.1 <13.0.0",
-      "resolved": "https://registry.npmjs.org/elasticsearch/-/elasticsearch-12.1.1.tgz"
+      "version": "10.1.3",
+      "from": "elasticsearch@>=10.1.3 <11.0.0",
+      "resolved": "https://registry.npmjs.org/elasticsearch/-/elasticsearch-10.1.3.tgz"
     },
     "emojis-list": {
       "version": "2.0.1",

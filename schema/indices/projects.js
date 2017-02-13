@@ -16,7 +16,8 @@
         "type": "long"
       },
       "location": {
-        "type": "geo_point"
+        "type": "geo_point",
+        "lat_lon": true
       },
       "place_ids": {
         "type": "long"
@@ -28,9 +29,6 @@
       "title": {
         "type": "string",
         "analyzer": "ascii_snowball_analyzer"
-      },
-      "title_exact": {
-        "type": "keyword"
       },
       "title_autocomplete": {
         "type": "string",

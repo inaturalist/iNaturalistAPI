@@ -30,7 +30,8 @@
         "type" : "integer"
       },
       "location" : {
-        "type" : "geo_point"
+        "type" : "geo_point",
+        "lat_lon" : true
       },
       "name" : {
         "type" : "string"

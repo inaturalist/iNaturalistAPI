@@ -22,7 +22,8 @@
         }
       },
       "created_at" : {
-        "type" : "date"
+        "type" : "date",
+        "format" : "dateOptionalTime"
       },
       "default_photo" : {
         "properties" : {
