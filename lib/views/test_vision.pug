@@ -14,8 +14,8 @@ html( lang="en" )
         position: fixed
       }
       img {
-        max-width: 250px;
-        max-height: 250px;
+        max-width: 200px;
+        max-height: 200px;
       }
       .similar {
         margin-bottom: 40px;
@@ -27,23 +27,40 @@ html( lang="en" )
   body
     div.container-fluid
       div.row
-        div.col-xs-3
+        div.col-xs-2
           div.fixed
             h4 Observation
             img( src="/" + tempfilepath )
             div.taxon
               a( href="http://www.inaturalist.org/taxa/" + observation.taxon.id )= observation.taxon.name
-        div.col-xs-3
+        div.col-xs-2
           h4 Similar By Photo
+          - var sumOfScores = 0;
           each match in similarByPhoto
+            - sumOfScores += match.score
             div.similar
-              img( src=match.taxon.default_photo.medium_url )
+              if match.taxon.default_photo
+                img( src=match.taxon.default_photo.medium_url )
               div.taxon
                 a( href="http://www.inaturalist.org/taxa/" + match.taxon.id )= match.taxon.name
-              div.score Score: #{ match.score }
-        div.col-xs-3
+              div.score Score: #{ match.score }, SumOfScores: #{ Math.round( sumOfScores ) }
+        div.col-xs-5
           h4 Classification
           div#similarTree
+        div.col-xs-2
+          h4 Frequency
+          p Common Ancestor:&nbsp;
+            if commonAncestor
+              a( href="http://www.inaturalist.org/taxa/" + commonAncestor.id )= commonAncestor.name
+            else
+              Life
+            each match in nearbyTaxa
+              div.similar
+                if match.taxon.default_photo
+                  img( src=match.taxon.default_photo.medium_url )
+                div.taxon
+                  a( href="http://www.inaturalist.org/taxa/" + match.taxon.id )= match.taxon.name
+                div.score Score: #{ match.count }
     script( type="text/javascript" ).
        var data = !{ JSON.stringify( jstreeData ) };
        $( "#similarTree" ).jstree({ core: { data: data } } );
