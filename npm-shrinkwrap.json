@@ -725,7 +725,7 @@
     "elasticmaps": {
       "version": "0.3.0",
       "from": "inaturalist/elasticmaps",
-      "resolved": "git://github.com/inaturalist/elasticmaps.git#9030b2e91bc6fa2798d5de5434e876bd009f63f5"
+      "resolved": "git://github.com/inaturalist/elasticmaps.git#3c61d9ea0e2332fa8e53c5b165993bf764dc923e"
     },
     "elasticsearch": {
       "version": "10.1.3",
