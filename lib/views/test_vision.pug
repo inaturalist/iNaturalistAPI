@@ -1,3 +1,16 @@
+mixin taxonWithPhoto( match, sum )
+  div.similar
+    div.photo
+      if match.taxon.default_photo
+        img( src=match.taxon.default_photo.medium_url )
+      else
+        p [ no photo ]
+    div.taxon
+      a( href="http://www.inaturalist.org/taxa/" + match.taxon.id )= match.taxon.name
+    div.score Score: #{ match.score }
+      if sum
+        | , Percentile: #{ Math.round( sum ) }%
+
 doctype html
 html( lang="en" )
   head
@@ -7,11 +20,8 @@ html( lang="en" )
     script( src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" )
     script( src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.3/jstree.min.js" )
     style.
-      h1 {
-        font-size: 18px;
-      }
-      .fixed {
-        position: fixed
+      h4 {
+        text-align: center;
       }
       img {
         max-width: 200px;
@@ -19,48 +29,85 @@ html( lang="en" )
       }
       .similar {
         margin-bottom: 40px;
+        text-align: center;
       }
       .jstree-themeicon-custom {
         background-size: cover !important;
         background-position: center !important;
       }
+      .row {
+        width: 3000px;
+      }
+      .observation {
+        position: fixed;
+        background: white;
+        padding: 0px 20px 20px 20px;
+        margin-left: -15px;
+        z-index: 10;
+        border-right: 2px solid;
+        border-bottom: 2px solid;
+        border-color: black;
+      }
+      .alt {
+        background-color: #E6E6E6;
+      }
   body
     div.container-fluid
       div.row
-        div.col-xs-2
-          div.fixed
+        div.col-xs-1
+          div.observation
             h4 Observation
             img( src="/" + tempfilepath )
             div.taxon
               a( href="http://www.inaturalist.org/taxa/" + observation.taxon.id )= observation.taxon.name
-        div.col-xs-2
-          h4 Similar By Photo
+        div.col-xs-1
+          h4 Everything
+          p
+            | FrequencyScore * ( VisionScore || ( 1 / TotalVisionResults ) )
+          each match in allSet
+            + taxonWithPhoto( match )
+        div.col-xs-1.alt
+          h4 Vision
+          p
+            | VisionScore
           - var sumOfScores = 0;
           each match in similarByPhoto
             - sumOfScores += match.score
-            div.similar
-              if match.taxon.default_photo
-                img( src=match.taxon.default_photo.medium_url )
-              div.taxon
-                a( href="http://www.inaturalist.org/taxa/" + match.taxon.id )= match.taxon.name
-              div.score Score: #{ match.score }, SumOfScores: #{ Math.round( sumOfScores ) }
-        div.col-xs-5
-          h4 Classification
-          div#similarTree
+            + taxonWithPhoto( match, sumOfScores )
         div.col-xs-2
+          h4 Vision Classification
+          p
+            | Classification of Vision results
+          div#similarTree
+        div.col-xs-1.alt
           h4 Frequency
+          p
+            | Most common taxa nearby, within 3 months, and in the clade:
           p Common Ancestor:&nbsp;
             if commonAncestor
               a( href="http://www.inaturalist.org/taxa/" + commonAncestor.id )= commonAncestor.name
             else
               Life
-            each match in nearbyTaxa
-              div.similar
-                if match.taxon.default_photo
-                  img( src=match.taxon.default_photo.medium_url )
-                div.taxon
-                  a( href="http://www.inaturalist.org/taxa/" + match.taxon.id )= match.taxon.name
-                div.score Score: #{ match.count }
+          each match in nearbyTaxa
+            + taxonWithPhoto( match )
+        div.col-xs-1
+          h4 Combined
+          p
+            | Intersection of Vision/Taxa
+          each match in combinedSet
+            + taxonWithPhoto( match )
+        div.col-xs-1.alt
+          h4 Only Vision
+          p
+            | Only in the vision model, no recent nearby obs in the common ancestor
+          each match in onlyVision
+            + taxonWithPhoto( match )
+        div.col-xs-1
+          h4 Only Frequency
+          p
+            | Only nearby obs in the common ancestor, not returned by the vision model
+          each match in onlyFrequency
+            + taxonWithPhoto( match )
     script( type="text/javascript" ).
        var data = !{ JSON.stringify( jstreeData ) };
        $( "#similarTree" ).jstree({ core: { data: data } } );
