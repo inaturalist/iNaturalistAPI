@@ -82,14 +82,18 @@
           "body": "id1",
           "category": "leading",
           "current": true,
-          "current_taxon": false,
+          "current_taxon": true,
           "taxon": {
             "id": 5,
+            "is_active": true,
             "iconic_taxon_id": 1,
             "ancestor_ids": [1,2,3,4,5],
             "min_species_ancestry": "1,2,3,4,5",
-            "rank_level": 10
-          },
+            "rank_level": 10,
+             "min_species_ancestors": [
+              { "id": 1 }, { "id": 2 }, { "id": 3 }, { "id": 4 }, { "id": 5 }
+            ]
+         },
           "observation": {
             "id": 1,
             "user": {

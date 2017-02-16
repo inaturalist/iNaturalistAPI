@@ -14,7 +14,7 @@ describe( "esClient", function( ) {
   describe( "search", function( ) {
     it( "can specify source fields to return", function( done ) {
       esClient.search( "taxa", { body: {
-        query: { filtered: { filter: { term: { id: 9898 } } } }, _source: [ "id" ] },
+        query: { bool: { must: { term: { id: 9898 } } } }, _source: [ "id" ] },
         size: 1 },
         function( err, results ) {
           expect( results.hits.total ).to.eql( 1 );
@@ -27,7 +27,7 @@ describe( "esClient", function( ) {
 
     it( "can choose not to return source", function( done ) {
       esClient.search( "taxa", { body: {
-        query: { filtered: { filter: { term: { id: 9898 } } } }, _source: false },
+        query: { bool: { must: { term: { id: 9898 } } } }, _source: false },
         size: 1 },
         function( err, results ) {
           expect( results.hits.total ).to.eql( 1 );
@@ -96,11 +96,6 @@ describe( "esClient", function( ) {
     it( "maxes out at 200 per page", function( ) {
       var h = esClient.searchHash({ per_page: 500 });
       expect( h.size ).to.eq( 200 );
-    });
-
-    it( "can return a custom field list", function( ) {
-      var h = esClient.searchHash({ fields: [ "id", "name" ] });
-      expect( h.fields ).to.deep.eq([ "id", "name" ]);
     });
   });
 
