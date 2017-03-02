@@ -9766,7 +9766,7 @@ CREATE TABLE observations (
     captive boolean DEFAULT false,
     community_taxon_id integer,
     site_id integer,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
     public_positional_accuracy integer,
     mappable boolean DEFAULT false,
     cached_votes_total integer DEFAULT 0,
