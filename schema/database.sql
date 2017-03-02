@@ -9170,6 +9170,7 @@ CREATE TABLE identifications (
     updated_at timestamp without time zone,
     current boolean DEFAULT true,
     taxon_change_id integer,
+    category character varying(255),
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
