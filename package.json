@@ -27,6 +27,7 @@
     "elasticmaps": "inaturalist/elasticmaps",
     "elasticsearch": "^10.1.3",
     "express": "^4.13.4",
+    "grpc": "*",
     "inaturalistjs": "inaturalist/inaturalistjs",
     "jsonwebtoken": "^5.7.0",
     "memory-cache": "^0.1.4",
