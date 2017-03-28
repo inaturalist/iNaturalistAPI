@@ -7,6 +7,7 @@ var expect = require( "chai" ).expect,
     Observation = require( "../../../lib/models/observation" ),
     Project = require( "../../../lib/models/project" ),
     List = require( "../../../lib/models/list" ),
+    UpdateAction = require( "../../../lib/models/update_action" ),
     // testHelper = require( "../../../lib/test_helper" ),
     ObservationsController = require( "../../../lib/controllers/v1/observations_controller" ),
     eq;
@@ -658,4 +659,5 @@ describe( "ObservationsController", function( ) {
       });
     });
   });
+
 });

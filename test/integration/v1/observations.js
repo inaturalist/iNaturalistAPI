@@ -302,6 +302,31 @@ describe( "Observations", function( ) {
         expect( res.err ).to.be.undefined;
       }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "shows updates on obs by viewer and not by viewer by default", function( done ) {
+      const ownerId = 123;
+      var token = jwt.sign({ user_id: ownerId }, config.jwtSecret || "secret", { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/updates" ).set( "Authorization", token ).expect( res => {
+        expect( res.body.results.find( r => r.resource_owner_id === ownerId ) ).to.exist;
+        expect( res.body.results.find( r => r.resource_owner_id !== ownerId ) ).to.exist;
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+    it( "filters on obs by viewer", function( done ) {
+      const ownerId = 123;
+      var token = jwt.sign({ user_id: ownerId }, config.jwtSecret || "secret", { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/updates?observations_by=owner" ).set( "Authorization", token ).expect( res => {
+        expect( res.body.results.find( r => r.resource_owner_id === ownerId ) ).to.exist;
+        expect( res.body.results.find( r => r.resource_owner_id !== ownerId ) ).to.not.exist;
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+    it( "filters on obs by following", function( done ) {
+      const ownerId = 123;
+      var token = jwt.sign({ user_id: ownerId }, config.jwtSecret || "secret", { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/updates?observations_by=following" ).set( "Authorization", token ).expect( res => {
+        expect( res.body.results.find( r => r.resource_owner_id !== ownerId ) ).to.exist;
+        expect( res.body.results.find( r => r.resource_owner_id === ownerId ) ).to.not.exist;
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
   });
 
   describe( "deleted", function( ) {
