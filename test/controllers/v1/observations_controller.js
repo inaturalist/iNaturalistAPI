@@ -2,13 +2,10 @@ var expect = require( "chai" ).expect,
     moment = require( "moment" ),
     _ = require( "underscore" ),
     observations = require( "inaturalistjs" ).observations,
-    util = require( "../../../lib/util" ),
     testHelper = require( "../../../lib/test_helper" ),
     Observation = require( "../../../lib/models/observation" ),
     Project = require( "../../../lib/models/project" ),
     List = require( "../../../lib/models/list" ),
-    UpdateAction = require( "../../../lib/models/update_action" ),
-    // testHelper = require( "../../../lib/test_helper" ),
     ObservationsController = require( "../../../lib/controllers/v1/observations_controller" ),
     eq;
 
