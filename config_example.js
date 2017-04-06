@@ -1,9 +1,17 @@
+var environment = "development";
+if ( global && global.config && global.config.environment ) {
+  environment = global.config.environment;
+}
+if ( process && process.env && process.env.NODE_ENV ) {
+  environment = process.env.NODE_ENV;
+}
 module.exports = {
-  environment: "development",
+  environment: environment,
   elasticsearch: {
     host: "localhost:9200",
     geoPointField: "location",
-    searchIndex: "development_observations"
+    searchIndex: `${environment}_observations`,
+    placeIndex: `${environment}_places`
   },
   database: {
     user: "username",
@@ -11,7 +19,7 @@ module.exports = {
     port: 5432,
     geometry_field: "geom",
     srid: 4326,
-    dbname: "inaturalist_development",
+    dbname: `inaturalist_${environment}`,
     password: "password",
     ssl: false
   },

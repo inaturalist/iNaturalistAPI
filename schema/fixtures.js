@@ -229,6 +229,13 @@
           "private_geojson": { "type": "Point", "coordinates": [ "4", "3" ] },
           "place_guess": "Tangerina",
           "captive": true
+        },
+        {
+          "id": 6,
+          "user": { "id": 333 },
+          "geoprivacy": "private",
+          "private_location": "1.234,1.234",
+          "private_geojson": { "type": "Point", "coordinates": [ "1.234", "1.234" ] }
         }
       ]
     },
