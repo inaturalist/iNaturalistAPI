@@ -54,6 +54,8 @@ describe( "Observations", function( ) {
         // Rails app to return obs 6 to load from the ES index
       } ).set( "Authorization", token ).expect( res => {
         expect( res.body.private_geojson.coordinates[1] ).to.eq( fixtureObs.private_geojson.coordinates[1] );
+        expect( res.body.private_location ).not.to.be.undefined;
+        expect( res.body.private_location ).to.eq( fixtureObs.private_location );
       } ).expect( "Content-Type", /json/ ).expect( 200, done );
     } )
   } );
