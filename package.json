@@ -29,7 +29,6 @@
     "inaturalistjs": "inaturalist/inaturalistjs",
     "jade": "^1.11.0",
     "jsonwebtoken": "^5.7.0",
-    "memory-cache": "^0.1.4",
     "moment": "^2.12.0",
     "moment-timezone": "^0.5.2",
     "newrelic": "^1.25.5",
