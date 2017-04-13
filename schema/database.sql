@@ -9170,6 +9170,7 @@ CREATE TABLE identifications (
     updated_at timestamp without time zone,
     current boolean DEFAULT true,
     taxon_change_id integer,
+    category character varying(255),
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -9766,7 +9767,7 @@ CREATE TABLE observations (
     captive boolean DEFAULT false,
     community_taxon_id integer,
     site_id integer,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
     public_positional_accuracy integer,
     mappable boolean DEFAULT false,
     cached_votes_total integer DEFAULT 0,

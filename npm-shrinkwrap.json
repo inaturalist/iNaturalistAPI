@@ -1184,9 +1184,9 @@
       "resolved": "https://registry.npmjs.org/ignore/-/ignore-2.2.19.tgz"
     },
     "inaturalistjs": {
-      "version": "0.7.1",
+      "version": "0.11.0",
       "from": "inaturalist/inaturalistjs",
-      "resolved": "git://github.com/inaturalist/inaturalistjs.git#110866cccbf645b50e084752a32e7b96574eb820"
+      "resolved": "git://github.com/inaturalist/inaturalistjs.git#4673ebb17b67f9f1b6613601981ea22d667998d5"
     },
     "indent-string": {
       "version": "1.2.2",
