@@ -82,14 +82,18 @@
           "body": "id1",
           "category": "leading",
           "current": true,
-          "current_taxon": false,
+          "current_taxon": true,
           "taxon": {
             "id": 5,
+            "is_active": true,
             "iconic_taxon_id": 1,
             "ancestor_ids": [1,2,3,4,5],
             "min_species_ancestry": "1,2,3,4,5",
-            "rank_level": 10
-          },
+            "rank_level": 10,
+             "min_species_ancestors": [
+              { "id": 1 }, { "id": 2 }, { "id": 3 }, { "id": 4 }, { "id": 5 }
+            ]
+         },
           "observation": {
             "id": 1,
             "user": {
@@ -225,6 +229,13 @@
           "private_geojson": { "type": "Point", "coordinates": [ "4", "3" ] },
           "place_guess": "Tangerina",
           "captive": true
+        },
+        {
+          "id": 6,
+          "user": { "id": 333 },
+          "geoprivacy": "private",
+          "private_location": "1.234,1.234",
+          "private_geojson": { "type": "Point", "coordinates": [ "1.234", "1.234" ] }
         }
       ]
     },
@@ -358,9 +369,49 @@
           "name": "A User"
         }
       ]
+    },
+    "update_actions": {
+      "update_action": [
+        {
+          "id": 1,
+          "subscriber_ids": [123],
+          "resource_id": 1,
+          "resource_type": "Observation",
+          "notifier_type": "Comment",
+          "notifier_id": 1,
+          "notification": "activity",
+          "resource_owner_id": 123,
+          "viewed_subscriber_ids": []
+        },
+        {
+          "id": 2,
+          "subscriber_ids": [123],
+          "resource_id": 2,
+          "resource_type": "Observation",
+          "notifier_type": "Comment",
+          "notifier_id": 2,
+          "notification": "activity",
+          "resource_owner_id": 5,
+          "viewed_subscriber_ids": []
+        }
+      ]
     }
   },
   "postgresql": {
+    "comments": [
+      {
+        "id": 1,
+        "parent_type": "Observation",
+        "parent_id": 1,
+        "body": "I am the very model of a modern major general"
+      },
+      {
+        "id": 2,
+        "parent_type": "Observation",
+        "parent_id": 2,
+        "body": "I've information animal, mineral, and vegetable'"
+      }
+    ],
     "conservation_statuses": [
       {
         "taxon_id": 10001,

@@ -1,4 +1,4 @@
-var observationFieldValues = require( "inaturalistjs" ).observationFieldValues,
+var observationFieldValues = require( "inaturalistjs" ).observation_field_values,
     testHelper = require( "../../../lib/test_helper" ),
     ObservationFieldValuesController =
       require( "../../../lib/controllers/v1/observation_field_values_controller" );

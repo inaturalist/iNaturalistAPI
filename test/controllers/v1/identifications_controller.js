@@ -80,17 +80,17 @@ describe( "IdentificationsController", ( ) => {
 
     it( "filters by without_taxon_id", ( ) => {
       Q( { without_taxon_id: 89 }, ( e, q ) => ( eq = q ) );
-      expect( _.detect( eq.filters, f => {
-        return f.not && f.not.terms && f.not.terms["taxon.ancestor_ids"] &&
-          f.not.terms["taxon.ancestor_ids"][0] === 89;
+      expect( _.detect( eq.inverse_filters, f => {
+        return f.terms && f.terms["taxon.ancestor_ids"] &&
+          f.terms["taxon.ancestor_ids"][0] === 89;
       })).to.not.be.undefined;
     });
 
     it( "filters by without_observation_taxon_id", ( ) => {
       Q( { without_observation_taxon_id: 90 }, ( e, q ) => ( eq = q ) );
-      expect( _.detect( eq.filters, f => {
-        return f.not && f.not.terms && f.not.terms["observation.taxon.ancestor_ids"] &&
-          f.not.terms["observation.taxon.ancestor_ids"][0] === 90;
+      expect( _.detect( eq.inverse_filters, f => {
+        return f.terms && f.terms["observation.taxon.ancestor_ids"] &&
+          f.terms["observation.taxon.ancestor_ids"][0] === 90;
       })).to.not.be.undefined;
     });
 
@@ -103,8 +103,8 @@ describe( "IdentificationsController", ( ) => {
 
     it( "filters by booleans false", ( ) => {
       Q( { is_change: "false" }, ( e, q ) => ( eq = q ) );
-      expect( _.detect( eq.filters, f => {
-        return f.not && f.not.exists && f.not.exists.field === "taxon_change_id";
+      expect( _.detect( eq.inverse_filters, f => {
+        return f.exists && f.exists.field === "taxon_change_id";
       })).to.not.be.undefined;
     });
 
@@ -159,7 +159,7 @@ describe( "IdentificationsController", ( ) => {
       Q( { observed_d1: "2016-01-01T01:00:00", observed_d2: "2017-01-01T01:00:00" },
         ( e, q ) => ( eq = q ) );
       expect( _.detect( eq.filters, f => {
-        return f.or && f.or[0].and[0].range["observation.time_observed_at"];
+        return f.bool && f.bool.should[0].bool.must[0].range["observation.time_observed_at"];
       })).to.not.be.undefined;
     });
 

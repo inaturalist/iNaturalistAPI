@@ -29,7 +29,6 @@
     "express": "^4.13.4",
     "inaturalistjs": "inaturalist/inaturalistjs",
     "jsonwebtoken": "^5.7.0",
-    "memory-cache": "^0.1.4",
     "mime": "*",
     "moment": "^2.12.0",
     "moment-timezone": "^0.5.2",
@@ -51,6 +50,7 @@
     "istanbul": "^0.4.2",
     "mocha": "^2.4.5",
     "mocha-lcov-reporter": "^1.2.0",
+    "nock": "^9.0.11",
     "sinon": "^1.17.3",
     "supertest": "^1.2.0"
   }

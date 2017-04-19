@@ -75,7 +75,7 @@ describe( "Taxon", function( ) {
     it( "returns null given an unknown ID", function( done ) {
       Taxon.findByID( 55555, function( err, tax ) {
         expect( err ).to.eq( null );
-        expect( tax ).to.eq( false );
+        expect( tax ).to.eq( null );
         done( );
       });
     });

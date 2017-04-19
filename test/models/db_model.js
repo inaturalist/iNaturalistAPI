@@ -38,14 +38,14 @@ describe( "DBModel", function( ) {
 
   describe( "fetchHasMany", function( ) {
     it( "does nothing if there are no objects", function( done ) {
-      DBModel.fetchHasMany([ ], User, "observation_id", function( err ) {
+      DBModel.fetchHasMany([ ], User, "observation_id", { }, function( err ) {
         expect( err ).to.be.undefined;
         done( );
       });
     });
 
     it( "does nothing if there are no valid IDs", function( done ) {
-      DBModel.fetchHasMany([{ id: null }], Identification, "observation_id", function( err ) {
+      DBModel.fetchHasMany([{ id: null }], Identification, "observation_id", { }, function( err ) {
         expect( err ).to.be.undefined;
         done( );
       });
@@ -53,7 +53,7 @@ describe( "DBModel", function( ) {
 
     it( "fetches has many associations", function( done ) {
       var o = { id: 1 };
-      DBModel.fetchHasMany([ o ], Identification, "observation_id", function( ) {
+      DBModel.fetchHasMany([ o ], Identification, "observation_id", { }, function( ) {
         expect( o.identifications.length ).to.eq( 2 );
         done( );
       });
@@ -61,7 +61,7 @@ describe( "DBModel", function( ) {
 
     it( "postgresql errors", function( done ) {
       var o = { id: "not an integer" };
-      DBModel.fetchHasMany([ o ], Identification, "observation_id", function( err ) {
+      DBModel.fetchHasMany([ o ], Identification, "observation_id", { }, function( err ) {
         expect( err.message ).to.eq(
           'invalid input syntax for integer: "not an integer"' );
         done( );

@@ -1,11 +1,13 @@
 "use strict";
 var expect = require( "chai" ).expect,
     request = require( "supertest" ),
+    nock = require( "nock" ),
     fs = require( "fs" ),
     jwt = require( "jsonwebtoken" ),
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
     config = require( "../../../config.js" ),
-    app = iNaturalistAPI.server( );
+    app = iNaturalistAPI.server( ),
+    _ = require( "underscore" );
 
 var fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
@@ -36,6 +38,27 @@ describe( "Observations", function( ) {
       }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
   });
+
+  describe( "create", function( ) {
+    it( "returns private coordinates when geoprivacy is private", function( done ) {
+      var fixtureObs = fixtures.elasticsearch.observations.observation[5];
+      expect( fixtureObs.geoprivacy ).to.eq( "private" );
+      expect( fixtureObs.location ).to.be.undefined;
+      var token = jwt.sign( { user_id: 333 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      nock( "http://localhost:3000" ).
+        post( "/observations" ).
+        reply( 200, [ { id: fixtureObs.id } ] );
+      request( app ).post( "/v1/observations", {
+        // it doesn't really matter what we post since we're just stubbing the
+        // Rails app to return obs 6 to load from the ES index
+      } ).set( "Authorization", token ).expect( res => {
+        expect( res.body.private_geojson.coordinates[1] ).to.eq( fixtureObs.private_geojson.coordinates[1] );
+        expect( res.body.private_location ).not.to.be.undefined;
+        expect( res.body.private_location ).to.eq( fixtureObs.private_location );
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } )
+  } );
 
   describe( "search", function( ) {
     it( "returns json", function( done ) {
@@ -138,9 +161,8 @@ describe( "Observations", function( ) {
     it( "does not strips place guess from obscured observations", function( done ) {
       request( app ).get( "/v1/observations?geoprivacy=obscured_private" ).
       expect( function( res ) {
-        expect( res.body.total_results ).to.eq( 1 );
-        expect( res.body.results[ 0 ].id ).to.eq( 333 );
-        expect( res.body.results[ 0 ].place_guess ).to.eq( "Idaho" );
+        var o = _.find( res.body.results, function( r ) { return r.id === 333; } );
+        expect( o.place_guess ).to.eq( "Idaho" );
       }).expect( 200, done );
     });
 
@@ -302,6 +324,31 @@ describe( "Observations", function( ) {
         expect( res.err ).to.be.undefined;
       }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "shows updates on obs by viewer and not by viewer by default", function( done ) {
+      const ownerId = 123;
+      var token = jwt.sign({ user_id: ownerId }, config.jwtSecret || "secret", { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/updates" ).set( "Authorization", token ).expect( res => {
+        expect( res.body.results.find( r => r.resource_owner_id === ownerId ) ).to.exist;
+        expect( res.body.results.find( r => r.resource_owner_id !== ownerId ) ).to.exist;
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+    it( "filters on obs by viewer", function( done ) {
+      const ownerId = 123;
+      var token = jwt.sign({ user_id: ownerId }, config.jwtSecret || "secret", { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/updates?observations_by=owner" ).set( "Authorization", token ).expect( res => {
+        expect( res.body.results.find( r => r.resource_owner_id === ownerId ) ).to.exist;
+        expect( res.body.results.find( r => r.resource_owner_id !== ownerId ) ).to.not.exist;
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+    it( "filters on obs by following", function( done ) {
+      const ownerId = 123;
+      var token = jwt.sign({ user_id: ownerId }, config.jwtSecret || "secret", { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/updates?observations_by=following" ).set( "Authorization", token ).expect( res => {
+        expect( res.body.results.find( r => r.resource_owner_id !== ownerId ) ).to.exist;
+        expect( res.body.results.find( r => r.resource_owner_id === ownerId ) ).to.not.exist;
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
   });
 
   describe( "deleted", function( ) {

@@ -19,9 +19,9 @@ describe( "User", function( ) {
       });
     });
 
-    it( "returns false for missing users", function( done ) {
+    it( "returns undefined for missing users", function( done ) {
       User.findByLogin( "nonsense", function( err, u ) {
-        expect( u ).to.be.false;
+        expect( u ).to.be.undefined;
         done( );
       });
     });
