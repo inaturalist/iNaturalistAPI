@@ -1,7 +1,6 @@
 "use strict";
 var expect = require( "chai" ).expect,
     request = require( "supertest" ),
-    util = require( "../../../lib/util"),
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
     app = iNaturalistAPI.server( );
 
