@@ -36,7 +36,6 @@
     "newrelic": "^1.25.5",
     "node.extend": "^1.1.5",
     "pg": "^4.5.1",
-    "pug": "2.0.0-beta8",
     "request": "^2.81.0",
     "squel": "^4.3.3",
     "underscore": "^1.8.3",
