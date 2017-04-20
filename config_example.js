@@ -24,5 +24,10 @@ module.exports = {
     ssl: false
   },
   tileSize: 512,
-  debug: true
+  debug: true,
+  imageProcesing: {
+    taxaFilePath: "",
+    uploadsDir: "",
+    tensorappURL: ""
+  }
 };
