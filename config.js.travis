@@ -12,5 +12,6 @@ module.exports = {
     geometry_field: "geom",
     dbname: "inaturalist_test"
   },
+  imageProcesing: { },
   debug: true
 }
