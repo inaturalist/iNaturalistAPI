@@ -91,13 +91,13 @@ describe( "ObservationsController", function( ) {
     it( "can apply inverse project rules", function( done ) {
       Project.findByID( 543, function( err, p ) {
         Q( { inat: { not_matching_project_rules_for: p } }, function( e, q ) {
-          expect( q.inverse_filters ).to.include({ terms: { place_ids: [ 222, 333 ] }});
-          expect( q.inverse_filters ).to.include({ terms: { "taxon.ancestor_ids": [ 444, 555, 876, 987 ] }});
-          expect( q.inverse_filters ).to.include({ term: { captive: false }});
-          expect( q.inverse_filters ).to.include({ exists: { field: "photos.url" }});
-          expect( q.inverse_filters ).to.include({ exists: { field: "sounds" }});
-          expect( q.inverse_filters ).to.include({ exists: { field: "geojson" }});
-          expect( q.inverse_filters ).to.include({ exists: { field: "taxon" }});
+          expect( q.grouped_inverse_filters ).to.include({ terms: { place_ids: [ 222, 333 ] }});
+          expect( q.grouped_inverse_filters ).to.include({ terms: { "taxon.ancestor_ids": [ 444, 555, 876, 987 ] }});
+          expect( q.grouped_inverse_filters ).to.include({ term: { captive: false }});
+          expect( q.grouped_inverse_filters ).to.include({ exists: { field: "photos.url" }});
+          expect( q.grouped_inverse_filters ).to.include({ exists: { field: "sounds" }});
+          expect( q.grouped_inverse_filters ).to.include({ exists: { field: "geojson" }});
+          expect( q.grouped_inverse_filters ).to.include({ exists: { field: "taxon" }});
           // plus a complicated date filter
           done( );
         });
