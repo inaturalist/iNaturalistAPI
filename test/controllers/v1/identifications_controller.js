@@ -159,7 +159,7 @@ describe( "IdentificationsController", ( ) => {
       Q( { observed_d1: "2016-01-01T01:00:00", observed_d2: "2017-01-01T01:00:00" },
         ( e, q ) => ( eq = q ) );
       expect( _.detect( eq.filters, f => {
-        return f.bool && f.bool.should[0].bool.must[0].range["observation.time_observed_at"];
+        return f.bool && f.bool.should[0].bool.filter[0].range["observation.time_observed_at"];
       })).to.not.be.undefined;
     });
 

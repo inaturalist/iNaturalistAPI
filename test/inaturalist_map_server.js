@@ -153,7 +153,7 @@ describe( "InaturalistMapServer", function( ) {
       stubReq.params.style = "summary";
       MapServer.prepareStyle( stubReq, function( ) {
         expect( stubReq.style ).to.eql(
-          MapStyles.coloredHeatmap( "#6E6E6E", 8, 0.2 ) );
+          MapStyles.coloredHeatmap( { color: "#6E6E6E", width: 8, opacity: 0.2 } ) );
         done( );
       });
     });
@@ -171,7 +171,7 @@ describe( "InaturalistMapServer", function( ) {
       stubReq.query.color = "#123FED";
       MapServer.prepareStyle( stubReq, function( ) {
         expect( stubReq.style ).to.eql(
-          MapStyles.coloredHeatmap( stubReq.query.color ) );
+          MapStyles.coloredHeatmap( { color: stubReq.query.color } ) );
         done( );
       });
     });
@@ -181,7 +181,7 @@ describe( "InaturalistMapServer", function( ) {
       stubReq.inat = { taxon: { iconic_taxon_id: Taxon.iconicTaxonID( "Animalia" ) } };
       MapServer.prepareStyle( stubReq, function( ) {
         expect( stubReq.style ).to.eql(
-          MapStyles.coloredHeatmap( "#1E90FF" ) );
+          MapStyles.coloredHeatmap( { color: "#1E90FF" } ) );
         done( );
       });
     });

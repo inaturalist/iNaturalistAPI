@@ -723,9 +723,9 @@
       "resolved": "https://registry.npmjs.org/ejs/-/ejs-2.4.1.tgz"
     },
     "elasticmaps": {
-      "version": "0.3.0",
+      "version": "0.3.1",
       "from": "inaturalist/elasticmaps",
-      "resolved": "git://github.com/inaturalist/elasticmaps.git#3c61d9ea0e2332fa8e53c5b165993bf764dc923e"
+      "resolved": "git://github.com/inaturalist/elasticmaps.git#be953d513b1ae58dbf42d045bc876ac2447a06b6"
     },
     "elasticsearch": {
       "version": "10.1.3",
