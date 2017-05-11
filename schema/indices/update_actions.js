@@ -3,8 +3,7 @@
     "dynamic" : "true",
     "properties" : {
       "created_at" : {
-        "type" : "date",
-        "format" : "strict_date_optional_time||epoch_millis"
+        "type" : "date"
       },
       "id" : {
         "type" : "long"
