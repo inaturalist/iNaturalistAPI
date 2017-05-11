@@ -93,9 +93,9 @@ describe( "esClient", function( ) {
       expect( h.size ).to.eq( 30 );
     });
 
-    it( "maxes out at 200 per page", function( ) {
-      var h = esClient.searchHash({ per_page: 500 });
-      expect( h.size ).to.eq( 200 );
+    it( "maxes out at 10000 per page", function( ) {
+      var h = esClient.searchHash({ per_page: 10001 });
+      expect( h.size ).to.eq( 30 );
     });
   });
 
