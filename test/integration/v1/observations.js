@@ -233,8 +233,22 @@ describe( "Observations", ( ) => {
       } ).expect( 200, done );
     } );
 
-    it( "finds field values", done => {
+    it( "finds observations with fields", done => {
       request( app ).get( "/v1/observations?field:Habitat" ).
+      expect( res => {
+        expect( _.map( res.body.results, "id" ) ).to.contain( 1 );
+      }).expect( 200, done );
+    } );
+
+    it( "finds observations with fields and values ", done => {
+      request( app ).get( "/v1/observations?field:Habitat=marine" ).
+      expect( res => {
+        expect( _.map( res.body.results, "id" ) ).to.contain( 1 );
+      }).expect( 200, done );
+    } );
+
+    it( "finds observations with fields and values case-insensitively", done => {
+      request( app ).get( "/v1/observations?field:hAbiTat=MaRinE" ).
       expect( res => {
         expect( _.map( res.body.results, "id" ) ).to.contain( 1 );
       }).expect( 200, done );
