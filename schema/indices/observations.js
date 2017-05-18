@@ -286,11 +286,19 @@
           "name": {
             "type": "keyword"
           },
+          "name_ci": {
+            "type": "text",
+            "analyzer": "keyword_analyzer"
+          },
           "uuid": {
             "type": "keyword"
           },
           "value": {
             "type": "keyword"
+          },
+          "value_ci": {
+            "type": "text",
+            "analyzer": "keyword_analyzer"
           }
         }
       },

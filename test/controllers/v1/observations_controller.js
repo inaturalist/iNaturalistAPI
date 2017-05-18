@@ -474,14 +474,14 @@ describe( "ObservationsController", function( ) {
     it( "filters by observation fields", function( ) {
       Q( { "field:habitat": null }, function( e, q ) { eq = q; } );
       expect( eq.filters[0].nested.query.bool.filter.length ).to.eql( 1 );
-      expect( eq.filters[0].nested.query.bool.filter[0].match[ "ofvs.name"] ).to.eql( "habitat" );
+      expect( eq.filters[0].nested.query.bool.filter[0].match[ "ofvs.name_ci"] ).to.eql( "habitat" );
     });
 
     it( "filters by observation field values", function( ) {
       Q( { "field:habitat": "marine" }, function( e, q ) { eq = q; } );
       expect( eq.filters[0].nested.query.bool.filter.length ).to.eql( 2 );
-      expect( eq.filters[0].nested.query.bool.filter[0].match[ "ofvs.name"] ).to.eql( "habitat" );
-      expect( eq.filters[0].nested.query.bool.filter[1].match[ "ofvs.value"] ).to.eql( "marine" );
+      expect( eq.filters[0].nested.query.bool.filter[0].match[ "ofvs.name_ci"] ).to.eql( "habitat" );
+      expect( eq.filters[0].nested.query.bool.filter[1].match[ "ofvs.value_ci"] ).to.eql( "marine" );
     });
 
     it( "filters by conservation status", function( ) {
