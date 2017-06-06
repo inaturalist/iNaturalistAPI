@@ -76,14 +76,14 @@ describe( "esClient", function( ) {
           coordinates: [ [ 5, -90 ], [ 180, 90 ] ] }}}});
     });
 
-    it( "splits envelopes that cross the dateline into an or query", function( ) {
+    it( "splits envelopes that cross the dateline into a bool should query", function( ) {
       expect( esClient.envelopeFilter( { envelope: { loc: { nelng: -10, swlng: 30 } } }) ).to.
-        eql({ or: [
+        eql({ bool: { should: [
           { geo_shape: { loc: { shape: { type: "envelope",
           coordinates: [ [ 30, -90 ], [ 180, 90 ] ] }}}},
           { geo_shape: { loc: { shape: { type: "envelope",
           coordinates: [ [ -180, -90 ], [ -10, 90 ] ] }}}}
-        ]});
+        ]}});
     });
   });
 
