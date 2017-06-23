@@ -222,7 +222,7 @@ describe( "IdentificationsController", ( ) => {
 
   describe( "speciesCounts", ( ) => {
     it( "returns taxa", done => {
-      IdentificationsController.speciesCounts( { query: { } }, ( e, r ) => {
+      IdentificationsController.speciesCounts( { query: { } }, { }, ( e, r ) => {
         expect(r.total_results).to.eq(2);
         expect(r.results[0].count).to.above(0);
         expect(r.results[0].taxon.id).to.eq(5);
