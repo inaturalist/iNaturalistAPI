@@ -7,6 +7,7 @@ var expect = require( "chai" ).expect,
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
     config = require( "../../../config.js" ),
     app = iNaturalistAPI.server( ),
+    moment = require( "moment" ),
     _ = require( "underscore" );
 
 var fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
@@ -69,17 +70,24 @@ describe( "Observations", ( ) => {
     it( "looks up observation users from the DB", done => {
       request( app ).get( "/v1/observations" ).
       expect( res => {
-        expect( res.body.total_results ).to.eq( fixtures.elasticsearch.observations.observation.length );
-        expect( res.body.results[ 0 ].id ).to.eq( 2 );
-        expect( res.body.results[ 0 ].user.id ).to.eq( 5 );
-        expect( res.body.results[ 0 ].user.login ).to.eq( "b-user" );
+        var fixtureObs = _.sortBy(
+          fixtures.elasticsearch.observations.observation,
+          o => o.created_at ? moment( o.created_at ) : moment( "0000-01-01" )
+        ).reverse( );
+        var dbUsers = fixtures.postgresql.users;
+        expect( res.body.total_results ).to.eq( fixtureObs.length );
+        expect( res.body.results[ 0 ].id ).to.eq( fixtureObs[0].id );
+        expect( res.body.results[ 0 ].user.id ).to.eq( fixtureObs[0].user.id );
+        var dbUser0 = _.find( dbUsers, u => u.id === fixtureObs[0].user.id );
+        var dbUser1 = _.find( dbUsers, u => u.id === fixtureObs[1].user.id );
+        expect( res.body.results[ 0 ].user.login ).to.eq( dbUser0.login );
         // identifications are not part of the default search response
         expect( res.body.results[ 0 ].identifications ).to.be.undefined;
-        expect( res.body.results[ 1 ].id ).to.eq( 1 );
-        expect( res.body.results[ 1 ].user.id ).to.eq( 123 );
+        expect( res.body.results[ 1 ].id ).to.eq( fixtureObs[1].id );
+        expect( res.body.results[ 1 ].user.id ).to.eq( fixtureObs[1].user.id );
         // login comes from the DB
-        expect( res.body.results[ 1 ].user.login ).to.eq( "a-user" );
-        expect( res.body.results[ 1 ].user.name ).to.eq( "A User" );
+        expect( res.body.results[ 1 ].user.login ).to.eq( dbUser1.login );
+        expect( res.body.results[ 1 ].user.name ).to.eq( dbUser1.name );
       }).expect( 200, done );
     });
 
@@ -253,6 +261,45 @@ describe( "Observations", ( ) => {
         expect( _.map( res.body.results, "id" ) ).to.contain( 1 );
       }).expect( 200, done );
     } );
+
+    it( "filters by term_id", done => {
+      request( app ).get( "/v1/observations?term_id=1" ).
+      expect( res => {
+        expect( res.body.results.map( r => r.id ) ).to.contain( 7 );
+        expect( res.body.results.map( r => r.id ) ).not.to.contain( 6 );
+      } ).expect( 200, done );
+    } );
+    
+    it( "filters by term_value_id", done => {
+      request( app ).get( "/v1/observations?term_id=1&term_value_id=2" ).
+      expect( res => {
+        expect( res.body.results.map( r => r.id ) ).to.contain( 8 );
+        expect( res.body.results.map( r => r.id ) ).not.to.contain( 7 );
+        expect( res.body.results.map( r => r.id ) ).not.to.contain( 6 );
+      } ).expect( 200, done );
+    } );
+
+    it( "filters by without_term_id", done => {
+      request( app ).get( "/v1/observations?without_term_id=1" ).
+      expect( res => {
+        // not annotated with this term
+        expect( res.body.results.map( r => r.id ) ).to.contain( 6 );
+        // annotated with this term
+        expect( res.body.results.map( r => r.id ) ).not.to.contain( 7 );
+        // annotated with this term but failing votes
+        expect( res.body.results.map( r => r.id ) ).not.to.contain( 9 );
+      } ).expect( 200, done );
+    } );
+
+    it( "filters by without_term_value_id", done => {
+      request( app ).get( "/v1/observations?term_id=1&without_term_value_id=1" ).
+      expect( res => {
+        expect( res.body.results.map( r => r.id ) ).to.contain( 8 );
+        expect( res.body.results.map( r => r.id ) ).not.to.contain( 7 );
+        expect( res.body.results.map( r => r.id ) ).not.to.contain( 6 );
+      } ).expect( 200, done );
+    } );
+
   });
 
   describe( "histogram", ( ) => {
