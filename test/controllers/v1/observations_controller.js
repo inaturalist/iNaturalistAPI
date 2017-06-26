@@ -91,13 +91,13 @@ describe( "ObservationsController", function( ) {
     it( "can apply inverse project rules", function( done ) {
       Project.findByID( 543, function( err, p ) {
         Q( { inat: { not_matching_project_rules_for: p } }, function( e, q ) {
-          expect( q.inverse_filters ).to.include({ terms: { place_ids: [ 222, 333 ] }});
-          expect( q.inverse_filters ).to.include({ terms: { "taxon.ancestor_ids": [ 444, 555, 876, 987 ] }});
-          expect( q.inverse_filters ).to.include({ term: { captive: false }});
-          expect( q.inverse_filters ).to.include({ exists: { field: "photos.url" }});
-          expect( q.inverse_filters ).to.include({ exists: { field: "sounds" }});
-          expect( q.inverse_filters ).to.include({ exists: { field: "geojson" }});
-          expect( q.inverse_filters ).to.include({ exists: { field: "taxon" }});
+          expect( q.grouped_inverse_filters ).to.include({ terms: { place_ids: [ 222, 333 ] }});
+          expect( q.grouped_inverse_filters ).to.include({ terms: { "taxon.ancestor_ids": [ 444, 555, 876, 987 ] }});
+          expect( q.grouped_inverse_filters ).to.include({ term: { captive: false }});
+          expect( q.grouped_inverse_filters ).to.include({ exists: { field: "photos.url" }});
+          expect( q.grouped_inverse_filters ).to.include({ exists: { field: "sounds" }});
+          expect( q.grouped_inverse_filters ).to.include({ exists: { field: "geojson" }});
+          expect( q.grouped_inverse_filters ).to.include({ exists: { field: "taxon" }});
           // plus a complicated date filter
           done( );
         });
@@ -403,11 +403,11 @@ describe( "ObservationsController", function( ) {
       Q( { d1: "2015-01-01T00:00:00+00:00", d2: "2015-02-02T23:59:59+00:00" },
         function( e, q ) { eq = q; } );
       var shoulds = eq.filters[0].bool.should;
-      expect( shoulds[0].bool.must[0].range.time_observed_at ).to.eql(
+      expect( shoulds[0].bool.filter[0].range.time_observed_at ).to.eql(
         { gte: "2015-01-01T00:00:00+00:00",
           lte: "2015-02-02T23:59:59+00:00" });
-      expect( shoulds[0].bool.must[1].exists.field ).to.eql( "time_observed_at" );
-      expect( shoulds[1].bool.must[0].range["observed_on_details.date"] ).to.eql(
+      expect( shoulds[0].bool.filter[1].exists.field ).to.eql( "time_observed_at" );
+      expect( shoulds[1].bool.filter[0].range["observed_on_details.date"] ).to.eql(
         { gte: "2015-01-01",
           lte: "2015-02-02" });
       expect( shoulds[1].bool.must_not[0].exists.field ).to.eql( "time_observed_at" );
@@ -473,32 +473,32 @@ describe( "ObservationsController", function( ) {
 
     it( "filters by observation fields", function( ) {
       Q( { "field:habitat": null }, function( e, q ) { eq = q; } );
-      expect( eq.filters[0].nested.query.bool.must.length ).to.eql( 1 );
-      expect( eq.filters[0].nested.query.bool.must[0].match[ "ofvs.name"] ).to.eql( "habitat" );
+      expect( eq.filters[0].nested.query.bool.filter.length ).to.eql( 1 );
+      expect( eq.filters[0].nested.query.bool.filter[0].match[ "ofvs.name_ci"] ).to.eql( "habitat" );
     });
 
     it( "filters by observation field values", function( ) {
       Q( { "field:habitat": "marine" }, function( e, q ) { eq = q; } );
-      expect( eq.filters[0].nested.query.bool.must.length ).to.eql( 2 );
-      expect( eq.filters[0].nested.query.bool.must[0].match[ "ofvs.name"] ).to.eql( "habitat" );
-      expect( eq.filters[0].nested.query.bool.must[1].match[ "ofvs.value"] ).to.eql( "marine" );
+      expect( eq.filters[0].nested.query.bool.filter.length ).to.eql( 2 );
+      expect( eq.filters[0].nested.query.bool.filter[0].match[ "ofvs.name_ci"] ).to.eql( "habitat" );
+      expect( eq.filters[0].nested.query.bool.filter[1].match[ "ofvs.value_ci"] ).to.eql( "marine" );
     });
 
     it( "filters by conservation status", function( ) {
       Q( { cs: "endangered" }, function( e, q ) { eq = q; } );
       expect( eq.filters[0].nested.query.bool.must_not[0].exists.field ).
         to.eql( "taxon.statuses.place_id" );
-      expect( eq.filters[0].nested.query.bool.must[0].
+      expect( eq.filters[0].nested.query.bool.filter[0].
         terms["taxon.statuses.status" ][0] ).to.eql( "endangered" );
     });
 
     it( "filters by conservation status with a place", function( ) {
       Q( { cs: "endangered", place_id: 1 }, function( e, q ) { eq = q; } );
-      expect( eq.filters[1].nested.query.bool.must[1].bool.should[0].
+      expect( eq.filters[1].nested.query.bool.filter[1].bool.should[0].
         terms["taxon.statuses.place_id"] ).to.eql( [ 1 ] );
-      expect( eq.filters[1].nested.query.bool.must[1].bool.should[1].
+      expect( eq.filters[1].nested.query.bool.filter[1].bool.should[1].
         bool.must_not.exists.field ).to.eql( "taxon.statuses.place_id" );
-      expect( eq.filters[1].nested.query.bool.must[0].
+      expect( eq.filters[1].nested.query.bool.filter[0].
         terms["taxon.statuses.status" ][0] ).to.eql( "endangered" );
     });
 
@@ -506,7 +506,7 @@ describe( "ObservationsController", function( ) {
       Q( { csi: "en" }, function( e, q ) { eq = q; } );
       expect( eq.filters[0].nested.query.bool.must_not[0].exists.field ).
         to.eql( "taxon.statuses.place_id" );
-      expect( eq.filters[0].nested.query.bool.must[0].
+      expect( eq.filters[0].nested.query.bool.filter[0].
         terms["taxon.statuses.iucn" ][0] ).to.eql( 40 );
     });
 
@@ -519,7 +519,7 @@ describe( "ObservationsController", function( ) {
       Q( { csa: "natureserve" }, function( e, q ) { eq = q; } );
       expect( eq.filters[0].nested.query.bool.must_not[0].exists.field ).
         to.eql( "taxon.statuses.place_id" );
-      expect( eq.filters[0].nested.query.bool.must[0].
+      expect( eq.filters[0].nested.query.bool.filter[0].
         terms["taxon.statuses.authority" ][0] ).to.eql( "natureserve" );
     });
 
@@ -567,7 +567,7 @@ describe( "ObservationsController", function( ) {
 
     it( "filters by changed_since date", function( ) {
       Q( { changed_since: "2015-01-02T00:00:00+00:00" }, function( e, q ) { eq = q; } );
-      expect( eq.filters[0].nested.query.bool.must[0] ).to.eql({
+      expect( eq.filters[0].nested.query.bool.filter[0] ).to.eql({
         range: { "field_change_times.changed_at": {
           gte: "2015-01-02T00:00:00+00:00" } }
       });
@@ -581,7 +581,7 @@ describe( "ObservationsController", function( ) {
     it( "filters by changed_fields", function( ) {
       Q( { changed_since: "2015-01-02T00:00:00+00:00", changed_fields: "description" },
         function( e, q ) { eq = q; } );
-      expect( eq.filters[0].nested.query.bool.must[1] ).to.eql({
+      expect( eq.filters[0].nested.query.bool.filter[1] ).to.eql({
         terms: { "field_change_times.field_name": [ "description" ] }
       });
     });
@@ -589,7 +589,7 @@ describe( "ObservationsController", function( ) {
     it( "filters by changed_fields", function( ) {
       Q( { changed_since: "2015-01-02T00:00:00+00:00", change_project_id: "4" },
         function( e, q ) { eq = q; } );
-      expect( eq.filters[0].nested.query.bool.must[1].or[0] ).to.eql({
+      expect( eq.filters[0].nested.query.bool.filter[1].or[0] ).to.eql({
         terms: { "field_change_times.project_id": [ "4" ] }
       });
     });

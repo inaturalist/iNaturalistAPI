@@ -1,43 +1,39 @@
 {
-  "update_action" : {
-    "dynamic" : "true",
-    "properties" : {
-      "created_at" : {
-        "type" : "date",
-        "format" : "strict_date_optional_time||epoch_millis"
+  "update_action": {
+    "dynamic": "true",
+    "properties": {
+      "created_at": {
+        "type": "date"
       },
-      "id" : {
-        "type" : "long"
+      "id": {
+        "type": "long"
       },
-      "notification" : {
-        "type" : "string",
-        "analyzer" : "keyword_analyzer"
+      "notification": {
+        "type": "keyword"
       },
-      "notifier" : {
-        "type" : "string",
-        "analyzer" : "keyword_analyzer"
+      "notifier": {
+        "type": "keyword"
       },
-      "notifier_id" : {
-        "type" : "long"
+      "notifier_id": {
+        "type": "long"
       },
-      "notifier_type" : {
-        "type" : "string"
+      "notifier_type": {
+        "type": "keyword"
       },
-      "resource_id" : {
-        "type" : "long"
+      "resource_id": {
+        "type": "long"
       },
-      "resource_owner_id" : {
-        "type" : "long"
+      "resource_owner_id": {
+        "type": "long"
       },
-      "resource_type" : {
-        "type" : "string",
-        "analyzer" : "keyword_analyzer"
+      "resource_type": {
+        "type": "keyword"
       },
-      "subscriber_ids" : {
-        "type" : "long"
+      "subscriber_ids": {
+        "type": "long"
       },
-      "viewed_subscriber_ids" : {
-        "type" : "long"
+      "viewed_subscriber_ids": {
+        "type": "long"
       }
     }
   }

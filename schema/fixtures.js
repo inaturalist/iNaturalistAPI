@@ -162,6 +162,10 @@
           "id": 1,
           "user": { "id": 123 },
           "created_at": "2015-12-31T00:00:00",
+          "ofvs": [ {
+            "name_ci": "Habitat",
+            "value_ci": "marine"
+          } ],
           "private_location": "1,2",
           "taxon": {
             "id": 5,
