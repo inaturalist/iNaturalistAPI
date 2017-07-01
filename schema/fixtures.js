@@ -240,6 +240,58 @@
           "geoprivacy": "private",
           "private_location": "1.234,1.234",
           "private_geojson": { "type": "Point", "coordinates": [ "1.234", "1.234" ] }
+        },
+        {
+          "id": 7,
+          "user": { "id": 5 },
+          "created_at": "2001-06-01T01:00:00",
+          "annotations": [
+            {
+              "controlled_attribute_id": 1,
+              "controlled_value_id": 1,
+              "concatenated_attr_val": "1|1",
+              "vote_score": 1.0,
+              "user_id": 5,
+              "votes": []
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "user": { "id": 5 },
+          "created_at": "2001-06-01T01:00:00",
+          "annotations": [
+            {
+              "controlled_attribute_id": 1,
+              "controlled_value_id": 2,
+              "concatenated_attr_val": "1|2",
+              "vote_score": 1.0,
+              "user_id": 5,
+              "votes": []
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "user": { "id": 5 },
+          "created_at": "2001-06-01T01:00:00",
+          "annotations": [
+            {
+              "controlled_attribute_id": 1,
+              "controlled_value_id": 2,
+              "concatenated_attr_val": "1|2",
+              "vote_score": -1,
+              "user_id": 5,
+              "votes": [
+                {
+                  "vote_flag": false,
+                  "user": {
+                    "id": 5
+                  }
+                }
+              ]
+            }
+          ]
         }
       ]
     },
