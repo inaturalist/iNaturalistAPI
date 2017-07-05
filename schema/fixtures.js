@@ -321,7 +321,11 @@
           "id": 1001,
           "ancestor_ids": [ 1001 ],
           "name": "Life",
-          "names": [{ "name_autocomplete": "Life", "exact": "Life" }],
+          "names": [{
+            "name_autocomplete": "Life",
+            "exact": "Life",
+            "exact_ci": "Life"
+          }],
           "observations_count": 50,
           "is_active": true
         },
@@ -329,7 +333,11 @@
           "id": 1,
           "name": "Los",
           "ancestor_ids": [ 1001, 1 ],
-          "names": [{ "name_autocomplete": "Los", "exact": "Los" }],
+          "names": [{
+            "name_autocomplete": "Los",
+            "exact": "Los",
+            "exact_ci": "Los"
+          }],
           "observations_count": 50,
           "is_active": true,
           "statuses": [ { "place_id": 432, "iucn": 30, "authority": "IUCN Red List", "status": "VU" } ],
@@ -340,7 +348,11 @@
           "name": "Los",
           "parent_id": 1,
           "ancestor_ids": [ 1001, 1, 2 ],
-          "names": [{ "name_autocomplete": "Los", "exact": "Los" }],
+          "names": [{
+            "name_autocomplete": "Los",
+            "exact": "Los",
+            "exact_ci": "Los"
+          }],
           "observations_count": 50,
           "is_active": false
         },
@@ -349,7 +361,11 @@
           "name": "Los lobos",
           "parent_id": 2,
           "ancestor_ids": [ 1001, 1, 2, 3 ],
-          "names": [{ "name_autocomplete": "Los lobos", "exact": "Los lobos" }],
+          "names": [{
+            "name_autocomplete": "Los lobos",
+            "exact": "Los lobos",
+            "exact_ci": "Los lobos"
+          }],
           "observations_count": 100,
           "is_active": true,
           "taxon_changes_count": 1,
@@ -357,7 +373,11 @@
         },
         {
           "id": 4,
-          "names": [{ "name_autocomplete": "眼紋疏廣蠟蟬", "exact": "眼紋疏廣蠟蟬" }],
+          "names": [{
+            "name_autocomplete": "眼紋疏廣蠟蟬",
+            "exact": "眼紋疏廣蠟蟬",
+            "exact_ci": "眼紋疏廣蠟蟬"
+          }],
           "observations_count": 200,
           "is_active": true
         },

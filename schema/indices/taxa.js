@@ -80,8 +80,11 @@
       "names" : {
         "properties" : {
           "exact" : {
-            "type" : "string",
-            "analyzer" : "keyword_analyzer"
+            "type" : "keyword"
+          },
+          "exact_ci": {
+            "type": "text",
+            "analyzer": "keyword_analyzer"
           },
           "is_valid" : {
             "type" : "boolean"
