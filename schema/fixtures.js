@@ -302,10 +302,10 @@
           "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] },
           "project_observations": [
             {
+              "id": 101,
               "user_id": 1,
               "uuid": "8cf0282d-c6f3-4947-9905-4937def371f4",
-              "project_id": 1,
-              "curator_coordinate_access": true
+              "project_id": 1
             }
           ]
         },
@@ -318,10 +318,10 @@
           "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] },
           "project_observations": [
             {
+              "id": 111,
               "user_id": 1,
               "uuid": "902996e7-6d0d-40b8-9dc7-1384d0bc2ec7",
-              "project_id": 2,
-              "curator_coordinate_access": false
+              "project_id": 2
             }
           ]
         }
@@ -613,6 +613,38 @@
         "id": 432,
         "name": "a-place",
         "display_name": "a-place"
+      }
+    ],
+    "preferences": [
+      {
+        "id": 101,
+        "name": "curator_coordinate_access",
+        "owner_id": 101,
+        "owner_type": "ProjectObservation",
+        "value": "t"
+      },
+      {
+        "id": 111,
+        "name": "curator_coordinate_access",
+        "owner_id": 111,
+        "owner_type": "ProjectObservation",
+        "value": "f"
+      }
+    ],
+    "project_observations": [
+      {
+        "id": 101,
+        "observation_id": 10,
+        "user_id": 1,
+        "uuid": "8cf0282d-c6f3-4947-9905-4937def371f4",
+        "project_id": 1
+      },
+      {
+        "id": 111,
+        "observation_id": 11,
+        "user_id": 1,
+        "uuid": "902996e7-6d0d-40b8-9dc7-1384d0bc2ec7",
+        "project_id": 2
       }
     ],
     "project_users": [
