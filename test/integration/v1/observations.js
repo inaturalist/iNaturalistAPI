@@ -31,6 +31,22 @@ describe( "Observations", ( ) => {
       }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
 
+    it( "shows authenticated project curators private info if they have access", done => {
+      var token = jwt.sign({ user_id: 123 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/10" ).set( "Authorization", token ).expect( ( res ) => {
+        expect( res.body.results[ 0 ].private_location ).to.not.be.undefined;
+      }).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+
+    it( "does not show authenticated project curators private info if they do not have access", done => {
+      var token = jwt.sign({ user_id: 123 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/11" ).set( "Authorization", token ).expect( ( res ) => {
+        expect( res.body.results[ 0 ].private_location ).to.be.undefined;
+      }).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+
     it( "does not show authenticated users others' private info", done => {
       var token = jwt.sign({ user_id: 123 }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
