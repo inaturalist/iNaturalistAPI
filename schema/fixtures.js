@@ -292,6 +292,38 @@
               ]
             }
           ]
+        },
+        {
+          "id": 10,
+          "user": { "id": 5 },
+          "created_at": "2001-06-01T01:00:00",
+          "private_location": "1,2",
+          "project_ids": [ 1 ],
+          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] },
+          "project_observations": [
+            {
+              "user_id": 1,
+              "uuid": "8cf0282d-c6f3-4947-9905-4937def371f4",
+              "project_id": 1,
+              "curator_coordinate_access": true
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "user": { "id": 5 },
+          "created_at": "2001-06-01T01:00:00",
+          "private_location": "1,2",
+          "project_ids": [ 2 ],
+          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] },
+          "project_observations": [
+            {
+              "user_id": 1,
+              "uuid": "902996e7-6d0d-40b8-9dc7-1384d0bc2ec7",
+              "project_id": 2,
+              "curator_coordinate_access": false
+            }
+          ]
         }
       ]
     },
@@ -599,6 +631,16 @@
         "user_id": 123,
         "role": "curator",
         "observations_count": 900
+      },
+      {
+        "project_id": 1,
+        "user_id": 123,
+        "role": "curator"
+      },
+      {
+        "project_id": 2,
+        "user_id": 123,
+        "role": "curator"
       }
     ],
     "projects": [
@@ -609,6 +651,18 @@
         "user_id": 6,
         "start_time": "2016-02-02 2:22:22",
         "end_time": "2016-05-05 5:55:55"
+      },
+      {
+        "id": 1,
+        "slug": "project-one",
+        "title": "Project One",
+        "user_id": 123
+      },
+      {
+        "id": 2,
+        "slug": "project-two",
+        "title": "Project Two",
+        "user_id": 123
       }
     ],
     "rules": [
