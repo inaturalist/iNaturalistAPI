@@ -97,8 +97,6 @@ describe( "Observations", ( ) => {
         var dbUser0 = _.find( dbUsers, u => u.id === fixtureObs[0].user.id );
         var dbUser1 = _.find( dbUsers, u => u.id === fixtureObs[1].user.id );
         expect( res.body.results[ 0 ].user.login ).to.eq( dbUser0.login );
-        // identifications are not part of the default search response
-        expect( res.body.results[ 0 ].identifications ).to.be.undefined;
         expect( res.body.results[ 1 ].id ).to.eq( fixtureObs[1].id );
         expect( res.body.results[ 1 ].user.id ).to.eq( fixtureObs[1].user.id );
         // login comes from the DB

@@ -162,6 +162,20 @@
           "id": 1,
           "user": { "id": 123 },
           "created_at": "2015-12-31T00:00:00",
+          "identifications": [
+            {
+              "id": 102,
+              "taxon_id": 5,
+              "user": { "id": 123 },
+              "body": "id1"
+            },
+            {
+              "id": 103,
+              "taxon_id": 5,
+              "user": { "id": 5 },
+              "body": "id2"
+            }
+          ],
           "ofvs": [ {
             "name_ci": "Habitat",
             "value_ci": "marine"
@@ -187,7 +201,7 @@
             "ancestor_ids": [1,2,3,4],
             "min_species_ancestry": "1,2,3,4"
           },
-          "non_owner_ids":[{ "user": { "id": 123 } }],
+          "identifications":[{ "user": { "id": 123 }, "own_observation": false }],
           "place_guess": "Montana",
           "private_geojson": { "type": "Point", "coordinates": [ "3", "2" ] }
         },
@@ -305,7 +319,10 @@
               "id": 101,
               "user_id": 1,
               "uuid": "8cf0282d-c6f3-4947-9905-4937def371f4",
-              "project_id": 1
+              "project_id": 1,
+              "preferences": [
+                { "name": "curator_coordinate_access", "value": true }
+              ]
             }
           ]
         },
@@ -321,7 +338,10 @@
               "id": 111,
               "user_id": 1,
               "uuid": "902996e7-6d0d-40b8-9dc7-1384d0bc2ec7",
-              "project_id": 2
+              "project_id": 2,
+              "preferences": [
+                { "name": "curator_coordinate_access", "value": false }
+              ]
             }
           ]
         }
