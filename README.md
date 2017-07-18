@@ -16,3 +16,11 @@ Filter by pattern: `NODE_ENV=test ./node_modules/mocha/bin/_mocha --recursive --
 
 Edit `lib/views/swagger_v*.yml.ejs`
 
+# Troubleshooting
+Sometimes `npm shrinkwrap` freaks out about node-pre-gyp and other mapnik-related stuff. This seems to placate it:
+
+```bash
+npm install
+npm update lodash elasticmaps inaturalistjs # or any other packages it thinks are invalid
+npm shrinkwrap
+```
