@@ -165,7 +165,7 @@
       "mappable": {
         "type": "boolean"
       },
-      "non_owner_ids": {
+      "identifications": {
         "type": "nested",
         "properties": {
           "body": {
