@@ -75,13 +75,13 @@ describe( "ObservationsController", function( ) {
     it( "can apply params from project rules", function( done ) {
       Project.findByID( 543, function( err, p ) {
         Q( { inat: { apply_project_rules_for: p } }, function( e, q ) {
-          expect( q.filters ).to.include({ terms: { place_ids: [ 222, 333 ] }});
-          expect( q.filters ).to.include({ terms: { "taxon.ancestor_ids": [ 444, 555, 876, 987 ] }});
-          expect( q.filters ).to.include({ term: { captive: false }});
-          expect( q.filters ).to.include({ exists: { field: "photos.url" }});
-          expect( q.filters ).to.include({ exists: { field: "sounds" }});
-          expect( q.filters ).to.include({ exists: { field: "geojson" }});
-          expect( q.filters ).to.include({ exists: { field: "taxon" }});
+          expect( q.filters ).to.deep.include({ terms: { place_ids: [ 222, 333 ] }});
+          expect( q.filters ).to.deep.include({ terms: { "taxon.ancestor_ids": [ 444, 555, 876, 987 ] }});
+          expect( q.filters ).to.deep.include({ term: { captive: false }});
+          expect( q.filters ).to.deep.include({ exists: { field: "photos.url" }});
+          expect( q.filters ).to.deep.include({ exists: { field: "sounds" }});
+          expect( q.filters ).to.deep.include({ exists: { field: "geojson" }});
+          expect( q.filters ).to.deep.include({ exists: { field: "taxon" }});
           // plus a complicated date filter
           done( );
         });
@@ -91,13 +91,13 @@ describe( "ObservationsController", function( ) {
     it( "can apply inverse project rules", function( done ) {
       Project.findByID( 543, function( err, p ) {
         Q( { inat: { not_matching_project_rules_for: p } }, function( e, q ) {
-          expect( q.grouped_inverse_filters ).to.include({ terms: { place_ids: [ 222, 333 ] }});
-          expect( q.grouped_inverse_filters ).to.include({ terms: { "taxon.ancestor_ids": [ 444, 555, 876, 987 ] }});
-          expect( q.grouped_inverse_filters ).to.include({ term: { captive: false }});
-          expect( q.grouped_inverse_filters ).to.include({ exists: { field: "photos.url" }});
-          expect( q.grouped_inverse_filters ).to.include({ exists: { field: "sounds" }});
-          expect( q.grouped_inverse_filters ).to.include({ exists: { field: "geojson" }});
-          expect( q.grouped_inverse_filters ).to.include({ exists: { field: "taxon" }});
+          expect( q.grouped_inverse_filters ).to.deep.include({ terms: { place_ids: [ 222, 333 ] }});
+          expect( q.grouped_inverse_filters ).to.deep.include({ terms: { "taxon.ancestor_ids": [ 444, 555, 876, 987 ] }});
+          expect( q.grouped_inverse_filters ).to.deep.include({ term: { captive: false }});
+          expect( q.grouped_inverse_filters ).to.deep.include({ exists: { field: "photos.url" }});
+          expect( q.grouped_inverse_filters ).to.deep.include({ exists: { field: "sounds" }});
+          expect( q.grouped_inverse_filters ).to.deep.include({ exists: { field: "geojson" }});
+          expect( q.grouped_inverse_filters ).to.deep.include({ exists: { field: "taxon" }});
           // plus a complicated date filter
           done( );
         });
@@ -107,7 +107,7 @@ describe( "ObservationsController", function( ) {
     it( "queries a list's taxon_ids", function( done ) {
       List.findByID( 999, function( err, l ) {
         Q( { inat: { list: l } }, function( e, q ) {
-          expect( q.filters ).to.include({ terms: { "taxon.ancestor_ids": [ 876, 987 ] }});
+          expect( q.filters ).to.deep.include({ terms: { "taxon.ancestor_ids": [ 876, 987 ] }});
           done( );
         });
       });
@@ -415,10 +415,10 @@ describe( "ObservationsController", function( ) {
 
     it( "does nothing without an invalid date", function( ) {
       Q( { d1: "nonsense" }, function( e, q ) { eq = q; } );
-      expect( eq.where ).to.be.empty;
+      expect( eq.where ).to.be.undefined;
       expect( eq.filters ).to.be.empty;
       Q( { d2: "nonsense" }, function( e, q ) { eq = q; } );
-      expect( eq.where ).to.be.empty;
+      expect( eq.where ).to.be.undefined;
       expect( eq.filters ).to.be.empty;
     });
 

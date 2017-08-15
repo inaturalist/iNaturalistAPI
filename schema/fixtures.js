@@ -225,12 +225,14 @@
             "min_species_ancestry": "11,22,33,123",
             "rank_level": 10
           },
-          "sounds": {
-            "id": 1,
-            "license_code": "CC-BY",
-            "attribution": "Slartibartfast",
-            "native_sound_id": 123
-          }
+          "sounds": [
+            {
+              "id": 1,
+              "license_code": "CC-BY",
+              "attribution": "Slartibartfast",
+              "native_sound_id": 123
+            }
+          ]
         },
         {
           "id": 5,
