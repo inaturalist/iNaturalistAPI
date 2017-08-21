@@ -189,6 +189,13 @@
             "rank_level": 10
           },
           "project_ids": [ 543 ],
+          "project_observations": [
+            {
+              "id": 909090,
+              "uuid": "07e60a0a-db6d-48b1-8424-5d5c3f9d2bc3",
+              "project_id": 543
+            }
+          ],
           "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
         },
         {
@@ -364,6 +371,14 @@
           "title_exact": "Project Two",
           "location": "21,22",
           "user_ids": [ 123 ]
+        },
+        {
+          "id": 543,
+          "title": "A Project",
+          "title_autocomplete": "A Project",
+          "title_exact": "A Project",
+          "location": "22,33",
+          "user_ids": [ 6 ]
         }
       ]
     },

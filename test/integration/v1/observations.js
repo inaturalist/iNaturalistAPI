@@ -230,6 +230,10 @@ describe( "Observations", ( ) => {
       request( app ).get( "/v1/observations?id=1&details=all" ).
       expect( res => {
         expect( res.body.results[ 0 ].identifications.length ).to.be.above( 0 );
+        expect( res.body.results[ 0 ].project_observations.length ).to.be.above( 0 );
+        expect( res.body.results[ 0 ].project_observations[0].project.location ).to.eq( "22,33" );
+        expect( res.body.results[ 0 ].project_observations[0].project.latitude ).to.eq( "22" );
+        expect( res.body.results[ 0 ].project_observations[0].project.longitude ).to.eq( "33" );
       }).expect( 200, done );
     });
 
