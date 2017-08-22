@@ -3,7 +3,7 @@ sudo: required
 language: node_js
 
 node_js:
-  - "5.8.0"
+  - "8.3.0"
 
 jdk:
   - oraclejdk8
