@@ -469,6 +469,11 @@
               { "place_id": 111 }
             ] },
             { "name": "BestInCalifornia", "locale": "en", "place_taxon_names": [
+              { "place_id": 222 } ] },
+            { "name": "BestInAmericaES", "locale": "es", "place_taxon_names": [
+              { "place_id": 111 }
+            ] },
+            { "name": "BestInCaliforniaES", "locale": "es", "place_taxon_names": [
               { "place_id": 222 } ] } ],
           "statuses": [
             { "place_id": null, "iucn": 20 },
@@ -647,6 +652,11 @@
     ],
     "places": [
       {
+        "id": 222,
+        "name": "California",
+        "ancestry": "111/222"
+      },
+      {
         "id": 432,
         "name": "a-place",
         "display_name": "a-place"
@@ -820,6 +830,13 @@
         "name": "A User",
         "icon_content_type": "image/jpeg",
         "icon_file_name": "img.jpg"
+      },
+      {
+        "id": 124,
+        "login": "es-user",
+        "name": "ES User",
+        "locale": "es",
+        "place_id": 222
       }
     ],
     "taxa": [

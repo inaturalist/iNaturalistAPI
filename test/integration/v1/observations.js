@@ -54,6 +54,14 @@ describe( "Observations", ( ) => {
         expect( res.body.results[ 0 ].private_location ).to.be.undefined;
       }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "localizes taxon names to authenticated users default settings", done => {
+      var token = jwt.sign({ user_id: 124 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/4" ).set( "Authorization", token ).expect( ( res ) => {
+        expect( res.body.results[ 0 ].taxon.preferred_common_name ).to.eq( "BestInCaliforniaES" );
+      }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
   });
 
   describe( "create", ( ) => {
