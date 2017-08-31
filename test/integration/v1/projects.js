@@ -17,6 +17,7 @@ describe( "Projects Routes", function( ) {
           expect( res.body.results.length ).to.eq( 1 );
           expect( project.id ).to.eq( 1 );
           expect( project.title ).to.eq( "Project One" );
+          expect( project.location ).to.eq( "11,12" );
           expect( project.latitude ).to.eq( "11" );
           expect( project.longitude ).to.eq( "12" );
         }
@@ -51,13 +52,14 @@ describe( "Projects Routes", function( ) {
       request( app ).get( "/v1/projects/autocomplete?q=proj" ).
         expect( function( res ) {
           expect( res.body.page ).to.eq( 1 );
-          expect( res.body.per_page ).to.eq( 2 );
-          expect( res.body.total_results ).to.eq( 2 );
+          expect( res.body.per_page ).to.eq( 3 );
+          expect( res.body.total_results ).to.eq( 3 );
           res.body.results = _.sortBy( res.body.results, function( r ) {
             return r.id;
           });
           expect( res.body.results[0].title ).to.eq( "Project One" );
           expect( res.body.results[1].title ).to.eq( "Project Two" );
+          expect( res.body.results[2].title ).to.eq( "A Project" );
         }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
 

@@ -189,6 +189,13 @@
             "rank_level": 10
           },
           "project_ids": [ 543 ],
+          "project_observations": [
+            {
+              "id": 909090,
+              "uuid": "07e60a0a-db6d-48b1-8424-5d5c3f9d2bc3",
+              "project_id": 543
+            }
+          ],
           "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
         },
         {
@@ -225,12 +232,14 @@
             "min_species_ancestry": "11,22,33,123",
             "rank_level": 10
           },
-          "sounds": {
-            "id": 1,
-            "license_code": "CC-BY",
-            "attribution": "Slartibartfast",
-            "native_sound_id": 123
-          }
+          "sounds": [
+            {
+              "id": 1,
+              "license_code": "CC-BY",
+              "attribution": "Slartibartfast",
+              "native_sound_id": 123
+            }
+          ]
         },
         {
           "id": 5,
@@ -364,6 +373,14 @@
           "title_exact": "Project Two",
           "location": "21,22",
           "user_ids": [ 123 ]
+        },
+        {
+          "id": 543,
+          "title": "A Project",
+          "title_autocomplete": "A Project",
+          "title_exact": "A Project",
+          "location": "22,33",
+          "user_ids": [ 6 ]
         }
       ]
     },
@@ -452,6 +469,11 @@
               { "place_id": 111 }
             ] },
             { "name": "BestInCalifornia", "locale": "en", "place_taxon_names": [
+              { "place_id": 222 } ] },
+            { "name": "BestInAmericaES", "locale": "es", "place_taxon_names": [
+              { "place_id": 111 }
+            ] },
+            { "name": "BestInCaliforniaES", "locale": "es", "place_taxon_names": [
               { "place_id": 222 } ] } ],
           "statuses": [
             { "place_id": null, "iucn": 20 },
@@ -630,6 +652,11 @@
     ],
     "places": [
       {
+        "id": 222,
+        "name": "California",
+        "ancestry": "111/222"
+      },
+      {
         "id": 432,
         "name": "a-place",
         "display_name": "a-place"
@@ -803,6 +830,13 @@
         "name": "A User",
         "icon_content_type": "image/jpeg",
         "icon_file_name": "img.jpg"
+      },
+      {
+        "id": 124,
+        "login": "es-user",
+        "name": "ES User",
+        "locale": "es",
+        "place_id": 222
       }
     ],
     "taxa": [

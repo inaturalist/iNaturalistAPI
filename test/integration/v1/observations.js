@@ -54,6 +54,14 @@ describe( "Observations", ( ) => {
         expect( res.body.results[ 0 ].private_location ).to.be.undefined;
       }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "localizes taxon names to authenticated users default settings", done => {
+      var token = jwt.sign({ user_id: 124 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/4" ).set( "Authorization", token ).expect( ( res ) => {
+        expect( res.body.results[ 0 ].taxon.preferred_common_name ).to.eq( "BestInCaliforniaES" );
+      }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
   });
 
   describe( "create", ( ) => {
@@ -198,7 +206,7 @@ describe( "Observations", ( ) => {
     it( "filters by captive", done => {
       request( app ).get( "/v1/observations?sounds=true" ).
       expect( res => {
-        expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.be.defined; // captive
+        expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.not.be.undefined; // captive
         expect( res.body.results.map( r => r.id ).indexOf( 1 ) ).to.eq( -1 ); // not-captive
       } ).expect( 200, done );
     } );
@@ -207,22 +215,22 @@ describe( "Observations", ( ) => {
       request( app ).get( "/v1/observations?captive=false" ).
       expect( res => {
         expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.eq( -1 ); // captive
-        expect( res.body.results.map( r => r.id ).indexOf( 1 ) ).to.be.defined; // not-captive
+        expect( res.body.results.map( r => r.id ).indexOf( 1 ) ).to.not.be.undefined; // not-captive
       } ).expect( 200, done );
     } );
 
     it( "filters by captive=any", done => {
       request( app ).get( "/v1/observations?captive=any" ).
       expect( res => {
-        expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.be.defined; // captive
-        expect( res.body.results.map( r => r.id ).indexOf( 1 ) ).to.be.defined; // not-captive
+        expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.not.be.undefined; // captive
+        expect( res.body.results.map( r => r.id ).indexOf( 1 ) ).to.not.be.undefined; // not-captive
       } ).expect( 200, done );
     } );
 
     it( "includes soundcloud identifiers", done => {
       request( app ).get( "/v1/observations?sounds=true" ).
       expect( res => {
-        expect( res.body.results.native_sound_id ).to.be.defined;
+        expect( res.body.results[ 0 ].sounds[0].native_sound_id ).to.not.be.undefined;
       } ).expect( 200, done );
     } );
 
@@ -230,14 +238,18 @@ describe( "Observations", ( ) => {
       request( app ).get( "/v1/observations?id=1&details=all" ).
       expect( res => {
         expect( res.body.results[ 0 ].identifications.length ).to.be.above( 0 );
+        expect( res.body.results[ 0 ].project_observations.length ).to.be.above( 0 );
+        expect( res.body.results[ 0 ].project_observations[0].project.location ).to.eq( "22,33" );
+        expect( res.body.results[ 0 ].project_observations[0].project.latitude ).to.eq( "22" );
+        expect( res.body.results[ 0 ].project_observations[0].project.longitude ).to.eq( "33" );
       }).expect( 200, done );
     });
 
     it( "returns a bounding box if you request one", done => {
      request( app ).get( "/v1/observations?return_bounds=true" ).
      expect( res => {
-      expect( res.body.total_bounds ).to.be.defined;
-      expect( res.body.total_bounds.swlng ).to.be.defined;
+      expect( res.body.total_bounds ).to.not.be.undefined;
+      expect( res.body.total_bounds.swlng ).to.not.be.undefined;
      } ).expect( 200, done );
     } );
 
