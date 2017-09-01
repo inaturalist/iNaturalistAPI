@@ -95,13 +95,17 @@ describe( "Taxon", function( ) {
     });
 
     it( "can fallback to English", function( ) {
-      expect( t.preferredCommonName({ locale: "de",
-        defaultToEnglish: true }) ).to.eq( "BestEnglish" );
+      expect( t.preferredCommonName({ locale: "de", defaultToEnglish: true }) ).to.eq( "BestEnglish" );
     });
 
     it( "returns the best name given a place", function( ) {
       p = { id: 222 };
       expect( t.preferredCommonName({ preferredPlace: p }) ).to.eq( "BestInCalifornia" );
+    });
+
+    it( "returns the best name given a place regardless of locale", function( ) {
+      p = { id: 222 };
+      expect( t.preferredCommonName({ locale: "de", preferredPlace: p }) ).to.eq( "BestInCalifornia" );
     });
 
     it( "return the best name from an ancestor place", function( ) {
