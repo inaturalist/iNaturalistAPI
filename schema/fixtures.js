@@ -144,6 +144,18 @@
               "is_active": true
             }
           }
+        },
+        {
+          "id": 104,
+          "current": true,
+          "taxon_change": {
+            "id": 1,
+            "type": "TaxonSwap"
+          },
+          "taxon": {
+            "id": 10002,
+            "ancestor_ids": [10002]
+          }
         }
       ]
     },
@@ -496,6 +508,10 @@
         {
           "id": 10001,
           "name": "DetailsTaxon"
+        },
+        {
+          "id": 10002,
+          "name": "Taxon for a swap"
         }
       ]
     },

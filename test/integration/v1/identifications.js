@@ -4,7 +4,16 @@ var expect = require( "chai" ).expect,
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
     app = iNaturalistAPI.server( );
 
-describe( "Observations", function( ) {
+describe( "Identifications", function( ) {
+
+  describe( "search", function( ) {
+    it( "should filter by is_change", function( done ) {
+      request( app ).get( "/v1/identifications?is_change=false&taxon_id=10002" ).
+        expect( function( res ) {
+          expect( res.body.results.length ).to.eq( 0 );
+        } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+  } );
 
   describe( "recent_taxa", function( ) {
     it( "returns identifications and taxa", function( done ) {

@@ -1,12 +1,15 @@
 "use strict";
 var _ = require( "underscore" ),
     expect = require( "chai" ).expect,
+    fs = require( "fs" ),
     identifications = require( "inaturalistjs" ).identifications,
     util = require( "../../../lib/util" ),
     testHelper = require( "../../../lib/test_helper" ),
     Identification = require( "../../../lib/models/identification" ),
     IdentificationsController = require( "../../../lib/controllers/v1/identifications_controller" ),
     eq;
+
+var fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 var Q = ( params, callback ) => {
   var queryString = _.reduce( params, ( components, value, key ) => {
@@ -97,14 +100,14 @@ describe( "IdentificationsController", ( ) => {
     it( "filters by booleans true", ( ) => {
       Q( { is_change: "true" }, ( e, q ) => ( eq = q ) );
       expect( _.detect( eq.filters, f => {
-        return f.exists && f.exists.field === "taxon_change_id";
+        return f.exists && f.exists.field === "taxon_change.id";
       })).to.not.be.undefined;
     });
 
     it( "filters by booleans false", ( ) => {
       Q( { is_change: "false" }, ( e, q ) => ( eq = q ) );
       expect( _.detect( eq.inverse_filters, f => {
-        return f.exists && f.exists.field === "taxon_change_id";
+        return f.exists && f.exists.field === "taxon_change.id";
       })).to.not.be.undefined;
     });
 
@@ -193,7 +196,7 @@ describe( "IdentificationsController", ( ) => {
   describe( "search", ( ) => {
     it( "returns identifications", done => {
       IdentificationsController.search( { query: { } }, ( e, r ) => {
-        expect(r.total_results).to.eq(2);
+        expect(r.total_results).to.eq( fixtures.elasticsearch.identifications.identification.length );
         done( );
       });
     });
