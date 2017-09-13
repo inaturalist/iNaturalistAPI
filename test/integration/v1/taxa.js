@@ -12,15 +12,16 @@ describe( "Taxa", function( ) {
         expect( "Content-Type", /json/ ).expect( 200, done );
     });
 
-    it( "returns returns matches, with exact results first", function( done ) {
+    it( "returns matches, with all exact results first", function( done ) {
       request( app ).get( "/v1/taxa/autocomplete?q=los" ).
         expect( function( res ) {
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.per_page ).to.eq( 30 );
-          expect( res.body.total_results ).to.eq( 2 );
-          expect( res.body.results.length ).to.eq( 2 );
+          expect( res.body.total_results ).to.eq( 3 );
+          expect( res.body.results.length ).to.eq( 3 );
           expect( res.body.results[ 0 ].matched_term ).to.eq( "Los" );
-          expect( res.body.results[ 1 ].matched_term ).to.eq( "Los lobos" );
+          expect( res.body.results[ 1 ].matched_term ).to.eq( "Los" );
+          expect( res.body.results[ 2 ].matched_term ).to.eq( "Los lobos" );
         }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
 
@@ -43,7 +44,7 @@ describe( "Taxa", function( ) {
     it( "can return all taxa", function( done ) {
       request( app ).get( "/v1/taxa/autocomplete?q=los&is_active=any" ).
         expect( function( res ) {
-          expect( res.body.total_results ).to.eq( 3 );
+          expect( res.body.total_results ).to.eq( 4 );
         }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
 

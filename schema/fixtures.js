@@ -512,6 +512,19 @@
         {
           "id": 10002,
           "name": "Taxon for a swap"
+        },
+        {
+          "id": 7,
+          "name": "Los",
+          "parent_id": 1,
+          "ancestor_ids": [ 1001, 1, 2 ],
+          "names": [{
+            "name_autocomplete": "Los",
+            "exact": "Los",
+            "exact_ci": "Los"
+          }],
+          "observations_count": 50,
+          "is_active": true
         }
       ]
     },
