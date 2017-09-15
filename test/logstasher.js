@@ -44,9 +44,9 @@ describe( "Logstasher", ( ) => {
   } );
 
   it( "cleans up multiple IPs and adds originals to new field", ( ) => {
-    expect( Logstasher.splitMultipleIPs({ "x-real-ip": "127.0.0.1, 192.168.1.1"}) ).to.deep.eq ({
-      "x-real-ip": "192.168.1.1",
-      "x-real-ip-all": [ "127.0.0.1", "192.168.1.1" ] })
+    expect( Logstasher.splitMultipleIPs({ "x_real_ip": "127.0.0.1, 192.168.1.1"}) ).to.deep.eq ({
+      "x_real_ip": "192.168.1.1",
+      "x_real_ip_all": [ "127.0.0.1", "192.168.1.1" ] })
   } );
 
 } );
