@@ -1,4 +1,5 @@
 /* eslint no-console: 0 */
+"use strict";
 var fs = require( "fs" ),
     path = require( "path" );
 
@@ -10,8 +11,9 @@ if( fs.existsSync( newrelic_path ) ) {
 }
 
 var InaturalistAPI = require( "./lib/inaturalist_api" );
-var app = InaturalistAPI.server( );
 var port = Number( process.env.PORT || 4000 );
+var logWriteStream = fs.createWriteStream( `inaturalist_api.${port}.log`, { flags : "a" } );
+var app = InaturalistAPI.server( logWriteStream );
 app.listen( port, function( ) {
   console.log( "Listening on " + port );
 });
