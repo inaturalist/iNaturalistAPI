@@ -365,6 +365,48 @@
               ]
             }
           ]
+        },
+        {
+          "id": 12,
+          "user": { "id": 5 },
+          "identifications": [
+            {
+              "id": 121,
+              "user": {
+                "id": 121,
+                "login": "user121"
+              },
+              "taxon": {
+                "id": 1
+              }
+            },
+            {
+              "id": 122,
+              "user": {
+                "id": 122,
+                "login": "user122"
+              },
+              "taxon": {
+                "id": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "user": { "id": 5 },
+          "identifications": [
+            {
+              "id": 121,
+              "user": {
+                "id": 121,
+                "login": "user121"
+              },
+              "taxon": {
+                "id": 1
+              }
+            }
+          ]
         }
       ]
     },

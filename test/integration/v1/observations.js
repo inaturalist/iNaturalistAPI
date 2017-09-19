@@ -134,7 +134,7 @@ describe( "Observations", ( ) => {
       }).expect( 200, done );
     } );
 
-    it( "finds observations by without_taxon_id", function( done) {
+    it( "finds observations by without_taxon_id", function( done ) {
       request( app ).get( "/v1/observations?taxon_id=4&without_taxon_id=5" ).
       expect( res => {
         expect( _.map( res.body.results, "id" ) ).to.contain( 2 );
@@ -142,13 +142,49 @@ describe( "Observations", ( ) => {
       }).expect( 200, done );
     } );
 
-    it( "finds observations by multiple without_taxon_id", function( done) {
+    it( "finds observations by multiple without_taxon_id", done => {
       request( app ).get( "/v1/observations?without_taxon_id=4,5" ).
       expect( res => {
         expect( _.map( res.body.results, "id" ) ).to.contain( 333 );
         expect( _.map( res.body.results, "id" ) ).not.to.contain( 2 );
         expect( _.map( res.body.results, "id" ) ).not.to.contain( 1 );
       }).expect( 200, done );
+    } );
+
+    it( "finds observations by ident_user_id", done => {
+      const userID = 121;
+      request( app ).get( `/v1/observations?ident_user_id=${userID}` ).
+      expect( res => {
+        expect( res.body.results.length ).to.be.above( 0 );
+        const obsIdentifiedByUser = _.filter( res.body.results, o =>
+          _.find( o.identifications, i => i.user.id === userID ) );
+        expect( obsIdentifiedByUser.length ).to.eq( res.body.results.length );
+      } ).expect( 200, done );
+    } );
+
+    it( "finds observations by ident_user_id by login", done => {
+      const login = "user121";
+      request( app ).get( `/v1/observations?ident_user_id=${login}` ).
+      expect( res => {
+        expect( res.body.results.length ).to.be.above( 0 );
+        const obsIdentifiedByUser = _.filter( res.body.results, o =>
+          _.find( o.identifications, i => i.user.login === login ) );
+        expect( obsIdentifiedByUser.length ).to.eq( res.body.results.length );
+      } ).expect( 200, done );
+    } );
+
+    it( "finds observations by numerous ident_user_id", done => {
+      const userIDs = [121,122];
+      request( app ).get( `/v1/observations?ident_user_id=${userIDs.join( "," )}` ).
+      expect( res => {
+        expect( res.body.results.length ).to.be.above( 0 );
+        const obsIdentifiedByUsers = _.filter( res.body.results, o =>
+          _.find( o.identifications, i => userIDs.indexOf( i.user.id ) >= 0 ) );
+        expect( obsIdentifiedByUsers.length ).to.eq( res.body.results.length );
+        const obsIdentifiedByNeither = _.filter( res.body.results, o =>
+          _.find( o.identifications, i => userIDs.indexOf( i.user.id ) < 0 ) );
+        expect( obsIdentifiedByNeither.length ).to.eq( 0 );
+      } ).expect( 200, done );
     } );
 
     it( "looks up projects by slug", done => {
