@@ -71,6 +71,11 @@ describe( "ObservationsController", function( ) {
       ObservationsController, observations, "deleteQualityMetric", done );
   });
 
+  it( "calls viewed_updates", function( done ) {
+    testHelper.testInatJSNoPreload(
+      ObservationsController, observations, "viewedUpdates", done );
+  });
+
   describe( "reqToElasticQuery", function( ) {
     it( "can apply params from project rules", function( done ) {
       Project.findByID( 543, function( err, p ) {
