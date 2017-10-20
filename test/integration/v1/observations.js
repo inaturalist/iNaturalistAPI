@@ -82,7 +82,21 @@ describe( "Observations", ( ) => {
         expect( res.body.private_location ).not.to.be.undefined;
         expect( res.body.private_location ).to.eq( fixtureObs.private_location );
       } ).expect( "Content-Type", /json/ ).expect( 200, done );
-    } )
+    } );
+    it( "works with the Bearer scheme", done => {
+      var fixtureObs = fixtures.elasticsearch.observations.observation[5];
+      var token = jwt.sign( { user_id: 333 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      nock( "http://localhost:3000" ).
+        post( "/observations" ).
+        reply( 200, [ { id: fixtureObs.id } ] );
+      request( app ).post( "/v1/observations", {
+        // it doesn't really matter what we post since we're just stubbing the
+        // Rails app to return obs 6 to load from the ES index
+      } ).set( "Authorization", `Bearer ${token}` ).expect( res => {
+        expect( res.body.id ).to.eq( fixtureObs.id );
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
   } );
 
   describe( "search", ( ) => {
