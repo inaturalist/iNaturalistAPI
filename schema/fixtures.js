@@ -549,7 +549,8 @@
         },
         {
           "id": 10001,
-          "name": "DetailsTaxon"
+          "name": "DetailsTaxon",
+          "ancestor_ids": [ 10001 ]
         },
         {
           "id": 10002,
