@@ -390,6 +390,13 @@ describe( "Observations", ( ) => {
       request( app ).get( "/v1/observations/identifiers" ).
         expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "supports pagination", done => {
+      request( app ).get( "/v1/observations/identifiers?per_page=1&page=2" ).expect( res => {
+        expect( res.body.page ).to.eq( 2 );
+        expect( res.body.per_page ).to.eq( 1 );
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
   });
 
   describe( "observers", ( ) => {
@@ -408,6 +415,20 @@ describe( "Observations", ( ) => {
         expect( res.results[0].user.name ).to.eq( "A User" );
       });
     });
+
+    it( "supports pagination", done => {
+      request( app ).get( "/v1/observations/observers?per_page=1&page=2" ).expect( res => {
+        expect( res.body.page ).to.eq( 2 );
+        expect( res.body.per_page ).to.eq( 1 );
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+
+    it( "supports pagination when ordering by species_count", done => {
+      request( app ).get( "/v1/observations/observers?per_page=1&page=2&order_by=species_count" ).expect( res => {
+        expect( res.body.page ).to.eq( 2 );
+        expect( res.body.per_page ).to.eq( 1 );
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
   });
 
   describe( "species_counts", ( ) => {
@@ -434,12 +455,18 @@ describe( "Observations", ( ) => {
       request( app ).get( "/v1/observations/species_counts?unobserved_by_user_id=1&lat=50&lng=50" ).
         expect( res => {
           expect( res.body.page ).to.eq( 1 );
-          expect( res.body.per_page ).to.eq( 1 );
           expect( res.body.total_results ).to.eq( 1 );
           expect( res.body.results[0].count ).to.eq( 1 );
           expect( res.body.results[0].taxon.id ).to.eq( 123 );
         }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "supports pagination", done => {
+      request( app ).get( "/v1/observations/species_counts?per_page=1&page=2" ).expect( res => {
+        expect( res.body.page ).to.eq( 2 );
+        expect( res.body.per_page ).to.eq( 1 );
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
   });
 
   describe( "iconic_taxa_counts", ( ) => {
