@@ -214,9 +214,13 @@ describe( "IdentificationsController", ( ) => {
   describe( "categories", ( ) => {
     it( "returns identification counts grouped by category", done => {
       IdentificationsController.categories( { query: { } }, ( e, r ) => {
-        expect(r.total_results).to.eq(2);
+        expect(r.total_results).to.eq(
+          _.uniq( _.filter( fixtures.elasticsearch.identifications.identification, i => i.category ), i => i.category ).length
+        );
         expect(r.results[0].category).to.eq( "leading" );
-        expect(r.results[0].count).to.eq(1);
+        expect(r.results[0].count).to.eq(
+          _.filter( fixtures.elasticsearch.identifications.identification, i => i.category === "leading" ).length
+        );
         done( );
       });
     });
@@ -226,7 +230,9 @@ describe( "IdentificationsController", ( ) => {
   describe( "speciesCounts", ( ) => {
     it( "returns taxa", done => {
       IdentificationsController.speciesCounts( { query: { } }, { }, ( e, r ) => {
-        expect(r.total_results).to.eq(2);
+        expect(r.total_results).to.eq(
+          _.uniq( _.filter( fixtures.elasticsearch.identifications.identification, i => i.taxon ), i => i.taxon.id ).length
+        );
         expect(r.results[0].count).to.above(0);
         expect(r.results[0].taxon.id).to.eq(5);
         done( );
@@ -237,7 +243,9 @@ describe( "IdentificationsController", ( ) => {
   describe( "identifiers", ( ) => {
     it( "returns identification counts grouped by identifier", done => {
       IdentificationsController.identifiers( { query: { } }, ( e, r ) => {
-        expect(r.total_results).to.eq(2);
+        expect(r.total_results).to.eq(
+          _.uniq( _.filter( fixtures.elasticsearch.identifications.identification, i => i.user ), i => i.user.id ).length
+        );
         expect(r.results[0].count).to.eq(1);
         expect(r.results[0].user.id).to.not.be.undefined;
         done( );
@@ -248,7 +256,9 @@ describe( "IdentificationsController", ( ) => {
   describe( "observers", ( ) => {
     it( "returns identification counts grouped by observer", done => {
       IdentificationsController.observers( { query: { } }, ( e, r ) => {
-        expect(r.total_results).to.eq(2);
+        expect(r.total_results).to.eq(
+          _.uniq( _.filter( fixtures.elasticsearch.identifications.identification, i => i.observation ), i => i.observation.user.id ).length
+        );
         expect(r.results[0].count).to.eq(1);
         expect(r.results[0].user.id).to.not.be.undefined;
         done( );

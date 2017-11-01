@@ -2,7 +2,11 @@
 var expect = require( "chai" ).expect,
     request = require( "supertest" ),
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
+    fs = require( "fs" ),
+    _ = require( "lodash" ),
     app = iNaturalistAPI.server( );
+
+var fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 describe( "Identifications", function( ) {
 
@@ -24,6 +28,24 @@ describe( "Identifications", function( ) {
           expect( firstResult.taxon ).to.not.be.undefined;
         }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
+    it( "should filter by quality_grade=needs_id,research", function( done ) {
+      var identFromCasual = _.find( fixtures.elasticsearch.identifications.identification, i =>
+        i.observation && i.observation.quality_grade === "casual" && i.taxon && i.taxon.min_species_ancestors.length > 1 );
+      var searchTaxon = identFromCasual.taxon.min_species_ancestors[0];
+      request( app ).get( `/v1/identifications/recent_taxa?taxon_id=${searchTaxon.id}&rank=species&quality_grade=needs_id,research` ).
+        expect( function( res ) {
+          expect( res.body.results.map( r => r.taxon.id ) ).not.to.include( identFromCasual.taxon.id );
+        } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+    it( "should filter by quality_grade=casual", function( done ) {
+      var identFromCasual = _.find( fixtures.elasticsearch.identifications.identification, i =>
+        i.observation && i.observation.quality_grade === "casual" && i.taxon && i.taxon.min_species_ancestors.length > 1 );
+      var searchTaxon = identFromCasual.taxon.min_species_ancestors[0];
+      request( app ).get( `/v1/identifications/recent_taxa?taxon_id=${searchTaxon.id}&rank=species&quality_grade=casual` ).
+        expect( function( res ) {
+          expect( res.body.results.map( r => r.taxon.id ) ).to.include( identFromCasual.taxon.id );
+        } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
   });
 
   describe( "similar_species", function( ) {
