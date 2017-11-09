@@ -1,4 +1,4 @@
-# iNaturalistAPI
+# iNaturalistAPI "!https://travis-ci.org/inaturalist/iNaturalistAPI.png!":https://travis-ci.org/inaturalist/iNaturalistAPI
 
 [![Build Status](https://travis-ci.org/inaturalist/iNaturalistAPI.svg?branch=master)](https://travis-ci.org/inaturalist/iNaturalistAPI)
 [![Coverage Status](https://coveralls.io/repos/github/inaturalist/iNaturalistAPI/badge.svg?branch=master)](https://coveralls.io/github/inaturalist/iNaturalistAPI?branch=master)
