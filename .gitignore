@@ -8,3 +8,4 @@ config.js
 newrelic.js
 newrelic_agent.log
 inaturalist_api.*.log
+public/uploads/
