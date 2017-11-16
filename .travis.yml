@@ -33,6 +33,7 @@ before_script:
   - psql -c 'CREATE EXTENSION postgis;' -U postgres -d inaturalist_test
   - psql -c 'CREATE EXTENSION postgis_topology;' -U postgres -d inaturalist_test
   - psql -f schema/database.sql -U postgres -d inaturalist_test
+  - touch vision-taxa.txt
   - sleep 15
 
 after_script:

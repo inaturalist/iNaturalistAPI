@@ -19,6 +19,15 @@ describe( "Identifications", function( ) {
     } );
   } );
 
+  describe( "species_counts", function( ) {
+    it( "should have results", function( done ) {
+      request( app ).get( "/v1/identifications/species_counts" ).
+        expect( function( res ) {
+          expect( res.body.results.length ).to.be.above( 0 );
+        } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+  } );
+
   describe( "recent_taxa", function( ) {
     it( "returns identifications and taxa", function( done ) {
       request( app ).get( "/v1/identifications/recent_taxa" ).
