@@ -27,6 +27,7 @@
     "elasticmaps": "github:inaturalist/elasticmaps",
     "elasticsearch": "^13.3.1",
     "express": "^4.15.4",
+    "geoip-lite": "*",
     "inaturalistjs": "github:inaturalist/inaturalistjs",
     "jsonwebtoken": "^7.4.2",
     "lodash": "^4.17.4",

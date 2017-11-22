@@ -429,6 +429,12 @@ describe( "Observations", ( ) => {
         expect( res.body.per_page ).to.eq( 1 );
       } ).expect( "Content-Type", /json/ ).expect( 200, done );
     } );
+
+    it( "should never return null total_results", done => {
+      request( app ).get( "/v1/observations/observers?place_id=123" ).expect( res => {
+        expect( res.body.total_results ).to.eq( 0 );
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    })
   });
 
   describe( "species_counts", ( ) => {

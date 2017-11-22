@@ -36,7 +36,7 @@ describe( "InaturalistMapServer", function( ) {
               "id", "location", "taxon.iconic_taxon_id", "captive", "quality_grade",
               "geoprivacy", "private_location" ] },
             size: 1, sort: { id: { order: "desc" } } } } },
-          geohash_grid: { field: "location", precision: 3, size: 50000 }
+          geohash_grid: { field: "location", precision: 3, size: 30000 }
         });
         done( );
       });
@@ -52,7 +52,7 @@ describe( "InaturalistMapServer", function( ) {
               "id", "location", "taxon.iconic_taxon_id", "captive", "quality_grade",
               "geoprivacy", "private_location" ] },
             size: 1, sort: { id: { order: "desc" } } } } },
-          geohash_grid: { field: "location", precision: 3, size: 50000 }
+          geohash_grid: { field: "location", precision: 3, size: 30000 }
         });
         done( );
       });
