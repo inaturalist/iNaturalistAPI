@@ -1,7 +1,11 @@
 var expect = require( "chai" ).expect,
     request = require( "supertest" ),
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
+    fs = require( "fs" ),
+    _ = require( "lodash" );
     app = iNaturalistAPI.server( );
+
+var fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 describe( "Places", function( ) {
 
@@ -14,14 +18,17 @@ describe( "Places", function( ) {
     it( "returns standard and community places", function( done ) {
       request( app ).get( "/v1/places/nearby?swlat=41&swlng=-73&nelat=43&nelng=-70" ).
         expect( function( res ) {
+          const places = _.filter( fixtures.elasticsearch.places.place, p => !_.isNil( p.geometry_geojson ) );
+          const standardPlaces = _.filter( places, p => p.admin_level !== null );
+          const communityPlaces = _.filter( places, p => p.admin_level === null );
           expect( res.body.page ).to.eq( 1 );
-          expect( res.body.per_page ).to.eq( 3 );
-          expect( res.body.total_results ).to.eq( 3 );
-          expect( res.body.results.standard.length ).to.eq( 2 );
-          expect( res.body.results.community.length ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( places.length );
+          expect( res.body.total_results ).to.eq( places.length );
+          expect( res.body.results.standard.length ).to.eq( standardPlaces.length );
+          expect( res.body.results.community.length ).to.eq( communityPlaces.length );
           expect( res.body.results.standard[ 0 ].name ).to.eq( "United States" );
           expect( res.body.results.standard[ 1 ].name ).to.eq( "Massachusetts" );
-          expect( res.body.results.community[ 0 ].name ).to.eq( "Community" );
+          expect( res.body.results.community[ 0 ].name ).to.eq( communityPlaces[0].name );
         }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
   });

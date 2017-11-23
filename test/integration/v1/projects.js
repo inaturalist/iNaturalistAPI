@@ -2,7 +2,11 @@ var expect = require( "chai" ).expect,
     request = require( "supertest" ),
     _ = require( "underscore" ),
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
+    fs = require( "fs" ),
+    _ = require( "lodash" ),
     app = iNaturalistAPI.server( );
+
+var fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 describe( "Projects Routes", function( ) {
 
@@ -51,15 +55,16 @@ describe( "Projects Routes", function( ) {
     it( "returns partial matches", function( done ) {
       request( app ).get( "/v1/projects/autocomplete?q=proj" ).
         expect( function( res ) {
+          const projects = _.filter( fixtures.elasticsearch.projects.project, p => p.title.match( /proj/i ) );
           expect( res.body.page ).to.eq( 1 );
-          expect( res.body.per_page ).to.eq( 3 );
-          expect( res.body.total_results ).to.eq( 3 );
+          expect( res.body.per_page ).to.eq( projects.length );
+          expect( res.body.total_results ).to.eq( projects.length );
           res.body.results = _.sortBy( res.body.results, function( r ) {
             return r.id;
           });
-          expect( res.body.results[0].title ).to.eq( "Project One" );
-          expect( res.body.results[1].title ).to.eq( "Project Two" );
-          expect( res.body.results[2].title ).to.eq( "A Project" );
+          expect( res.body.results.map( p => p.title ) ).to.include( "Project One" );
+          expect( res.body.results.map( p => p.title ) ).to.include( "Project Two" );
+          expect( res.body.results.map( p => p.title ) ).to.include( "A Project" );
         }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
 
