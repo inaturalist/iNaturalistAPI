@@ -7,6 +7,7 @@ var expect = require( "chai" ).expect,
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
     config = require( "../../../config.js" ),
     app = iNaturalistAPI.server( ),
+    moment = require( "moment" ),
     _ = require( "underscore" );
 
 var fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
@@ -30,11 +31,35 @@ describe( "Observations", ( ) => {
       }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
 
+    it( "shows authenticated project curators private info if they have access", done => {
+      var token = jwt.sign({ user_id: 123 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/10" ).set( "Authorization", token ).expect( ( res ) => {
+        expect( res.body.results[ 0 ].private_location ).to.not.be.undefined;
+      }).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+
+    it( "does not show authenticated project curators private info if they do not have access", done => {
+      var token = jwt.sign({ user_id: 123 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/11" ).set( "Authorization", token ).expect( ( res ) => {
+        expect( res.body.results[ 0 ].private_location ).to.be.undefined;
+      }).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+
     it( "does not show authenticated users others' private info", done => {
       var token = jwt.sign({ user_id: 123 }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
       request( app ).get( "/v1/observations/333" ).set( "Authorization", token ).expect( ( res ) => {
         expect( res.body.results[ 0 ].private_location ).to.be.undefined;
+      }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "localizes taxon names to authenticated users default settings", done => {
+      var token = jwt.sign({ user_id: 124 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/4" ).set( "Authorization", token ).expect( ( res ) => {
+        expect( res.body.results[ 0 ].taxon.preferred_common_name ).to.eq( "BestInCaliforniaES" );
       }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
   });
@@ -57,7 +82,21 @@ describe( "Observations", ( ) => {
         expect( res.body.private_location ).not.to.be.undefined;
         expect( res.body.private_location ).to.eq( fixtureObs.private_location );
       } ).expect( "Content-Type", /json/ ).expect( 200, done );
-    } )
+    } );
+    it( "works with the Bearer scheme", done => {
+      var fixtureObs = fixtures.elasticsearch.observations.observation[5];
+      var token = jwt.sign( { user_id: 333 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      nock( "http://localhost:3000" ).
+        post( "/observations" ).
+        reply( 200, [ { id: fixtureObs.id } ] );
+      request( app ).post( "/v1/observations", {
+        // it doesn't really matter what we post since we're just stubbing the
+        // Rails app to return obs 6 to load from the ES index
+      } ).set( "Authorization", `Bearer ${token}` ).expect( res => {
+        expect( res.body.id ).to.eq( fixtureObs.id );
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
   } );
 
   describe( "search", ( ) => {
@@ -69,17 +108,22 @@ describe( "Observations", ( ) => {
     it( "looks up observation users from the DB", done => {
       request( app ).get( "/v1/observations" ).
       expect( res => {
-        expect( res.body.total_results ).to.eq( fixtures.elasticsearch.observations.observation.length );
-        expect( res.body.results[ 0 ].id ).to.eq( 2 );
-        expect( res.body.results[ 0 ].user.id ).to.eq( 5 );
-        expect( res.body.results[ 0 ].user.login ).to.eq( "b-user" );
-        // identifications are not part of the default search response
-        expect( res.body.results[ 0 ].identifications ).to.be.undefined;
-        expect( res.body.results[ 1 ].id ).to.eq( 1 );
-        expect( res.body.results[ 1 ].user.id ).to.eq( 123 );
+        var fixtureObs = _.sortBy(
+          fixtures.elasticsearch.observations.observation,
+          o => o.created_at ? moment( o.created_at ) : moment( "0000-01-01" )
+        ).reverse( );
+        var dbUsers = fixtures.postgresql.users;
+        expect( res.body.total_results ).to.eq( fixtureObs.length );
+        expect( res.body.results[ 0 ].id ).to.eq( fixtureObs[0].id );
+        expect( res.body.results[ 0 ].user.id ).to.eq( fixtureObs[0].user.id );
+        var dbUser0 = _.find( dbUsers, u => u.id === fixtureObs[0].user.id );
+        var dbUser1 = _.find( dbUsers, u => u.id === fixtureObs[1].user.id );
+        expect( res.body.results[ 0 ].user.login ).to.eq( dbUser0.login );
+        expect( res.body.results[ 1 ].id ).to.eq( fixtureObs[1].id );
+        expect( res.body.results[ 1 ].user.id ).to.eq( fixtureObs[1].user.id );
         // login comes from the DB
-        expect( res.body.results[ 1 ].user.login ).to.eq( "a-user" );
-        expect( res.body.results[ 1 ].user.name ).to.eq( "A User" );
+        expect( res.body.results[ 1 ].user.login ).to.eq( dbUser1.login );
+        expect( res.body.results[ 1 ].user.name ).to.eq( dbUser1.name );
       }).expect( 200, done );
     });
 
@@ -104,7 +148,7 @@ describe( "Observations", ( ) => {
       }).expect( 200, done );
     } );
 
-    it( "finds observations by without_taxon_id", function( done) {
+    it( "finds observations by without_taxon_id", function( done ) {
       request( app ).get( "/v1/observations?taxon_id=4&without_taxon_id=5" ).
       expect( res => {
         expect( _.map( res.body.results, "id" ) ).to.contain( 2 );
@@ -112,13 +156,49 @@ describe( "Observations", ( ) => {
       }).expect( 200, done );
     } );
 
-    it( "finds observations by multiple without_taxon_id", function( done) {
+    it( "finds observations by multiple without_taxon_id", done => {
       request( app ).get( "/v1/observations?without_taxon_id=4,5" ).
       expect( res => {
         expect( _.map( res.body.results, "id" ) ).to.contain( 333 );
         expect( _.map( res.body.results, "id" ) ).not.to.contain( 2 );
         expect( _.map( res.body.results, "id" ) ).not.to.contain( 1 );
       }).expect( 200, done );
+    } );
+
+    it( "finds observations by ident_user_id", done => {
+      const userID = 121;
+      request( app ).get( `/v1/observations?ident_user_id=${userID}` ).
+      expect( res => {
+        expect( res.body.results.length ).to.be.above( 0 );
+        const obsIdentifiedByUser = _.filter( res.body.results, o =>
+          _.find( o.identifications, i => i.user.id === userID ) );
+        expect( obsIdentifiedByUser.length ).to.eq( res.body.results.length );
+      } ).expect( 200, done );
+    } );
+
+    it( "finds observations by ident_user_id by login", done => {
+      const login = "user121";
+      request( app ).get( `/v1/observations?ident_user_id=${login}` ).
+      expect( res => {
+        expect( res.body.results.length ).to.be.above( 0 );
+        const obsIdentifiedByUser = _.filter( res.body.results, o =>
+          _.find( o.identifications, i => i.user.login === login ) );
+        expect( obsIdentifiedByUser.length ).to.eq( res.body.results.length );
+      } ).expect( 200, done );
+    } );
+
+    it( "finds observations by numerous ident_user_id", done => {
+      const userIDs = [121,122];
+      request( app ).get( `/v1/observations?ident_user_id=${userIDs.join( "," )}` ).
+      expect( res => {
+        expect( res.body.results.length ).to.be.above( 0 );
+        const obsIdentifiedByUsers = _.filter( res.body.results, o =>
+          _.find( o.identifications, i => userIDs.indexOf( i.user.id ) >= 0 ) );
+        expect( obsIdentifiedByUsers.length ).to.eq( res.body.results.length );
+        const obsIdentifiedByNeither = _.filter( res.body.results, o =>
+          _.find( o.identifications, i => userIDs.indexOf( i.user.id ) < 0 ) );
+        expect( obsIdentifiedByNeither.length ).to.eq( 0 );
+      } ).expect( 200, done );
     } );
 
     it( "looks up projects by slug", done => {
@@ -176,7 +256,7 @@ describe( "Observations", ( ) => {
     it( "filters by captive", done => {
       request( app ).get( "/v1/observations?sounds=true" ).
       expect( res => {
-        expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.be.defined; // captive
+        expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.not.be.undefined; // captive
         expect( res.body.results.map( r => r.id ).indexOf( 1 ) ).to.eq( -1 ); // not-captive
       } ).expect( 200, done );
     } );
@@ -185,22 +265,22 @@ describe( "Observations", ( ) => {
       request( app ).get( "/v1/observations?captive=false" ).
       expect( res => {
         expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.eq( -1 ); // captive
-        expect( res.body.results.map( r => r.id ).indexOf( 1 ) ).to.be.defined; // not-captive
+        expect( res.body.results.map( r => r.id ).indexOf( 1 ) ).to.not.be.undefined; // not-captive
       } ).expect( 200, done );
     } );
 
     it( "filters by captive=any", done => {
       request( app ).get( "/v1/observations?captive=any" ).
       expect( res => {
-        expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.be.defined; // captive
-        expect( res.body.results.map( r => r.id ).indexOf( 1 ) ).to.be.defined; // not-captive
+        expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.not.be.undefined; // captive
+        expect( res.body.results.map( r => r.id ).indexOf( 1 ) ).to.not.be.undefined; // not-captive
       } ).expect( 200, done );
     } );
 
     it( "includes soundcloud identifiers", done => {
       request( app ).get( "/v1/observations?sounds=true" ).
       expect( res => {
-        expect( res.body.results.native_sound_id ).to.be.defined;
+        expect( res.body.results[ 0 ].sounds[0].native_sound_id ).to.not.be.undefined;
       } ).expect( 200, done );
     } );
 
@@ -208,14 +288,18 @@ describe( "Observations", ( ) => {
       request( app ).get( "/v1/observations?id=1&details=all" ).
       expect( res => {
         expect( res.body.results[ 0 ].identifications.length ).to.be.above( 0 );
+        expect( res.body.results[ 0 ].project_observations.length ).to.be.above( 0 );
+        expect( res.body.results[ 0 ].project_observations[0].project.location ).to.eq( "22,33" );
+        expect( res.body.results[ 0 ].project_observations[0].project.latitude ).to.eq( "22" );
+        expect( res.body.results[ 0 ].project_observations[0].project.longitude ).to.eq( "33" );
       }).expect( 200, done );
     });
 
     it( "returns a bounding box if you request one", done => {
      request( app ).get( "/v1/observations?return_bounds=true" ).
      expect( res => {
-      expect( res.body.total_bounds ).to.be.defined;
-      expect( res.body.total_bounds.swlng ).to.be.defined;
+      expect( res.body.total_bounds ).to.not.be.undefined;
+      expect( res.body.total_bounds.swlng ).to.not.be.undefined;
      } ).expect( 200, done );
     } );
 
@@ -253,6 +337,45 @@ describe( "Observations", ( ) => {
         expect( _.map( res.body.results, "id" ) ).to.contain( 1 );
       }).expect( 200, done );
     } );
+
+    it( "filters by term_id", done => {
+      request( app ).get( "/v1/observations?term_id=1" ).
+      expect( res => {
+        expect( res.body.results.map( r => r.id ) ).to.contain( 7 );
+        expect( res.body.results.map( r => r.id ) ).not.to.contain( 6 );
+      } ).expect( 200, done );
+    } );
+    
+    it( "filters by term_value_id", done => {
+      request( app ).get( "/v1/observations?term_id=1&term_value_id=2" ).
+      expect( res => {
+        expect( res.body.results.map( r => r.id ) ).to.contain( 8 );
+        expect( res.body.results.map( r => r.id ) ).not.to.contain( 7 );
+        expect( res.body.results.map( r => r.id ) ).not.to.contain( 6 );
+      } ).expect( 200, done );
+    } );
+
+    it( "filters by without_term_id", done => {
+      request( app ).get( "/v1/observations?without_term_id=1" ).
+      expect( res => {
+        // not annotated with this term
+        expect( res.body.results.map( r => r.id ) ).to.contain( 6 );
+        // annotated with this term
+        expect( res.body.results.map( r => r.id ) ).not.to.contain( 7 );
+        // annotated with this term but failing votes
+        expect( res.body.results.map( r => r.id ) ).not.to.contain( 9 );
+      } ).expect( 200, done );
+    } );
+
+    it( "filters by without_term_value_id", done => {
+      request( app ).get( "/v1/observations?term_id=1&without_term_value_id=1" ).
+      expect( res => {
+        expect( res.body.results.map( r => r.id ) ).to.contain( 8 );
+        expect( res.body.results.map( r => r.id ) ).not.to.contain( 7 );
+        expect( res.body.results.map( r => r.id ) ).not.to.contain( 6 );
+      } ).expect( 200, done );
+    } );
+
   });
 
   describe( "histogram", ( ) => {
@@ -267,6 +390,13 @@ describe( "Observations", ( ) => {
       request( app ).get( "/v1/observations/identifiers" ).
         expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "supports pagination", done => {
+      request( app ).get( "/v1/observations/identifiers?per_page=1&page=2" ).expect( res => {
+        expect( res.body.page ).to.eq( 2 );
+        expect( res.body.per_page ).to.eq( 1 );
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
   });
 
   describe( "observers", ( ) => {
@@ -285,6 +415,26 @@ describe( "Observations", ( ) => {
         expect( res.results[0].user.name ).to.eq( "A User" );
       });
     });
+
+    it( "supports pagination", done => {
+      request( app ).get( "/v1/observations/observers?per_page=1&page=2" ).expect( res => {
+        expect( res.body.page ).to.eq( 2 );
+        expect( res.body.per_page ).to.eq( 1 );
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+
+    it( "supports pagination when ordering by species_count", done => {
+      request( app ).get( "/v1/observations/observers?per_page=1&page=2&order_by=species_count" ).expect( res => {
+        expect( res.body.page ).to.eq( 2 );
+        expect( res.body.per_page ).to.eq( 1 );
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+
+    it( "should never return null total_results", done => {
+      request( app ).get( "/v1/observations/observers?place_id=123" ).expect( res => {
+        expect( res.body.total_results ).to.eq( 0 );
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    })
   });
 
   describe( "species_counts", ( ) => {
@@ -311,12 +461,18 @@ describe( "Observations", ( ) => {
       request( app ).get( "/v1/observations/species_counts?unobserved_by_user_id=1&lat=50&lng=50" ).
         expect( res => {
           expect( res.body.page ).to.eq( 1 );
-          expect( res.body.per_page ).to.eq( 1 );
           expect( res.body.total_results ).to.eq( 1 );
           expect( res.body.results[0].count ).to.eq( 1 );
           expect( res.body.results[0].taxon.id ).to.eq( 123 );
         }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
+
+    it( "supports pagination", done => {
+      request( app ).get( "/v1/observations/species_counts?per_page=1&page=2" ).expect( res => {
+        expect( res.body.page ).to.eq( 2 );
+        expect( res.body.per_page ).to.eq( 1 );
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
   });
 
   describe( "iconic_taxa_counts", ( ) => {

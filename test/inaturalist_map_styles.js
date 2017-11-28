@@ -1,4 +1,5 @@
 var expect = require( "chai" ).expect,
+    Taxon = require( "../lib/models/taxon" ),
     MapStyles = require( "../lib/inaturalist_map_styles" );
 
 describe( "InaturalistMapStyles", function( ) {
@@ -14,7 +15,7 @@ describe( "InaturalistMapStyles", function( ) {
 
   describe( "coloredPoints", function( ) {
     it( "defaults to gray", function( ) {
-      expect( MapStyles.markersAndCircles( ) ).to.include( "#585858" );
+      expect( MapStyles.markersAndCircles( ) ).to.include( Taxon.defaultColor );
     });
 
     it( "uses a heatmap styled colorize-alpha filter", function( ) {

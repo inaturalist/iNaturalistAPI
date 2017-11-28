@@ -51,8 +51,33 @@ describe( "util", function( ) {
       expect( opts.place ).to.eq( "PL" );
       expect( opts.preferredPlace ).to.eq( "PPL" );
     });
-  });
 
+    it( "sets locale based on user session", function( ) {
+      var req = { query: { }, inat: { }, userSession: { locale: "de" } };
+      var opts = util.localeOpts( req );
+      expect( opts.locale ).to.eq( "de" );
+    });
+
+    it( "sets preferredPlace based on user session", function( ) {
+      var req = { query: { }, inat: { }, userSession: { preferredPlace: { id: 111 } } };
+      var opts = util.localeOpts( req );
+      expect( opts.preferredPlace.id ).to.eq( 111 );
+    });
+
+    it( "overrides user session locale with params", function( ) {
+      var req = { query: { locale: "es" }, inat: { }, userSession: { locale: "de" } };
+      var opts = util.localeOpts( req );
+      expect( opts.locale ).to.eq( "es" );
+    });
+
+    it( "overrides user session place with params", function( ) {
+      var req = { query: { }, inat: { place: "PL", preferredPlace: "PPL" },
+        userSession: { preferredPlace: { id: 111 } } };
+      var opts = util.localeOpts( req );
+      expect( opts.place ).to.eq( "PL" );
+      expect( opts.preferredPlace ).to.eq( "PPL" );
+    });
+  });
 });
 
 function expectError( e, done ) {

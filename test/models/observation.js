@@ -5,27 +5,19 @@ var expect = require( "chai" ).expect,
 describe( "Observation", function( ) {
 
   describe( "preloadAllAssociations", function( ) {
-    it( "returns preload ID errors", function( done ) {
-      var stub = sinon.stub( Observation, "preloadIdentifications", function( p, cb ) {
-        cb("id-error");
-      });
+    it( "returns preload errors", function( done ) {
+      var stub = sinon.stub( Observation, "preloadAnnotationControlledTerms" ).
+        callsFake( function( p, cb ) {
+          cb("terms-error");
+        }
+      );
       Observation.preloadAllAssociations([ ], null, function( e ) {
-        expect( e ).to.eq( "id-error" );
+        expect( e ).to.eq( "terms-error" );
         stub.restore( );
         done( );
       });
     });
 
-    it( "returns preload fave errors", function( done ) {
-      var stub = sinon.stub( Observation, "preloadFaves", function( p, cb ) {
-        cb("fave-error");
-      });
-      Observation.preloadAllAssociations([ ], null, function( e ) {
-        expect( e ).to.eq( "fave-error" );
-        stub.restore( );
-        done( );
-      });
-    });
   });
 
 });

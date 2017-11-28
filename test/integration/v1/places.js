@@ -41,7 +41,7 @@ describe( "Places", function( ) {
     });
 
     it( "returns an error if too many IDs are requested", function( done ) {
-      var ids = [ ], count = 21;
+      var ids = [ ], count = 501;
       for( var i = 1 ; i <= count ; i++ ) {
         ids.push( i );
       }

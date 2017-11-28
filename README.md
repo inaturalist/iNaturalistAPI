@@ -7,6 +7,16 @@ Our API is documented using the [Swagger](http://swagger.io/)/[OpenAPI](https://
 
 #### https://api.inaturalist.org
 
+# Setup
+
+```bash
+npm install
+# Fill in vals to connect to Rails, Postgres, and elasticsearch
+cp config_example.js config.js
+# Run the node app on port 4000
+node app.js
+```
+
 # Running Tests
 
 Run all: `npm test`
@@ -15,4 +25,3 @@ Filter by pattern: `NODE_ENV=test ./node_modules/mocha/bin/_mocha --recursive --
 # Updating Documentation
 
 Edit `lib/views/swagger_v*.yml.ejs`
-

@@ -8,7 +8,7 @@ describe( "PlacesController", function( ) {
         nelat: 0.0001, nelng: 0.00011, swlat: 0.0001, swlng: 0.00011 } };
       var body = PlacesController.nearbyQueryBody( req );
       var filters = body.query.bool.filter;
-      expect( filters ).to.include({ range: { bbox_area: { lte: 1.5, gt: 0 } } });
+      expect( filters ).to.deep.include({ range: { bbox_area: { lte: 1.5, gt: 0 } } });
     });
 
     it( "limits max latitude to 90", function( ) {
@@ -16,7 +16,7 @@ describe( "PlacesController", function( ) {
         nelat: 100, nelng: 100, swlat: 100, swlng: 100 } };
       var body = PlacesController.nearbyQueryBody( req );
       var filters = body.query.bool.filter;
-      expect( filters ).to.include({ geo_shape: {
+      expect( filters ).to.deep.include({ geo_shape: {
         geometry_geojson: {
           shape: {
             type: "envelope",
@@ -30,7 +30,7 @@ describe( "PlacesController", function( ) {
         nelat: -100, nelng: -100, swlat: -100, swlng: -100 } };
       var body = PlacesController.nearbyQueryBody( req );
       var filters = body.query.bool.filter;
-      expect( filters ).to.include({ geo_shape: {
+      expect( filters ).to.deep.include({ geo_shape: {
         geometry_geojson: {
           shape: {
             type: "envelope",
@@ -44,7 +44,7 @@ describe( "PlacesController", function( ) {
         nelat: 0.0001, nelng: 0.00011, swlat: 0.0001, swlng: 0.00011 } };
       var body = PlacesController.nearbyQueryBody( req );
       var filter = body.query.bool.filter;
-      expect( filter ).to.include({ match: {
+      expect( filter ).to.deep.include({ match: {
         display_name_autocomplete: "Massachusetts" }});
     });
   });
