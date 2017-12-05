@@ -9,3 +9,10 @@ newrelic.js
 newrelic_agent.log
 inaturalist_api.*.log
 public/uploads/
+lib/vision/**
+!lib/vision/cache_images.js
+!lib/vision/cv_stats.js
+!lib/vision/file_cache.js
+!lib/vision/image_cache.js
+!lib/vision/photos_csv_transformer.js
+!lib/vision/run_stats.js
