@@ -858,6 +858,18 @@
         "user_id": 123
       }
     ],
+    "roles": [
+      {
+        "id": 1,
+        "name": "admin"
+      }
+    ],
+    "roles_users": [
+      {
+        "user_id": 1,
+        "role_id": 1
+      }
+    ],
     "rules": [
       {
         "type": "ProjectObservationRule", "ruler_type": "Project", "ruler_id": 543,
