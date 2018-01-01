@@ -54,6 +54,13 @@ describe( "Observation", ( ) => {
       expect( _.map( obs.comments, "id" ).sort( ) ).to.deep.eq( [ 1, 2, 3 ] );
     });
 
+    it( "site curators see all comments", ( ) => {
+      const obs = new Observation( { comments },
+        { userSession: { user_id: 1, isCurator: true } } );
+      expect( obs.comments.length ).to.eq( 3 );
+      expect( _.map( obs.comments, "id" ).sort( ) ).to.deep.eq( [ 1, 2, 3 ] );
+    });
+
   });
 
   describe( "preloadAllAssociations", ( ) => {
