@@ -10,7 +10,7 @@ describe( "DBModel", function( ) {
       DBModel.fetchBelongsTo([ o ], User, function( ) {
         expect( o.user ).to.not.be.undefined;
         expect( o.user.id ).to.eq( 123 );
-        expect( o.user_id ).to.be.undefined;
+        expect( o.user_id ).to.eq( 123 );
         done( );
       });
     });

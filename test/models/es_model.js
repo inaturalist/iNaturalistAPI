@@ -10,7 +10,7 @@ describe( "ESModel", function( ) {
       ESModel.fetchBelongsTo([ o ], Taxon, { }, function( ) {
         expect( o.taxon ).to.not.be.undefined;
         expect( o.taxon.id ).to.eq( 1 );
-        expect( o.taxon_id ).to.be.undefined;
+        expect( o.taxon_id ).to.eq( 1 );
         done( );
       });
     });
