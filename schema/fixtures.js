@@ -599,6 +599,17 @@
           "name": "Taxon for a swap"
         },
         {
+          "id": 10003,
+          "name": "Inactive, replaced by 123",
+          "is_active": false,
+          "current_synonymous_taxon_id": 123
+        },
+        {
+          "id": 10004,
+          "name": "Inactive, unreplaced",
+          "is_active": false
+        },
+        {
           "id": 7,
           "name": "Los",
           "parent_id": 1,
