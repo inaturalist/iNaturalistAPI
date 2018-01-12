@@ -602,12 +602,18 @@
           "id": 10003,
           "name": "Inactive, replaced by 123",
           "is_active": false,
-          "current_synonymous_taxon_id": 123
+          "current_synonymous_taxon_ids": [123]
         },
         {
           "id": 10004,
           "name": "Inactive, unreplaced",
           "is_active": false
+        },
+        {
+          "id": 10005,
+          "name": "Inactive, replaced by 1 and 2",
+          "is_active": false,
+          "current_synonymous_taxon_ids": [1,2]
         },
         {
           "id": 7,
