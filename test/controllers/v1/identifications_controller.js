@@ -229,7 +229,7 @@ describe( "IdentificationsController", ( ) => {
 
   describe( "speciesCounts", ( ) => {
     it( "returns taxa", done => {
-      IdentificationsController.speciesCounts( { query: { } }, { }, ( e, r ) => {
+      IdentificationsController.speciesCounts( { query: { } }, ( e, r ) => {
         expect(r.total_results).to.eq(
           _.uniq( _.filter( fixtures.elasticsearch.identifications.identification, i => i.taxon ), i => i.taxon.id ).length
         );
