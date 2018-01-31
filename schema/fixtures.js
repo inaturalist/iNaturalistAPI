@@ -627,6 +627,50 @@
           }],
           "observations_count": 50,
           "is_active": true
+        },
+        {
+          "id": 8,
+          "name": "Mimulus guttatus",
+          "parent_id": 1,
+          "ancestor_ids": [ 1001, 1, 2 ],
+          "names": [
+            {
+              "name_autocomplete": "Mimulus guttatus",
+              "exact": "Mimulus guttatus",
+              "exact_ci": "Mimulus guttatus",
+              "locale": "sci"
+            },
+            {
+              "name_autocomplete": "seep monkeyflower",
+              "exact": "seep monkeyflower",
+              "exact_ci": "seep monkeyflower",
+              "locale": "en"
+            }
+          ],
+          "observations_count": 50,
+          "is_active": true
+        },
+        {
+          "id": 9,
+          "name": "Ulva intestinalis",
+          "parent_id": 1,
+          "ancestor_ids": [ 1001, 1, 2 ],
+          "names": [
+            {
+              "name_autocomplete": "Ulva intestinalis",
+              "exact": "Ulva intestinalis",
+              "exact_ci": "Ulva intestinaliss",
+              "locale": "sci"
+            },
+            {
+              "name_autocomplete": "Gutweed",
+              "exact": "Gutweed",
+              "exact_ci": "Gutweed",
+              "locale": "en"
+            }
+          ],
+          "observations_count": 50,
+          "is_active": true
         }
       ]
     },
