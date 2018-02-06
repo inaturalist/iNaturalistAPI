@@ -153,4 +153,37 @@ describe( "Taxa", function( ) {
         } ).expect( "Content-Type", /json/ ).expect( 200, done );
     } );
   });
+
+  describe( "search", function( ) {
+    it( "returns taxa", done => {
+      request( app ).get( "/v1/taxa?id=3" ).
+        expect( function( res ) {
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results[0].id ).to.eq( 3 );
+        } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "returns taxa with id above a value", done => {
+      request( app ).get( "/v1/taxa?id_above=10&order_by=id" ).
+        expect( function( res ) {
+          expect( res.body.results[0].id ).to.be.above( 10 );
+        } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "returns taxa with id above a value", done => {
+      request( app ).get( "/v1/taxa?id_below=10&order_by=id&order=desc" ).
+        expect( function( res ) {
+          expect( res.body.results[0].id ).to.be.below( 10 );
+        } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "returns taxa with id above a value", done => {
+      request( app ).get( "/v1/taxa?q=los" ).
+        expect( function( res ) {
+          expect( res.body.total_results ).to.eq( 3 );
+          expect( res.body.results[0].matched_term ).to.eq( "Los lobos" );
+        } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+  });
+
 });

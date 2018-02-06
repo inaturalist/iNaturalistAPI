@@ -6,7 +6,7 @@ node_js:
   - "8.9.1"
 
 jdk:
-  - oraclejdk8
+  - openjdk8
 
 env:
   - CXX=g++-4.8
@@ -17,7 +17,6 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
-      - oracle-java8-set-default
   postgresql: "9.6"
 
 before_install:

@@ -32,8 +32,16 @@ describe( "Places", function( ) {
         expect( "Content-Type", /json/ ).expect( 200, done );
     });
 
+    it( "returns projects by slug", function( done ) {
+      request( app ).get( "/v1/places/united-states" ).
+        expect( function( res ) {
+          expect( res.body.results[0].slug ).to.eq( "united-states" );
+        }
+      ).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
     it( "validates format of IDs", function( done ) {
-      request( app ).get( "/v1/places/hawaii" ).
+      request( app ).get( "/v1/places/haw.ii" ).
         expect( function( res ) {
           expect( res.body.error ).to.eq( "Error" );
           expect( res.body.status ).to.eq( 422 );

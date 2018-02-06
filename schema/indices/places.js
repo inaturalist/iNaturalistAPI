@@ -20,6 +20,10 @@
         "analyzer" : "keyword_autocomplete_analyzer",
         "search_analyzer" : "keyword_analyzer"
       },
+      "slug": {
+        "type": "string",
+        "analyzer": "keyword_analyzer"
+      },
       "geometry_geojson" : {
         "type" : "geo_shape"
       },
