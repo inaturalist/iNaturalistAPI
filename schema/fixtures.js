@@ -5,6 +5,7 @@
         {
           "id": 1,
           "name": "United States",
+          "slug": "united-states",
           "display_name_autocomplete": "United States",
           "location": "48.8907012939,-116.9820022583",
           "admin_level": 0,
@@ -25,6 +26,7 @@
         {
           "id": 2,
           "name": "Massachusetts",
+          "slug": "massachusetts",
           "display_name_autocomplete": "Massachusetts",
           "location": "42.0368995667,-71.6835021973",
           "admin_level": 1,
@@ -45,6 +47,7 @@
         {
           "id": 3,
           "name": "Community",
+          "slug": "community",
           "display_name_autocomplete": "Community",
           "admin_level": null,
           "bbox_area": 6,
@@ -63,11 +66,13 @@
         },
         {
           "id": 123,
-          "name": "itsname"
+          "name": "itsname",
+          "slug": "itsname"
         },
         {
           "id": 432,
           "name": "a-place",
+          "slug": "a-place",
           "display_name_autocomplete": "a-place"
         }
       ]
@@ -456,6 +461,7 @@
           "title_autocomplete": "Project One",
           "title_exact": "Project One",
           "location": "11,12",
+          "slug": "project-one",
           "user_ids": [ 1, 5, 123 ]
         },
         {
@@ -464,6 +470,7 @@
           "title_autocomplete": "Project Two",
           "title_exact": "Project Two",
           "location": "21,22",
+          "slug": "project-two",
           "user_ids": [ 123 ]
         },
         {
@@ -472,6 +479,7 @@
           "title_autocomplete": "A Project",
           "title_exact": "A Project",
           "location": "22,33",
+          "slug": "a-project",
           "user_ids": [ 6 ]
         }
       ]
