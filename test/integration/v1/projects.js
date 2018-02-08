@@ -28,6 +28,14 @@ describe( "Projects Routes", function( ) {
       ).expect( "Content-Type", /json/ ).expect( 200, done );
     });
 
+    it( "returns projects by slug", function( done ) {
+      request( app ).get( "/v1/projects/project-two" ).
+        expect( function( res ) {
+          expect( res.body.results[0].slug ).to.eq( "project-two" );
+        }
+      ).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
     it( "returns an error if too many IDs are requested", function( done ) {
       var ids = [ ], count = 101;
       for( var i = 1 ; i <= count ; i++ ) {
