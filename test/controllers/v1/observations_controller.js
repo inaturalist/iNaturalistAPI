@@ -1,6 +1,6 @@
 var expect = require( "chai" ).expect,
     moment = require( "moment" ),
-    _ = require( "underscore" ),
+    _ = require( "lodash" ),
     observations = require( "inaturalistjs" ).observations,
     testHelper = require( "../../../lib/test_helper" ),
     Observation = require( "../../../lib/models/observation" ),

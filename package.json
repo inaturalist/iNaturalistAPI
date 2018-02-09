@@ -41,7 +41,6 @@
     "pg": "^7.1.2",
     "request": "^2.81.0",
     "squel": "^5.11.1",
-    "underscore": "^1.8.3",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {

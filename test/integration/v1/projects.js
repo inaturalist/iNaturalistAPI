@@ -1,6 +1,6 @@
 var expect = require( "chai" ).expect,
     request = require( "supertest" ),
-    _ = require( "underscore" ),
+    _ = require( "lodash" ),
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
     app = iNaturalistAPI.server( );
 

@@ -1,5 +1,5 @@
 var expect = require( "chai" ).expect,
-    _ = require( "underscore" ),
+    _ = require( "lodash" ),
     Place = require( "../../lib/models/place" );
 
 describe( "Place", function( ) {
