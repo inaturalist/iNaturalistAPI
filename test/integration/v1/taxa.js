@@ -69,13 +69,6 @@ describe( "Taxa", function( ) {
         } ).expect( "Content-Type", /json/ ).expect( 200, done );
     } );
 
-    it( "returns term matches across multiple names", function( done ) {
-      request( app ).get( "/v1/taxa/autocomplete?q=Mimulus+seep" ).
-        expect( res => {
-          expect( res.body.results[0].name ).to.eq( "Mimulus guttatus" );
-        } ).expect( "Content-Type", /json/ ).expect( 200, done );
-    } );
-
     it( "should favor names in preferredPlace", function( done ) {
       request( app ).get( "/v1/taxa/autocomplete?q=yellow+pansy&preferred_place_id=433" ).
         expect( res => {
