@@ -78,6 +78,7 @@
         "type" : "string"
       },
       "names" : {
+        "type": "nested",
         "properties" : {
           "exact" : {
             "type" : "keyword"
