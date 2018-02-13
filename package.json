@@ -17,6 +17,8 @@
   "author": "Patrick Leary <patrick.r.leary@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@turf/boolean-contains": "^5.1.5",
+    "@turf/circle": "^5.1.5",
     "async": "^2.5.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
