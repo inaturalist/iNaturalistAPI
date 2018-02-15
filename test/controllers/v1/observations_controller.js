@@ -159,6 +159,12 @@ describe( "ObservationsController", function( ) {
         eql([ "place_guess" ]);
     });
 
+    it( "queries taxon_name", function( ) {
+      Q( { taxon_name: "something" }, function( e, q ) { eq = q; } );
+      expect( eq.filters[0].multi_match.fields ).to.
+        eql([ "taxon.names.name" ]);
+    });
+
     //
     // Filters
     //
@@ -178,16 +184,10 @@ describe( "ObservationsController", function( ) {
       expect( eq.filters ).to.eql([{ exists: { field: "photos.url" } }]);
     });
 
-    it( "filters by user login", function( ) {
-      Q( { user_id: "aname" }, function( e, q ) { eq = q; } );
-      expect( eq.filters ).to.eql([{ terms: { "user.login": [ "aname" ] } }]);
-    });
-
     it( "filters by param values", function( ) {
       _.each([ { http_param: "rank", es_field: "taxon.rank" },
         { http_param: "user_id", es_field: "user.id" },
         { http_param: "user_login", es_field: "user.login" },
-        { http_param: "taxon_name", es_field: "taxon.names.name" },
         { http_param: "day", es_field: "observed_on_details.day" },
         { http_param: "month", es_field: "observed_on_details.month" },
         { http_param: "year", es_field: "observed_on_details.year" },
