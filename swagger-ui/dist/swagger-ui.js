@@ -1524,12 +1524,7 @@ SwaggerClient.prototype.buildFromSpec = function (response) {
 
   if (typeof this.url === 'string') {
     location = this.parseUri(this.url);
-    if (typeof this.scheme === 'undefined' && typeof this.schemes === 'undefined' || this.schemes.length === 0) {
-      this.scheme = location.scheme || 'http';
-    } else if (typeof this.scheme === 'undefined') {
-      this.scheme = this.schemes[0] || location.scheme;
-    }
-
+    this.scheme = ( location.scheme === "https" ) ? "https" : "http";
     if (typeof this.host === 'undefined' || this.host === '') {
       this.host = location.host;
 
