@@ -8,7 +8,7 @@ var expect = require( "chai" ).expect,
     config = require( "../../../config.js" ),
     app = iNaturalistAPI.server( ),
     moment = require( "moment" ),
-    _ = require( "underscore" );
+    _ = require( "lodash" );
 
 var fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 

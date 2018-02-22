@@ -93,6 +93,12 @@
           "name": "a-place",
           "slug": "a-place",
           "display_name_autocomplete": "a-place"
+        },
+        {
+          "id": 433,
+          "name": "a-place-in-a-place",
+          "display_name_autocomplete": "A Place In A Place",
+          "ancestor_place_ids": [432, 433]
         }
       ]
     },
@@ -665,6 +671,106 @@
         },
         {
           "id": 8,
+          "name": "Mimulus guttatus",
+          "parent_id": 1,
+          "ancestor_ids": [ 1001, 1, 2 ],
+          "names": [
+            {
+              "name_autocomplete": "Mimulus guttatus",
+              "exact": "Mimulus guttatus",
+              "exact_ci": "Mimulus guttatus",
+              "locale": "sci"
+            },
+            {
+              "name_autocomplete": "seep monkeyflower",
+              "exact": "seep monkeyflower",
+              "exact_ci": "seep monkeyflower",
+              "locale": "en"
+            }
+          ],
+          "observations_count": 50,
+          "is_active": true
+        },
+        {
+          "id": 9,
+          "name": "Ulva intestinalis",
+          "parent_id": 1,
+          "ancestor_ids": [ 1001, 1, 2 ],
+          "names": [
+            {
+              "name_autocomplete": "Ulva intestinalis",
+              "exact": "Ulva intestinalis",
+              "exact_ci": "Ulva intestinaliss",
+              "locale": "sci"
+            },
+            {
+              "name_autocomplete": "Gutweed",
+              "exact": "Gutweed",
+              "exact_ci": "Gutweed",
+              "locale": "en"
+            }
+          ],
+          "observations_count": 50,
+          "is_active": true
+        },
+        {
+          "id": 10,
+          "name": "Viola pedunculata",
+          "parent_id": 1,
+          "ancestor_ids": [ 1001, 1, 2 ],
+          "names": [
+            {
+              "name_autocomplete": "Viola pedunculata",
+              "exact": "Viola pedunculata",
+              "exact_ci": "Viola pedunculata",
+              "locale": "sci"
+            },
+            {
+              "name_autocomplete": "California Golden Violet",
+              "exact": "California Golden Violet",
+              "exact_ci": "California Golden Violet",
+              "locale": "en"
+            },
+            {
+              "name_autocomplete": "yellow pansy",
+              "exact": "yellow pansy",
+              "exact_ci": "yellow pansy",
+              "locale": "en"
+            }
+          ],
+          "observations_count": 51,
+          "is_active": true
+        },
+        {
+          "id": 11,
+          "name": "Junonia hierta",
+          "parent_id": 1,
+          "ancestor_ids": [ 1001, 1, 2 ],
+          "names": [
+            {
+              "name_autocomplete": "Junonia hierta",
+              "exact": "Junonia hierta",
+              "exact_ci": "Junonia hierta",
+              "locale": "sci"
+            },
+            {
+              "name_autocomplete": "Yellow Pansy",
+              "exact": "Yellow Pansy",
+              "exact_ci": "Yellow Pansy",
+              "locale": "en",
+              "place_taxon_names": [
+                {
+                  "place_id": 433,
+                  "position": 0
+                }
+              ]
+            }
+          ],
+          "observations_count": 50,
+          "is_active": true
+        },
+        {
+          "id": 12,
           "name": "Search test taxon",
           "rank": "species",
           "rank_level": 10,
@@ -848,6 +954,12 @@
         "id": 432,
         "name": "a-place",
         "display_name": "a-place"
+      },
+      {
+        "id": 433,
+        "name": "a-place-in-a-place",
+        "display_name": "A Place In A Place",
+        "ancestry": "432/433"
       }
     ],
     "preferences": [

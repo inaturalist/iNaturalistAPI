@@ -1,9 +1,6 @@
 var expect = require( "chai" ).expect,
-    // sinon = require( "sinon" ),
     request = require( "supertest" ),
-    // _ = require( "underscore" ),
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
-    // User = require( "../../../lib/models/user" ),
     app = iNaturalistAPI.server( );
 
 describe( "Users", function( ) {
