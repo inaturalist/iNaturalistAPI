@@ -13,27 +13,27 @@ describe( "Search", ( ) => {
     } )
     it( "returns taxa", done => {
       request( app ).get( "/v1/search?q=search+test" ).expect( res => {
-        expect( _.filter( res.body.results, r => r.rank ).length ).to.be.above( 0 );
+        expect( _.filter( res.body.results, r => r.record.rank ).length ).to.be.above( 0 );
       } ).expect( "Content-Type", /json/ ).expect( 200, done );
     } );
     it( "returns places", done => {
       request( app ).get( "/v1/search?q=search+test" ).expect( res => {
-        expect( _.filter( res.body.results, r => r.bbox_area ).length ).to.be.above( 0 );
+        expect( _.filter( res.body.results, r => r.record.bbox_area ).length ).to.be.above( 0 );
       } ).expect( "Content-Type", /json/ ).expect( 200, done );
     } );
     it( "returns projects", done => {
       request( app ).get( "/v1/search?q=search+test" ).expect( res => {
-        expect( _.filter( res.body.results, r => r.user_ids ).length ).to.be.above( 0 );
+        expect( _.filter( res.body.results, r => r.record.user_ids ).length ).to.be.above( 0 );
       } ).expect( "Content-Type", /json/ ).expect( 200, done );
     } );
     it( "returns users", done => {
       request( app ).get( "/v1/search?q=search+test" ).expect( res => {
-        expect( _.filter( res.body.results, r => r.login ).length ).to.be.above( 0 );
+        expect( _.filter( res.body.results, r => r.record.login ).length ).to.be.above( 0 );
       } ).expect( "Content-Type", /json/ ).expect( 200, done );
     } );
     it( "returns substring matches", done => {
       request( app ).get( "/v1/search?q=test+user" ).expect( res => {
-        expect( _.filter( res.body.results, r => r.login === "search_test_user" ).length ).to.be.above( 0 );
+        expect( _.filter( res.body.results, r => r.record.login === "search_test_user" ).length ).to.be.above( 0 );
       } ).expect( "Content-Type", /json/ ).expect( 200, done );
     } );
     it( "returns fuzzy matches", done => {
