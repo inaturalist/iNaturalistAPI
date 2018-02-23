@@ -65,6 +65,25 @@
           }
         },
         {
+          "id": 4,
+          "name": "Search Test Place",
+          "display_name_autocomplete": "search test place",
+          "admin_level": null,
+          "bbox_area": 6,
+          "geometry_geojson": {
+            "type": "Polygon",
+            "coordinates": [[
+              [ -73.5, 42.75 ], [ -70, 42.75 ], [ -70, 41.5 ], [ -73.5, 41.5 ], [ -73.5, 42.75 ]
+            ]]
+          },
+          "bounding_box_geojson": {
+            "type": "Polygon",
+            "coordinates": [[
+              [ -73.5, 42.75 ], [ -70, 42.75 ], [ -70, 41.5 ], [ -73.5, 41.5 ], [ -73.5, 42.75 ]
+            ]]
+          }
+        },
+        {
           "id": 123,
           "name": "itsname",
           "slug": "itsname"
@@ -487,6 +506,14 @@
           "location": "22,33",
           "slug": "a-project",
           "user_ids": [ 6 ]
+        },
+        {
+          "id": 3,
+          "title": "Search Test Project",
+          "title_autocomplete": "search test project",
+          "title_exact": "Search Test Project",
+          "location": "11,12",
+          "user_ids": [ 1 ]
         }
       ]
     },
@@ -741,6 +768,21 @@
           ],
           "observations_count": 50,
           "is_active": true
+        },
+        {
+          "id": 12,
+          "name": "Search test taxon",
+          "rank": "species",
+          "rank_level": 10,
+          "parent_id": 1,
+          "ancestor_ids": [ 1001, 1, 2 ],
+          "names": [{
+            "name_autocomplete": "Search test taxon",
+            "exact": "Search test taxon",
+            "exact_ci": "Search test taxon"
+          }],
+          "observations_count": 50,
+          "is_active": true
         }
       ]
     },
@@ -762,6 +804,13 @@
           "id": 123,
           "login": "a-user",
           "name": "A User"
+        },
+        {
+          "id": 2,
+          "login": "search_test_user",
+          "login_autocomplete": "search_test_user",
+          "name": "Search Test User",
+          "name_autocomplete": "Search Test User"
         }
       ]
     },
