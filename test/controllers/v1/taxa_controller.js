@@ -1,5 +1,7 @@
 const expect = require( "chai" ).expect;
+const ComputervisionController = require( "../../../lib/controllers/v1/computervision_controller" );
 const TaxaController = require( "../../../lib/controllers/v1/taxa_controller" );
+const sinon = require( "sinon" );
 
 describe( "TaxaController", ( ) => {
 
@@ -71,6 +73,31 @@ describe( "TaxaController", ( ) => {
         done( );
       });
     });
+  });
+
+  describe( "speciesCountsResponse", ( ) => {
+
+    it( "includes all taxa by defaul", done => {
+      const req = { query: { }, inat: { } };
+      const leafCounts = [ { taxon_id: 1, count: 100 }, { taxon_id: 2, count: 99 } ];
+      TaxaController.speciesCountsResponse( req, leafCounts, { }, ( err, response ) => {
+        expect( response.results.length ).to.eq( 2 );
+        done( )
+      });
+    });
+
+    it( "can filter by taxa in the vision model", done => {
+      // stub CvC.modelContainsTaxonID to say only taxonID 1 is in the model
+      sinon.stub( ComputervisionController, "modelContainsTaxonID" ).
+        callsFake( taxonID => ( taxonID === 1 ) );
+      const req = { query: { include_only_vision_taxa: true }, inat: { } };
+      const leafCounts = [ { taxon_id: 1, count: 100 }, { taxon_id: 2, count: 99 } ];
+      TaxaController.speciesCountsResponse( req, leafCounts, { }, ( err, response ) => {
+        expect( response.results.length ).to.eq( 1 );
+        done( )
+      });
+    });
+
   });
 
 });
