@@ -2,7 +2,7 @@ var expect = require( "chai" ).expect,
     request = require( "supertest" ),
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
     fs = require( "fs" ),
-    _ = require( "lodash" );
+    _ = require( "lodash" ),
     app = iNaturalistAPI.server( );
 
 var fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
