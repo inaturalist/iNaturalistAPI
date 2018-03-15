@@ -28,7 +28,7 @@
     "elasticsearch": "^13.3.1",
     "express": "^4.15.4",
     "geoip-lite": "*",
-    "inaturalistjs": "github:inaturalist/inaturalistjs#4c229b7837af63b213ab89a073b1b7b2c253e00c",
+    "inaturalistjs": "github:inaturalist/inaturalistjs#edee7381b4e7dcd681429c2739c1e7b78e5ee0ad",
     "jsonwebtoken": "^7.4.2",
     "lodash": "^4.17.4",
     "md5": "^2.2.1",

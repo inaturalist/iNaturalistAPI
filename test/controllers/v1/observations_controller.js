@@ -199,14 +199,14 @@ describe( "ObservationsController", function( ) {
       ], function( filter ) {
         var qp = { };
         // single values (user_id only accepts integers)
-        var v = (filter.http_param == "user_id") ? 99 : "test";
+        var v = (filter.http_param == "user_id") ? "99" : "test";
         qp[ filter.http_param ] = v;
         Q( qp, function( e, q ) { eq = q; } );
         var f = { terms: { } };
         f.terms[ filter.es_field ] = [ v ];
         expect( eq.filters ).to.eql([ f ]);
         // multiple values (user_id only accepts integers)
-        v = (filter.http_param == "user_id") ? [ 98, 99 ] : [ "test1", "test2" ];
+        v = (filter.http_param == "user_id") ? [ "98", "99" ] : [ "test1", "test2" ];
         qp[ filter.http_param ] = v;
         Q( qp, function( e, q ) { eq = q; } );
         f = { terms: { } };
