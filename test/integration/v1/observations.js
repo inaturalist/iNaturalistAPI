@@ -376,6 +376,16 @@ describe( "Observations", ( ) => {
       } ).expect( 200, done );
     } );
 
+    it( "can return only ids", done => {
+      request( app ).get( "/v1/observations?id=2&only_id=true&per_page=1" ).
+      expect( res => {
+        const result = res.body.results[0];
+        expect( _.keys( result ).length ).to.eq( 1 );
+        expect( _.keys( result )[0] ).to.eq( "id" );
+        expect( result.id ).to.eq( 2 );
+      }).expect( 200, done );
+    });
+
   });
 
   describe( "histogram", ( ) => {
@@ -558,6 +568,15 @@ describe( "Observations", ( ) => {
         expect( res.body.results.length ).to.eq( 3 );
       }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
+  });
+
+  describe( "identification_categories", ( ) => {
+    it( "returns categories", done => {
+      request( app ).get( "/v1/observations/identification_categories" ).expect( res => {
+        expect( res.body.results[0].category ).to.eq( "leading" );
+        expect( res.body.results[0].count ).to.eq( 1 );
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
   });
 
 });

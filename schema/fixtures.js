@@ -247,7 +247,8 @@
               "id": 102,
               "taxon_id": 5,
               "user": { "id": 123 },
-              "body": "id1"
+              "body": "id1",
+              "category": "leading"
             },
             {
               "id": 103,
