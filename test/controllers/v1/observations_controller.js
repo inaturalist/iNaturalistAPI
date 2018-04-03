@@ -1,7 +1,9 @@
+"use strict";
 var expect = require( "chai" ).expect,
     moment = require( "moment" ),
     _ = require( "lodash" ),
     observations = require( "inaturalistjs" ).observations,
+    util = require( "../../../lib/util" ),
     testHelper = require( "../../../lib/test_helper" ),
     Observation = require( "../../../lib/models/observation" ),
     Project = require( "../../../lib/models/project" ),
@@ -657,6 +659,72 @@ describe( "ObservationsController", function( ) {
     it( "fetches results", function( done ) {
       ObservationsController.search( { query: { } }, function( ) {
         // this needs some work - fixtures, etc
+        done( );
+      });
+    });
+  });
+
+  describe( "projectsQueryFilters", ( ) => {
+    it( "fetches results", done => {
+      const projects = [{
+        id: 11,
+        slug: "test-project",
+        project_type: "collection",
+        search_parameters: [
+          {
+            field: "quality_grade",
+            value: "research,needs_id"
+          },
+          {
+            field: "taxon_id",
+            value: 1
+          }
+        ]
+      } ];
+      const req = {
+        query: {
+          taxon_id: 1,
+          project_id: "test-project,12"
+        },
+        inat: {
+          project: projects
+        }
+      };
+      ObservationsController.applyCollectionProjectRules( req, ( err, components ) => {
+        expect( components.search_filters[0] ).to.deep.eq( {
+          bool: {
+            should: [{
+              bool: {
+                must: [
+                  {
+                    terms: {
+                      "taxon.ancestor_ids": [ "1" ]
+                    }
+                  },
+                  {
+                    terms: {
+                      quality_grade: [
+                        "needs_id",
+                        "research"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }]
+          }
+        });
+        expect( components.search_filters[1] ).to.deep.eq( {
+          terms: {
+            "taxon.ancestor_ids": [ 1 ]
+          }
+        });
+        // the "collection" project slug will be removed from project_id param
+        expect( components.search_filters[2] ).to.deep.eq( {
+          terms: {
+            "project_ids": [ "12" ]
+          }
+        });
         done( );
       });
     });

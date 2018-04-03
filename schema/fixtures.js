@@ -1,5 +1,15 @@
 {
   "elasticsearch": {
+    "controlled_terms": {
+      "controlled_term": [
+        {
+          "id": 1,
+          "uri": "uri",
+          "is_value": "false",
+          "values": [ ]
+        }
+      ]
+    },
     "places": {
       "place": [
         {
@@ -242,6 +252,8 @@
           "id": 1,
           "user": { "id": 123 },
           "created_at": "2015-12-31T00:00:00",
+          "quality_grade": "research",
+          "oauth_application_id": 3,
           "identifications": [
             {
               "id": 102,
@@ -515,6 +527,58 @@
           "title_exact": "Search Test Project",
           "location": "11,12",
           "user_ids": [ 1 ]
+        },
+        {
+          "id": 2000,
+          "title": "First New Project",
+          "slug": "first-new-project",
+          "project_type": "collection",
+          "search_parameters": [
+            {
+              "field": "quality_grade",
+              "value": "research,needs_id"
+            },
+            {
+              "field": "taxon_id",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 2001,
+          "title": "Second New Project",
+          "slug": "second-new-project",
+          "project_type": "collection",
+          "search_parameters": [
+            {
+              "field": "user_id",
+              "value": 1
+            },
+            {
+              "field": "taxon_id",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "id": 2003,
+          "title": "First Umbrella",
+          "slug": "first-umbrella",
+          "project_type": "umbrella",
+          "project_observation_rules": [
+            {
+              "id": 100,
+              "operand_id": 2000,
+              "operand_type": "Project",
+              "operator": "in_project?"
+            },
+            {
+              "id": 100,
+              "operand_id": 2001,
+              "operand_type": "Project",
+              "operator": "in_project?"
+            }
+          ]
         }
       ]
     },
@@ -945,6 +1009,17 @@
         "establishment_means": "endemic"
       }
     ],
+    "oauth_applications": [
+      {
+        "id": 3,
+        "name": "iNaturalist iPhone App",
+        "uid": "uid",
+        "secret": "secret",
+        "redirect_uri": "redirect_uri",
+        "created_at": "2018-04-01 01:00:00",
+        "updated_at": "2018-04-01 01:00:00"
+      }
+    ],
     "places": [
       {
         "id": 222,
@@ -1045,6 +1120,26 @@
         "user_id": 123
       }
     ],
+    "posts": [
+      {
+        "id": 1,
+        "parent_id": 543,
+        "parent_type": "Project",
+        "published_at": "2018-04-01 01:00:00",
+        "title": "post 1 title",
+        "body": "post 1 body",
+        "user_id": 1
+      },
+      {
+        "id": 2,
+        "parent_id": 543,
+        "parent_type": "Project",
+        "published_at": "2018-04-01 02:00:00",
+        "title": "post 2 title",
+        "body": "post 2 body2",
+        "user_id": 1
+      }
+    ],
     "roles": [
       {
         "id": 1,
@@ -1117,6 +1212,14 @@
       {
         "type": "ProjectObservationRule", "ruler_type": "Project", "ruler_id": 543,
         "operator": "verifiable?", "operand_id": 1
+      }
+    ],
+    "subscriptions": [
+      {
+        "id": 1,
+        "resource_id": 543,
+        "resource_type": "Project",
+        "user_id": 1
       }
     ],
     "users": [
