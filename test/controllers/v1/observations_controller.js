@@ -692,37 +692,39 @@ describe( "ObservationsController", function( ) {
       };
       ObservationsController.applyCollectionProjectRules( req, ( err, components ) => {
         expect( components.search_filters[0] ).to.deep.eq( {
-          bool: {
-            should: [{
-              bool: {
-                must: [
-                  {
-                    terms: {
-                      "taxon.ancestor_ids": [ "1" ]
-                    }
-                  },
-                  {
-                    terms: {
-                      quality_grade: [
-                        "needs_id",
-                        "research"
-                      ]
-                    }
-                  }
-                ]
-              }
-            }]
-          }
-        });
-        expect( components.search_filters[1] ).to.deep.eq( {
           terms: {
             "taxon.ancestor_ids": [ 1 ]
           }
         });
+        expect( components.search_filters[1].bool.should ).to.not.be.undefined;
+        const shoulds = components.search_filters[1].bool.should;
+        expect( shoulds[0] ).to.deep.eq( {
+          bool: {
+            must: [
+              {
+                terms: {
+                  "taxon.ancestor_ids": [ "1" ]
+                }
+              },
+              {
+                terms: {
+                  quality_grade: [
+                    "needs_id",
+                    "research"
+                  ]
+                }
+              }
+            ]
+          }
+        });
         // the "collection" project slug will be removed from project_id param
-        expect( components.search_filters[2] ).to.deep.eq( {
-          terms: {
-            "project_ids": [ "12" ]
+        expect( shoulds[1] ).to.deep.eq( {
+          bool: {
+            must: [{
+              terms: {
+                "project_ids": [ "12" ]
+              }
+            }]
           }
         });
         done( );
