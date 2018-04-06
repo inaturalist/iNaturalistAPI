@@ -1,9 +1,12 @@
+"use strict";
 var expect = require( "chai" ).expect,
     request = require( "supertest" ),
     _ = require( "lodash" ),
+    jwt = require( "jsonwebtoken" ),
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
+    util = require( "../../../lib/util" ),
+    config = require( "../../../config.js" ),
     fs = require( "fs" ),
-    _ = require( "lodash" ),
     app = iNaturalistAPI.server( );
 
 var fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
@@ -63,7 +66,11 @@ describe( "Projects Routes", function( ) {
     it( "returns partial matches", function( done ) {
       request( app ).get( "/v1/projects/autocomplete?q=proj" ).
         expect( function( res ) {
-          const projects = _.filter( fixtures.elasticsearch.projects.project, p => p.title.match( /proj/i ) );
+          const projects = _.filter( fixtures.elasticsearch.projects.project, p => (
+            p.title.match( /proj/i ) &&
+            p.project_type !== "collection" &&
+            p.project_type !== "umbrella"
+          ) );
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.per_page ).to.eq( projects.length );
           expect( res.body.total_results ).to.eq( projects.length );
@@ -131,5 +138,37 @@ describe( "Projects Routes", function( ) {
         }).expect( "Content-Type", /json/ ).expect( 200, done );
     });
   });
+
+  describe( "posts", ( ) => {
+    it( "returns posts", done => {
+      request( app ).get( "/v1/projects/543/posts" ).
+        expect( res => {
+          expect( res.body.total_results ).to.eq( 2 );
+          expect( res.body.results[0].user.id ).to.eq( 1 );
+          expect( res.body.results[0].title ).to.not.be.undefined;
+          expect( res.body.results[0].body ).to.not.be.undefined;
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+  });
+
+  describe( "subscriptions", ( ) => {
+    it( "fails for unauthenticated requests", done => {
+      request( app ).get( "/v1/projects/543/subscriptions" ).expect( res => {
+        expect( res.error.text ).to.eq( '{"error":"Unauthorized","status":401}' );
+      }).expect( "Content-Type", /json/ ).expect( 401, done );
+    });
+
+    it( "returns posts", done => {
+      var token = jwt.sign({ user_id: 1 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/projects/543/subscriptions" ).set( "Authorization", token ).
+        expect( res => {
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results[0].user_id ).to.eq( 1 );
+          expect( res.body.results[0].resource_id ).to.eq( 543 );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+  });
+
 
 });

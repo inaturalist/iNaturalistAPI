@@ -21,6 +21,46 @@
       "place_ids": {
         "type": "long"
       },
+      "project_observation_rules" : {
+        "properties" : {
+          "id" : {
+            "type" : "long"
+          },
+          "operand_id" : {
+            "type" : "long"
+          },
+          "operand_type" : {
+            "type" : "keyword"
+          },
+          "operator" : {
+            "type" : "keyword"
+          }
+        }
+      },
+      "project_type" : {
+        "type" : "keyword"
+      },
+      "search_parameters" : {
+        "type" : "nested",
+        "properties" : {
+          "field" : {
+            "type" : "keyword"
+          },
+          "value" : {
+            "type" : "text"
+          },
+          "value_boolean" : {
+            "type" : "boolean"
+          },
+          "value_date" : {
+            "type" : "date",
+            "format" : "dateOptionalTime"
+          },
+          "value_number" : {
+            "type" : "long"
+          }
+        }
+      },
       "slug": {
         "type": "string",
         "analyzer": "keyword_analyzer"

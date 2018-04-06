@@ -232,13 +232,13 @@ describe( "InaturalistMapServer", function( ) {
   describe( "taxonPlacesQuery", function( ) {
     it( "sets admin_level based on zoom", function( ) {
       var q = MapServer.taxonPlacesQuery({ params: { zoom: 1 } });
-      expect( q ).to.include( "p.admin_level = 0" );
+      expect( q ).to.include( "places.admin_level = 0" );
       q = MapServer.taxonPlacesQuery({ params: { zoom: 4 } });
-      expect( q ).to.include( "p.admin_level = 1" );
+      expect( q ).to.include( "places.admin_level = 1" );
       q = MapServer.taxonPlacesQuery({ params: { zoom: 6 } });
-      expect( q ).to.include( "p.admin_level = 2" );
+      expect( q ).to.include( "places.admin_level = 2" );
       q = MapServer.taxonPlacesQuery({ params: { zoom: 11 } });
-      expect( q ).to.include( "p.admin_level = 3" );
+      expect( q ).to.include( "places.admin_level = 3" );
     });
   });
 });
