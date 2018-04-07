@@ -6,7 +6,14 @@
           "id": 1,
           "uri": "uri",
           "is_value": "false",
-          "values": [ ]
+          "values": [ ],
+          "labels": [
+            {
+              "id": 1,
+              "locale": "en",
+              "label": "The BEST Term"
+            }
+          ]
         }
       ]
     },

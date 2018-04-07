@@ -600,4 +600,12 @@ describe( "Observations", ( ) => {
     } );
   });
 
+  describe( "popular_field_values", ( ) => {
+    it( "returns controlled attributes with the label field", done => {
+      request( app ).get( "/v1/observations/popular_field_values" ).expect( res => {
+        expect( res.body.results[0].controlled_attribute.label ).to.not.be.undefined;
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+  } );
+
 });
