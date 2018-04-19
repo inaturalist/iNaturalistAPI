@@ -37,7 +37,7 @@ describe( "Search", ( ) => {
       } ).expect( "Content-Type", /json/ ).expect( 200, done );
     } );
     it( "returns fuzzy matches", done => {
-      request( app ).get( "/v1/search?q=seach+test" ).expect( res => {
+      request( app ).get( "/v1/search?q=californa" ).expect( res => {
         expect( res.body.results.length ).to.be.above( 0 );
       } ).expect( "Content-Type", /json/ ).expect( 200, done );
     } );
