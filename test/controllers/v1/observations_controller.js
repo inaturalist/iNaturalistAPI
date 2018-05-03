@@ -453,7 +453,7 @@ describe( "ObservationsController", function( ) {
 
     it( "filters by not_in_project", function( ) {
       Q( { not_in_project: [ 6, 7 ] }, function( e, q ) { eq = q; } );
-      expect( eq.inverse_filters ).to.eql([{ term: { project_ids: [ 6, 7 ] }}]);
+      expect( eq.inverse_filters ).to.eql([{ terms: { project_ids: [ 6, 7 ] }}]);
     });
 
     it( "filters by featured observation", function( ) {
@@ -690,7 +690,7 @@ describe( "ObservationsController", function( ) {
           project: projects
         }
       };
-      ObservationsController.applyCollectionProjectRules( req, ( err, components ) => {
+      ObservationsController.applyCollectionProjectRules( req, { }, ( err, components ) => {
         expect( components.search_filters[0] ).to.deep.eq( {
           terms: {
             "taxon.ancestor_ids": [ 1 ]
