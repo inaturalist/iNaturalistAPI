@@ -9,6 +9,8 @@ module.exports = {
   environment: environment,
   // Host running the iNaturalist Rails app
   apiURL: "http://localhost:3000",
+  // Base URL for the current version of *this* app
+  currentVersionURL: "http://localhost:4000/v1",
   // Whether the Rails app supports SSL requests. For local dev assume it does not
   apiHostSSL: false,
   writeHostSSL: false,
