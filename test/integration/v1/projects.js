@@ -4,7 +4,6 @@ var expect = require( "chai" ).expect,
     _ = require( "lodash" ),
     jwt = require( "jsonwebtoken" ),
     iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
-    util = require( "../../../lib/util" ),
     config = require( "../../../config.js" ),
     fs = require( "fs" ),
     app = iNaturalistAPI.server( );
@@ -12,6 +11,19 @@ var expect = require( "chai" ).expect,
 var fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 describe( "Projects Routes", function( ) {
+
+  describe( "search", function( ) {
+    it( "returns json", function( done ) {
+      request( app ).get( "/v1/projects" ).
+        expect( function( res ) {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 7 );
+          expect( res.body.total_results ).to.eq( 7 );
+          expect( res.body.results.length ).to.eq( 7 );
+        }
+      ).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+  });
 
   describe( "show", function( ) {
     it( "returns json", function( done ) {

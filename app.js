@@ -1,7 +1,8 @@
 /* eslint no-console: 0 */
 "use strict";
-var fs = require( "fs" ),
-    path = require( "path" );
+const fs = require( "fs" );
+const path = require( "path" );
+const Logstasher = require( "./lib/logstasher" );
 
 // NewRelic is stats module, which needs newrelic.js in the app root
 // do as little as possible before loading NewRelic
@@ -12,8 +13,8 @@ if( fs.existsSync( newrelic_path ) ) {
 
 var InaturalistAPI = require( "./lib/inaturalist_api" );
 var port = Number( process.env.PORT || 4000 );
-var logWriteStream = fs.createWriteStream( `inaturalist_api.${port}.log`, { flags : "a" } );
-var app = InaturalistAPI.server( logWriteStream );
+Logstasher.setLogStreamFilePath( `inaturalist_api.${port}.log` );
+var app = InaturalistAPI.server( );
 app.listen( port, function( ) {
   console.log( "Listening on " + port );
 });
