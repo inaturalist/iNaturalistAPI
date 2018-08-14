@@ -507,7 +507,8 @@
           "title_exact": "Project One",
           "location": "11,12",
           "slug": "project-one",
-          "user_ids": [ 1, 5, 123 ]
+          "user_ids": [ 1, 5, 123 ],
+          "featured_at": "2018-04-20T20:57:17.137Z"
         },
         {
           "id": 2,
@@ -871,6 +872,11 @@
           "id": 5,
           "login": "b-user",
           "name": "B User"
+        },
+        {
+          "id": 6,
+          "login": "z-user",
+          "name": "Z User"
         },
         {
           "id": 123,
