@@ -1,49 +1,50 @@
-var expect = require( "chai" ).expect,
-    User = require( "../../lib/models/user" );
+"use strict";
+const expect = require( "chai" ).expect;
+const User = require( "../../lib/models/user" );
 
-describe( "User", function( ) {
-  describe( "findByLogin", function( ) {
-    it( "returns a user given an login", function( done ) {
-      User.findByLogin( "a-user", function( err, u ) {
+describe( "User", ( ) => {
+  describe( "findByLogin", ( ) => {
+    it( "returns a user given an login", done => {
+      User.findByLogin( "a-user", ( err, u ) => {
         expect( u.id ).to.eq( 123 );
         expect( u.login ).to.eq( "a-user" );
         done( );
       });
     });
 
-    it( "returns a user from the cache", function( done ) {
-      User.findByLogin( "a-user", function( err, u ) {
+    it( "returns a user from the cache", done => {
+      User.findByLogin( "a-user", ( err, u ) => {
         expect( u.id ).to.eq( 123 );
         expect( u.login ).to.eq( "a-user" );
         done( );
       });
     });
 
-    it( "returns undefined for missing users", function( done ) {
-      User.findByLogin( "nonsense", function( err, u ) {
+    it( "returns undefined for missing users", done => {
+      User.findByLogin( "nonsense", ( err, u ) => {
         expect( u ).to.be.undefined;
         done( );
       });
     });
 
-    it( "returns nothing given nothing", function( done ) {
-      User.findByLogin( undefined, function( err, u ) {
+    it( "returns nothing given nothing", done => {
+      User.findByLogin( undefined, ( err, u ) => {
         expect( u ).to.be.undefined;
         done( );
       });
     });
   });
 
-  describe( "iconUrl", function( ) {
-    it( "returns nothing if there is no icon", function( ) {
+  describe( "iconUrl", ( ) => {
+    it( "returns nothing if there is no icon", ( ) => {
       expect( User.iconUrl({ }) ).to.be.undefined;
     });
 
-    it( "returns nothing with an unknown type", function( ) {
+    it( "returns nothing with an unknown type", ( ) => {
       expect( User.iconUrl({ id: 50, icon_content_type: "nans" }) ).to.be.undefined;
     });
 
-    it( "recognizes standard extensions", function( ) {
+    it( "recognizes standard extensions", ( ) => {
       expect( User.iconUrl({ id: 50, icon_content_type: "jpeg" }) ).to.match( /50\/medium.jpg$/ );
       expect( User.iconUrl({ id: 50, icon_content_type: "png" }) ).to.match( /50\/medium.png$/ );
       expect( User.iconUrl({ id: 50, icon_content_type: "gif" }) ).to.match( /50\/medium.gif$/ );
@@ -51,7 +52,7 @@ describe( "User", function( ) {
       expect( User.iconUrl({ id: 50, icon_content_type: "tiff" }) ).to.match( /50\/medium.tiff$/ );
     });
 
-    it( "some exceptions", function( ) {
+    it( "some exceptions", ( ) => {
       expect( User.iconUrl({ id: 50, icon_content_type: "jpeg",
         icon_file_name: "image.jpeg" })).to.match( /50\/medium.jpeg$/ );
       expect( User.iconUrl({ id: 50, icon_content_type: "jpeg",
@@ -62,12 +63,48 @@ describe( "User", function( ) {
         icon_file_name: "data" })).to.match( /50\/medium.jpeg$/ );
     });
 
-    it( "some exceptions", function( ) {
+    it( "some exceptions", ( ) => {
       var globalPrefix = global.config.userImagePrefix;
       global.config.userImagePrefix = null;
       expect( User.iconUrl({ id: 50, icon_content_type: "jpeg", icon_file_name: "image.jpeg" })).
         to.eq( "https://static.inaturalist.org/attachments/users/icons/50/medium.jpeg" );
       global.config.userImagePrefix = globalPrefix;
+    });
+  });
+
+  describe( "findByLoginOrID", ( ) => {
+    it( "should not error if given an unknown login", done => {
+      User.findByLoginOrID( "nobody", ( err, u ) => {
+        expect( err ).to.eq( null );
+        expect( u ).to.eq( false );
+        done( );
+      });
+    });
+
+    it( "should not error if given an unknown ID", done => {
+      User.findByLoginOrID( 123456789, ( err, u ) => {
+        expect( err ).to.eq( null );
+        expect( u ).to.eq( false );
+        done( );
+      });
+    });
+
+    it( "returns a user given an ID", done => {
+      User.findByLoginOrID( 1, ( err, u ) => {
+        expect( err ).to.eq( null );
+        expect( u.id ).to.eq( 1 );
+        expect( u.login ).to.eq( "userlogin" );
+        done( );
+      });
+    });
+
+    it( "returns a user given a login", done => {
+      User.findByLoginOrID( "userlogin", ( err, u ) => {
+        expect( err ).to.eq( null );
+        expect( u.id ).to.eq( 1 );
+        expect( u.login ).to.eq( "userlogin" );
+        done( );
+      });
     });
   });
 

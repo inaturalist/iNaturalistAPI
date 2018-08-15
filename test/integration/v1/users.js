@@ -60,4 +60,31 @@ describe( "Users", function( ) {
     });
   });
 
+  describe( "projects", function( ) {
+    it( "returns a 422 for unknown users", function( done ) {
+      request( app ).get( "/v1/users/nobody/projects" ).
+        expect( "Content-Type", /json/ ).expect( 422, done );
+    });
+
+    it( "returns projects given a user ID", function( done ) {
+      request( app ).get( "/v1/users/1/projects" ).
+        expect( function( res ) {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 2 );
+          expect( res.body.total_results ).to.eq( 2 );
+          expect( res.body.results[0].slug ).to.eq( "project-one" );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+
+    it( "returns projects given a user login", function( done ) {
+      request( app ).get( "/v1/users/userlogin/projects" ).
+        expect( function( res ) {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 2 );
+          expect( res.body.total_results ).to.eq( 2 );
+          expect( res.body.results[0].slug ).to.eq( "project-one" );
+        }).expect( "Content-Type", /json/ ).expect( 200, done );
+    });
+  });
+
 });
