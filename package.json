@@ -19,7 +19,7 @@
   "dependencies": {
     "async": "^2.5.0",
     "bluebird": "^3.5.0",
-    "body-parser": "^1.17.2",
+    "body-parser": "^1.18.3",
     "carto": "^0.18.2",
     "compression": "^1.7.0",
     "crypto": "^1.0.1",
@@ -42,10 +42,11 @@
     "pg": "^7.1.2",
     "request": "^2.88.0",
     "squel": "^5.11.1",
+    "sshpk": "^1.14.2",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
-    "babel-eslint": "^7.2.3",
+    "babel-eslint": "^8.2.6",
     "chai": "^4.1.1",
     "coveralls": "^3.0.2",
     "eslint": "^4.4.1",
