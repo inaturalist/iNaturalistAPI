@@ -86,10 +86,6 @@ describe( "Taxon", function( ) {
       expect( t.preferredCommonName({ locale: "en" }) ).to.eq( "BestEnglish" );
     });
 
-    it( "defaults to en", function( ) {
-      expect( t.preferredCommonName( ) ).to.eq( "BestEnglish" );
-    });
-
     it( "defaults to strict locale check", function( ) {
       expect( t.preferredCommonName({ locale: "de" }) ).to.be.undefined;
     });
@@ -100,17 +96,17 @@ describe( "Taxon", function( ) {
 
     it( "returns the best name given a place", function( ) {
       p = { id: 222 };
-      expect( t.preferredCommonName({ preferredPlace: p }) ).to.eq( "BestInCalifornia" );
+      expect( t.preferredCommonName({ locale: "en", preferredPlace: p }) ).to.eq( "BestInCalifornia" );
     });
 
-    it( "returns the best name given a place regardless of locale", function( ) {
+    it( "returns nothing without a matching locale", function( ) {
       p = { id: 222 };
-      expect( t.preferredCommonName({ locale: "de", preferredPlace: p }) ).to.eq( "BestInCalifornia" );
+      expect( t.preferredCommonName({ locale: "de", preferredPlace: p }) ).to.be.undefined;
     });
 
     it( "return the best name from an ancestor place", function( ) {
       p = { id: 333, ancestor_place_ids: [ 111, 333 ] };
-      expect( t.preferredCommonName({ preferredPlace: p }) ).to.eq( "BestInAmerica" );
+      expect( t.preferredCommonName({ locale: "en", preferredPlace: p }) ).to.eq( "BestInAmerica" );
     });
   });
 
