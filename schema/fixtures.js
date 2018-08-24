@@ -1035,9 +1035,19 @@
     ],
     "places": [
       {
+        "id": 111,
+        "name": "United States",
+        "ancestry": "111"
+      },
+      {
         "id": 222,
         "name": "California",
         "ancestry": "111/222"
+      },
+      {
+        "id": 333,
+        "name": "Nevada",
+        "ancestry": "111/333"
       },
       {
         "id": 432,

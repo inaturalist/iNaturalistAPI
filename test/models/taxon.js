@@ -99,8 +99,13 @@ describe( "Taxon", function( ) {
       expect( t.preferredCommonName({ locale: "en", preferredPlace: p }) ).to.eq( "BestInCalifornia" );
     });
 
-    it( "returns nothing without a matching locale", function( ) {
+    it( "returns an exact place match even if locale doesn't match", function( ) {
       p = { id: 222 };
+      expect( t.preferredCommonName({ locale: "de", preferredPlace: p }) ).to.eq( "BestInCalifornia" );
+    });
+
+    it( "does not returns an ancestor place match even if locale doesn't match", function( ) {
+      p = { id: 333 }; // Should be a descendant of 111 North America
       expect( t.preferredCommonName({ locale: "de", preferredPlace: p }) ).to.be.undefined;
     });
 
