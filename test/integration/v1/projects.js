@@ -17,9 +17,9 @@ describe( "Projects Routes", function( ) {
       request( app ).get( "/v1/projects" ).
         expect( function( res ) {
           expect( res.body.page ).to.eq( 1 );
-          expect( res.body.per_page ).to.eq( 7 );
-          expect( res.body.total_results ).to.eq( 7 );
-          expect( res.body.results.length ).to.eq( 7 );
+          expect( res.body.per_page ).to.eq( fixtures.elasticsearch.projects.project.length );
+          expect( res.body.total_results ).to.eq( fixtures.elasticsearch.projects.project.length );
+          expect( res.body.results.length ).to.eq( fixtures.elasticsearch.projects.project.length );
         }
       ).expect( "Content-Type", /json/ ).expect( 200, done );
     });

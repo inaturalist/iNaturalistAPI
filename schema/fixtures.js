@@ -587,6 +587,15 @@
               "operator": "in_project?"
             }
           ]
+        },
+        {
+          "id": 2004,
+          "title": "Spammiest Spam Project",
+          "title_autocomplete": "Spammiest Spam Project",
+          "title_exact": "Spammiest Spam Project",
+          "slug": "spammiest-spam-project",
+          "user_ids": [ ],
+          "spam": true
         }
       ]
     },
