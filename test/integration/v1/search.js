@@ -41,5 +41,10 @@ describe( "Search", ( ) => {
         expect( res.body.results.length ).to.be.above( 0 );
       } ).expect( "Content-Type", /json/ ).expect( 200, done );
     } );
+    it( "does not return spam projects", done => {
+      request( app ).get( "/v1/search?q=spammiest+spam+project" ).expect( res => {
+        expect( res.body.results.length ).to.eq( 0 );
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+    })
   } );
 } );
