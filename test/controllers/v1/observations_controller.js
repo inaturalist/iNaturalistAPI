@@ -714,7 +714,8 @@ describe( "ObservationsController", function( ) {
                   ]
                 }
               }
-            ]
+            ],
+            must_not: []
           }
         });
         // the "collection" project slug will be removed from project_id param
