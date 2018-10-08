@@ -25,7 +25,7 @@
     "compression": "^1.7.0",
     "crypto": "^1.0.1",
     "ejs": "^2.5.7",
-    "elasticmaps": "github:inaturalist/elasticmaps",
+    "elasticmaps": "github:inaturalist/elasticmaps#c6ea17a5e606abde042503bbb6b23fed49429f43",
     "elasticsearch": "^13.3.1",
     "express": "^4.16.3",
     "form-data": "^2.3.2",
