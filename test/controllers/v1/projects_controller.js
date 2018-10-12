@@ -39,4 +39,14 @@ describe( "ProjectsController", function( ) {
       ProjectsController, projects, "delete", done );
   });
 
+  it( "features", function( done ) {
+    testHelper.testInatJSNoPreload(
+      ProjectsController, projects, "feature", done );
+  });
+
+  it( "unfeatures", function( done ) {
+    testHelper.testInatJSNoPreload(
+      ProjectsController, projects, "unfeature", done );
+  });
+
 });
