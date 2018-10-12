@@ -31,7 +31,7 @@
     "form-data": "^2.3.2",
     "geoip-lite": "*",
     "hoek": "^4.2.1",
-    "inaturalistjs": "github:inaturalist/inaturalistjs#3a776410841e8a4109779dc8d189aaf9c0777eda",
+    "inaturalistjs": "github:inaturalist/inaturalistjs",
     "jsonwebtoken": "^7.4.2",
     "lodash": "^4.17.10",
     "md5": "^2.2.1",
