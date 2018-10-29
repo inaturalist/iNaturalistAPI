@@ -178,18 +178,16 @@ describe( "Observations", ( ) => {
       } ).expect( 200, done );
     } );
 
-    // TODO: do we need to preserve searching by user login instead of ID?
-    //       Could we lookup the user ID from the login and then search on ID?
-    // it( "finds observations by ident_user_id by login", done => {
-    //   const login = "user121";
-    //   request( app ).get( `/v1/observations?ident_user_id=${login}` ).
-    //   expect( res => {
-    //     expect( res.body.results.length ).to.be.above( 0 );
-    //     const obsIdentifiedByUser = _.filter( res.body.results, o =>
-    //       _.find( o.identifications, i => i.user.login === login ) );
-    //     expect( obsIdentifiedByUser.length ).to.eq( res.body.results.length );
-    //   } ).expect( 200, done );
-    // } );
+    it( "finds observations by ident_user_id by login", done => {
+      const login = "user121";
+      request( app ).get( `/v1/observations?ident_user_id=${login}` ).
+      expect( res => {
+        expect( res.body.results.length ).to.be.above( 0 );
+        const obsIdentifiedByUser = _.filter( res.body.results, o =>
+          _.find( o.identifications, i => i.user.login === login ) );
+        expect( obsIdentifiedByUser.length ).to.eq( res.body.results.length );
+      } ).expect( 200, done );
+    } );
 
     it( "finds observations by numerous ident_user_id", done => {
       const userIDs = [121,122];

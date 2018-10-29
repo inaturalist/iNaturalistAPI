@@ -1257,6 +1257,20 @@
         "icon_file_name": "img.jpg"
       },
       {
+        "id": 121,
+        "login": "user121",
+        "name": "user121",
+        "icon_content_type": "image/jpeg",
+        "icon_file_name": "img.jpg"
+      },
+      {
+        "id": 122,
+        "login": "user122",
+        "name": "user122",
+        "icon_content_type": "image/jpeg",
+        "icon_file_name": "img.jpg"
+      },
+      {
         "id": 123,
         "login": "a-user",
         "name": "A User",
