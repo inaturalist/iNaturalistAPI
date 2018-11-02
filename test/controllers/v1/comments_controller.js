@@ -1,18 +1,18 @@
-var comments = require( "inaturalistjs" ).comments,
-    testHelper = require( "../../../lib/test_helper" ),
-    Comment = require( "../../../lib/models/comment" ),
-    CommentsController = require( "../../../lib/controllers/v1/comments_controller" );
+const { comments } = require( "inaturalistjs" );
+const testHelper = require( "../../../lib/test_helper" );
+const Comment = require( "../../../lib/models/comment" );
+const CommentsController = require( "../../../lib/controllers/v1/comments_controller" );
 
-describe( "CommentsController", function( ) {
-  it( "creates", function( done ) {
+describe( "CommentsController", ( ) => {
+  it( "creates", done => {
     testHelper.testInatJSPreload( CommentsController, comments, "create", Comment, done );
-  });
+  } );
 
-  it( "updates", function( done ) {
+  it( "updates", done => {
     testHelper.testInatJSPreload( CommentsController, comments, "update", Comment, done );
-  });
+  } );
 
-  it( "deletes", function( done ) {
+  it( "deletes", done => {
     testHelper.testInatJSNoPreload( CommentsController, comments, "delete", done );
-  });
-});
+  } );
+} );

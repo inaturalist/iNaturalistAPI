@@ -1,21 +1,25 @@
-var observationFieldValues = require( "inaturalistjs" ).observation_field_values,
-    testHelper = require( "../../../lib/test_helper" ),
-    ObservationFieldValuesController =
-      require( "../../../lib/controllers/v1/observation_field_values_controller" );
+const { observation_field_values } = require( "inaturalistjs" ); // eslint-disable-line camelcase
+const testHelper = require( "../../../lib/test_helper" );
+const ObservationFieldValuesController = require(
+  "../../../lib/controllers/v1/observation_field_values_controller"
+);
 
-describe( "ObservationFieldValuesController", function( ) {
-  it( "creates", function( done ) {
+describe( "ObservationFieldValuesController", ( ) => {
+  it( "creates", done => {
     testHelper.testInatJSNoPreload(
-      ObservationFieldValuesController, observationFieldValues, "create", done );
-  });
+      ObservationFieldValuesController, observation_field_values, "create", done
+    );
+  } );
 
-  it( "updates", function( done ) {
+  it( "updates", done => {
     testHelper.testInatJSNoPreload(
-      ObservationFieldValuesController, observationFieldValues, "update", done );
-  });
+      ObservationFieldValuesController, observation_field_values, "update", done
+    );
+  } );
 
-  it( "deletes", function( done ) {
+  it( "deletes", done => {
     testHelper.testInatJSNoPreload(
-      ObservationFieldValuesController, observationFieldValues, "delete", done );
-  });
-});
+      ObservationFieldValuesController, observation_field_values, "delete", done
+    );
+  } );
+} );
