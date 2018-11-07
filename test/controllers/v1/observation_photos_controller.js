@@ -1,22 +1,25 @@
-var observation_photos = require( "inaturalistjs" ).observation_photos,
-    testHelper = require( "../../../lib/test_helper" ),
-    ObservationPhotosController = require( "../../../lib/controllers/v1/observation_photos_controller" );
+const { observation_photos } = require( "inaturalistjs" ); // eslint-disable-line camelcase
+const testHelper = require( "../../../lib/test_helper" );
+const ObservationPhotosController = require(
+  "../../../lib/controllers/v1/observation_photos_controller"
+);
 
-describe( "ObservationPhotosController", function( ) {
-
-  it( "creates", function( done ) {
+describe( "ObservationPhotosController", ( ) => {
+  it( "creates", done => {
     testHelper.testInatJSNoPreload(
-      ObservationPhotosController, observation_photos, "create", done );
-  });
+      ObservationPhotosController, observation_photos, "create", done
+    );
+  } );
 
-  it( "updates", function( done ) {
+  it( "updates", done => {
     testHelper.testInatJSNoPreload(
-      ObservationPhotosController, observation_photos, "update", done );
-  });
+      ObservationPhotosController, observation_photos, "update", done
+    );
+  } );
 
-  it( "deletes", function( done ) {
+  it( "deletes", done => {
     testHelper.testInatJSNoPreload(
-      ObservationPhotosController, observation_photos, "delete", done );
-  });
-
-});
+      ObservationPhotosController, observation_photos, "delete", done
+    );
+  } );
+} );
