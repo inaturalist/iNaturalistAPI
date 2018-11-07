@@ -1,35 +1,34 @@
-"use strict";
-var expect = require( "chai" ).expect,
-    request = require( "supertest" ),
-    _ = require( "lodash" ),
-    jwt = require( "jsonwebtoken" ),
-    iNaturalistAPI = require( "../../../lib/inaturalist_api" ),
-    config = require( "../../../config.js" ),
-    fs = require( "fs" ),
-    app = iNaturalistAPI.server( );
+const { expect } = require( "chai" );
+const request = require( "supertest" );
+const _ = require( "lodash" );
+const jwt = require( "jsonwebtoken" );
+const fs = require( "fs" );
+const iNaturalistAPI = require( "../../../lib/inaturalist_api" );
+const config = require( "../../../config.js" );
 
-var fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
+const app = iNaturalistAPI.server( );
 
-describe( "Projects Routes", function( ) {
+const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
-  describe( "search", function( ) {
-    it( "returns json", function( done ) {
-      request( app ).get( "/v1/projects" ).
-        expect( function( res ) {
+describe( "Projects Routes", ( ) => {
+  describe( "search", ( ) => {
+    it( "returns json", done => {
+      request( app ).get( "/v1/projects" )
+        .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.per_page ).to.eq( fixtures.elasticsearch.projects.project.length );
           expect( res.body.total_results ).to.eq( fixtures.elasticsearch.projects.project.length );
           expect( res.body.results.length ).to.eq( fixtures.elasticsearch.projects.project.length );
-        }
-      ).expect( "Content-Type", /json/ ).expect( 200, done );
-    });
-  });
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
 
-  describe( "show", function( ) {
-    it( "returns json", function( done ) {
-      request( app ).get( "/v1/projects/1" ).
-        expect( function( res ) {
-          var project = res.body.results[0];
+  describe( "show", ( ) => {
+    it( "returns json", done => {
+      request( app ).get( "/v1/projects/1" )
+        .expect( res => {
+          const project = res.body.results[0];
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.per_page ).to.eq( 1 );
           expect( res.body.total_results ).to.eq( 1 );
@@ -39,148 +38,158 @@ describe( "Projects Routes", function( ) {
           expect( project.location ).to.eq( "11,12" );
           expect( project.latitude ).to.eq( "11" );
           expect( project.longitude ).to.eq( "12" );
-        }
-      ).expect( "Content-Type", /json/ ).expect( 200, done );
-    });
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
 
-    it( "returns projects by slug", function( done ) {
-      request( app ).get( "/v1/projects/project-two" ).
-        expect( function( res ) {
+    it( "returns projects by slug", done => {
+      request( app ).get( "/v1/projects/project-two" )
+        .expect( res => {
           expect( res.body.results[0].slug ).to.eq( "project-two" );
-        }
-      ).expect( "Content-Type", /json/ ).expect( 200, done );
-    });
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
 
-    it( "returns an error if too many IDs are requested", function( done ) {
-      var ids = [ ], count = 101;
-      for( var i = 1 ; i <= count ; i++ ) {
+    it( "returns an error if too many IDs are requested", done => {
+      const ids = [];
+      const count = 101;
+      for ( let i = 1; i <= count; i += 1 ) {
         ids.push( i );
       }
-      request( app ).get( "/v1/projects/" + ids.join( "," ) ).
-        expect( function( res ) {
+      request( app ).get( `/v1/projects/${ids.join( "," )}` )
+        .expect( res => {
           expect( res.body.error ).to.eq( "Too many IDs" );
           expect( res.body.status ).to.eq( 422 );
-        }).expect( "Content-Type", /json/ ).expect( 422, done );
-    });
-  });
+        } ).expect( "Content-Type", /json/ )
+        .expect( 422, done );
+    } );
+  } );
 
-  describe( "autocomplete", function( ) {
-    it( "returns an empty response if not given a query", function( done ) {
-      request( app ).get( "/v1/projects/autocomplete" ).
-        expect( function( res ) {
+  describe( "autocomplete", ( ) => {
+    it( "returns an empty response if not given a query", done => {
+      request( app ).get( "/v1/projects/autocomplete" )
+        .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.per_page ).to.eq( 0 );
           expect( res.body.total_results ).to.eq( 0 );
           expect( res.body.results.length ).to.eq( 0 );
-        }).expect( "Content-Type", /json/ ).expect( 200, done );
-    });
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
 
-    it( "returns partial matches", function( done ) {
-      request( app ).get( "/v1/projects/autocomplete?q=proj" ).
-        expect( function( res ) {
+    it( "returns partial matches", done => {
+      request( app ).get( "/v1/projects/autocomplete?q=proj" )
+        .expect( res => {
           const projects = _.filter( fixtures.elasticsearch.projects.project, p => (
-            p.title.match( /proj/i ) &&
-            p.project_type !== "collection" &&
-            p.project_type !== "umbrella"
+            p.title.match( /proj/i )
+            && p.project_type !== "collection"
+            && p.project_type !== "umbrella"
           ) );
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.per_page ).to.eq( projects.length );
           expect( res.body.total_results ).to.eq( projects.length );
-          res.body.results = _.sortBy( res.body.results, function( r ) {
-            return r.id;
-          });
+          res.body.results = _.sortBy( res.body.results, "id" );
           expect( res.body.results.map( p => p.title ) ).to.include( "Project One" );
           expect( res.body.results.map( p => p.title ) ).to.include( "Project Two" );
           expect( res.body.results.map( p => p.title ) ).to.include( "A Project" );
-        }).expect( "Content-Type", /json/ ).expect( 200, done );
-    });
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
 
-    it( "can filter by member_id", function( done ) {
-      request( app ).get( "/v1/projects/autocomplete?member_id=123" ).
-        expect( function( res ) {
+    it( "can filter by member_id", done => {
+      request( app ).get( "/v1/projects/autocomplete?member_id=123" )
+        .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.results.length ).to.eq( 2 );
-        }).expect( "Content-Type", /json/ ).expect( 200, done );
-    });
-  });
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
 
-  describe( "members", function( ) {
-    it( "returns an error given an unknown project ID", function( done ) {
-      request( app ).get( "/v1/projects/888/members" ).
-        expect( function( res ) {
+  describe( "members", ( ) => {
+    it( "returns an error given an unknown project ID", done => {
+      request( app ).get( "/v1/projects/888/members" )
+        .expect( res => {
           expect( res.body.error ).to.eq( "Unknown project_id" );
           expect( res.body.status ).to.eq( 422 );
-        }).expect( "Content-Type", /json/ ).expect( 422, done );
-    });
+        } ).expect( "Content-Type", /json/ )
+        .expect( 422, done );
+    } );
 
-    it( "returns an empty response if not given a query", function( done ) {
-      request( app ).get( "/v1/projects/543/members" ).
-        expect( function( res ) {
+    it( "returns an empty response if not given a query", done => {
+      request( app ).get( "/v1/projects/543/members" )
+        .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.per_page ).to.eq( 3 );
           expect( res.body.total_results ).to.eq( 3 );
           expect( res.body.results.length ).to.eq( 3 );
-        }).expect( "Content-Type", /json/ ).expect( 200, done );
-    });
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
 
-    it( "defaults to page 1", function( done ) {
-      request( app ).get( "/v1/projects/543/members?page=-1" ).
-        expect( function( res ) {
+    it( "defaults to page 1", done => {
+      request( app ).get( "/v1/projects/543/members?page=-1" )
+        .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.results.length ).to.eq( 3 );
-        }).expect( "Content-Type", /json/ ).expect( 200, done );
-    });
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
 
-    it( "can filter by curators", function( done ) {
-      request( app ).get( "/v1/projects/543/members?role=curator" ).
-        expect( function( res ) {
+    it( "can filter by curators", done => {
+      request( app ).get( "/v1/projects/543/members?role=curator" )
+        .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.results.length ).to.eq( 2 );
           expect( res.body.results[0].user.id ).to.eq( 123 );
           expect( res.body.results[1].user.id ).to.eq( 6 );
-        }).expect( "Content-Type", /json/ ).expect( 200, done );
-    });
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
 
-    it( "can filter by manager", function( done ) {
-      request( app ).get( "/v1/projects/543/members?role=manager" ).
-        expect( function( res ) {
+    it( "can filter by manager", done => {
+      request( app ).get( "/v1/projects/543/members?role=manager" )
+        .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.results.length ).to.eq( 1 );
           expect( res.body.results[0].user.id ).to.eq( 6 );
-        }).expect( "Content-Type", /json/ ).expect( 200, done );
-    });
-  });
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
 
   describe( "posts", ( ) => {
     it( "returns posts", done => {
-      request( app ).get( "/v1/projects/543/posts" ).
-        expect( res => {
+      request( app ).get( "/v1/projects/543/posts" )
+        .expect( res => {
           expect( res.body.total_results ).to.eq( 2 );
           expect( res.body.results[0].user.id ).to.eq( 1 );
           expect( res.body.results[0].title ).to.not.be.undefined;
           expect( res.body.results[0].body ).to.not.be.undefined;
-        }).expect( "Content-Type", /json/ ).expect( 200, done );
-    });
-  });
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
 
   describe( "subscriptions", ( ) => {
     it( "fails for unauthenticated requests", done => {
       request( app ).get( "/v1/projects/543/subscriptions" ).expect( res => {
-        expect( res.error.text ).to.eq( '{"error":"Unauthorized","status":401}' );
-      }).expect( "Content-Type", /json/ ).expect( 401, done );
-    });
+        expect( res.error.text ).to.eq( "{\"error\":\"Unauthorized\",\"status\":401}" );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 401, done );
+    } );
 
     it( "returns posts", done => {
-      var token = jwt.sign({ user_id: 1 }, config.jwtSecret || "secret",
+      const token = jwt.sign( { user_id: 1 }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/projects/543/subscriptions" ).set( "Authorization", token ).
-        expect( res => {
+      request( app ).get( "/v1/projects/543/subscriptions" ).set( "Authorization", token )
+        .expect( res => {
           expect( res.body.total_results ).to.eq( 1 );
           expect( res.body.results[0].user_id ).to.eq( 1 );
           expect( res.body.results[0].resource_id ).to.eq( 543 );
-        }).expect( "Content-Type", /json/ ).expect( 200, done );
-    });
-  });
-
-
-});
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+} );

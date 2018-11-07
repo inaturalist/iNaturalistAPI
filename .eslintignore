@@ -1,5 +1,7 @@
+cache/**
 coverage/**
+node_modules/**
 public/**
-swagger-ui/**
 schema/**
+swagger-ui/**
 
