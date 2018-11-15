@@ -144,6 +144,9 @@
       "id_please": {
         "type": "boolean"
       },
+      "identification_categories": {
+        "type": "keyword"
+      },
       "identifications_count": {
         "type": "long"
       },
