@@ -340,8 +340,7 @@ CREATE TABLE announcements (
     body text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    locales text[] DEFAULT '{}'::text[],
-    site_id integer
+    locales text[] DEFAULT '{}'::text[]
 );
 
 
@@ -362,6 +361,16 @@ CREATE SEQUENCE announcements_id_seq
 --
 
 ALTER SEQUENCE announcements_id_seq OWNED BY announcements.id;
+
+
+--
+-- Name: announcements_sites; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE announcements_sites (
+    announcement_id integer,
+    site_id integer
+);
 
 
 --
@@ -1105,6 +1114,40 @@ ALTER SEQUENCE deleted_photos_id_seq OWNED BY deleted_photos.id;
 
 
 --
+-- Name: deleted_sounds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE deleted_sounds (
+    id integer NOT NULL,
+    user_id integer,
+    sound_id integer,
+    removed_from_s3 boolean DEFAULT false,
+    orphan boolean DEFAULT false,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: deleted_sounds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE deleted_sounds_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: deleted_sounds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE deleted_sounds_id_seq OWNED BY deleted_sounds.id;
+
+
+--
 -- Name: deleted_users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1303,7 +1346,8 @@ CREATE TABLE flow_tasks (
     redirect_url character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    exception text
+    exception text,
+    unique_hash character varying
 );
 
 
@@ -1369,7 +1413,9 @@ CREATE TABLE friendships (
     user_id integer,
     friend_id integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    following boolean DEFAULT true,
+    trust boolean DEFAULT false
 );
 
 
@@ -2156,7 +2202,8 @@ CREATE TABLE oauth_applications (
     image_updated_at timestamp without time zone,
     url character varying(255),
     description text,
-    scopes character varying DEFAULT ''::character varying NOT NULL
+    scopes character varying DEFAULT ''::character varying NOT NULL,
+    confidential boolean DEFAULT true NOT NULL
 );
 
 
@@ -2669,29 +2716,9 @@ ALTER SEQUENCE observations_id_seq OWNED BY observations.id;
 --
 
 CREATE TABLE observations_places (
-    id integer NOT NULL,
     observation_id integer NOT NULL,
     place_id integer NOT NULL
 );
-
-
---
--- Name: observations_places_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE observations_places_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: observations_places_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE observations_places_id_seq OWNED BY observations_places.id;
 
 
 --
@@ -3247,7 +3274,6 @@ CREATE TABLE projects (
     project_type character varying(255),
     slug character varying(255),
     observed_taxa_count integer DEFAULT 0,
-    featured_at timestamp without time zone,
     source_url character varying(255),
     tracking_codes character varying(255),
     delta boolean DEFAULT false,
@@ -3435,12 +3461,80 @@ ALTER SEQUENCE rules_id_seq OWNED BY rules.id;
 
 
 --
+-- Name: saved_locations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE saved_locations (
+    id integer NOT NULL,
+    user_id integer,
+    latitude numeric(15,10),
+    longitude numeric(15,10),
+    title character varying,
+    positional_accuracy integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    geoprivacy text DEFAULT 'open'::text
+);
+
+
+--
+-- Name: saved_locations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE saved_locations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: saved_locations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE saved_locations_id_seq OWNED BY saved_locations.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE schema_migrations (
     version character varying(255) NOT NULL
 );
+
+
+--
+-- Name: sessions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE sessions (
+    id integer NOT NULL,
+    session_id character varying NOT NULL,
+    data text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: sessions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE sessions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sessions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE sessions_id_seq OWNED BY sessions.id;
 
 
 --
@@ -3473,6 +3567,40 @@ CREATE SEQUENCE site_admins_id_seq
 --
 
 ALTER SEQUENCE site_admins_id_seq OWNED BY site_admins.id;
+
+
+--
+-- Name: site_featured_projects; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE site_featured_projects (
+    id integer NOT NULL,
+    site_id integer,
+    project_id integer,
+    user_id integer,
+    noteworthy boolean DEFAULT false,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: site_featured_projects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE site_featured_projects_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: site_featured_projects_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE site_featured_projects_id_seq OWNED BY site_featured_projects.id;
 
 
 --
@@ -3826,7 +3954,7 @@ CREATE TABLE taxa (
     updater_id integer,
     observations_count integer DEFAULT 0,
     listed_taxa_count integer DEFAULT 0,
-    rank_level integer,
+    rank_level double precision,
     unique_name character varying(255),
     wikipedia_summary text,
     wikipedia_title character varying(255),
@@ -3837,8 +3965,8 @@ CREATE TABLE taxa (
     locked boolean DEFAULT false NOT NULL,
     conservation_status_source_identifier integer,
     is_active boolean DEFAULT true NOT NULL,
-    complete boolean,
-    complete_rank character varying
+    complete_rank character varying,
+    complete boolean
 );
 
 
@@ -3918,7 +4046,8 @@ CREATE TABLE taxon_changes (
     updated_at timestamp without time zone NOT NULL,
     committed_on date,
     change_group character varying(255),
-    committer_id integer
+    committer_id integer,
+    move_children boolean DEFAULT false
 );
 
 
@@ -3947,10 +4076,10 @@ ALTER SEQUENCE taxon_changes_id_seq OWNED BY taxon_changes.id;
 
 CREATE TABLE taxon_curators (
     id integer NOT NULL,
-    taxon_id integer,
     user_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    taxon_id integer
 );
 
 
@@ -3981,7 +4110,10 @@ CREATE TABLE taxon_descriptions (
     id integer NOT NULL,
     taxon_id integer,
     locale character varying(255),
-    body text
+    body text,
+    provider character varying,
+    provider_taxon_id character varying,
+    url character varying
 );
 
 
@@ -4381,37 +4513,6 @@ ALTER SEQUENCE update_actions_id_seq OWNED BY update_actions.id;
 
 
 --
--- Name: update_subscribers; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE update_subscribers (
-    id integer NOT NULL,
-    update_action_id integer,
-    subscriber_id integer,
-    viewed_at timestamp without time zone
-);
-
-
---
--- Name: update_subscribers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE update_subscribers_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: update_subscribers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE update_subscribers_id_seq OWNED BY update_subscribers.id;
-
-
---
 -- Name: user_blocks; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -4525,7 +4626,10 @@ CREATE TABLE users (
     icon_file_name character varying,
     icon_content_type character varying,
     icon_file_size integer,
-    icon_updated_at timestamp without time zone
+    icon_updated_at timestamp without time zone,
+    search_place_id integer,
+    curator_sponsor_id integer,
+    suspended_by_user_id integer
 );
 
 
@@ -4667,7 +4771,8 @@ CREATE TABLE wiki_pages (
     title character varying(255),
     content text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    admin_only boolean DEFAULT false
 );
 
 
@@ -4688,6 +4793,44 @@ CREATE SEQUENCE wiki_pages_id_seq
 --
 
 ALTER SEQUENCE wiki_pages_id_seq OWNED BY wiki_pages.id;
+
+
+--
+-- Name: year_statistics; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE year_statistics (
+    id integer NOT NULL,
+    user_id integer,
+    year integer,
+    data json,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    site_id integer,
+    shareable_image_file_name character varying,
+    shareable_image_content_type character varying,
+    shareable_image_file_size integer,
+    shareable_image_updated_at timestamp without time zone
+);
+
+
+--
+-- Name: year_statistics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE year_statistics_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: year_statistics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE year_statistics_id_seq OWNED BY year_statistics.id;
 
 
 --
@@ -4849,6 +4992,13 @@ ALTER TABLE ONLY deleted_observations ALTER COLUMN id SET DEFAULT nextval('delet
 --
 
 ALTER TABLE ONLY deleted_photos ALTER COLUMN id SET DEFAULT nextval('deleted_photos_id_seq'::regclass);
+
+
+--
+-- Name: deleted_sounds id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY deleted_sounds ALTER COLUMN id SET DEFAULT nextval('deleted_sounds_id_seq'::regclass);
 
 
 --
@@ -5104,13 +5254,6 @@ ALTER TABLE ONLY observations ALTER COLUMN id SET DEFAULT nextval('observations_
 
 
 --
--- Name: observations_places id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY observations_places ALTER COLUMN id SET DEFAULT nextval('observations_places_id_seq'::regclass);
-
-
---
 -- Name: passwords id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -5244,10 +5387,31 @@ ALTER TABLE ONLY rules ALTER COLUMN id SET DEFAULT nextval('rules_id_seq'::regcl
 
 
 --
+-- Name: saved_locations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY saved_locations ALTER COLUMN id SET DEFAULT nextval('saved_locations_id_seq'::regclass);
+
+
+--
+-- Name: sessions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY sessions ALTER COLUMN id SET DEFAULT nextval('sessions_id_seq'::regclass);
+
+
+--
 -- Name: site_admins id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY site_admins ALTER COLUMN id SET DEFAULT nextval('site_admins_id_seq'::regclass);
+
+
+--
+-- Name: site_featured_projects id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY site_featured_projects ALTER COLUMN id SET DEFAULT nextval('site_featured_projects_id_seq'::regclass);
 
 
 --
@@ -5419,13 +5583,6 @@ ALTER TABLE ONLY update_actions ALTER COLUMN id SET DEFAULT nextval('update_acti
 
 
 --
--- Name: update_subscribers id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY update_subscribers ALTER COLUMN id SET DEFAULT nextval('update_subscribers_id_seq'::regclass);
-
-
---
 -- Name: user_blocks id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -5472,6 +5629,13 @@ ALTER TABLE ONLY wiki_page_versions ALTER COLUMN id SET DEFAULT nextval('wiki_pa
 --
 
 ALTER TABLE ONLY wiki_pages ALTER COLUMN id SET DEFAULT nextval('wiki_pages_id_seq'::regclass);
+
+
+--
+-- Name: year_statistics id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY year_statistics ALTER COLUMN id SET DEFAULT nextval('year_statistics_id_seq'::regclass);
 
 
 --
@@ -5656,6 +5820,14 @@ ALTER TABLE ONLY deleted_observations
 
 ALTER TABLE ONLY deleted_photos
     ADD CONSTRAINT deleted_photos_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: deleted_sounds deleted_sounds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY deleted_sounds
+    ADD CONSTRAINT deleted_sounds_pkey PRIMARY KEY (id);
 
 
 --
@@ -5939,14 +6111,6 @@ ALTER TABLE ONLY observations
 
 
 --
--- Name: observations_places observations_places_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY observations_places
-    ADD CONSTRAINT observations_places_pkey PRIMARY KEY (id);
-
-
---
 -- Name: observation_sounds observations_sounds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6107,11 +6271,35 @@ ALTER TABLE ONLY rules
 
 
 --
+-- Name: saved_locations saved_locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY saved_locations
+    ADD CONSTRAINT saved_locations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sessions sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY sessions
+    ADD CONSTRAINT sessions_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: site_admins site_admins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY site_admins
     ADD CONSTRAINT site_admins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: site_featured_projects site_featured_projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY site_featured_projects
+    ADD CONSTRAINT site_featured_projects_pkey PRIMARY KEY (id);
 
 
 --
@@ -6307,14 +6495,6 @@ ALTER TABLE ONLY update_actions
 
 
 --
--- Name: update_subscribers update_subscribers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY update_subscribers
-    ADD CONSTRAINT update_subscribers_pkey PRIMARY KEY (id);
-
-
---
 -- Name: user_blocks user_blocks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6371,10 +6551,32 @@ ALTER TABLE ONLY wiki_pages
 
 
 --
+-- Name: year_statistics year_statistics_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY year_statistics
+    ADD CONSTRAINT year_statistics_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: fk_flags_user; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX fk_flags_user ON flags USING btree (user_id);
+
+
+--
+-- Name: index_annotations_on_controlled_attribute_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_annotations_on_controlled_attribute_id ON annotations USING btree (controlled_attribute_id);
+
+
+--
+-- Name: index_annotations_on_controlled_value_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_annotations_on_controlled_value_id ON annotations USING btree (controlled_value_id);
 
 
 --
@@ -6385,10 +6587,10 @@ CREATE INDEX index_annotations_on_resource_id_and_resource_type ON annotations U
 
 
 --
--- Name: index_announcements_on_site_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_annotations_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_announcements_on_site_id ON announcements USING btree (site_id);
+CREATE INDEX index_annotations_on_user_id ON annotations USING btree (user_id);
 
 
 --
@@ -6396,6 +6598,20 @@ CREATE INDEX index_announcements_on_site_id ON announcements USING btree (site_i
 --
 
 CREATE INDEX index_announcements_on_start_and_end ON announcements USING btree (start, "end");
+
+
+--
+-- Name: index_announcements_sites_on_announcement_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_announcements_sites_on_announcement_id ON announcements_sites USING btree (announcement_id);
+
+
+--
+-- Name: index_announcements_sites_on_site_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_announcements_sites_on_site_id ON announcements_sites USING btree (site_id);
 
 
 --
@@ -6665,6 +6881,13 @@ CREATE INDEX index_deleted_photos_on_created_at ON deleted_photos USING btree (c
 
 
 --
+-- Name: index_deleted_sounds_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_deleted_sounds_on_created_at ON deleted_sounds USING btree (created_at);
+
+
+--
 -- Name: index_deleted_users_on_login; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6728,10 +6951,31 @@ CREATE INDEX index_flow_task_resources_on_resource_type_and_resource_id ON flow_
 
 
 --
+-- Name: index_flow_tasks_on_unique_hash; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_flow_tasks_on_unique_hash ON flow_tasks USING btree (unique_hash);
+
+
+--
 -- Name: index_flow_tasks_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_flow_tasks_on_user_id ON flow_tasks USING btree (user_id);
+
+
+--
+-- Name: index_friendships_on_following; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_friendships_on_following ON friendships USING btree (following);
+
+
+--
+-- Name: index_friendships_on_trust; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_friendships_on_trust ON friendships USING btree (trust);
 
 
 --
@@ -6900,6 +7144,13 @@ CREATE INDEX index_identifications_on_user_id_and_created_at ON identifications 
 --
 
 CREATE INDEX index_identifications_on_user_id_and_current ON identifications USING btree (user_id, current);
+
+
+--
+-- Name: index_identifications_on_user_id_and_observation_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_identifications_on_user_id_and_observation_id ON identifications USING btree (user_id, observation_id) WHERE current;
 
 
 --
@@ -7152,6 +7403,13 @@ CREATE INDEX index_observation_field_values_on_user_id ON observation_field_valu
 --
 
 CREATE UNIQUE INDEX index_observation_field_values_on_uuid ON observation_field_values USING btree (uuid);
+
+
+--
+-- Name: index_observation_field_values_on_value_and_field; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_observation_field_values_on_value_and_field ON observation_field_values USING btree (value, observation_field_id);
 
 
 --
@@ -7680,6 +7938,13 @@ CREATE UNIQUE INDEX index_preferences_on_owner_and_name_and_preference ON prefer
 
 
 --
+-- Name: index_preferences_on_updated_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_preferences_on_updated_at ON preferences USING btree (updated_at);
+
+
+--
 -- Name: index_project_assets_on_asset_content_type; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7771,6 +8036,13 @@ CREATE INDEX index_project_users_on_project_id_and_taxa_count ON project_users U
 
 
 --
+-- Name: index_project_users_on_updated_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_project_users_on_updated_at ON project_users USING btree (updated_at);
+
+
+--
 -- Name: index_project_users_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7841,6 +8113,34 @@ CREATE INDEX index_roles_users_on_user_id ON roles_users USING btree (user_id);
 
 
 --
+-- Name: index_saved_locations_on_title; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_saved_locations_on_title ON saved_locations USING btree (title);
+
+
+--
+-- Name: index_saved_locations_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_saved_locations_on_user_id ON saved_locations USING btree (user_id);
+
+
+--
+-- Name: index_sessions_on_session_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_sessions_on_session_id ON sessions USING btree (session_id);
+
+
+--
+-- Name: index_sessions_on_updated_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sessions_on_updated_at ON sessions USING btree (updated_at);
+
+
+--
 -- Name: index_site_admins_on_site_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7852,6 +8152,13 @@ CREATE INDEX index_site_admins_on_site_id ON site_admins USING btree (site_id);
 --
 
 CREATE INDEX index_site_admins_on_user_id ON site_admins USING btree (user_id);
+
+
+--
+-- Name: index_site_featured_projects_on_site_id_and_project_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_site_featured_projects_on_site_id_and_project_id ON site_featured_projects USING btree (site_id, project_id);
 
 
 --
@@ -8093,6 +8400,13 @@ CREATE INDEX index_taxon_changes_on_user_id ON taxon_changes USING btree (user_i
 
 
 --
+-- Name: index_taxon_descriptions_on_provider; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_taxon_descriptions_on_provider ON taxon_descriptions USING btree (provider);
+
+
+--
 -- Name: index_taxon_descriptions_on_taxon_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8226,13 +8540,6 @@ CREATE UNIQUE INDEX index_update_actions_unique ON update_actions USING btree (r
 
 
 --
--- Name: index_update_subscribers_on_update_action_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_update_subscribers_on_update_action_id ON update_subscribers USING btree (update_action_id);
-
-
---
 -- Name: index_user_blocks_on_blocked_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8258,6 +8565,13 @@ CREATE INDEX index_user_mutes_on_muted_user_id ON user_mutes USING btree (muted_
 --
 
 CREATE INDEX index_user_mutes_on_user_id ON user_mutes USING btree (user_id);
+
+
+--
+-- Name: index_users_on_curator_sponsor_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_curator_sponsor_id ON users USING btree (curator_sponsor_id);
 
 
 --
@@ -8391,6 +8705,20 @@ CREATE INDEX index_wiki_pages_on_creator_id ON wiki_pages USING btree (creator_i
 --
 
 CREATE UNIQUE INDEX index_wiki_pages_on_path ON wiki_pages USING btree (path);
+
+
+--
+-- Name: index_year_statistics_on_site_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_year_statistics_on_site_id ON year_statistics USING btree (site_id);
+
+
+--
+-- Name: index_year_statistics_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_year_statistics_on_user_id ON year_statistics USING btree (user_id);
 
 
 --
@@ -9117,4 +9445,60 @@ INSERT INTO schema_migrations (version) VALUES ('20170923232400');
 INSERT INTO schema_migrations (version) VALUES ('20171107200722');
 
 INSERT INTO schema_migrations (version) VALUES ('20171108223540');
+
+INSERT INTO schema_migrations (version) VALUES ('20171218191934');
+
+INSERT INTO schema_migrations (version) VALUES ('20171221220649');
+
+INSERT INTO schema_migrations (version) VALUES ('20171222172131');
+
+INSERT INTO schema_migrations (version) VALUES ('20180103194449');
+
+INSERT INTO schema_migrations (version) VALUES ('20180109232530');
+
+INSERT INTO schema_migrations (version) VALUES ('20180124192906');
+
+INSERT INTO schema_migrations (version) VALUES ('20180126155509');
+
+INSERT INTO schema_migrations (version) VALUES ('20180209020229');
+
+INSERT INTO schema_migrations (version) VALUES ('20180320224314');
+
+INSERT INTO schema_migrations (version) VALUES ('20180329144359');
+
+INSERT INTO schema_migrations (version) VALUES ('20180410171703');
+
+INSERT INTO schema_migrations (version) VALUES ('20180425181719');
+
+INSERT INTO schema_migrations (version) VALUES ('20180501172628');
+
+INSERT INTO schema_migrations (version) VALUES ('20180504213719');
+
+INSERT INTO schema_migrations (version) VALUES ('20180518192353');
+
+INSERT INTO schema_migrations (version) VALUES ('20180518231918');
+
+INSERT INTO schema_migrations (version) VALUES ('20180613193352');
+
+INSERT INTO schema_migrations (version) VALUES ('20180704195638');
+
+INSERT INTO schema_migrations (version) VALUES ('20180719001655');
+
+INSERT INTO schema_migrations (version) VALUES ('20180803162216');
+
+INSERT INTO schema_migrations (version) VALUES ('20180821031507');
+
+INSERT INTO schema_migrations (version) VALUES ('20180822173011');
+
+INSERT INTO schema_migrations (version) VALUES ('20180905191330');
+
+INSERT INTO schema_migrations (version) VALUES ('20180906232956');
+
+INSERT INTO schema_migrations (version) VALUES ('20180911144001');
+
+INSERT INTO schema_migrations (version) VALUES ('20180911233322');
+
+INSERT INTO schema_migrations (version) VALUES ('20180914231617');
+
+INSERT INTO schema_migrations (version) VALUES ('20181110004422');
 

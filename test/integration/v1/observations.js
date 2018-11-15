@@ -45,6 +45,17 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
+    it( "shows authenticated trusted users private info", done => {
+      const token = jwt.sign( { user_id: 125 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/14" ).set( "Authorization", token )
+        .expect( res => {
+          expect( res.body.results[0].private_location ).to.not.be.undefined;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
     it( "does not show authenticated project curators private info if they do not have access", done => {
       const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
