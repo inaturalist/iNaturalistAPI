@@ -224,7 +224,7 @@
              "min_species_ancestors": [
               { "id": 1 }, { "id": 2 }, { "id": 3 }, { "id": 4 }, { "id": 5 }
             ]
-         },
+          },
           "observation": {
             "id": 1,
             "user": {
@@ -240,6 +240,48 @@
               "rank_level": 10,
               "rank": "species"
             }
+          }
+        },
+        {
+          "id": 121,
+          "current": true,
+          "observation": {
+            "id": 12,
+            "user": {
+              "id": 5
+            }
+          },
+          "user": {
+            "id": 121,
+            "login": "user121"
+          }
+        },
+        {
+          "id": 122,
+          "current": true,
+          "observation": {
+            "id": 12,
+            "user": {
+              "id": 5
+            }
+          },
+          "user": {
+            "id": 122,
+            "login": "user122"
+          }
+        },
+        {
+          "id": 123,
+          "current": true,
+          "observation": {
+            "id": 13,
+            "user": {
+              "id": 5
+            }
+          },
+          "user": {
+            "id": 121,
+            "login": "user122"
           }
         }
       ]
@@ -261,21 +303,7 @@
           "created_at": "2015-12-31T00:00:00",
           "quality_grade": "research",
           "oauth_application_id": 3,
-          "identifications": [
-            {
-              "id": 102,
-              "taxon_id": 5,
-              "user": { "id": 123 },
-              "body": "id1",
-              "category": "leading"
-            },
-            {
-              "id": 103,
-              "taxon_id": 5,
-              "user": { "id": 5 },
-              "body": "id2"
-            }
-          ],
+          "identification_categories": ["leading"],
           "ofvs": [ {
             "name_ci": "Habitat",
             "value_ci": "marine"
@@ -289,13 +317,6 @@
             "rank_level": 10
           },
           "project_ids": [ 543 ],
-          "project_observations": [
-            {
-              "id": 909090,
-              "uuid": "07e60a0a-db6d-48b1-8424-5d5c3f9d2bc3",
-              "project_id": 543
-            }
-          ],
           "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
         },
         {
@@ -422,18 +443,7 @@
           "created_at": "2001-06-01T01:00:00",
           "private_location": "1,2",
           "project_ids": [ 1 ],
-          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] },
-          "project_observations": [
-            {
-              "id": 101,
-              "user_id": 1,
-              "uuid": "8cf0282d-c6f3-4947-9905-4937def371f4",
-              "project_id": 1,
-              "preferences": [
-                { "name": "curator_coordinate_access", "value": true }
-              ]
-            }
-          ]
+          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
         },
         {
           "id": 11,
@@ -441,60 +451,17 @@
           "created_at": "2001-06-01T01:00:00",
           "private_location": "1,2",
           "project_ids": [ 2 ],
-          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] },
-          "project_observations": [
-            {
-              "id": 111,
-              "user_id": 1,
-              "uuid": "902996e7-6d0d-40b8-9dc7-1384d0bc2ec7",
-              "project_id": 2,
-              "preferences": [
-                { "name": "curator_coordinate_access", "value": false }
-              ]
-            }
-          ]
+          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
         },
         {
           "id": 12,
           "user": { "id": 5 },
-          "identifications": [
-            {
-              "id": 121,
-              "user": {
-                "id": 121,
-                "login": "user121"
-              },
-              "taxon": {
-                "id": 1
-              }
-            },
-            {
-              "id": 122,
-              "user": {
-                "id": 122,
-                "login": "user122"
-              },
-              "taxon": {
-                "id": 1
-              }
-            }
-          ]
+          "identifier_user_ids": [ 121, 122 ]
         },
         {
           "id": 13,
           "user": { "id": 5 },
-          "identifications": [
-            {
-              "id": 121,
-              "user": {
-                "id": 121,
-                "login": "user121"
-              },
-              "taxon": {
-                "id": 1
-              }
-            }
-          ]
+          "identifier_user_ids": [ 121 ]
         }
       ]
     },
@@ -888,6 +855,16 @@
           "name": "Z User"
         },
         {
+          "id": 121,
+          "login": "user121",
+          "name": "user121"
+        },
+        {
+          "id": 122,
+          "login": "user122",
+          "name": "user122"
+        },
+        {
           "id": 123,
           "login": "a-user",
           "name": "A User"
@@ -1100,6 +1077,13 @@
         "user_id": 1,
         "uuid": "902996e7-6d0d-40b8-9dc7-1384d0bc2ec7",
         "project_id": 2
+      },
+      {
+        "id": 909090,
+        "observation_id": 1,
+        "user_id": 1,
+        "uuid": "07e60a0a-db6d-48b1-8424-5d5c3f9d2bc3",
+        "project_id": 543
       }
     ],
     "project_users": [
@@ -1269,6 +1253,20 @@
         "id": 6,
         "login": "z-user",
         "name": "Z User",
+        "icon_content_type": "image/jpeg",
+        "icon_file_name": "img.jpg"
+      },
+      {
+        "id": 121,
+        "login": "user121",
+        "name": "user121",
+        "icon_content_type": "image/jpeg",
+        "icon_file_name": "img.jpg"
+      },
+      {
+        "id": 122,
+        "login": "user122",
+        "name": "user122",
         "icon_content_type": "image/jpeg",
         "icon_file_name": "img.jpg"
       },

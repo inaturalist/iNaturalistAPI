@@ -1,12 +1,12 @@
-var environment = "development";
+let environment = "development";
 if ( global && global.config && global.config.environment ) {
-  environment = global.config.environment;
+  environment = global.config.environment; // eslint-disable-line prefer-destructuring
 }
 if ( process && process.env && process.env.NODE_ENV ) {
   environment = process.env.NODE_ENV;
 }
 module.exports = {
-  environment: environment,
+  environment,
   // Host running the iNaturalist Rails app
   apiURL: "http://localhost:3000",
   // Base URL for the current version of *this* app

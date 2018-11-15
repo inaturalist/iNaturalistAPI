@@ -6,8 +6,8 @@ coverage
 node_modules
 config.js
 newrelic.js
-newrelic_agent.log
-inaturalist_api.*.log
+*.log
+restart.sh
 public/taxa.txt
 public/uploads/
 lib/vision/**

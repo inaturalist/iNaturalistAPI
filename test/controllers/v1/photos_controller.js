@@ -1,9 +1,9 @@
-var photos = require( "inaturalistjs" ).photos,
-    testHelper = require( "../../../lib/test_helper" ),
-    PhotosController = require( "../../../lib/controllers/v1/photos_controller" );
+const { photos } = require( "inaturalistjs" );
+const testHelper = require( "../../../lib/test_helper" );
+const PhotosController = require( "../../../lib/controllers/v1/photos_controller" );
 
-describe( "PhotosController", function( ) {
-  it( "creates", function( done ) {
+describe( "PhotosController", ( ) => {
+  it( "creates", done => {
     testHelper.testInatJSNoPreload( PhotosController, photos, "create", done );
-  });
-});
+  } );
+} );
