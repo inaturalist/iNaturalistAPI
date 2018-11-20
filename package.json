@@ -24,7 +24,7 @@
     "carto": "^1.1.0",
     "compression": "^1.7.3",
     "ejs": "^2.6.1",
-    "elasticmaps": "file:/Users/pleary/Webroot/maps/elasticmaps",
+    "elasticmaps": "github:inaturalist/elasticmaps#31a5b881cde0db876c92c1c76c5025f4f73db93b",
     "elasticsearch": "^15.2.0",
     "express": "^4.16.4",
     "form-data": "^2.3.3",
