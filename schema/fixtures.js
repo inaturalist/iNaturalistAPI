@@ -299,7 +299,8 @@
       "observation": [
         {
           "id": 1,
-          "user": { "id": 123 },
+          "spam": false,
+          "user": { "id": 123, "spam": false, "suspended": false },
           "created_at": "2015-12-31T00:00:00",
           "quality_grade": "research",
           "oauth_application_id": 3,
@@ -321,7 +322,8 @@
         },
         {
           "id": 2,
-          "user": { "id": 5 },
+          "spam": false,
+          "user": { "id": 5, "spam": false, "suspended": false },
           "created_at": "2016-01-01T01:00:00",
           "location": "2,3",
           "taxon": {
@@ -329,13 +331,14 @@
             "ancestor_ids": [1,2,3,4],
             "min_species_ancestry": "1,2,3,4"
           },
-          "identifications":[{ "user": { "id": 123 }, "own_observation": false }],
+          "identifications":[{ "user": { "id": 123, "spam": false, "suspended": false }, "own_observation": false }],
           "place_guess": "Montana",
           "private_geojson": { "type": "Point", "coordinates": [ "3", "2" ] }
         },
         {
           "id": 333,
-          "user": { "id": 333 },
+          "spam": false,
+          "user": { "id": 333, "spam": false, "suspended": false },
           "created_at": "2010-01-01T02:00:00",
           "private_location": "1,2",
           "geoprivacy": "obscured",
@@ -343,7 +346,8 @@
         },
         {
           "id": 4,
-          "user": { "id": 333 },
+          "spam": false,
+          "user": { "id": 333, "spam": false, "suspended": false },
           "created_at": "1500-01-01T05:00:00",
           "observed_on": "1500-01-01T05:00:00",
           "taxon": {
@@ -364,7 +368,8 @@
         },
         {
           "id": 5,
-          "user": { "id": 333 },
+          "spam": false,
+          "user": { "id": 333, "spam": false, "suspended": false },
           "taxon": {
             "id": 123,
             "iconic_taxon_id": 1,
@@ -380,14 +385,16 @@
         },
         {
           "id": 6,
-          "user": { "id": 333 },
+          "spam": false,
+          "user": { "id": 333, "spam": false, "suspended": false },
           "geoprivacy": "private",
           "private_location": "1.234,1.234",
           "private_geojson": { "type": "Point", "coordinates": [ "1.234", "1.234" ] }
         },
         {
           "id": 7,
-          "user": { "id": 5 },
+          "spam": false,
+          "user": { "id": 5, "spam": false, "suspended": false },
           "created_at": "2001-06-01T01:00:00",
           "annotations": [
             {
@@ -402,7 +409,8 @@
         },
         {
           "id": 8,
-          "user": { "id": 5 },
+          "spam": false,
+          "user": { "id": 5, "spam": false, "suspended": false },
           "created_at": "2001-06-01T01:00:00",
           "annotations": [
             {
@@ -417,7 +425,8 @@
         },
         {
           "id": 9,
-          "user": { "id": 5 },
+          "spam": false,
+          "user": { "id": 5, "spam": false, "suspended": false },
           "created_at": "2001-06-01T01:00:00",
           "annotations": [
             {
@@ -439,7 +448,8 @@
         },
         {
           "id": 10,
-          "user": { "id": 5 },
+          "spam": false,
+          "user": { "id": 5, "spam": false, "suspended": false },
           "created_at": "2001-06-01T01:00:00",
           "private_location": "1,2",
           "project_ids": [ 1 ],
@@ -447,7 +457,8 @@
         },
         {
           "id": 11,
-          "user": { "id": 5 },
+          "spam": false,
+          "user": { "id": 5, "spam": false, "suspended": false },
           "created_at": "2001-06-01T01:00:00",
           "private_location": "1,2",
           "project_ids": [ 2 ],
@@ -455,13 +466,45 @@
         },
         {
           "id": 12,
-          "user": { "id": 5 },
+          "spam": false,
+          "user": { "id": 5, "spam": false, "suspended": false },
           "identifier_user_ids": [ 121, 122 ]
         },
         {
           "id": 13,
-          "user": { "id": 5 },
+          "spam": false,
+          "user": { "id": 5, "spam": false, "suspended": false },
           "identifier_user_ids": [ 121 ]
+        },
+        {
+          "id": 14,
+          "spam": false,
+          "description": "Observation by suspended user",
+          "user": {
+            "id": 6,
+            "suspended": true,
+            "spam": false
+          }
+        },
+        {
+          "id": 15,
+          "spam": false,
+          "description": "Observation by spam user",
+          "user": {
+            "id": 7,
+            "spam": true,
+            "suspended": false
+          }
+        },
+        {
+          "id": 16,
+          "description": "Observation that is spam",
+          "user": {
+            "id": 8,
+            "spam": false,
+            "suspended": false
+          },
+          "spam": true
         }
       ]
     },

@@ -11,6 +11,8 @@ const config = require( "../../../config.js" );
 const app = iNaturalistAPI.server( );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
+const defaultObservations = _.filter( fixtures.elasticsearch.observations.observation,
+  o => !( o.spam || o.user.spam || o.user.suspended ) );
 
 describe( "Observations", ( ) => {
   describe( "show", ( ) => {
@@ -77,6 +79,30 @@ describe( "Observations", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+    it( "should show a spam observation", done => {
+      request( app ).get( "/v1/observations/16" )
+        .expect( res => {
+          expect( res.body.results[0].id ).to.eq( 16 );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+    it( "should show an observation by a spammer", done => {
+      request( app ).get( "/v1/observations/15" )
+        .expect( res => {
+          expect( res.body.results[0].id ).to.eq( 15 );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+    it( "should show an observation by a suspended user", done => {
+      request( app ).get( "/v1/observations/14" )
+        .expect( res => {
+          expect( res.body.results[0].id ).to.eq( 14 );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "create", ( ) => {
@@ -131,7 +157,7 @@ describe( "Observations", ( ) => {
       request( app ).get( "/v1/observations" )
         .expect( res => {
           const fixtureObs = _.sortBy(
-            fixtures.elasticsearch.observations.observation,
+            defaultObservations,
             o => ( o.created_at ? moment( o.created_at ) : moment( "0000-01-01" ) )
           ).reverse( );
           const dbUsers = fixtures.postgresql.users;
@@ -234,7 +260,7 @@ describe( "Observations", ( ) => {
       request( app ).get( "/v1/observations?not_in_project=a-project" )
         .expect( res => {
           expect( res.body.total_results )
-            .to.eq( fixtures.elasticsearch.observations.observation.length - 1 );
+            .to.eq( defaultObservations.length - 1 );
         } ).expect( 200, done );
     } );
 
@@ -249,7 +275,7 @@ describe( "Observations", ( ) => {
       request( app ).get( "/v1/observations?projects=nonsense" )
         .expect( res => {
           expect( res.body.total_results )
-            .to.eq( fixtures.elasticsearch.observations.observation.length );
+            .to.eq( defaultObservations.length );
         } ).expect( 200, done );
     } );
 
@@ -410,6 +436,52 @@ describe( "Observations", ( ) => {
           expect( _.keys( result )[0] ).to.eq( "id" );
           expect( result.id ).to.eq( 2 );
         } ).expect( 200, done );
+    } );
+
+    describe( "appropriate filter", ( ) => {
+      it( "should not include spam observations by default", done => {
+        request( app ).get( "/v1/observations?user_id=8" ).expect( res => {
+          expect( res.body.results.map( r => r.id ) ).not.to.contain( 16 );
+        } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+      it( "should not include observations by spammers by default", done => {
+        request( app ).get( "/v1/observations?user_id=7" ).expect( res => {
+          expect( res.body.results.map( r => r.id ) ).not.to.contain( 15 );
+        } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+      it( "should not include observations by suspended user by default", done => {
+        request( app ).get( "/v1/observations?user_id=6" ).expect( res => {
+          expect( res.body.results.map( r => r.id ) ).not.to.contain( 14 );
+        } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "should include spam observations with appropriate=any", done => {
+        request( app ).get( "/v1/observations?user_id=8&appropriate=any" ).expect( res => {
+          expect( res.body.results.map( r => r.id ) ).to.contain( 16 );
+        } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+      it( "should include observations by spammers with appropriate=any", done => {
+        request( app ).get( "/v1/observations?user_id=7&appropriate=any" ).expect( res => {
+          expect( res.body.results.map( r => r.id ) ).to.contain( 15 );
+        } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+      it( "should include observations by suspended user with appropriate=any", done => {
+        request( app ).get( "/v1/observations?user_id=6&appropriate=any" ).expect( res => {
+          expect( res.body.results.map( r => r.id ) ).to.contain( 14 );
+        } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
     } );
   } );
 

@@ -20,7 +20,9 @@ node app.js
 # Running Tests
 
 Run all: `npm test`
-Filter by pattern: `NODE_ENV=test ./node_modules/mocha/bin/_mocha --recursive --fgrep observations`
+Filter by pattern: `NODE_ENV=test ./node_modules/mocha/bin/_mocha --recursive --fgrep observations` (this only sort of works)
+
+You can run a single test with `npm test` by adding `.only(`, e.g. `it.only( "should do something", done => ... )` or `describe.only( "some test group", ( ) => ... )`.
 
 # Updating Documentation
 

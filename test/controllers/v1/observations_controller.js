@@ -171,7 +171,7 @@ describe( "ObservationsController", ( ) => {
 
     it( "queries multiple fields", ( ) => {
       Q( { q: "search" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [
+      expect( eq.filters[0] ).to.eql(
         {
           multi_match: {
             fields: [
@@ -185,7 +185,7 @@ describe( "ObservationsController", ( ) => {
             query: "search"
           }
         }
-      ] );
+      );
     } );
 
     it( "queries names", ( ) => {
@@ -220,17 +220,17 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by taxon_id", ( ) => {
       Q( { taxon_id: 88 }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ terms: { "taxon.ancestor_ids": [88] } }] );
+      expect( eq.filters[0] ).to.eql( { terms: { "taxon.ancestor_ids": [88] } } );
     } );
 
     it( "filters by taxon_ids", ( ) => {
       Q( { taxon_ids: [3, 4, 5] }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ terms: { "taxon.ancestor_ids": [3, 4, 5] } }] );
+      expect( eq.filters[0] ).to.eql( { terms: { "taxon.ancestor_ids": [3, 4, 5] } } );
     } );
 
     it( "turns has[] into params", ( ) => {
       Q( { has: ["photos"] }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [
+      expect( eq.filters[0] ).to.eql(
         {
           bool: {
             should: [
@@ -239,7 +239,7 @@ describe( "ObservationsController", ( ) => {
             ]
           }
         }
-      ] );
+      );
     } );
 
     it( "filters by param values", ( ) => {
@@ -268,7 +268,7 @@ describe( "ObservationsController", ( ) => {
               should: _.map( filter.es_field, ff => ( { terms: { [ff]: [vSingle] } } ) )
             }
           };
-          expect( eq.filters ).to.eql( [f] );
+          expect( eq.filters[0] ).to.eql( f );
           // Array values
           qp[filter.http_param] = vArray;
           Q( qp, ( e, q ) => { eq = q; } );
@@ -277,19 +277,19 @@ describe( "ObservationsController", ( ) => {
               should: _.map( filter.es_field, ff => ( { terms: { [ff]: vArray } } ) )
             }
           };
-          expect( eq.filters ).to.eql( [f] );
+          expect( eq.filters[0] ).to.eql( f );
         } else {
           qp[filter.http_param] = vSingle;
           Q( qp, ( e, q ) => { eq = q; } );
           let f = { terms: { } };
           f.terms[filter.es_field] = [vSingle];
-          expect( eq.filters ).to.eql( [f] );
+          expect( eq.filters[0] ).to.eql( f );
           // Array values
           qp[filter.http_param] = vArray;
           Q( qp, ( e, q ) => { eq = q; } );
           f = { terms: { } };
           f.terms[filter.es_field] = vArray;
-          expect( eq.filters ).to.eql( [f] );
+          expect( eq.filters[0] ).to.eql( f );
         }
       } );
     } );
@@ -310,13 +310,13 @@ describe( "ObservationsController", ( ) => {
         Q( qp, ( e, q ) => { eq = q; } );
         let f = { terms: { } };
         f.terms[filter.es_field] = [true];
-        expect( eq.filters ).to.eql( [f] );
+        expect( eq.filters[0] ).to.eql( f );
         // false values
         qp[filter.http_param] = "false";
         Q( qp, ( e, q ) => { eq = q; } );
         f = { term: { } };
         f.term[filter.es_field] = false;
-        expect( eq.filters ).to.eql( [f] );
+        expect( eq.filters[0] ).to.eql( f );
       } );
     } );
 
@@ -336,7 +336,7 @@ describe( "ObservationsController", ( ) => {
               should: _.map( filter.es_field, ff => ( { exists: { field: ff } } ) )
             }
           };
-          expect( eq.filters ).to.eql( [f] );
+          expect( eq.filters[0] ).to.eql( f );
           // false values
           qp[filter.http_param] = "false";
           Q( qp, ( e, q ) => { eq = q; } );
@@ -346,7 +346,7 @@ describe( "ObservationsController", ( ) => {
           qp[filter.http_param] = "true";
           Q( qp, ( e, q ) => { eq = q; } );
           const f = { exists: { field: filter.es_field } };
-          expect( eq.filters ).to.eql( [f] );
+          expect( eq.filters[0] ).to.eql( f );
           // false values
           qp[filter.http_param] = "false";
           Q( qp, ( e, q ) => { eq = q; } );
@@ -357,8 +357,7 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by verifiable true", ( ) => {
       Q( { verifiable: "true" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [
-        { terms: { quality_grade: ["needs_id", "research"] } }] );
+      expect( eq.filters[0] ).to.eql( { terms: { quality_grade: ["needs_id", "research"] } } );
     } );
 
     it( "filters by verifiable false", ( ) => {
@@ -369,106 +368,101 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by observed_on", ( ) => {
       Q( { observed_on: "2009-10-11" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [
-        { terms: { "observed_on_details.day": [11] } },
-        { terms: { "observed_on_details.month": [10] } },
-        { terms: { "observed_on_details.year": [2009] } }] );
+      expect( eq.filters[0] ).to.eql( { terms: { "observed_on_details.day": [11] } } );
+      expect( eq.filters[1] ).to.eql( { terms: { "observed_on_details.month": [10] } } );
+      expect( eq.filters[2] ).to.eql( { terms: { "observed_on_details.year": [2009] } } );
     } );
 
     it( "filters by on", ( ) => {
       Q( { on: "2009-10-11" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [
-        { terms: { "observed_on_details.day": [11] } },
-        { terms: { "observed_on_details.month": [10] } },
-        { terms: { "observed_on_details.year": [2009] } }] );
+      expect( eq.filters[0] ).to.eql( { terms: { "observed_on_details.day": [11] } } );
+      expect( eq.filters[1] ).to.eql( { terms: { "observed_on_details.month": [10] } } );
+      expect( eq.filters[2] ).to.eql( { terms: { "observed_on_details.year": [2009] } } );
     } );
 
     it( "filters by created_on", ( ) => {
       Q( { created_on: "2009-10-11" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [
-        { terms: { "created_at_details.day": [11] } },
-        { terms: { "created_at_details.month": [10] } },
-        { terms: { "created_at_details.year": [2009] } }] );
+      expect( eq.filters[0] ).to.eql( { terms: { "created_at_details.day": [11] } } );
+      expect( eq.filters[1] ).to.eql( { terms: { "created_at_details.month": [10] } } );
+      expect( eq.filters[2] ).to.eql( { terms: { "created_at_details.year": [2009] } } );
     } );
 
     it( "filters by project_id", ( ) => {
       Q( { project_id: 3 }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ terms: { project_ids: [3] } }] );
+      expect( eq.filters[0] ).to.eql( { terms: { project_ids: [3] } } );
     } );
 
     it( "filters by project_id and ignores bad pcid values", ( ) => {
       Q( { project_id: 3, pcid: "bad" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ terms: { project_ids: [3] } }] );
+      expect( eq.filters[0] ).to.eql( { terms: { project_ids: [3] } } );
     } );
 
     it( "filters by project_id and pcid=true", ( ) => {
       Q( { project_id: 3, pcid: "true" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [
-        { terms: { project_ids: [3] } },
-        { terms: { project_ids_with_curator_id: [3] } }] );
+      expect( eq.filters[0] ).to.eql( { terms: { project_ids: [3] } } );
+      expect( eq.filters[1] ).to.eql( { terms: { project_ids_with_curator_id: [3] } } );
     } );
 
     it( "filters by project_id and pcid=false", ( ) => {
       Q( { project_id: 3, pcid: "false" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [
-        { terms: { project_ids: [3] } },
-        { terms: { project_ids_without_curator_id: [3] } }] );
+      expect( eq.filters[0] ).to.eql( { terms: { project_ids: [3] } } );
+      expect( eq.filters[1] ).to.eql( { terms: { project_ids_without_curator_id: [3] } } );
     } );
 
     it( "ignores bad pcid values", ( ) => {
       Q( { pcid: "bad" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.be.empty;
+      expect( eq.filters[0].terms ).to.be.undefined;
     } );
 
     it( "filters by pcid=true", ( ) => {
       Q( { pcid: "true" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ exists: { field: "project_ids_with_curator_id" } }] );
+      expect( eq.filters[0] ).to.eql( { exists: { field: "project_ids_with_curator_id" } } );
     } );
 
     it( "filters by pcid=false", ( ) => {
       Q( { pcid: "false" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ exists: { field: "project_ids_without_curator_id" } }] );
+      expect( eq.filters[0] ).to.eql( { exists: { field: "project_ids_without_curator_id" } } );
     } );
 
     it( "filters by project_ids", ( ) => {
       Q( { project_ids: [4, 5] }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ terms: { project_ids: [4, 5] } }] );
+      expect( eq.filters[0] ).to.eql( { terms: { project_ids: [4, 5] } } );
     } );
 
     it( "filters by lrank", ( ) => {
       Q( { lrank: "family" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{
+      expect( eq.filters[0] ).to.eql( {
         range: { "taxon.rank_level": { gte: 30, lte: 100 } }
-      }] );
+      } );
     } );
 
     it( "filters by hrank", ( ) => {
       Q( { hrank: "class" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{
+      expect( eq.filters[0] ).to.eql( {
         range: { "taxon.rank_level": { gte: 0, lte: 50 } }
-      }] );
+      } );
     } );
 
     it( "filters by quality grade except 'any'", ( ) => {
       Q( { quality_grade: "research" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ terms: { quality_grade: ["research"] } }] );
+      expect( eq.filters[0] ).to.eql( { terms: { quality_grade: ["research"] } } );
       Q( { quality_grade: "any" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.be.empty;
+      expect( eq.filters[0].terms ).to.be.undefined;
     } );
 
     it( "filters by identifications most_agree", ( ) => {
       Q( { identifications: "most_agree" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ terms: { identifications_most_agree: [true] } }] );
+      expect( eq.filters[0] ).to.eql( { terms: { identifications_most_agree: [true] } } );
     } );
 
     it( "filters by identifications some_agree", ( ) => {
       Q( { identifications: "some_agree" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ terms: { identifications_some_agree: [true] } }] );
+      expect( eq.filters[0] ).to.eql( { terms: { identifications_some_agree: [true] } } );
     } );
 
     it( "filters by identifications most_disagree", ( ) => {
       Q( { identifications: "most_disagree" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ terms: { identifications_most_disagree: [true] } }] );
+      expect( eq.filters[0] ).to.eql( { terms: { identifications_most_disagree: [true] } } );
     } );
 
     it( "filters by bounding box", ( ) => {
@@ -478,7 +472,7 @@ describe( "ObservationsController", ( ) => {
         swlat: 3,
         swlng: 4
       }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{
+      expect( eq.filters[0] ).to.eql( {
         envelope: {
           geojson: {
             nelat: 1,
@@ -487,38 +481,38 @@ describe( "ObservationsController", ( ) => {
             swlng: 4
           }
         }
-      }] );
+      } );
     } );
 
     it( "filters by point and radius", ( ) => {
       Q( { lat: 10, lng: 20, radius: 30 }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{
+      expect( eq.filters[0] ).to.eql( {
         geo_distance: { distance: "30km", location: { lat: 10, lon: 20 } }
-      }] );
+      } );
     } );
 
     it( "defaults to a radius of 10k", ( ) => {
       Q( { lat: 10, lng: 20 }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{
+      expect( eq.filters[0] ).to.eql( {
         geo_distance: { distance: "10km", location: { lat: 10, lon: 20 } }
-      }] );
+      } );
     } );
 
     it( "filters by iconic_taxa", ( ) => {
       Q( { iconic_taxa: ["Animalia", "Plantae"] }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ terms: { "taxon.iconic_taxon_id": [103, 111] } }] );
+      expect( eq.filters[0] ).to.eql( { terms: { "taxon.iconic_taxon_id": [103, 111] } } );
     } );
 
     it( "filters by unknown iconic_taxa", ( ) => {
       Q( { iconic_taxa: ["Animalia", "Plantae", "unknown"] }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{
+      expect( eq.filters[0] ).to.eql( {
         bool: {
           should: [
             { terms: { "taxon.iconic_taxon_id": [103, 111] } },
             { bool: { must_not: { exists: { field: "taxon.iconic_taxon_id" } } } }
           ]
         }
-      }] );
+      } );
     } );
 
     it( "filters observed_on by date", ( ) => {
@@ -540,10 +534,10 @@ describe( "ObservationsController", ( ) => {
     it( "does nothing without an invalid date", ( ) => {
       Q( { d1: "nonsense" }, ( e, q ) => { eq = q; } );
       expect( eq.where ).to.be.undefined;
-      expect( eq.filters ).to.be.empty;
+      expect( eq.filters[0].bool ).to.be.undefined;
       Q( { d2: "nonsense" }, ( e, q ) => { eq = q; } );
       expect( eq.where ).to.be.undefined;
-      expect( eq.filters ).to.be.empty;
+      expect( eq.filters[0].bool ).to.be.undefined;
     } );
 
     it( "defaults d2 to tomorrow", ( ) => {
@@ -583,21 +577,21 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by updated_since", ( ) => {
       Q( { updated_since: "2015-01-02T00:00:00+00:00" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{
+      expect( eq.filters[0] ).to.eql( {
         range: { updated_at: { gte: "2015-01-02T00:00:00+00:00" } }
-      }] );
+      } );
     } );
 
     it( "ignores bad updated_since values", ( ) => {
       Q( { updated_since: "nonsense" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.be.empty;
+      expect( eq.filters[0].range ).to.be.undefined;
     } );
 
     it( "filters by observed_after", ( ) => {
       Q( { observed_after: "2015-01-02T00:00:00+00:00" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{
+      expect( eq.filters[0] ).to.eql( {
         range: { observed_on: { gte: "2015-01-02T00:00:00+00:00" } }
-      }] );
+      } );
     } );
 
     it( "filters by observation fields", ( ) => {
@@ -641,7 +635,7 @@ describe( "ObservationsController", ( ) => {
 
     it( "ignores bad values for csi", ( ) => {
       Q( { csi: "bad" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.be.empty;
+      expect( eq.filters[0].nested ).to.be.undefined;
     } );
 
     it( "filters by conservation status authority", ( ) => {
@@ -654,19 +648,19 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by popular", ( ) => {
       Q( { popular: "true" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ range: { cached_votes_total: { gte: 1 } } }] );
+      expect( eq.filters[0] ).to.eql( { range: { cached_votes_total: { gte: 1 } } } );
       Q( { popular: "false" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ term: { cached_votes_total: 0 } }] );
+      expect( eq.filters[0] ).to.eql( { term: { cached_votes_total: 0 } } );
     } );
 
     it( "filters by id_above", ( ) => {
       Q( { id_above: 51 }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ range: { id: { gt: 51 } } }] );
+      expect( eq.filters[0] ).to.eql( { range: { id: { gt: 51 } } } );
     } );
 
     it( "filters by reviewed true", ( ) => {
       Q( { reviewed: "true", viewer_id: 21 }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ terms: { reviewed_by: [21] } }] );
+      expect( eq.filters[0].terms.reviewed_by ).to.eql( [21] );
     } );
 
     it( "filters by reviewed false", ( ) => {
@@ -676,12 +670,13 @@ describe( "ObservationsController", ( ) => {
 
     it( "ignored bad values for reviewed", ( ) => {
       Q( { reviewed: "bad", viewer_id: 21 }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.be.empty;
+      expect( _.find( eq.filters, f => f.terms && f.terms.reviewed_by ) ).to.be.undefined;
     } );
 
     it( "filters by geoprivacy", ( ) => {
       Q( { geoprivacy: "whatever" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ terms: { geoprivacy: ["whatever"] } }] );
+      // expect( eq.filters ).to.eql( [{ terms: { geoprivacy: ["whatever"] } }] );
+      expect( eq.filters[0].terms.geoprivacy ).to.eql( ["whatever"] );
     } );
 
     it( "filters by geoprivacy open", ( ) => {
@@ -691,7 +686,8 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by geoprivacy obscured_private", ( ) => {
       Q( { geoprivacy: "obscured_private" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ terms: { geoprivacy: ["obscured", "private"] } }] );
+      // expect( eq.filters ).to.eql( [{ terms: { geoprivacy: ["obscured", "private"] } }] );
+      expect( eq.filters[0].terms.geoprivacy ).to.eql( ["obscured", "private"] );
     } );
 
     //
@@ -790,26 +786,23 @@ describe( "ObservationsController", ( ) => {
         } );
         expect( components.search_filters[1].bool.should ).to.not.be.undefined;
         const shoulds = components.search_filters[1].bool.should;
-        expect( shoulds[0] ).to.deep.eq( {
-          bool: {
-            must: [
-              {
-                terms: {
-                  "taxon.ancestor_ids": ["1"]
-                }
-              },
-              {
-                terms: {
-                  quality_grade: [
-                    "needs_id",
-                    "research"
-                  ]
-                }
-              }
-            ],
-            must_not: []
+        expect( shoulds[0].bool.must ).to.deep.include(
+          {
+            terms: {
+              quality_grade: [
+                "needs_id",
+                "research"
+              ]
+            }
           }
-        } );
+        );
+        expect( shoulds[0].bool.must ).to.deep.include(
+          {
+            terms: {
+              "taxon.ancestor_ids": ["1"]
+            }
+          }
+        );
         // the "collection" project slug will be removed from project_id param
         expect( shoulds[1] ).to.deep.eq( {
           bool: {
