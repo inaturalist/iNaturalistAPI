@@ -3,6 +3,7 @@ const request = require( "supertest" );
 const _ = require( "lodash" );
 const jwt = require( "jsonwebtoken" );
 const fs = require( "fs" );
+const nock = require( "nock" );
 const iNaturalistAPI = require( "../../../lib/inaturalist_api" );
 const config = require( "../../../config.js" );
 
@@ -167,6 +168,27 @@ describe( "Projects Routes", ( ) => {
           expect( res.body.results[0].title ).to.not.be.undefined;
           expect( res.body.results[0].body ).to.not.be.undefined;
         } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    // this is really testing code in inatJS, but we need it to conitnue
+    // to work for the API, so just being overly cautious
+    it( "escapes non-ascii IDs", done => {
+      const nonAsciiName = "高中校";
+      const escapedName = encodeURI( nonAsciiName );
+      const token = jwt.sign( { user_id: 333 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      nock( "http://localhost:3000" )
+        .put( `/projects/${escapedName}` )
+        .reply( 200, { rsp: "success" } );
+      request( app ).put( `/v1/projects/${escapedName}`, {
+        // it doesn't really matter what we post since we're just stubbing the
+        // Rails app to return obs 6 to load from the ES index
+      } ).set( "Authorization", token )
+        .expect( res => {
+          expect( res.body.rsp ).to.eq( "success" );
+        } )
+        .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
   } );
