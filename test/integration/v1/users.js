@@ -1,6 +1,8 @@
 const { expect } = require( "chai" );
+const jwt = require( "jsonwebtoken" );
 const request = require( "supertest" );
 const iNaturalistAPI = require( "../../../lib/inaturalist_api" );
+const config = require( "../../../config.js" );
 
 const app = iNaturalistAPI.server( );
 
@@ -86,6 +88,33 @@ describe( "Users", ( ) => {
           expect( res.body.total_results ).to.eq( 2 );
           expect( res.body.results[0].slug ).to.eq( "project-one" );
         } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "me", ( ) => {
+    it( "fails for unauthenticated requests", done => {
+      request( app ).get( "/v1/users/me" ).expect( res => {
+        expect( res.error.text ).to.eq( "{\"error\":\"Unauthorized\",\"status\":401}" );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 401, done );
+    } );
+
+    it( "returns the logged-in users object", done => {
+      const token = jwt.sign( { user_id: 1 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/users/me" ).set( "Authorization", token )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results[0].id ).to.eq( 1 );
+          expect( res.body.results[0].site_id ).to.eq( 1 );
+          expect( res.body.results[0].site.id ).to.eq( 1 );
+          expect( res.body.results[0].site.url ).to.eq( "https://www.inaturalist.org" );
+          expect( res.body.results[0].site.place_id ).to.eq( 1 );
+          expect( res.body.results[0].site.locale ).to.eq( "en" );
+          expect( res.body.results[0].site.site_name_short ).to.eq( "iNat" );
+        } )
+        .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
   } );

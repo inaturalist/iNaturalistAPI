@@ -842,7 +842,8 @@
           "login": "userlogin",
           "login_autocomplete": "userloginautocomplete",
           "name": "username",
-          "name_autocomplete": "usernameautocomplete"
+          "name_autocomplete": "usernameautocomplete",
+          "site_id": 1
         },
         {
           "id": 5,
@@ -1061,6 +1062,20 @@
         "owner_id": 111,
         "owner_type": "ProjectObservation",
         "value": "f"
+      },
+      {
+        "id": 200,
+        "name": "locale",
+        "owner_id": 1,
+        "owner_type": "Site",
+        "value": "en"
+      },
+      {
+        "id": 201,
+        "name": "site_name_short",
+        "owner_id": 1,
+        "owner_type": "Site",
+        "value": "iNat"
       }
     ],
     "project_observations": [
@@ -1230,6 +1245,16 @@
         "operator": "verifiable?", "operand_id": 1
       }
     ],
+    "sites": [
+      {
+        "id": 1,
+        "name": "iNaturalist",
+        "place_id": 1,
+        "url": "https://www.inaturalist.org",
+        "created_at": "2018-12-31T00:00:00",
+        "updated_at": "2018-12-31T00:00:00"
+      }
+    ],
     "subscriptions": [
       {
         "id": 1,
@@ -1242,7 +1267,8 @@
       {
         "id": 1,
         "login": "userlogin",
-        "name": "username"
+        "name": "username",
+        "site_id": 1
       },
       {
         "id": 5,
