@@ -156,9 +156,9 @@ describe( "IdentificationsController", ( ) => {
     it( "filters by d1/d2", ( ) => {
       Q( { d1: "2016-01-01T01:00:00", d2: "2017-01-01T01:00:00" }, ( e, q ) => { eq = q; } );
       expect( _.find( eq.filters, f => (
-        f.range && f.range.created_at
-          && f.range.created_at.gte === "2016-01-01T01:00:00+00:00"
-          && f.range.created_at.lte === "2017-01-01T01:00:00+00:00"
+        f.bool && f.bool.should && f.bool.should[0].bool && f.bool.should[0].bool.filter && f.bool.should[0].bool.filter[0].range
+          && f.bool.should[0].bool.filter[0].range.created_at.gte === "2016-01-01T01:00:00+00:00"
+          && f.bool.should[0].bool.filter[0].range.created_at.lte === "2017-01-01T01:00:00+00:00"
       ) ) ).to.not.be.undefined;
     } );
 
