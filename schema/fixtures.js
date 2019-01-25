@@ -462,6 +462,13 @@
           "id": 13,
           "user": { "id": 5 },
           "identifier_user_ids": [ 121 ]
+        },
+        {
+          "id": 14,
+          "user": { "id": 126, "login": "totally-trusting" },
+          "description": "Observation by user 126 who trusts user 125",
+          "private_location": "1,2",
+          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
         }
       ]
     },
@@ -1309,6 +1316,21 @@
         "name": "ES User",
         "locale": "es",
         "place_id": 222
+      },
+      {
+        "id": 125,
+        "login": "totally-trustworthy"
+      },
+      {
+        "id": 126,
+        "login": "totally-trusting"
+      }
+    ],
+    "friendships": [
+      {
+        "user_id": 126,
+        "friend_id": 125,
+        "trust": true
       }
     ],
     "taxa": [
