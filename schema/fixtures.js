@@ -1083,8 +1083,14 @@
         "owner_id": 1,
         "owner_type": "Site",
         "value": "iNat"
-      }
-    ],
+      },
+      {
+        "id": 301,
+        "name": "scientific_name_first",
+        "owner_id": 1,
+        "owner_type": "User",
+        "value": "t"
+      }    ],
     "project_observations": [
       {
         "id": 101,
@@ -1258,6 +1264,16 @@
         "name": "iNaturalist",
         "place_id": 1,
         "url": "https://www.inaturalist.org",
+        "draft": "f",
+        "created_at": "2018-12-31T00:00:00",
+        "updated_at": "2018-12-31T00:00:00"
+      },
+      {
+        "id": 2,
+        "name": "NaturaLista",
+        "place_id": 6793,
+        "url": "https://www.naturalista.mx/",
+        "draft": "f",
         "created_at": "2018-12-31T00:00:00",
         "updated_at": "2018-12-31T00:00:00"
       }

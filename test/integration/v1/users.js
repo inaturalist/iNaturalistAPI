@@ -107,6 +107,7 @@ describe( "Users", ( ) => {
         .expect( res => {
           expect( res.body.total_results ).to.eq( 1 );
           expect( res.body.results[0].id ).to.eq( 1 );
+          expect( res.body.results[0].prefers_scientific_name_first ).to.eq( true );
           expect( res.body.results[0].site_id ).to.eq( 1 );
           expect( res.body.results[0].site.id ).to.eq( 1 );
           expect( res.body.results[0].site.url ).to.eq( "https://www.inaturalist.org" );
