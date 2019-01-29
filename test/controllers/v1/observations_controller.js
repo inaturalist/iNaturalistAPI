@@ -208,8 +208,9 @@ describe( "ObservationsController", ( ) => {
 
     it( "queries taxon_name", ( ) => {
       Q( { taxon_name: "something" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters[0].multi_match.fields ).to
-        .eql( ["taxon.names.name", "taxon.names_*"] );
+      expect( eq.filters[0].multi_match.fields ).to.include( "taxon.names_sci" );
+      expect( eq.filters[0].multi_match.fields ).to.include( "taxon.names_en" );
+      expect( eq.filters[0].multi_match.fields ).to.include( "taxon.names_fr" );
     } );
 
     //
