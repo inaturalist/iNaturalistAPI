@@ -22,6 +22,8 @@ node app.js
 Run all: `npm test`
 Filter by pattern: `NODE_ENV=test ./node_modules/mocha/bin/_mocha --recursive --fgrep observations`
 
+You can also add `.only` to a `describe` or `it` call to only run that test when you run `npm test`, e.g. `it.only( "should only run this test" )`.
+
 # Updating Documentation
 
 Edit `lib/views/swagger_v*.yml.ejs`

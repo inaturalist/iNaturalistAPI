@@ -653,9 +653,9 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by popular", ( ) => {
       Q( { popular: "true" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ range: { cached_votes_total: { gte: 1 } } }] );
+      expect( eq.filters ).to.eql( [{ range: { faves_count: { gte: 1 } } }] );
       Q( { popular: "false" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters ).to.eql( [{ term: { cached_votes_total: 0 } }] );
+      expect( eq.filters ).to.eql( [{ term: { faves_count: 0 } }] );
     } );
 
     it( "filters by id_above", ( ) => {
