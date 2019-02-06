@@ -19,3 +19,4 @@ lib/vision/**
 !lib/vision/photos_csv_transformer.js
 !lib/vision/run_stats.js
 cache/**
+log/**

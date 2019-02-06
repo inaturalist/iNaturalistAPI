@@ -14,7 +14,7 @@ const InaturalistAPI = require( "./lib/inaturalist_api" ); // eslint-disable-lin
 
 const port = Number( process.env.PORT || 4000 );
 const logstashPath = path.join(
-  path.dirname( fs.realpathSync( __filename ) ), `inaturalist_api.${port}.log`
+  path.dirname( fs.realpathSync( __filename ) ), "log", `inaturalist_api.${port}.log`
 );
 Logstasher.setLogStreamFilePath( logstashPath );
 const app = InaturalistAPI.server( );
