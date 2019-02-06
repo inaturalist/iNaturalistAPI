@@ -13,8 +13,15 @@ if ( fs.existsSync( newrelicPath ) ) {
 const InaturalistAPI = require( "./lib/inaturalist_api" ); // eslint-disable-line global-require
 
 const port = Number( process.env.PORT || 4000 );
-Logstasher.setLogStreamFilePath( `inaturalist_api.${port}.log` );
+const logstashPath = path.join(
+  path.dirname( fs.realpathSync( __filename ) ), "log", `inaturalist_api.${port}.log`
+);
+Logstasher.setLogStreamFilePath( logstashPath );
 const app = InaturalistAPI.server( );
 app.listen( port, ( ) => {
   console.log( `Listening on ${port}` );
 } );
+
+if ( process.pid ) {
+  console.log( `This process is your pid: ${process.pid}` );
+}
