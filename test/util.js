@@ -90,5 +90,15 @@ describe( "util", ( ) => {
       expect( opts.place ).to.eq( "PL" );
       expect( opts.preferredPlace ).to.eq( "PPL" );
     } );
+
+    it( "sets he to iw", ( ) => {
+      const opts = util.localeOpts( { query: { locale: "he" } } );
+      expect( opts.locale ).to.eq( "iw" );
+    } );
+    
+    it( "sets he-IL to iw-IL", ( ) => {
+      const opts = util.localeOpts( { query: { locale: "he-IL" } } );
+      expect( opts.locale ).to.eq( "iw-il" ); // not sure why it's lowercase...
+    } );
   } );
 } );
