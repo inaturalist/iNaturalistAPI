@@ -469,6 +469,23 @@
           "description": "Observation by user 126 who trusts user 125",
           "private_location": "1,2",
           "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
+        },
+        {
+          "id": 15,
+          "user": { "id": 5 },
+          "description": "Observation of an obscured taxon",
+          "private_location": "1,2",
+          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] },
+          "taxon_geoprivacy": "obscured"
+        },
+        {
+          "id": 16,
+          "user": { "id": 5 },
+          "description": "Observation of an obscured taxon AND user geoprivacy",
+          "private_location": "1,2",
+          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] },
+          "geoprivacy": "obscured",
+          "taxon_geoprivacy": "obscured"
         }
       ]
     },

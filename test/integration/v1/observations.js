@@ -422,6 +422,40 @@ describe( "Observations", ( ) => {
           expect( result.id ).to.eq( 2 );
         } ).expect( 200, done );
     } );
+
+    it( "filters by geoprivacy", done => {
+      const obsWithUserGeoprivacy = 333;
+      const obsWithTaxonGeoprivacy = 15;
+      const obsWithUserAndTaxonGeoprivacy = 16;
+      request( app ).get( "/v1/observations?geoprivacy=obscured" )
+        .expect( res => {
+          expect( res.body.results.map( r => r.id ) ).to.contain( obsWithUserGeoprivacy );
+          expect( res.body.results.map( r => r.id ) ).not.to.contain( obsWithTaxonGeoprivacy );
+          expect( res.body.results.map( r => r.id ) ).to.contain( obsWithUserAndTaxonGeoprivacy );
+        } ).expect( 200, done );
+    } );
+    it( "filters by taxon_geoprivacy", done => {
+      const obsWithUserGeoprivacy = 333;
+      const obsWithTaxonGeoprivacy = 15;
+      const obsWithUserAndTaxonGeoprivacy = 16;
+      request( app ).get( "/v1/observations?taxon_geoprivacy=obscured" )
+        .expect( res => {
+          expect( res.body.results.map( r => r.id ) ).to.contain( obsWithTaxonGeoprivacy );
+          expect( res.body.results.map( r => r.id ) ).not.to.contain( obsWithUserGeoprivacy );
+          expect( res.body.results.map( r => r.id ) ).to.contain( obsWithUserAndTaxonGeoprivacy );
+        } ).expect( 200, done );
+    } );
+    it( "filters by geoprivacy and taxon_geoprivacy", done => {
+      const obsWithUserGeoprivacy = 333;
+      const obsWithTaxonGeoprivacy = 15;
+      const obsWithUserAndTaxonGeoprivacy = 16;
+      request( app ).get( "/v1/observations?geoprivacy=obscured&taxon_geoprivacy=obscured" )
+        .expect( res => {
+          expect( res.body.results.map( r => r.id ) ).not.to.contain( obsWithTaxonGeoprivacy );
+          expect( res.body.results.map( r => r.id ) ).not.to.contain( obsWithUserGeoprivacy );
+          expect( res.body.results.map( r => r.id ) ).to.contain( obsWithUserAndTaxonGeoprivacy );
+        } ).expect( 200, done );
+    } );
   } );
 
   describe( "histogram", ( ) => {
