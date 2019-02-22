@@ -182,6 +182,16 @@ describe( "IdentificationsController", ( ) => {
       ) ) ).to.not.be.undefined;
     } );
 
+    it( "filters by id_above", ( ) => {
+      Q( { id_above: 51 }, ( e, q ) => { eq = q; } );
+      expect( eq.filters ).to.deep.include( { range: { id: { gt: 51 } } } );
+    } );
+
+    it( "filters by id_below", ( ) => {
+      Q( { id_below: 51 }, ( e, q ) => { eq = q; } );
+      expect( eq.filters ).to.deep.include( { range: { id: { lt: 51 } } } );
+    } );
+
     it( "sorts by created_at desc by default", ( ) => {
       Q( { }, ( e, q ) => { eq = q; } );
       expect( eq.sort ).to.deep.eq( { created_at: "desc" } );

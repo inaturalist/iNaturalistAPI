@@ -17,6 +17,16 @@ describe( "Identifications", ( ) => {
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "can return only ids", done => {
+      request( app ).get( "/v1/identifications?id=102&only_id=true&per_page=1" )
+        .expect( res => {
+          const result = res.body.results[0];
+          expect( _.keys( result ).length ).to.eq( 1 );
+          expect( _.keys( result )[0] ).to.eq( "id" );
+          expect( result.id ).to.eq( 102 );
+        } ).expect( 200, done );
+    } );
   } );
 
   describe( "species_counts", ( ) => {
