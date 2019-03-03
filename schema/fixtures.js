@@ -486,6 +486,29 @@
           "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] },
           "geoprivacy": "obscured",
           "taxon_geoprivacy": "obscured"
+        },
+        {
+          "id": 17,
+          "user": { "id": 5 },
+          "description": "obs with a large positional_accuracy",
+          "private_location": "1,2",
+          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] },
+          "positional_accuracy": 5000
+        },
+        {
+          "id": 18,
+          "user": { "id": 5 },
+          "description": "obs with a small positional_accuracy",
+          "private_location": "1,2",
+          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] },
+          "positional_accuracy": 5
+        },
+        {
+          "id": 19,
+          "user": { "id": 5 },
+          "description": "obs with no positional_accuracy",
+          "private_location": "1,2",
+          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
         }
       ]
     },

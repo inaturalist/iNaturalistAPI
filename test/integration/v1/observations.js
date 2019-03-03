@@ -456,6 +456,50 @@ describe( "Observations", ( ) => {
           expect( res.body.results.map( r => r.id ) ).to.contain( obsWithUserAndTaxonGeoprivacy );
         } ).expect( 200, done );
     } );
+    it( "filters by acc_below", done => {
+      const obsWithPositionalAccuracy5000 = 17;
+      const obsWithPositionalAccuracy5 = 18;
+      request( app ).get( "/v1/observations?acc_below=100" )
+        .expect( res => {
+          const ids = res.body.results.map( r => r.id );
+          expect( ids ).to.contain( obsWithPositionalAccuracy5 );
+          expect( ids ).not.to.contain( obsWithPositionalAccuracy5000 );
+        } ).expect( 200, done );
+    } );
+    it( "filters by acc_above", done => {
+      const obsWithPositionalAccuracy5000 = 17;
+      const obsWithPositionalAccuracy5 = 18;
+      request( app ).get( "/v1/observations?acc_above=100" )
+        .expect( res => {
+          const ids = res.body.results.map( r => r.id );
+          expect( ids ).not.to.contain( obsWithPositionalAccuracy5 );
+          expect( ids ).to.contain( obsWithPositionalAccuracy5000 );
+        } ).expect( 200, done );
+    } );
+    it( "filters by acc=true", done => {
+      const obsWithPositionalAccuracy5000 = 17;
+      const obsWithPositionalAccuracy5 = 18;
+      const obsWithNoPositionalAccuracy = 19;
+      request( app ).get( "/v1/observations?acc=true" )
+        .expect( res => {
+          const ids = res.body.results.map( r => r.id );
+          expect( ids ).to.contain( obsWithPositionalAccuracy5 );
+          expect( ids ).to.contain( obsWithPositionalAccuracy5000 );
+          expect( ids ).not.to.contain( obsWithNoPositionalAccuracy );
+        } ).expect( 200, done );
+    } );
+    it( "filters by acc=false", done => {
+      const obsWithPositionalAccuracy5000 = 17;
+      const obsWithPositionalAccuracy5 = 18;
+      const obsWithNoPositionalAccuracy = 19;
+      request( app ).get( "/v1/observations?acc=false" )
+        .expect( res => {
+          const ids = res.body.results.map( r => r.id );
+          expect( ids ).not.to.contain( obsWithPositionalAccuracy5 );
+          expect( ids ).not.to.contain( obsWithPositionalAccuracy5000 );
+          expect( ids ).to.contain( obsWithNoPositionalAccuracy );
+        } ).expect( 200, done );
+    } );
   } );
 
   describe( "histogram", ( ) => {
