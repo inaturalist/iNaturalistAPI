@@ -893,6 +893,13 @@
           "site_id": 1
         },
         {
+          "id": 2,
+          "login": "search_test_user",
+          "login_autocomplete": "search_test_user",
+          "name": "Search Test User",
+          "name_autocomplete": "Search Test User"
+        },
+        {
           "id": 5,
           "login": "b-user",
           "name": "B User"
@@ -918,11 +925,9 @@
           "name": "A User"
         },
         {
-          "id": 2,
-          "login": "search_test_user",
-          "login_autocomplete": "search_test_user",
-          "name": "Search Test User",
-          "name_autocomplete": "Search Test User"
+          "id": 127,
+          "login": "user-with-coordinate-access",
+          "name": "User with coordinate access"
         }
       ]
     },
@@ -998,6 +1003,13 @@
         "observation_id": 1002,
         "created_at": "2016-03-01 00:00:00",
         "updated_at": "2016-01-01 00:00:00"
+      }
+    ],
+    "friendships": [
+      {
+        "user_id": 126,
+        "friend_id": 125,
+        "trust": true
       }
     ],
     "identifications": [
@@ -1234,6 +1246,10 @@
       {
         "user_id": 1,
         "role_id": 1
+      },
+      {
+        "user_id": 127,
+        "role_id": 1
       }
     ],
     "rules": [
@@ -1326,6 +1342,67 @@
         "user_id": 1
       }
     ],
+    "taxa": [
+      {
+        "id": 101,
+        "name": "Actinopterygii"
+      },
+      {
+        "id": 102,
+        "name": "Amphibia"
+      },
+      {
+        "id": 103,
+        "name": "Animalia"
+      },
+      {
+        "id": 104,
+        "name": "Arachnida"
+      },
+      {
+        "id": 105,
+        "name": "Aves"
+      },
+      {
+        "id": 106,
+        "name": "Chromista"
+      },
+      {
+        "id": 107,
+        "name": "Insecta"
+      },
+      {
+        "id": 108,
+        "name": "Fungi"
+      },
+      {
+        "id": 109,
+        "name": "Mammalia"
+      },
+      {
+        "id": 110,
+        "name": "Mollusca"
+      },
+      {
+        "id": 111,
+        "name": "Plantae"
+      },
+      {
+        "id": 112,
+        "name": "Protozoa"
+      },
+      {
+        "id": 113,
+        "name": "Reptilia"
+      }
+    ],
+    "user_privileges": [
+      {
+        "id": 1,
+        "user_id": 127,
+        "privilege": "coordinate_access"
+      }
+    ],
     "users": [
       {
         "id": 1,
@@ -1380,67 +1457,11 @@
       {
         "id": 126,
         "login": "totally-trusting"
-      }
-    ],
-    "friendships": [
-      {
-        "user_id": 126,
-        "friend_id": 125,
-        "trust": true
-      }
-    ],
-    "taxa": [
-      {
-        "id": 101,
-        "name": "Actinopterygii"
       },
       {
-        "id": 102,
-        "name": "Amphibia"
-      },
-      {
-        "id": 103,
-        "name": "Animalia"
-      },
-      {
-        "id": 104,
-        "name": "Arachnida"
-      },
-      {
-        "id": 105,
-        "name": "Aves"
-      },
-      {
-        "id": 106,
-        "name": "Chromista"
-      },
-      {
-        "id": 107,
-        "name": "Insecta"
-      },
-      {
-        "id": 108,
-        "name": "Fungi"
-      },
-      {
-        "id": 109,
-        "name": "Mammalia"
-      },
-      {
-        "id": 110,
-        "name": "Mollusca"
-      },
-      {
-        "id": 111,
-        "name": "Plantae"
-      },
-      {
-        "id": 112,
-        "name": "Protozoa"
-      },
-      {
-        "id": 113,
-        "name": "Reptilia"
+        "id": 127,
+        "login": "user-with-coordinate-access",
+        "name": "User with coordinate access"
       }
     ]
   }

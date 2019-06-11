@@ -56,6 +56,34 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
+    describe( "coordinate_access privilege", ( ) => {
+      it( "shows private coordinates if taxon_geoprivacy is obscured", done => {
+        const userWithPrivilege = 127;
+        const obsWithTaxonGeoprivacy = 15;
+        const token = jwt.sign( { user_id: userWithPrivilege }, config.jwtSecret || "secret",
+          { algorithm: "HS512" } );
+        request( app ).get( `/v1/observations/${obsWithTaxonGeoprivacy}` ).set( "Authorization", token )
+          .expect( res => {
+            expect( res.body.results[0].private_geojson ).to.not.be.undefined;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "does not show private coordinates if geoprivacy is obscured", done => {
+        const userWithPrivilege = 127;
+        const obsWithUserAndTaxonGeoprivacy = 16;
+        const token = jwt.sign( { user_id: userWithPrivilege }, config.jwtSecret || "secret",
+          { algorithm: "HS512" } );
+        request( app ).get( `/v1/observations/${obsWithUserAndTaxonGeoprivacy}` ).set( "Authorization", token )
+          .expect( res => {
+            expect( res.body.results[0].private_geojson ).to.be.undefined;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+    } );
+
     it( "does not show authenticated project curators private info if they do not have access", done => {
       const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
