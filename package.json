@@ -33,7 +33,8 @@
     "geoip-lite": "^1.3.4",
     "inaturalistjs": "github:inaturalist/inaturalistjs",
     "jsonwebtoken": "^8.3.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
+    "lodash.merge": "^4.6.2",
     "md5": "^2.2.1",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.23",
@@ -43,7 +44,7 @@
     "pg": "^7.6.0",
     "redis": "^2.8.0",
     "request": "^2.88.0",
-    "squel": "^5.12.2",
+    "squel": "^5.13.0",
     "sshpk": "^1.15.2",
     "yamljs": "^0.3.0",
     "yargs": "^13.2.2"
