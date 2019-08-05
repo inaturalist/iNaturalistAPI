@@ -169,26 +169,25 @@ describe( "ObservationsController", ( ) => {
     // Queries
     //
 
-    it( "queries multiple fields", ( ) => {
-      Q( { q: "search" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters[0].multi_match.operator ).to.eq( "and" );
-      expect( eq.filters[0].multi_match.query ).to.eq( "search" );
-      expect( eq.filters[0].multi_match.fields ).to.include( "taxon.names_sci" );
-      expect( eq.filters[0].multi_match.fields ).to.include( "taxon.names_en" );
-      expect( eq.filters[0].multi_match.fields ).to.include( "taxon.names_fr" );
-      expect( eq.filters[0].multi_match.fields ).to.include( "tags" );
-      expect( eq.filters[0].multi_match.fields ).to.include( "description" );
-      expect( eq.filters[0].multi_match.fields ).to.include( "place_guess" );
+    it( "queries multiple fields", done => {
+      Q( { q: "search" }, ( e, q ) => {
+        expect( q.filters[0].multi_match.operator ).to.eq( "and" );
+        expect( q.filters[0].multi_match.query ).to.eq( "search" );
+        expect( q.filters[0].multi_match.fields ).to.not.include( "taxon.names_sci" );
+        expect( q.filters[0].multi_match.fields ).to.not.include( "taxon.names_en" );
+        expect( q.filters[0].multi_match.fields ).to.not.include( "taxon.names_fr" );
+        expect( q.filters[0].multi_match.fields ).to.include( "tags" );
+        expect( q.filters[0].multi_match.fields ).to.include( "description" );
+        expect( q.filters[0].multi_match.fields ).to.include( "place_guess" );
+        done( );
+      } );
     } );
 
-    it( "queries names", ( ) => {
-      Q( { q: "search", search_on: "names" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters[0].multi_match.fields ).to.include( "taxon.names_sci" );
-      expect( eq.filters[0].multi_match.fields ).to.include( "taxon.names_en" );
-      expect( eq.filters[0].multi_match.fields ).to.include( "taxon.names_fr" );
-      expect( eq.filters[0].multi_match.fields ).to.not.include( "tags" );
-      expect( eq.filters[0].multi_match.fields ).to.not.include( "description" );
-      expect( eq.filters[0].multi_match.fields ).to.not.include( "place_guess" );
+    it( "queries names", done => {
+      Q( { q: "search", search_on: "names" }, ( e, q ) => {
+        expect( q.filters ).to.deep.include( { term: { id: -1 } } );
+        done( );
+      } );
     } );
 
     it( "queries tags", ( ) => {
@@ -206,11 +205,11 @@ describe( "ObservationsController", ( ) => {
       expect( eq.filters[0].multi_match.fields ).to.eql( ["place_guess"] );
     } );
 
-    it( "queries taxon_name", ( ) => {
-      Q( { taxon_name: "something" }, ( e, q ) => { eq = q; } );
-      expect( eq.filters[0].multi_match.fields ).to.include( "taxon.names_sci" );
-      expect( eq.filters[0].multi_match.fields ).to.include( "taxon.names_en" );
-      expect( eq.filters[0].multi_match.fields ).to.include( "taxon.names_fr" );
+    it( "queries taxon_name", done => {
+      Q( { taxon_name: "something" }, ( e, q ) => {
+        expect( q.filters ).to.deep.include( { term: { id: -1 } } );
+        done( );
+      } );
     } );
 
     //
