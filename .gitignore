@@ -20,3 +20,4 @@ lib/vision/**
 !lib/vision/run_stats.js
 cache/**
 log/**
+openapi/uploads/**
