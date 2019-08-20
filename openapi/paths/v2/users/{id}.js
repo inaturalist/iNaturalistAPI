@@ -7,7 +7,7 @@ const UsersController = require( "../../../../lib/controllers/v1/users_controlle
 module.exports = sendWrapper => {
   async function GET( req, res ) {
     UsersController.show( req, ( err, results ) => {
-      sendWrapper( res, err, results );
+      sendWrapper( req, res, err, results );
     } );
   }
 
@@ -37,7 +37,7 @@ module.exports = sendWrapper => {
 
   async function POST( req, res ) {
     UsersController.update( req, ( err, results ) => {
-      sendWrapper( res, err, results );
+      sendWrapper( req, res, err, results );
     } );
   }
 
@@ -58,7 +58,7 @@ module.exports = sendWrapper => {
         },
         "application/json": {
           schema: {
-            $ref: "#/components/schemas/UsersCreate"
+            $ref: "#/components/schemas/UsersUpdate"
           }
         }
       }

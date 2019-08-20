@@ -9,10 +9,11 @@ const ObservationsController = require( "../../../lib/controllers/v1/observation
 module.exports = sendWrapper => {
   async function GET( req, res ) {
     if ( req.originalMethod === "POST" ) {
+      req.originalQuery = req.query;
       req.query = _.mapValues( req.body, v => v.toString( ) );
     }
     ObservationsController.search( req, ( err, results ) => {
-      sendWrapper( res, err, results );
+      sendWrapper( req, res, err, results );
     } );
   }
 
@@ -41,7 +42,7 @@ module.exports = sendWrapper => {
 
   async function POST( req, res ) {
     ObservationsController.show( { params: { id: "1000000" }, query: { } }, ( err, results ) => {
-      sendWrapper( res, err, results );
+      sendWrapper( req, res, err, results );
     } );
   }
 

@@ -24,6 +24,11 @@ const app = InaturalistAPI.server( );
 
 let initializedApi = null;
 
+const sendWrapper = ( req, res, err, results ) => {
+  if ( err ) { return void initializedApi.args.errorMiddleware( err, null, res, null ); }
+  res.status( 200 ).header( "Content-Type", "application/json" ).send( results );
+};
+
 app.use( bodyParser.json( {
   type: req => {
     // Parser the request body for everything other than multipart requests,
@@ -79,16 +84,109 @@ const storage = multer.diskStorage( {
 
 const upload = multer( { storage } );
 
+const resolveSchema = ( req, schema ) => {
+  const schemaRef = schema.$ref;
+  if ( schemaRef && schemaRef.match( /#\/components\/schemas\// ) ) {
+    const schemaName = schemaRef.replace( "#/components/schemas/", "" );
+    return req.apiDoc.components.schemas[schemaName];
+  }
+  return schema;
+};
+
+const requestFields = req => {
+  const fields = req.body.fields || req.query.fields;
+  if ( _.isObject( fields ) ) {
+    return fields;
+  }
+  if ( !_.isEmpty( fields ) ) {
+    try {
+      const fieldsJson = JSON.parse( fields );
+      return fieldsJson;
+    } catch {
+      // ignore parse failures
+    }
+    const fieldsStringMatch = fields.match( /^[a-z_]+(,[a-z_]+)?$/ );
+    if ( fieldsStringMatch ) {
+      return fields.split( "," );
+    }
+    return false;
+  }
+  return null;
+};
+
+const responseItemSchema = req => {
+  if ( req.operationDoc
+    && req.operationDoc.responses["200"]
+    && req.operationDoc.responses["200"].content["application/json"]
+    && req.operationDoc.responses["200"].content["application/json"].schema ) {
+    const responseSchema = resolveSchema( req,
+      req.operationDoc.responses["200"].content["application/json"].schema );
+    if ( responseSchema.properties
+      && responseSchema.properties.results
+      && responseSchema.properties.results.items ) {
+      return resolveSchema( req, responseSchema.properties.results );
+    }
+  }
+  return null;
+};
+
+let applyFieldSelectionToItem = ( ) => { };
+const applyFieldSelectionToObject = ( req, item, fieldsRequested, itemSchema ) => {
+  let fieldsToReturn = { };
+  _.each( itemSchema.required, k => {
+    fieldsToReturn[k] = true;
+  } );
+  if ( _.isArray( fieldsRequested ) ) {
+    fieldsToReturn = Object.assign( fieldsToReturn, _.keyBy( fieldsRequested, r => r ) );
+  } else {
+    fieldsToReturn = Object.assign( fieldsToReturn, fieldsRequested );
+  }
+  const prunedItem = { };
+  // loop through the requested fields
+  _.each( fieldsToReturn, ( v, k ) => {
+    // the root item has the field, and is in the root item definition
+    const fieldSchema = itemSchema.properties[k];
+    if ( item[k] && fieldSchema ) {
+      const propertySchema = resolveSchema( req, fieldSchema );
+      prunedItem[k] = applyFieldSelectionToItem( req, item[k], v, propertySchema );
+    }
+  } );
+  return prunedItem;
+};
+
+applyFieldSelectionToItem = ( req, item, fields, itemSchema ) => {
+  if ( itemSchema.type === "array" && _.isArray( item ) ) {
+    item = _.map( item, i => applyFieldSelectionToItem(
+      req, i, fields, resolveSchema( req, itemSchema.items )
+    ) );
+  } else if ( itemSchema.type === "object" && _.isObject( item ) ) {
+    item = applyFieldSelectionToObject( req, item, fields, itemSchema );
+  }
+  return item;
+};
+
 const validateAllResponses = ( req, res, next ) => {
   const strictValidation = !!req.apiDoc["x-express-openapi-validation-strict"];
   if ( typeof res.validateResponse === "function" ) {
     const { send } = res;
-    res.send = function expressOpenAPISend( ...args ) {
+    res.send = ( ...args ) => {
       const onlyWarn = !strictValidation;
       if ( res.get( "x-express-openapi-validated" ) !== undefined ) {
         return send.apply( res, args );
       }
       const body = args[0];
+      const itemSchema = responseItemSchema( req );
+      if ( body && !_.isEmpty( body.results ) && itemSchema ) {
+        const fields = requestFields( req );
+        if ( fields === false ) {
+          res.set( "x-express-openapi-validated", true );
+          return sendWrapper( req, res, new Error( "invalid fields parameter" ) );
+        }
+        if ( fields !== "all" ) {
+          body.results = applyFieldSelectionToItem( req, body.results, fields, itemSchema );
+        }
+      }
+
       let validation = res.validateResponse( res.statusCode, body );
       let validationMessage;
       if ( validation === undefined ) {
@@ -97,16 +195,18 @@ const validateAllResponses = ( req, res, next ) => {
       if ( validation.errors ) {
         const errorList = Array.from( validation.errors ).map( e => e.message ).join( "," );
         validationMessage = `Invalid response for status code ${res.statusCode}: ${errorList}`;
-        console.warn( validationMessage );
+        console.warn( ["validationMessage", validationMessage] );
         // Set to avoid a loop, and to provide the original status code
         res.set( "x-express-openapi-validation-error-for", res.statusCode.toString( ) );
       }
       res.set( "x-express-openapi-validated", true );
       if ( onlyWarn || !validation.errors ) {
+        if ( _.has( req.originalQuery || req.query, "pretty" ) ) {
+          args[0] = JSON.stringify( body, null, 2 );
+        }
         return send.apply( res, args );
       }
-      res.status( 500 );
-      return res.json( { error: validationMessage } );
+      return sendWrapper( req, res, new Error( validationMessage ) );
     };
   }
   next( );
@@ -131,15 +231,12 @@ initializedApi = initialize( {
   docPath: "api-docs",
   apiDoc: {
     ...v1ApiDoc,
-    "x-express-openapi-additional-middleware": [validateAllResponses]
-    // "x-express-openapi-validation-strict": true
+    "x-express-openapi-additional-middleware": [validateAllResponses],
+    "x-express-openapi-validation-strict": true
   },
   enableObjectCoercion: true,
   dependencies: {
-    sendWrapper: ( res, err, results ) => {
-      if ( err ) { return void initializedApi.args.errorMiddleware( err, null, res, null ); }
-      res.status( 200 ).send( results );
-    }
+    sendWrapper
   },
   securityFilter: ( req, res ) => {
     // remove x-express-* attributes which don't need to be in the official documentation
@@ -206,10 +303,15 @@ initializedApi = initialize( {
       } );
       return;
     }
+    console.log( "Error trace from errorMiddleware ------->" );
     console.trace( err );
     res.status( err.status || 500 ).json( err instanceof Error
-      ? { status: 500, message: err.message, stack: err.stack.split( "\n" ) }
-      : err );
+      ? {
+        status: 500,
+        message: err.message,
+        stack: err.stack.split( "\n" ),
+        from: "errorMiddleware"
+      } : err );
   }
 } );
 

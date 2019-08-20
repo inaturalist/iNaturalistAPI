@@ -6,8 +6,9 @@ const observationsController = require( "../../../../lib/controllers/v1/observat
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
+    req.params.id = req.params.id.join( "," );
     observationsController.show( req, ( err, results ) => {
-      sendWrapper( res, err, results.results );
+      sendWrapper( req, res, err, results );
     } );
   }
 
@@ -27,15 +28,7 @@ module.exports = sendWrapper => {
         content: {
           "application/json": {
             schema: {
-              type: "object",
-              properties: {
-                results: {
-                  type: "array",
-                  items: {
-                    $ref: "#/components/schemas/Observation"
-                  }
-                }
-              }
+              $ref: "#/components/schemas/ResultsObservations"
             }
           }
         }

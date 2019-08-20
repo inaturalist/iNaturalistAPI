@@ -43,10 +43,10 @@ module.exports = Joi.object( ).keys( {
   rule_preferences: Joi.array( ).items( Joi.date( ) ),
   search_parameters: Joi.array( ).items( Joi.object( ).keys( {
     field: Joi.string( ),
-    value: Joi.any( ),
+    value: Joi.any( ).description( "TODO: values can be single values or arrays" ),
     value_bool: Joi.boolean( ),
     value_date: Joi.array( ).items( Joi.string( ) ),
-    value_keyword: Joi.array( ).items( Joi.string( ) ),
+    value_keyword: Joi.any( ).description( "TODO: values can be single values or arrays" ),
     value_number: Joi.array( ).items( Joi.number( ) )
   } ).unknown( false ) ),
   site_features: Joi.array( ).items( Joi.date( ) ).description( "TODO: fix this" ),

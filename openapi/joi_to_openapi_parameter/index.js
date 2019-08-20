@@ -81,9 +81,9 @@ const convert = joiSchema => {
     case "date":
       schema = dateParser( joiSchema );
       break;
-    // case "any":
-    //   swaggerSchema = { type: ["array", "boolean", "number", "object", "string", "null"] };
-    //   break;
+    case "any":
+      schema = { };
+      break;
     default:
       throw new TypeError( `${type} is not a Joi type recognized by parameterize.` );
   }

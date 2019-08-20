@@ -8,7 +8,7 @@ const TaxaController = require( "../../../../lib/controllers/v1/taxa_controller"
 module.exports = sendWrapper => {
   async function GET( req, res ) {
     TaxaController.show( req, ( err, results ) => {
-      sendWrapper( res, err, results );
+      sendWrapper( req, res, err, results );
     } );
   }
 

@@ -62,7 +62,7 @@ module.exports = Joi.object( ).keys( {
   rank: Joi.string( ),
   rank_level: Joi.number( ),
   statuses: Joi.array( ).items(
-    Joi.string( )
+    Joi.any( ).description( "TODO: status can be strings or objects" )
   ),
   taxon_changes_count: Joi.number( ).integer( ),
   taxon_photos: Joi.array( ).items(

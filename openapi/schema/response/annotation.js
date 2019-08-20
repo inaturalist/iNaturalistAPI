@@ -11,7 +11,7 @@ module.exports = Joi.object( ).keys( {
   controlled_value_id: Joi.number( ).integer( ),
   user,
   user_id: Joi.number( ).integer( ),
-  uuid: Joi.string( ).guid( { version: "uuidv4" } ),
+  uuid: Joi.string( ).guid( { version: "uuidv4" } ).required( ),
   vote_score: Joi.number( ).integer( ),
   votes: Joi.array( ).items( vote )
 } ).unknown( false ).meta( { className: "Annotation" } );
