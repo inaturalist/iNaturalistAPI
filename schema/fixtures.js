@@ -317,7 +317,7 @@
             "rank_level": 10
           },
           "project_ids": [ 543 ],
-          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
+          "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] }
         },
         {
           "id": 2,
@@ -331,7 +331,7 @@
           },
           "identifications":[{ "user": { "id": 123 }, "own_observation": false }],
           "place_guess": "Montana",
-          "private_geojson": { "type": "Point", "coordinates": [ "3", "2" ] }
+          "private_geojson": { "type": "Point", "coordinates": [ 3, 2 ] }
         },
         {
           "id": 333,
@@ -374,7 +374,7 @@
           },
           "location": "50,50",
           "private_location": "3,4",
-          "private_geojson": { "type": "Point", "coordinates": [ "4", "3" ] },
+          "private_geojson": { "type": "Point", "coordinates": [ 4, 3 ] },
           "place_guess": "Tangerina",
           "captive": true
         },
@@ -383,7 +383,7 @@
           "user": { "id": 333 },
           "geoprivacy": "private",
           "private_location": "1.234,1.234",
-          "private_geojson": { "type": "Point", "coordinates": [ "1.234", "1.234" ] }
+          "private_geojson": { "type": "Point", "coordinates": [ 1.234, 1.234 ] }
         },
         {
           "id": 7,
@@ -443,7 +443,7 @@
           "created_at": "2001-06-01T01:00:00",
           "private_location": "1,2",
           "project_ids": [ 1 ],
-          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
+          "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] }
         },
         {
           "id": 11,
@@ -451,7 +451,7 @@
           "created_at": "2001-06-01T01:00:00",
           "private_location": "1,2",
           "project_ids": [ 2 ],
-          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
+          "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] }
         },
         {
           "id": 12,
@@ -468,14 +468,14 @@
           "user": { "id": 126, "login": "totally-trusting" },
           "description": "Observation by user 126 who trusts user 125",
           "private_location": "1,2",
-          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
+          "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] }
         },
         {
           "id": 15,
           "user": { "id": 5 },
           "description": "Observation of an obscured taxon",
           "private_location": "1,2",
-          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] },
+          "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] },
           "taxon_geoprivacy": "obscured"
         },
         {
@@ -483,7 +483,7 @@
           "user": { "id": 5 },
           "description": "Observation of an obscured taxon AND user geoprivacy",
           "private_location": "1,2",
-          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] },
+          "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] },
           "geoprivacy": "obscured",
           "taxon_geoprivacy": "obscured"
         },
@@ -492,7 +492,7 @@
           "user": { "id": 5 },
           "description": "obs with a large positional_accuracy",
           "private_location": "1,2",
-          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] },
+          "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] },
           "positional_accuracy": 5000
         },
         {
@@ -500,7 +500,7 @@
           "user": { "id": 5 },
           "description": "obs with a small positional_accuracy",
           "private_location": "1,2",
-          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] },
+          "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] },
           "positional_accuracy": 5
         },
         {
@@ -508,7 +508,7 @@
           "user": { "id": 5 },
           "description": "obs with no positional_accuracy",
           "private_location": "1,2",
-          "private_geojson": { "type": "Point", "coordinates": [ "2", "1" ] }
+          "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] }
         }
       ]
     },

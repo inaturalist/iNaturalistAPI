@@ -19,7 +19,7 @@ describe( "esClient", ( ) => {
         },
         size: 1
       }, ( err, results ) => {
-        expect( results.hits.total ).to.eql( 1 );
+        expect( results.hits.total.value ).to.eql( 1 );
         expect( results.hits.hits[0]._source.id ).to.eql( 9898 );
         expect( results.hits.hits[0]._source.name ).to.be.undefined;
         done( );
@@ -34,7 +34,7 @@ describe( "esClient", ( ) => {
         },
         size: 1
       }, ( err, results ) => {
-        expect( results.hits.total ).to.eql( 1 );
+        expect( results.hits.total.value ).to.eql( 1 );
         expect( results.hits.hits[0]._source ).to.be.undefined;
         done( );
       } );
@@ -63,7 +63,7 @@ describe( "esClient", ( ) => {
         geo_shape: {
           geojson: {
             shape: {
-              coordinates: [[-180, -90], [180, 5]],
+              coordinates: [[-180, 5], [180, -90]],
               type: "envelope"
             }
           }
@@ -86,7 +86,7 @@ describe( "esClient", ( ) => {
             loc: {
               shape: {
                 type: "envelope",
-                coordinates: [[-180, -90], [180, 5]]
+                coordinates: [[-180, 5], [180, -90]]
               }
             }
           }
@@ -97,7 +97,7 @@ describe( "esClient", ( ) => {
             loc: {
               shape: {
                 type: "envelope",
-                coordinates: [[5, -90], [180, 90]]
+                coordinates: [[5, 90], [180, -90]]
               }
             }
           }
@@ -114,7 +114,7 @@ describe( "esClient", ( ) => {
                   loc: {
                     shape: {
                       type: "envelope",
-                      coordinates: [[30, -90], [180, 90]]
+                      coordinates: [[30, 90], [180, -90]]
                     }
                   }
                 }
@@ -124,7 +124,7 @@ describe( "esClient", ( ) => {
                   loc: {
                     shape: {
                       type: "envelope",
-                      coordinates: [[-180, -90], [-10, 90]]
+                      coordinates: [[-180, 90], [-10, -90]]
                     }
                   }
                 }
