@@ -143,9 +143,7 @@
          },
           "observation": {
             "id": 1,
-            "user": {
-              "id": 123
-            },
+            "user_id": 123,
             "taxon": {
               "id": 5,
               "iconic_taxon_id": 1,
@@ -178,9 +176,7 @@
           },
           "observation": {
             "id": 1,
-            "user": {
-              "id": 5
-            },
+            "user_id": 5,
             "taxon": {
               "id": 6,
               "iconic_taxon_id": 101,
@@ -227,9 +223,7 @@
           },
           "observation": {
             "id": 1,
-            "user": {
-              "id": 1234
-            },
+            "user_id": 1234,
             "quality_grade": "casual",
             "captive": true,
             "taxon": {
@@ -247,9 +241,7 @@
           "current": true,
           "observation": {
             "id": 12,
-            "user": {
-              "id": 5
-            }
+            "user_id": 5
           },
           "user": {
             "id": 121,
@@ -261,9 +253,7 @@
           "current": true,
           "observation": {
             "id": 12,
-            "user": {
-              "id": 5
-            }
+            "user_id": 5
           },
           "user": {
             "id": 122,
@@ -275,9 +265,7 @@
           "current": true,
           "observation": {
             "id": 13,
-            "user": {
-              "id": 5
-            }
+            "user_id": 5
           },
           "user": {
             "id": 121,
