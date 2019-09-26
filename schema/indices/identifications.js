@@ -89,9 +89,6 @@
     },
     "observation": {
       "properties": {
-        "captive": {
-          "type": "boolean"
-        },
         "created_at": {
           "type": "date"
         },
@@ -161,9 +158,6 @@
         "place_ids": {
           "type": "integer"
         },
-        "private_place_ids": {
-          "type": "integer"
-        },
         "quality_grade": {
           "type": "keyword"
         },
@@ -174,9 +168,6 @@
           "properties": {
             "ancestor_ids": {
               "type": "integer"
-            },
-            "ancestry": {
-              "type": "keyword"
             },
             "iconic_taxon_id": {
               "type": "integer"
@@ -193,13 +184,6 @@
             "min_species_taxon_id": {
               "type": "integer"
             },
-            "name": {
-              "type": "text",
-              "analyzer": "ascii_snowball_analyzer"
-            },
-            "parent_id": {
-              "type": "integer"
-            },
             "rank": {
               "type": "keyword"
             },
@@ -212,27 +196,8 @@
         "time_observed_at": {
           "type": "date"
         },
-        "user": {
-          "properties": {
-            "created_at": {
-              "type": "date"
-            },
-            "id": {
-              "type": "integer"
-            },
-            "login": {
-              "type": "keyword"
-            },
-            "spam": {
-              "type": "boolean"
-            },
-            "suspended": {
-              "type": "boolean"
-            }
-          }
-        },
-        "uuid": {
-          "type": "keyword"
+        "user_id": {
+          "type": "integer"
         }
       }
     },
@@ -250,9 +215,6 @@
         "ancestor_ids": {
           "type": "integer"
         },
-        "ancestry": {
-          "type": "keyword"
-        },
         "iconic_taxon_id": {
           "type": "integer"
         },
@@ -266,13 +228,6 @@
           "type": "keyword"
         },
         "min_species_taxon_id": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "text",
-          "analyzer": "ascii_snowball_analyzer"
-        },
-        "parent_id": {
           "type": "integer"
         },
         "rank": {
