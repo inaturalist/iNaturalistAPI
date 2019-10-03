@@ -132,6 +132,7 @@
           "current_taxon": true,
           "taxon": {
             "id": 5,
+            "min_species_taxon_id": 5,
             "is_active": true,
             "iconic_taxon_id": 1,
             "ancestor_ids": [1,2,3,4,5],
@@ -164,6 +165,7 @@
           "current_taxon": false,
           "taxon": {
             "id": 5,
+            "min_species_taxon_id": 5,
             "iconic_taxon_id": 101,
             "ancestor_ids": [1,2,3,4,5],
             "min_species_ancestry": "1,2,3,4,5",
@@ -211,6 +213,7 @@
           "current_taxon": true,
           "taxon": {
             "id": 5,
+            "min_species_taxon_id": 5,
             "is_active": true,
             "iconic_taxon_id": 1,
             "ancestor_ids": [1,2,3,4,5],
@@ -292,6 +295,7 @@
           "quality_grade": "research",
           "oauth_application_id": 3,
           "identification_categories": ["leading"],
+          "ident_taxon_ids": [5,6],
           "ofvs": [ {
             "name_ci": "Habitat",
             "value_ci": "marine"
@@ -606,6 +610,7 @@
         {
           "id": 1001,
           "ancestor_ids": [ 1001 ],
+          "min_species_ancestry": "1001",
           "name": "Life",
           "names": [{
             "name_autocomplete": "Life",
@@ -619,6 +624,7 @@
           "id": 1,
           "name": "Los",
           "ancestor_ids": [ 1001, 1 ],
+          "min_species_ancestry": "1001,1",
           "names": [{
             "name_autocomplete": "Los",
             "exact": "Los",
@@ -634,6 +640,7 @@
           "name": "Los",
           "parent_id": 1,
           "ancestor_ids": [ 1001, 1, 2 ],
+          "min_species_ancestry": "1001,1,2",
           "names": [{
             "name_autocomplete": "Los",
             "exact": "Los",
@@ -647,6 +654,7 @@
           "name": "Los lobos",
           "parent_id": 2,
           "ancestor_ids": [ 1001, 1, 2, 3 ],
+          "min_species_ancestry": "1001,1,2,3",
           "names": [{
             "name_autocomplete": "Los lobos",
             "exact": "Los lobos",
@@ -679,7 +687,11 @@
         {
           "id": 6,
           "iconic_taxon_id": 101,
-          "is_active": true
+          "is_active": true,
+          "ancestor_ids": [1,2,3,4,6],
+          "min_species_ancestry": "1,2,3,4,6",
+          "rank_level": 10,
+          "rank": "species"
         },
         {
           "id": 123,
