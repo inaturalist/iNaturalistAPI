@@ -278,7 +278,7 @@ describe( "IdentificationsController", ( ) => {
       IdentificationsController.observers( { query: { } }, ( e, r ) => {
         expect( r.total_results ).to.eq(
           _.uniqBy( _.filter( fixtures.elasticsearch.identifications.identification,
-            i => i.observation ), i => i.observation.user.id ).length
+            i => i.observation ), i => i.observation.user_id ).length
         );
         expect( r.results[0].count ).to.eq( 4 );
         expect( r.results[0].user.id ).to.not.be.undefined;
