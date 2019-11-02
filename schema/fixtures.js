@@ -14,6 +14,19 @@
               "label": "The BEST Term"
             }
           ]
+        },
+        {
+          "id": 2,
+          "uri": "uri",
+          "is_value": "false",
+          "values": [ ],
+          "labels": [
+            {
+              "id": 2,
+              "locale": "en",
+              "label": "The WORST Term"
+            }
+          ]
         }
       ]
     },
@@ -501,6 +514,46 @@
           "description": "obs with no positional_accuracy",
           "private_location": "1,2",
           "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] }
+        },
+        {
+          "id": 20,
+          "description": "Has term 2",
+          "user": { "id": 5 },
+          "created_at": "2001-06-01T01:00:00",
+          "annotations": [
+            {
+              "controlled_attribute_id": 2,
+              "controlled_value_id": 3,
+              "concatenated_attr_val": "2|3",
+              "vote_score": 1.0,
+              "user_id": 5,
+              "votes": []
+            }
+          ]
+        },
+        {
+          "id": 21,
+          "description": "Has term 1 and 2",
+          "user": { "id": 5 },
+          "created_at": "2001-06-01T01:00:00",
+          "annotations": [
+            {
+              "controlled_attribute_id": 1,
+              "controlled_value_id": 1,
+              "concatenated_attr_val": "1|1",
+              "vote_score": 1.0,
+              "user_id": 5,
+              "votes": []
+            },
+            {
+              "controlled_attribute_id": 2,
+              "controlled_value_id": 3,
+              "concatenated_attr_val": "2|3",
+              "vote_score": 1.0,
+              "user_id": 5,
+              "votes": []
+            }
+          ]
         }
       ]
     },

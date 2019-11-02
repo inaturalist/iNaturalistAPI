@@ -404,6 +404,18 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
+    it( "filters by term_id and without_term_id", done => {
+      const hasTerm1 = 9;
+      const hasTerm2 = 20;
+      const hasTerm1And2 = 21;
+      request( app ).get( "/v1/observations?term_id=2&without_term_id=1" )
+        .expect( res => {
+          expect( res.body.results.map( r => r.id ) ).to.contain( hasTerm2 );
+          expect( res.body.results.map( r => r.id ) ).not.to.contain( hasTerm1 );
+          expect( res.body.results.map( r => r.id ) ).not.to.contain( hasTerm1And2 );
+        } ).expect( 200, done );
+    } );
+
     it( "filters by without_term_value_id", done => {
       request( app ).get( "/v1/observations?term_id=1&without_term_value_id=1" )
         .expect( res => {
