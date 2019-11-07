@@ -554,6 +554,28 @@
               "votes": []
             }
           ]
+        },
+        {
+          "id": 22,
+          "description": "Observation field value of type numeric",
+          "user": { "id": 5 },
+          "created_at": "2001-06-01T01:00:00",
+          "ofvs": [ {
+            "datatype": "numeric",
+            "name_ci": "Count",
+            "value_ci": 3
+          } ]
+        },
+        {
+          "id": 23,
+          "description": "Observation field value of type taxon",
+          "user": { "id": 5 },
+          "created_at": "2001-06-01T01:00:00",
+          "ofvs": [ {
+            "datatype": "taxon",
+            "name_ci": "Eating",
+            "value_ci": 3
+          } ]
         }
       ]
     },
