@@ -5,7 +5,7 @@ dist: xenial
 language: node_js
 
 node_js:
-  - 10.13.0
+  - 12.13.0
 
 jdk:
   - openjdk8
