@@ -165,7 +165,7 @@ describe( "InaturalistMapServer", ( ) => {
       stubReq.params.style = "summary";
       MapServer.prepareStyle( stubReq, ( ) => {
         expect( stubReq.style ).to.eql(
-          MapStyles.geotilegrid( { color: "#6E6E6E" } )
+          MapStyles.geotilegrid( "#6E6E6E" )
         );
         done( );
       } );
