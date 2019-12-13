@@ -18,6 +18,18 @@ describe( "Identifications", ( ) => {
         .expect( 200, done );
     } );
 
+    it( "should filter by d1 and d2", done => {
+      const identIn2015 = 124;
+      const identIn2016 = 125;
+      request( app ).get( "/v1/identifications?d1=2015-01-01&d2=2015-12-31" )
+        .expect( res => {
+          const ids = res.body.results.map( i => i.id );
+          expect( ids ).to.include( identIn2015 );
+          expect( ids ).not.to.include( identIn2016 );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
     it( "can return only ids", done => {
       request( app ).get( "/v1/identifications?id=102&only_id=true&per_page=1" )
         .expect( res => {

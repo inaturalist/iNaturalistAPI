@@ -287,6 +287,34 @@
             "id": 121,
             "login": "user122"
           }
+        },
+        {
+          "id": 124,
+          "current": true,
+          "created_at": "2015-12-31T00:00:00",
+          "category": "leading",
+          "observation": {
+            "id": 13,
+            "user_id": 5
+          },
+          "user": {
+            "id": 121,
+            "login": "user122"
+          }
+        },
+        {
+          "id": 125,
+          "current": true,
+          "created_at": "2016-12-31T00:00:00",
+          "category": "leading",
+          "observation": {
+            "id": 13,
+            "user_id": 5
+          },
+          "user": {
+            "id": 122,
+            "login": "user122"
+          }
         }
       ]
     },
