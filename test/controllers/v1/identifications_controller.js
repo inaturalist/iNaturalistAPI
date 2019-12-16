@@ -153,14 +153,17 @@ describe( "IdentificationsController", ( ) => {
       ) ) ).to.not.be.undefined;
     } );
 
-    it( "filters by d1/d2", ( ) => {
-      Q( { d1: "2016-01-01T01:00:00", d2: "2017-01-01T01:00:00" }, ( e, q ) => { eq = q; } );
-      expect( _.find( eq.filters, f => (
-        f.bool && f.bool.should && f.bool.should[0].bool && f.bool.should[0].bool.filter && f.bool.should[0].bool.filter[0].range
-          && f.bool.should[0].bool.filter[0].range.created_at.gte === "2016-01-01T01:00:00+00:00"
-          && f.bool.should[0].bool.filter[0].range.created_at.lte === "2017-01-01T01:00:00+00:00"
-      ) ) ).to.not.be.undefined;
-    } );
+    // This is not going to work since we made created_at_details.date
+    // un-indexed in
+    // https://github.com/inaturalist/inaturalist/commit/a255f8bfeadea3c9d1e84476ab46b390a0436b3d#diff-160cb782bfe2c6e20fac5367817660c5R17
+    // it( "filters by d1/d2", ( ) => {
+    //   Q( { d1: "2016-01-01T01:00:00", d2: "2017-01-01T01:00:00" }, ( e, q ) => { eq = q; } );
+    //   expect( _.find( eq.filters, f => (
+    //     f.bool && f.bool.should && f.bool.should[0].bool && f.bool.should[0].bool.filter && f.bool.should[0].bool.filter[0].range
+    //       && f.bool.should[0].bool.filter[0].range.created_at.gte === "2016-01-01T01:00:00+00:00"
+    //       && f.bool.should[0].bool.filter[0].range.created_at.lte === "2017-01-01T01:00:00+00:00"
+    //   ) ) ).to.not.be.undefined;
+    // } );
 
     it( "filters by observed_d1/d2", ( ) => {
       Q( { observed_d1: "2016-01-01T01:00:00", observed_d2: "2017-01-01T01:00:00" },
@@ -266,7 +269,12 @@ describe( "IdentificationsController", ( ) => {
           _.uniqBy( _.filter( fixtures.elasticsearch.identifications.identification,
             i => i.user ), i => i.user.id ).length
         );
-        expect( r.results[0].count ).to.eq( 2 );
+        expect( r.results[0].count ).to.eq(
+          _.filter(
+            fixtures.elasticsearch.identifications.identification,
+            i => i.user && i.user.id === r.results[0].user.id
+          ).length
+        );
         expect( r.results[0].user.id ).to.not.be.undefined;
         done( );
       } );
@@ -278,9 +286,14 @@ describe( "IdentificationsController", ( ) => {
       IdentificationsController.observers( { query: { } }, ( e, r ) => {
         expect( r.total_results ).to.eq(
           _.uniqBy( _.filter( fixtures.elasticsearch.identifications.identification,
-            i => i.observation ), i => i.observation.user.id ).length
+            i => i.observation ), i => i.observation.user_id ).length
         );
-        expect( r.results[0].count ).to.eq( 4 );
+        expect( r.results[0].count ).to.eq(
+          _.filter(
+            fixtures.elasticsearch.identifications.identification,
+            i => i.observation && i.observation.user_id === r.results[0].user.id
+          ).length
+        );
         expect( r.results[0].user.id ).to.not.be.undefined;
         done( );
       } );

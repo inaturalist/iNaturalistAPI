@@ -29,24 +29,15 @@ describe( "InaturalistMapServer", ( ) => {
   describe( "prepareQuery", ( ) => {
     it( "adds a proper elastic_query for summaries", done => {
       stubReq.params.style = "summary";
+      stubReq.params.zoom = 1;
       MapServer.prepareQuery( stubReq, ( ) => {
         expect( stubReq.elastic_query.size ).to.eql( 0 );
         expect( stubReq.elastic_query.aggregations.zoom1 ).to.eql( {
-          aggs: {
-            geohash: {
-              top_hits: {
-                _source: {
-                  includes: [
-                    "id", "location", "taxon.iconic_taxon_id", "captive", "quality_grade",
-                    "geoprivacy", "private_location"
-                  ]
-                },
-                size: 1,
-                sort: { id: { order: "desc" } }
-              }
-            }
-          },
-          geohash_grid: { field: "location", precision: 3, size: 30000 }
+          geotile_grid: {
+            field: "location",
+            precision: 6,
+            size: 10000
+          }
         } );
         done( );
       } );
@@ -174,7 +165,7 @@ describe( "InaturalistMapServer", ( ) => {
       stubReq.params.style = "summary";
       MapServer.prepareStyle( stubReq, ( ) => {
         expect( stubReq.style ).to.eql(
-          MapStyles.coloredHeatmap( { color: "#6E6E6E", width: 8, opacity: 0.2 } )
+          MapStyles.geotilegrid( "#6E6E6E" )
         );
         done( );
       } );

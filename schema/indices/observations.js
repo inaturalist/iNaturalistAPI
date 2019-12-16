@@ -1,540 +1,663 @@
 {
-  "observation": {
-    "dynamic": "true",
-    "properties": {
-      "annotations": {
-        "type": "nested",
-        "properties": {
-          "concatenated_attr_val": {
-            "type": "keyword"
-          },
-          "controlled_attribute_id": {
-            "type": "long"
-          },
-          "controlled_value_id": {
-            "type": "long"
-          },
-          "resource_type": {
-            "type": "keyword"
-          },
-          "uuid": {
-            "type": "keyword"
-          },
-          "vote_score": {
-            "type": "long"
-          }
-        }
-      },
-      "cached_votes_total": {
-        "type": "long"
-      },
-      "captive": {
-        "type": "boolean"
-      },
-      "comments": {
-        "properties": {
-          "body": {
-            "type": "text",
-            "analyzer": "ascii_snowball_analyzer"
-          },
-          "created_at": {
-            "type": "date"
-          },
-          "created_at_details": {
-            "properties": {
-              "date": {
-                "type": "date"
-              },
-              "day": {
-                "type": "long"
-              },
-              "hour": {
-                "type": "long"
-              },
-              "month": {
-                "type": "long"
-              },
-              "week": {
-                "type": "long"
-              },
-              "year": {
-                "type": "long"
-              }
-            }
-          },
-          "id": {
-            "type": "long"
-          },
-          "user": {
-            "properties": {
-              "id": {
-                "type": "long"
-              },
-              "login": {
-                "type": "keyword"
-              }
-            }
-          },
-          "uuid": {
-            "type": "keyword"
-          }
-        }
-      },
-      "comments_count": {
-        "type": "long"
-      },
-      "created_at": {
-        "type": "date"
-      },
-      "created_at_details": {
-        "properties": {
-          "date": {
-            "type": "date"
-          },
-          "day": {
-            "type": "long"
-          },
-          "hour": {
-            "type": "long"
-          },
-          "month": {
-            "type": "long"
-          },
-          "week": {
-            "type": "long"
-          },
-          "year": {
-            "type": "long"
-          }
-        }
-      },
-      "created_time_zone": {
-        "type": "keyword"
-      },
-      "description": {
-        "type": "text",
-        "analyzer": "ascii_snowball_analyzer"
-      },
-      "faves_count": {
-        "type": "long"
-      },
-      "field_change_times": {
-        "type": "nested",
-        "properties": {
-          "changed_at": {
-            "type": "date"
-          },
-          "field_name": {
-            "type": "keyword"
-          },
-          "project_id": {
-            "type": "long"
-          }
-        }
-      },
-      "geojson": {
-        "type": "geo_shape"
-      },
-      "geoprivacy": {
-        "type": "keyword"
-      },
-      "id": {
-        "type": "integer"
-      },
-      "id_please": {
-        "type": "boolean"
-      },
-      "identification_categories": {
-        "type": "keyword"
-      },
-      "identifications_count": {
-        "type": "long"
-      },
-      "identifications_most_agree": {
-        "type": "boolean"
-      },
-      "identifications_most_disagree": {
-        "type": "boolean"
-      },
-      "identifications_some_agree": {
-        "type": "boolean"
-      },
-      "license_code": {
-        "type": "keyword"
-      },
-      "location": {
-        "type": "geo_point"
-      },
-      "mappable": {
-        "type": "boolean"
-      },
-      "identifications": {
-        "type": "nested",
-        "properties": {
-          "body": {
-            "type": "text",
-            "fields": {
-              "keyword": {
-                "type": "keyword",
-                "ignore_above": 256
-              }
-            }
-          },
-          "category": {
-            "type": "keyword"
-          },
-          "created_at": {
-            "type": "date"
-          },
-          "created_at_details": {
-            "properties": {
-              "date": {
-                "type": "date"
-              },
-              "day": {
-                "type": "long"
-              },
-              "hour": {
-                "type": "long"
-              },
-              "month": {
-                "type": "long"
-              },
-              "week": {
-                "type": "long"
-              },
-              "year": {
-                "type": "long"
-              }
-            }
-          },
-          "current": {
-            "type": "boolean"
-          },
-          "id": {
-            "type": "long"
-          },
-          "user": {
-            "properties": {
-              "id": {
-                "type": "long"
-              },
-              "login": {
-                "type": "keyword"
-              }
-            }
-          },
-          "uuid": {
-            "type": "keyword"
-          }
-        }
-      },
-      "num_identification_agreements": {
-        "type": "long"
-      },
-      "num_identification_disagreements": {
-        "type": "long"
-      },
-      "obscured": {
-        "type": "boolean"
-      },
-      "observation_photos": {
-        "properties": {
-          "photo_id": {
-            "type": "long"
-          },
-          "position": {
-            "type": "long"
-          },
-          "uuid": {
-            "type": "keyword"
-          }
-        }
-      },
-      "observed_on": {
-        "type": "date",
-        "format": "dateOptionalTime"
-      },
-      "observed_on_details": {
-        "properties": {
-          "date": {
-            "type": "date"
-          },
-          "day": {
-            "type": "long"
-          },
-          "hour": {
-            "type": "long"
-          },
-          "month": {
-            "type": "long"
-          },
-          "week": {
-            "type": "long"
-          },
-          "year": {
-            "type": "long"
-          }
-        }
-      },
-      "observed_on_string": {
-        "type": "text"
-      },
-      "observed_time_zone": {
-        "type": "keyword"
-      },
-      "ofvs": {
-        "type": "nested",
-        "properties": {
-          "name": {
-            "type": "keyword"
-          },
-          "name_ci": {
-            "type": "text",
-            "analyzer": "keyword_analyzer"
-          },
-          "uuid": {
-            "type": "keyword"
-          },
-          "value": {
-            "type": "keyword"
-          },
-          "value_ci": {
-            "type": "text",
-            "analyzer": "keyword_analyzer"
-          }
-        }
-      },
-      "out_of_range": {
-        "type": "boolean"
-      },
-      "photos": {
-        "properties": {
-          "attribution": {
-            "type": "text",
-            "fields": {
-              "keyword": {
-                "type": "keyword",
-                "ignore_above": 256
-              }
-            }
-          },
-          "id": {
-            "type": "long"
-          },
-          "license_code": {
-            "type": "keyword"
-          },
-          "url": {
-            "type": "text",
-            "fields": {
-              "keyword": {
-                "type": "keyword",
-                "ignore_above": 256
-              }
+  "dynamic": "true",
+  "properties": {
+    "annotations": {
+      "type": "nested",
+      "properties": {
+        "concatenated_attr_val": {
+          "type": "keyword"
+        },
+        "controlled_attribute_id": {
+          "type": "short"
+        },
+        "controlled_value_id": {
+          "type": "short"
+        },
+        "resource_type": {
+          "type": "keyword"
+        },
+        "user_id": {
+          "type": "keyword"
+        },
+        "uuid": {
+          "type": "keyword"
+        },
+        "vote_score": {
+          "type": "byte"
+        },
+        "votes": {
+          "properties": {
+            "created_at": {
+              "type": "date",
+              "index": false
+            },
+            "id": {
+              "type": "integer",
+              "index": false
+            },
+            "user_id": {
+              "type": "integer",
+              "index": false
+            },
+            "vote_flag": {
+              "type": "boolean",
+              "index": false
             }
           }
         }
-      },
-      "place_guess": {
-        "type": "text",
-        "analyzer": "ascii_snowball_analyzer"
-      },
-      "place_ids": {
-        "type": "long"
-      },
-      "private_geojson": {
-        "type": "geo_shape"
-      },
-      "private_location": {
-        "type": "geo_point"
-      },
-      "project_ids": {
-        "type": "long"
-      },
-      "project_ids_with_curator_id": {
-        "type": "long"
-      },
-      "project_ids_without_curator_id": {
-        "type": "long"
-      },
-      "project_observations": {
-        "properties": {
-          "project_id": {
-            "type": "long"
-          },
-          "uuid": {
-            "type": "keyword"
-          }
-        }
-      },
-      "quality_grade": {
-        "type": "keyword"
-      },
-      "reviewed_by": {
-        "type": "long"
-      },
-      "site_id": {
-        "type": "long"
-      },
-      "sounds": {
-        "properties": {
-          "attribution": {
-            "type": "text",
-            "fields": {
-              "keyword": {
-                "type": "keyword",
-                "ignore_above": 256
-              }
+      }
+    },
+    "cached_votes_total": {
+      "type": "short"
+    },
+    "captive": {
+      "type": "boolean"
+    },
+    "comments": {
+      "properties": {
+        "body": {
+          "type": "text",
+          "analyzer": "ascii_snowball_analyzer"
+        },
+        "created_at": {
+          "type": "date",
+          "index": false
+        },
+        "created_at_details": {
+          "properties": {
+            "date": {
+              "type": "date",
+              "index": false
+            },
+            "day": {
+              "type": "byte",
+              "index": false
+            },
+            "hour": {
+              "type": "byte",
+              "index": false
+            },
+            "month": {
+              "type": "byte",
+              "index": false
+            },
+            "week": {
+              "type": "byte",
+              "index": false
+            },
+            "year": {
+              "type": "short",
+              "index": false
             }
-          },
-          "id": {
-            "type": "long"
-          },
-          "license_code": {
-            "type": "keyword"
-          },
-          "native_sound_id": {
-            "type": "keyword"
           }
-        }
-      },
-      "species_guess": {
-        "type": "keyword"
-      },
-      "tags": {
-        "type": "text",
-        "analyzer": "ascii_snowball_analyzer"
-      },
-      "taxon": {
-        "properties": {
-          "ancestor_ids": {
-            "type": "long"
-          },
-          "ancestry": {
-            "type": "keyword"
-          },
-          "endemic": {
-            "type": "boolean"
-          },
-          "iconic_taxon_id": {
-            "type": "long"
-          },
-          "id": {
-            "type": "long"
-          },
-          "introduced": {
-            "type": "boolean"
-          },
-          "is_active": {
-            "type": "boolean"
-          },
-          "min_species_ancestry": {
-            "type": "keyword"
-          },
-          "name": {
-            "type": "text",
-            "fields": {
-              "keyword": {
-                "type": "keyword",
-                "ignore_above": 256
-              }
+        },
+        "flags": {
+          "properties": {
+            "comment": {
+              "type": "keyword",
+              "index": false
+            },
+            "created_at": {
+              "type": "date",
+              "index": false
+            },
+            "flag": {
+              "type": "keyword",
+              "index": false
+            },
+            "id": {
+              "type": "integer",
+              "index": false
+            },
+            "resolved": {
+              "type": "boolean",
+              "index": false
+            },
+            "resolver_id": {
+              "type": "integer",
+              "index": false
+            },
+            "updated_at": {
+              "type": "date",
+              "index": false
+            },
+            "user_id": {
+              "type": "integer",
+              "index": false
             }
-          },
-          "names": {
-            "properties": {
-              "locale": {
-                "type": "keyword"
-              },
-              "name": {
-                "type": "text",
-                "analyzer": "ascii_snowball_analyzer"
-              },
-              "place_taxon_names": {
-                "properties": {
-                  "place_id": {
-                    "type": "long"
-                  },
-                  "position": {
-                    "type": "long"
-                  }
-                }
-              },
-              "position": {
-                "type": "long"
-              }
+          }
+        },
+        "hidden": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "user": {
+          "properties": {
+            "created_at": {
+              "type": "date"
+            },
+            "id": {
+              "type": "integer"
+            },
+            "login": {
+              "type": "keyword"
+            },
+            "spam": {
+              "type": "boolean"
+            },
+            "suspended": {
+              "type": "boolean"
             }
-          },
-          "native": {
-            "type": "boolean"
-          },
-          "parent_id": {
-            "type": "long"
-          },
-          "rank": {
-            "type": "keyword"
-          },
-          "rank_level": {
-            "type": "long"
-          },
-          "statuses": {
-            "type": "nested",
-            "properties": {
-              "authority": {
-                "type": "keyword"
-              },
-              "geoprivacy": {
-                "type": "keyword"
-              },
-              "iucn": {
-                "type": "long"
-              },
-              "place_id": {
-                "type": "long"
-              },
-              "source_id": {
-                "type": "long"
-              },
-              "status": {
-                "type": "keyword"
-              }
+          }
+        },
+        "uuid": {
+          "type": "keyword"
+        }
+      }
+    },
+    "comments_count": {
+      "type": "short"
+    },
+    "community_taxon_id": {
+      "type": "integer"
+    },
+    "context_geoprivacy": {
+      "type": "keyword"
+    },
+    "context_taxon_geoprivacy": {
+      "type": "keyword"
+    },
+    "context_user_geoprivacy": {
+      "type": "keyword"
+    },
+    "created_at": {
+      "type": "date"
+    },
+    "created_at_details": {
+      "properties": {
+        "date": {
+          "type": "date"
+        },
+        "day": {
+          "type": "byte"
+        },
+        "hour": {
+          "type": "byte"
+        },
+        "month": {
+          "type": "byte"
+        },
+        "week": {
+          "type": "byte"
+        },
+        "year": {
+          "type": "short"
+        }
+      }
+    },
+    "created_time_zone": {
+      "type": "keyword",
+      "index": false
+    },
+    "description": {
+      "type": "text",
+      "analyzer": "ascii_snowball_analyzer"
+    },
+    "faves_count": {
+      "type": "short"
+    },
+    "flags": {
+      "properties": {
+        "comment": {
+          "type": "keyword",
+          "index": false
+        },
+        "created_at": {
+          "type": "date",
+          "index": false
+        },
+        "flag": {
+          "type": "keyword",
+          "index": false
+        },
+        "id": {
+          "type": "integer",
+          "index": false
+        },
+        "resolved": {
+          "type": "boolean",
+          "index": false
+        },
+        "resolver_id": {
+          "type": "integer",
+          "index": false
+        },
+        "updated_at": {
+          "type": "date",
+          "index": false
+        },
+        "user_id": {
+          "type": "integer",
+          "index": false
+        }
+      }
+    },
+    "geojson": {
+      "type": "geo_shape"
+    },
+    "geoprivacy": {
+      "type": "keyword"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "id_please": {
+      "type": "boolean"
+    },
+    "ident_taxon_ids": {
+      "type": "integer"
+    },
+    "identification_categories": {
+      "type": "keyword"
+    },
+    "identifications_count": {
+      "type": "short"
+    },
+    "identifications_most_agree": {
+      "type": "boolean"
+    },
+    "identifications_most_disagree": {
+      "type": "boolean"
+    },
+    "identifications_some_agree": {
+      "type": "boolean"
+    },
+    "identifier_user_ids": {
+      "type": "integer"
+    },
+    "license_code": {
+      "type": "keyword"
+    },
+    "location": {
+      "type": "geo_point"
+    },
+    "map_scale": {
+      "type": "byte"
+    },
+    "mappable": {
+      "type": "boolean"
+    },
+    "non_owner_identifier_user_ids": {
+      "type": "integer"
+    },
+    "num_identification_agreements": {
+      "type": "short"
+    },
+    "num_identification_disagreements": {
+      "type": "short"
+    },
+    "oauth_application_id": {
+      "type": "short"
+    },
+    "obscured": {
+      "type": "boolean"
+    },
+    "observed_on": {
+      "type": "date",
+      "format": "date_optional_time"
+    },
+    "observed_on_details": {
+      "properties": {
+        "date": {
+          "type": "date"
+        },
+        "day": {
+          "type": "byte"
+        },
+        "hour": {
+          "type": "byte"
+        },
+        "month": {
+          "type": "byte"
+        },
+        "week": {
+          "type": "byte"
+        },
+        "year": {
+          "type": "short"
+        }
+      }
+    },
+    "observed_on_string": {
+      "type": "text"
+    },
+    "observed_time_zone": {
+      "type": "keyword",
+      "index": false
+    },
+    "ofvs": {
+      "type": "nested",
+      "properties": {
+        "datatype": {
+          "type": "keyword"
+        },
+        "field_id": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "keyword"
+        },
+        "name_ci": {
+          "type": "text",
+          "analyzer": "keyword_analyzer"
+        },
+        "taxon_id": {
+          "type": "integer"
+        },
+        "user_id": {
+          "type": "integer"
+        },
+        "uuid": {
+          "type": "keyword"
+        },
+        "value": {
+          "type": "keyword"
+        },
+        "value_ci": {
+          "type": "text",
+          "analyzer": "keyword_analyzer"
+        }
+      }
+    },
+    "out_of_range": {
+      "type": "boolean"
+    },
+    "outlinks": {
+      "properties": {
+        "source": {
+          "type": "keyword"
+        },
+        "url": {
+          "type": "keyword"
+        }
+      }
+    },
+    "owners_identification_from_vision": {
+      "type": "boolean"
+    },
+    "photo_licenses": {
+      "type": "keyword"
+    },
+    "photos_count": {
+      "type": "short"
+    },
+    "place_guess": {
+      "type": "text",
+      "analyzer": "ascii_snowball_analyzer"
+    },
+    "place_ids": {
+      "type": "integer"
+    },
+    "positional_accuracy": {
+      "type": "integer"
+    },
+    "preferences": {
+      "properties": {
+        "name": {
+          "type": "keyword",
+          "index": false
+        },
+        "value": {
+          "type": "keyword",
+          "index": false
+        }
+      }
+    },
+    "private_geojson": {
+      "type": "geo_shape"
+    },
+    "private_location": {
+      "type": "geo_point"
+    },
+    "private_place_guess": {
+      "type": "text",
+      "analyzer": "ascii_snowball_analyzer"
+    },
+    "private_place_ids": {
+      "type": "integer"
+    },
+    "project_ids": {
+      "type": "integer"
+    },
+    "project_ids_with_curator_id": {
+      "type": "integer"
+    },
+    "project_ids_without_curator_id": {
+      "type": "integer"
+    },
+    "public_positional_accuracy": {
+      "type": "integer"
+    },
+    "quality_grade": {
+      "type": "keyword"
+    },
+    "quality_metrics": {
+      "properties": {
+        "agree": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "metric": {
+          "type": "keyword",
+          "index": false
+        },
+        "user_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "reviewed_by": {
+      "type": "integer"
+    },
+    "site_id": {
+      "type": "integer"
+    },
+    "sound_licenses": {
+      "type": "keyword"
+    },
+    "sounds": {
+      "properties": {
+        "attribution": {
+          "type": "keyword",
+          "index": false
+        },
+        "file_content_type": {
+          "type": "keyword",
+          "index": false
+        },
+        "file_url": {
+          "type": "keyword",
+          "index": false
+        },
+        "id": {
+          "type": "integer"
+        },
+        "license_code": {
+          "type": "keyword"
+        },
+        "native_sound_id": {
+          "type": "keyword",
+          "index": false
+        },
+        "play_local": {
+          "type": "boolean"
+        },
+        "secret_token": {
+          "type": "keyword",
+          "index": false
+        },
+        "subtype": {
+          "type": "keyword"
+        }
+      }
+    },
+    "sounds_count": {
+      "type": "short"
+    },
+    "spam": {
+      "type": "boolean"
+    },
+    "species_guess": {
+      "type": "keyword"
+    },
+    "tags": {
+      "type": "text",
+      "analyzer": "ascii_snowball_analyzer"
+    },
+    "taxon": {
+      "properties": {
+        "ancestor_ids": {
+          "type": "integer"
+        },
+        "ancestry": {
+          "type": "keyword"
+        },
+        "endemic": {
+          "type": "boolean"
+        },
+        "extinct": {
+          "type": "boolean"
+        },
+        "iconic_taxon_id": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "introduced": {
+          "type": "boolean"
+        },
+        "is_active": {
+          "type": "boolean"
+        },
+        "min_species_ancestry": {
+          "type": "keyword"
+        },
+        "min_species_taxon_id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "text",
+          "analyzer": "ascii_snowball_analyzer"
+        },
+        "native": {
+          "type": "boolean"
+        },
+        "parent_id": {
+          "type": "integer"
+        },
+        "rank": {
+          "type": "keyword"
+        },
+        "rank_level": {
+          "type": "scaled_float",
+          "scaling_factor": 100.0
+        },
+        "statuses": {
+          "type": "nested",
+          "properties": {
+            "authority": {
+              "type": "keyword"
+            },
+            "geoprivacy": {
+              "type": "keyword"
+            },
+            "iucn": {
+              "type": "byte"
+            },
+            "place_id": {
+              "type": "integer"
+            },
+            "source_id": {
+              "type": "short"
+            },
+            "status": {
+              "type": "keyword"
+            },
+            "status_name": {
+              "type": "keyword"
             }
-          },
-          "threatened": {
-            "type": "boolean"
           }
+        },
+        "threatened": {
+          "type": "boolean"
         }
-      },
-      "time_observed_at": {
-        "type": "date"
-      },
-      "time_zone_offset": {
-        "type": "keyword"
-      },
-      "updated_at": {
-        "type": "date"
-      },
-      "uri": {
-        "type": "text",
-        "fields": {
-          "keyword": {
-            "type": "keyword",
-            "ignore_above": 256
-          }
+      }
+    },
+    "taxon_geoprivacy": {
+      "type": "keyword"
+    },
+    "time_observed_at": {
+      "type": "date"
+    },
+    "time_zone_offset": {
+      "type": "keyword",
+      "index": false
+    },
+    "updated_at": {
+      "type": "date"
+    },
+    "uri": {
+      "type": "keyword",
+      "index": false
+    },
+    "user": {
+      "properties": {
+        "created_at": {
+          "type": "date"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "login": {
+          "type": "keyword"
+        },
+        "spam": {
+          "type": "boolean"
+        },
+        "suspended": {
+          "type": "boolean"
         }
-      },
-      "user": {
-        "properties": {
-          "id": {
-            "type": "long"
-          },
-          "login": {
-            "type": "keyword"
-          }
+      }
+    },
+    "uuid": {
+      "type": "keyword"
+    },
+    "votes": {
+      "type": "nested",
+      "properties": {
+        "created_at": {
+          "type": "date"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "user_id": {
+          "type": "integer"
+        },
+        "vote_flag": {
+          "type": "boolean"
+        },
+        "vote_scope": {
+          "type": "keyword"
         }
-      },
-      "uuid": {
-        "type": "keyword"
       }
     }
   }

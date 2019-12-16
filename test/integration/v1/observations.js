@@ -375,6 +375,28 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
+    describe( "ofv_datatype", ( ) => {
+      const obsWithNumericField = 22;
+      const obsWithTaxonField = 23;
+      const obsWithNoFields = 2;
+      it( "should filter by a single type", done => {
+        request( app ).get( "/v1/observations?ofv_datatype=taxon" )
+          .expect( res => {
+            expect( res.body.results.map( r => r.id ) ).to.contain( obsWithTaxonField );
+            expect( res.body.results.map( r => r.id ) ).not.to.contain( obsWithNumericField );
+            expect( res.body.results.map( r => r.id ) ).not.to.contain( obsWithNoFields );
+          } ).expect( 200, done );
+      } );
+      it( "should filter by multiple types", done => {
+        request( app ).get( "/v1/observations?ofv_datatype=taxon,numeric" )
+          .expect( res => {
+            expect( res.body.results.map( r => r.id ) ).to.contain( obsWithTaxonField );
+            expect( res.body.results.map( r => r.id ) ).to.contain( obsWithNumericField );
+            expect( res.body.results.map( r => r.id ) ).not.to.contain( obsWithNoFields );
+          } ).expect( 200, done );
+      } );
+    } );
+
     it( "filters by term_id", done => {
       request( app ).get( "/v1/observations?term_id=1" )
         .expect( res => {
@@ -401,6 +423,18 @@ describe( "Observations", ( ) => {
           expect( res.body.results.map( r => r.id ) ).not.to.contain( 7 );
           // annotated with this term but failing votes
           expect( res.body.results.map( r => r.id ) ).not.to.contain( 9 );
+        } ).expect( 200, done );
+    } );
+
+    it( "filters by term_id and without_term_id", done => {
+      const hasTerm1 = 9;
+      const hasTerm2 = 20;
+      const hasTerm1And2 = 21;
+      request( app ).get( "/v1/observations?term_id=2&without_term_id=1" )
+        .expect( res => {
+          expect( res.body.results.map( r => r.id ) ).to.contain( hasTerm2 );
+          expect( res.body.results.map( r => r.id ) ).not.to.contain( hasTerm1 );
+          expect( res.body.results.map( r => r.id ) ).not.to.contain( hasTerm1And2 );
         } ).expect( 200, done );
     } );
 
