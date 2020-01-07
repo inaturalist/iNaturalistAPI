@@ -331,6 +331,7 @@
       "observation": [
         {
           "id": 1,
+          "uuid": "cabbd853-39c0-429c-86f1-b36063d3d475",
           "user": { "id": 123 },
           "created_at": "2015-12-31T00:00:00",
           "quality_grade": "research",
