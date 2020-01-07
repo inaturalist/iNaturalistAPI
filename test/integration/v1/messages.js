@@ -10,7 +10,7 @@ const app = iNaturalistAPI.server( );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
-describe.only( "Messages", ( ) => {
+describe( "Messages", ( ) => {
   const currentUser = fixtures.elasticsearch.users.user[0];
   const token = jwt.sign( { user_id: currentUser.id }, config.jwtSecret || "secret",
     { algorithm: "HS512" } );
