@@ -1,10 +1,9 @@
 const Joi = require( "@hapi/joi" );
 const transform = require( "../../../joi_to_openapi_parameter" );
-const observationsController = require( "../../../../lib/controllers/v1/observations_controller" );
+const observationsController = require( "../../../../lib/controllers/v2/observations_controller" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    req.params.id = req.params.id.join( "," );
     observationsController.show( req, ( err, results ) => {
       sendWrapper( req, res, err, results );
     } );
@@ -17,8 +16,7 @@ module.exports = sendWrapper => {
       jwtOptional: []
     }],
     parameters: [
-      transform( Joi.array( ).items( Joi.number( ).integer( ) ).label( "id" ).meta( { in: "path" } )
-        .required( ) ),
+      transform( Joi.array( ).items( Joi.string( ).guid( ) ).label( "id" ).meta( { in: "path" } ) ),
       transform( Joi.string( ).label( "fields" ).meta( { in: "query" } ) )
     ],
     responses: {

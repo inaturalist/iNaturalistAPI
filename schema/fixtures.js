@@ -355,6 +355,7 @@
         },
         {
           "id": 2,
+          "uuid": "9a4046ff-2005-4c8c-8127-48ef2c8e3ab9",
           "user": { "id": 5 },
           "created_at": "2016-01-01T01:00:00",
           "location": "2,3",
@@ -369,6 +370,7 @@
         },
         {
           "id": 333,
+          "uuid": "5e26217c-5a88-421b-81fc-0ce4f07f634a",
           "user": { "id": 333 },
           "created_at": "2010-01-01T02:00:00",
           "private_location": "1,2",
@@ -377,6 +379,7 @@
         },
         {
           "id": 4,
+          "uuid": "e29e68ca-0ecf-4c6b-8fd5-71a28603fb5d",
           "user": { "id": 333 },
           "created_at": "1500-01-01T05:00:00",
           "observed_on": "1500-01-01T05:00:00",
@@ -398,6 +401,7 @@
         },
         {
           "id": 5,
+          "uuid": "e60d4116-f327-4ce1-bd46-27048fdc68a0",
           "user": { "id": 333 },
           "taxon": {
             "id": 123,
@@ -414,6 +418,7 @@
         },
         {
           "id": 6,
+          "uuid": "e1aabcda-0d06-4454-8959-9b000e555610",
           "user": { "id": 333 },
           "geoprivacy": "private",
           "private_location": "1.234,1.234",
@@ -421,6 +426,7 @@
         },
         {
           "id": 7,
+          "uuid": "f88b97cf-6515-4f5b-9a94-5f484167e4a9",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
           "annotations": [
@@ -436,6 +442,7 @@
         },
         {
           "id": 8,
+          "uuid": "02ad4be1-9f21-41a9-82d3-444d6c1078da",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
           "annotations": [
@@ -451,6 +458,7 @@
         },
         {
           "id": 9,
+          "uuid": "dc223c38-8389-44cc-8d22-8a0e77a67cbf",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
           "annotations": [
@@ -473,6 +481,7 @@
         },
         {
           "id": 10,
+          "uuid": "b1aa0a03-3256-4913-aef4-c308ee51dd29",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
           "private_location": "1,2",
@@ -481,6 +490,7 @@
         },
         {
           "id": 11,
+          "uuid": "5adf654d-3aef-48ee-8fd3-48b4a1e2268d",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
           "private_location": "1,2",
@@ -489,16 +499,19 @@
         },
         {
           "id": 12,
+          "uuid": "95e01721-e302-4ac7-b395-f7e4384c76a3",
           "user": { "id": 5 },
           "identifier_user_ids": [ 121, 122 ]
         },
         {
           "id": 13,
+          "uuid": "97aaf567-3998-4a05-b743-a261b9e65031",
           "user": { "id": 5 },
           "identifier_user_ids": [ 121 ]
         },
         {
           "id": 14,
+          "uuid": "6d59a34c-efb3-498a-9aef-eb6ef60ac0ec",
           "user": { "id": 126, "login": "totally-trusting" },
           "description": "Observation by user 126 who trusts user 125",
           "private_location": "1,2",
@@ -506,6 +519,7 @@
         },
         {
           "id": 15,
+          "uuid": "dba1f134-f95c-45c2-8381-22b445cf73ef",
           "user": { "id": 5 },
           "description": "Observation of an obscured taxon",
           "private_location": "1,2",
@@ -514,6 +528,7 @@
         },
         {
           "id": 16,
+          "uuid": "0ae6884e-151e-4d5b-a916-889f01f95985",
           "user": { "id": 5 },
           "description": "Observation of an obscured taxon AND user geoprivacy",
           "private_location": "1,2",
@@ -523,6 +538,7 @@
         },
         {
           "id": 17,
+          "uuid": "450a7b9c-19f2-43ef-9cc9-38b0d6df9bde",
           "user": { "id": 5 },
           "description": "obs with a large positional_accuracy",
           "private_location": "1,2",
@@ -531,6 +547,7 @@
         },
         {
           "id": 18,
+          "uuid": "bf423b43-684a-4aed-bb0c-c8c5ded663c2",
           "user": { "id": 5 },
           "description": "obs with a small positional_accuracy",
           "private_location": "1,2",
@@ -539,6 +556,7 @@
         },
         {
           "id": 19,
+          "uuid": "6e2602c7-1529-4dce-bd62-32f9d0af62f2",
           "user": { "id": 5 },
           "description": "obs with no positional_accuracy",
           "private_location": "1,2",
@@ -546,6 +564,7 @@
         },
         {
           "id": 20,
+          "uuid": "50891b33-96d9-4e46-954d-6215a9ef8147",
           "description": "Has term 2",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
@@ -562,6 +581,7 @@
         },
         {
           "id": 21,
+          "uuid": "048a064f-efb1-4671-afeb-a2fae902df52",
           "description": "Has term 1 and 2",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
@@ -586,6 +606,7 @@
         },
         {
           "id": 22,
+          "uuid": "4307798e-d8d8-4030-8e08-60de0cbb8323",
           "description": "Observation field value of type numeric",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
@@ -597,6 +618,7 @@
         },
         {
           "id": 23,
+          "uuid": "aded9e76-ba9a-427c-8346-5530a1dd4866",
           "description": "Observation field value of type taxon",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",

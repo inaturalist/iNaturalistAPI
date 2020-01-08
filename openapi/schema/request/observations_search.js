@@ -237,5 +237,5 @@ module.exports = Joi.object( ).keys( {
     "created_at"
   ),
   only_id: Joi.boolean( ),
-  fields: Joi.object( )
+  fields: Joi.any( )
 } ).unknown( false );

@@ -3,7 +3,7 @@ const j2s = require( "hapi-joi-to-swagger" );
 const observationsCreateSchema = require( "../../schema/request/observations_create" );
 const observationsSearchSchema = require( "../../schema/request/observations_search" );
 const transform = require( "../../joi_to_openapi_parameter" );
-const ObservationsController = require( "../../../lib/controllers/v1/observations_controller" );
+const ObservationsController = require( "../../../lib/controllers/v2/observations_controller" );
 
 
 module.exports = sendWrapper => {
