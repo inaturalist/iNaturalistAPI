@@ -18,7 +18,7 @@ describe( "pgClient", ( ) => {
 
     it( "uses the test database", done => {
       pgClient.connect( ( err, connection ) => {
-        expect( err ).to.be.null;
+        expect( err, 'Error msg: ' + err.message ).to.be.null;
         expect( connection.database ).to.eq( "inaturalist_test" );
         done( );
       } );
