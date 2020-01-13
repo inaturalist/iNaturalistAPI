@@ -1,5 +1,6 @@
 const { expect } = require( "chai" );
 const pgClient = require( "../lib/pg_client" );
+const dbConfig = require( "../config" );
 
 describe( "pgClient", ( ) => {
   describe( "connect", ( ) => {
@@ -8,17 +9,22 @@ describe( "pgClient", ( ) => {
     } );
 
     it( "fails if it can't connect", ( ) => {
-      process.env.NODE_ENV = "nonsense";
-      pgClient.connection = null;
-      pgClient.connect( ( err, connection ) => {
-        expect( err ).not.to.be.null;
-        expect( connection ).to.be.undefined;
-      } );
+      const originalDbName = dbConfig.database.dbname;
+      dbConfig.database.dbname = "inaturalist_nonsense";
+      try {
+        pgClient.connection = null;
+        pgClient.connect( ( err, connection ) => {
+          expect( err ).not.to.be.null;
+          expect( connection ).to.be.undefined;
+        } );
+      } finally {
+        dbConfig.database.dbname = originalDbName;
+      }
     } );
 
     it( "uses the test database", done => {
       pgClient.connect( ( err, connection ) => {
-        expect( err, 'Error msg: ' + err.message ).to.be.null;
+        expect( err ).to.be.null;
         expect( connection.database ).to.eq( "inaturalist_test" );
         done( );
       } );
