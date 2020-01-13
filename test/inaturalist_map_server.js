@@ -47,23 +47,7 @@ describe( "InaturalistMapServer", ( ) => {
       stubReq.params.style = "heatmap";
       MapServer.prepareQuery( stubReq, ( ) => {
         expect( stubReq.elastic_query.size ).to.eql( 0 );
-        expect( stubReq.elastic_query.aggregations.zoom1 ).to.eql( {
-          aggs: {
-            geohash: {
-              top_hits: {
-                _source: {
-                  includes: [
-                    "id", "location", "taxon.iconic_taxon_id", "captive", "quality_grade",
-                    "geoprivacy", "private_location"
-                  ]
-                },
-                size: 1,
-                sort: { id: { order: "desc" } }
-              }
-            }
-          },
-          geohash_grid: { field: "location", precision: 3, size: 30000 }
-        } );
+        expect( stubReq.elastic_query.aggregations.zoom1 ).to.have.key( "geotile_grid" );
         done( );
       } );
     } );
@@ -156,7 +140,7 @@ describe( "InaturalistMapServer", ( ) => {
     it( "can set the heatmap style", done => {
       stubReq.params.style = "heatmap";
       MapServer.prepareStyle( stubReq, ( ) => {
-        expect( stubReq.style ).to.eql( MapStyles.heatmap( ) );
+        expect( stubReq.style ).to.eql( MapStyles.geotilegridHeatmap( ) );
         done( );
       } );
     } );
