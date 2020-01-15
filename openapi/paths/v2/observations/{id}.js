@@ -1,6 +1,4 @@
-const _ = require( "lodash" );
 const Joi = require( "@hapi/joi" );
-const observationsSearchSchema = require( "../../../schema/request/observations_search" );
 const transform = require( "../../../joi_to_openapi_parameter" );
 const observationsController = require( "../../../../lib/controllers/v1/observations_controller" );
 
@@ -20,7 +18,8 @@ module.exports = sendWrapper => {
     }],
     parameters: [
       transform( Joi.array( ).items( Joi.number( ).integer( ) ).label( "id" ).meta( { in: "path" } )
-        .required( ) )
+        .required( ) ),
+      transform( Joi.string( ).label( "fields" ).meta( { in: "query" } ) )
     ],
     responses: {
       200: {
