@@ -4,7 +4,7 @@ const getChild = ( items, convert ) => {
   if ( items.length === 1 ) {
     return { items: convert( items[0] ).schema };
   }
-  return { items: { anyOf: _.map( items, i => ( { type: i._type } ) ) } };
+  return { items: { anyOf: _.map( items, i => ( convert( i ).schema ) ) } };
 };
 
 const getLength = tests => {

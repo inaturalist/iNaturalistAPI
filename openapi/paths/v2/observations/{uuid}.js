@@ -16,7 +16,14 @@ module.exports = sendWrapper => {
       jwtOptional: []
     }],
     parameters: [
-      transform( Joi.array( ).items( Joi.string( ).guid( ) ).label( "id" ).meta( { in: "path" } ) ),
+      transform(
+        Joi.array( )
+          .items( Joi.string( ).guid( ) )
+          .label( "uuid" )
+          .meta( { in: "path" } )
+          .required( )
+          .description( "A single UUID or a comma-separated list of them" )
+      ),
       transform( Joi.string( ).label( "fields" ).meta( { in: "query" } ) )
     ],
     responses: {
@@ -33,7 +40,31 @@ module.exports = sendWrapper => {
     }
   };
 
+  // async function PUT( req, res ) {
+  //   observationsController.update( req, ( err, results ) => {
+  //     sendWrapper( req, res, err, results );
+  //   } );
+  // }
+
+  // PUT.apiDoc = {
+  //   tags: ["Observations"],
+  //   summary: "Update an observation",
+  //   security: [{
+  //     jwtRequired: []
+  //   }],
+  //   parameters: [
+  //     transform(
+  //       Joi.string( ).guid( )
+  //         .label( "uuid" )
+  //         .meta( { in: "path" } )
+  //         .required( )
+  //         .description( "UUID of the observation to update" )
+  //     )
+  //   ]
+  // }
+
   return {
     GET
+    // PUT
   };
 };

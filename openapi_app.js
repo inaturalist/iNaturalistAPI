@@ -32,21 +32,28 @@ const main = ( ) => {
 
   app.use( bodyParser.json( {
     type: req => {
-      // Parser the request body for everything other than multipart requests,
+      // Parse the request body for everything other than multipart requests,
       // which should specify body data as plain old form data which express can
       // parse on its own.
       if ( !req.headers["content-type"] ) {
+        // console.log( "[DEBUG] no content-type" );
         return true;
       }
       return req.headers["content-type"].match( /multipart/ ) === null;
     }
   } ) );
 
-
   app.use( ( req, res, next ) => {
     util.timingMiddleware( req, res, next );
   } );
 
+  // Middleware to detect to X-HTTP-Method-Override header. We use this header
+  // to support long, complex retrieval requests at POST endpoints as well as
+  // the more traditional creation requests to the same POST endpoints. For
+  // example, under normal circumstances you might POST /observations to create
+  // an observation, but if you set the X-HTTP-Method-Override to GET and POST
+  // to /observations, you could instead send a complicated query object to
+  // retrieve records (see requestFields below)
   app.use( ( req, res, next ) => {
     const methodOverride = req.header( "X-HTTP-Method-Override" );
     if ( req.method === "POST" && methodOverride === "GET" && initializedApi ) {
@@ -59,6 +66,12 @@ const main = ( ) => {
           p.name === "X-HTTP-Method-Override" && p.in === "header"
         ) );
         if ( allowsOverride ) {
+          // console.log( "[DEBUG] Method-Override middleware, req.body: ", req.body );
+          if ( _.isEmpty( req.body ) ) {
+            const err = new Error( "X-HTTP-Method-Override requires Content-Type: application/json" );
+            err.status = 422;
+            return void initializedApi.args.errorMiddleware( err, null, res, null );
+          }
           req.originalMethod = req.originalMethod || req.method;
           req.method = "GET";
         }
@@ -67,6 +80,7 @@ const main = ( ) => {
     next( );
   } );
 
+  // Set up multer to handle multipart file uploads
   const storage = multer.diskStorage( {
     destination: ( req, file, callback ) => {
       crypto.pseudoRandomBytes( 16, ( err, raw ) => {
@@ -82,7 +96,6 @@ const main = ( ) => {
     },
     filename: ( req, file, callback ) => callback( null, file.originalname )
   } );
-
   const upload = multer( { storage } );
 
   const resolveSchema = ( req, schema ) => {
@@ -94,6 +107,7 @@ const main = ( ) => {
     return schema;
   };
 
+  // Extract the requested response fields
   const requestFields = req => {
     const fields = req.body.fields || req.query.fields;
     if ( _.isObject( fields ) ) {
@@ -273,7 +287,7 @@ const main = ( ) => {
         } );
         coercer.coerce( req );
 
-        upload.fields( _.map( knownUploadFields, f => ( { name: f } ) ) )( req, res, err => {
+        upload.fields( _.map( knownUploadFields, f => ( { name: f } ) ) )( req, res => {
           const originalBody = _.cloneDeep( req.body );
           const newBody = { };
           _.each( originalBody, ( v, k ) => {
@@ -304,12 +318,13 @@ const main = ( ) => {
         } );
         return;
       }
-      console.log( "Error trace from errorMiddleware ------->" );
-      console.trace( err );
+      // console.log( "Error trace from errorMiddleware ------->" );
+      // console.trace( err );
       res.status( err.status || 500 ).json( err instanceof Error
         ? {
-          status: 500,
+          status: err.status || 500,
           message: err.message,
+          // TODO Remove in production, right?
           stack: err.stack.split( "\n" ),
           from: "errorMiddleware"
         } : err );
