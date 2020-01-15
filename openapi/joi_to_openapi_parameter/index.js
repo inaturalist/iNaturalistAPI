@@ -5,6 +5,7 @@ const booleanParser = require( "./types/boolean" );
 const arrayParser = require( "./types/array" );
 const dateParser = require( "./types/date" );
 const objectParser = require( "./types/object" );
+const alternativesParser = require( "./types/alternatives" );
 
 const universalDecorator = joiSchema => {
   const universalParams = { };
@@ -70,7 +71,7 @@ const convert = joiSchema => {
     //   swaggerSchema = binaryParser( joiSchema );
     //   break;
     // case "alternatives":
-    //   swaggerSchema = alternativesParser( joiSchema, convert );
+    //   schema = alternativesParser( joiSchema, convert );
     //   break;
     case "object":
       schema = objectParser( joiSchema, convert );
