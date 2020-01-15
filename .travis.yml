@@ -39,7 +39,7 @@ before_script:
   - psql -c 'create database inaturalist_test;' -U postgres
   - psql -f schema/database.sql -U postgres -d inaturalist_test
   - touch vision-taxa.txt
-  - sleep 30
+  - sleep 35
 
 after_script:
   - npm run coveralls
