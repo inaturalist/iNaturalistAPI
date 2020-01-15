@@ -1,6 +1,8 @@
 const inaturalistjs = require( "inaturalistjs" );
 const Taxon = require( "../lib/models/taxon" );
 const testHelper = require( "../lib/test_helper" );
+const pgClient = require( "../lib/pg_client" );
+const util = require( "../lib/util" );
 
 before( function ( done ) {
   this.timeout( 10000 );
@@ -11,8 +13,11 @@ before( function ( done ) {
 
 before( function ( done ) {
   this.timeout( 10000 );
-  testHelper.loadPostgresqlFixtures( ( ) => {
-    Taxon.loadIconicTaxa( done );
+  pgClient.connect( err => {
+    if ( err ) { util.debug( err ); }
+    testHelper.loadPostgresqlFixtures( ( ) => {
+      Taxon.loadIconicTaxa( done );
+    } );
   } );
 } );
 
