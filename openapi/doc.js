@@ -25,30 +25,18 @@ fs.readdirSync( "./openapi/schema/request" ).forEach( file => {
   schemas[modelName] = schemas[modelName] || swagger;
 } );
 
+const url = "http://localhost:4000/v2";
+
 const apiDoc = {
   openapi: "3.0.0",
   servers: [{
-    url: "http://localhost:4000/v2"
+    url
   }],
   info: {
     title: "Test iNaturalist Version 2 API",
     version: "1.0.0",
-    description: `## http://localhost:4000/v2/
-
-[iNaturalist](https://www.inaturalist.org/) is a global community of
-naturalists, scientists, and members of the public sharing over a million
-wildlife sightings to teach one another about the natural world while
-creating high quality citizen science data for science and conservation.
-The iNaturalist technology infrastructure and open source software is
-administered by the
-
-[California Academy of Sciences](https://www.calacademy.org/) as
-part of their mission to explore, explain, and sustain life on Earth.
-These API methods return data in JSON/JSONP and PNG response formats. They
-are meant to supplement the existing [iNaturalist
-API](https://www.inaturalist.org/pages/api+reference), implemented in Ruby
-on Rails, which has more functionality and supports more write operations,
-but tends to be slower and have less consistent response formats. Visit our
+    description: `## ${url}
+These API methods return data in JSON/JSONP and PNG response formats. Visit our
 [developers page](https://www.inaturalist.org/pages/developers) for more
 information. Write operations that expect and return JSON describe a single
 \`body\` parameter that represents the request body, which should be specified
@@ -75,9 +63,36 @@ hours. Authentication required for all PUT and POST requests. Some GET
 requests will also include private information like hidden coordinates if
 the authenticated user has permission to view them.
 
+By default, all endpoints will return a very minimal response, usually just the
+UUID. To receive more data, include the \`fields\` parameter to specify exactly
+what you want in the response. For GET requests, this can be as simple as
+[${url}/observations?fields=species_guess,observed_on](${url}/observations?fields=species_guess,observed_on)
+to return the \`species_guess\` and \`observed_on\` fields of the observations.
+
+For more complex responses, all GET endpoints also support POST requests
+with the \`X-HTTP-Method-Override: GET\` header to so you can specify the
+response fields in a JSON object, e.g.
+\`\`\`
+  curl -XPOST \\
+    -H "X-HTTP-Method-Override: GET" \\
+    -H "Content-Type: application/json" \\
+    -d '{fields: {"species_guess": true, "geojson": {"coordinates": true}}' \\
+    "${url}/observations"
+\`\`\`
+
 iNaturalist Website: <https://www.inaturalist.org/>
 
 Open Source Software: <https://github.com/inaturalist/>
+
+## About iNaturalist
+
+[iNaturalist](https://www.inaturalist.org/) is a global community of
+naturalists, scientists, and members of the public sharing over a million
+wildlife sightings to teach one another about the natural world while
+creating high quality citizen science data for science and conservation.
+The iNaturalist technology infrastructure and open source software is
+administered by the [California Academy of Sciences](https://www.calacademy.org/) as
+part of their mission to explore, explain, and sustain life on Earth.
 
 ## Terms of Use
 

@@ -238,4 +238,6 @@ module.exports = Joi.object( ).keys( {
   ),
   only_id: Joi.boolean( ),
   fields: Joi.any( )
+    .description( "Attribute fields to return in the response" )
+    .example( "species_guess,observed_on" )
 } ).unknown( false );

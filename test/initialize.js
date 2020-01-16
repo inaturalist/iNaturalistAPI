@@ -14,7 +14,10 @@ before( function ( done ) {
 before( function ( done ) {
   this.timeout( 10000 );
   pgClient.connect( err => {
-    if ( err ) { util.debug( err ); }
+    if ( err ) {
+      console.log( "[DEBUG] err: ", err );
+      return void util.debug( err );
+    }
     testHelper.loadPostgresqlFixtures( ( ) => {
       Taxon.loadIconicTaxa( done );
     } );

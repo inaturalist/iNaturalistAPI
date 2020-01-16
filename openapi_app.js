@@ -32,6 +32,7 @@ const main = ( ) => {
 
   app.use( bodyParser.json( {
     type: req => {
+      console.log( "[DEBUG] bodyParser middleware, req.headers[content-type]: ", req.headers["content-type"] );
       // Parse the request body for everything other than multipart requests,
       // which should specify body data as plain old form data which express can
       // parse on its own.
@@ -98,6 +99,8 @@ const main = ( ) => {
   } );
   const upload = multer( { storage } );
 
+  // If a schema looks like one of our custom schemas, return the custom schema.
+  // Otherwise return the schema that was passed in
   const resolveSchema = ( req, schema ) => {
     const schemaRef = schema.$ref;
     if ( schemaRef && schemaRef.match( /#\/components\/schemas\// ) ) {
@@ -145,14 +148,25 @@ const main = ( ) => {
     return null;
   };
 
+
+  // These methods take the requested fields, select the ones that match the
+  // schema definition for the endpoint that was hit, and return only those
+  // fields. The two methods refer to each other, so we need to define a stub
+  // first.
   let applyFieldSelectionToItem = ( ) => { };
   const applyFieldSelectionToObject = ( req, item, fieldsRequested, itemSchema ) => {
     let fieldsToReturn = { };
+    // Make sure we always return required fields
     _.each( itemSchema.required, k => {
       fieldsToReturn[k] = true;
     } );
+    // Requested fields might be specified as a string, e.g. "date", an array,
+    // e.g. ["date"], or an object, e.g. {date: true} or {date: "date"}. Here
+    // we're normalizing them into an object
     if ( _.isArray( fieldsRequested ) ) {
       fieldsToReturn = Object.assign( fieldsToReturn, _.keyBy( fieldsRequested, r => r ) );
+    } else if ( _.isString( fieldsRequested ) ) {
+      fieldsToReturn = Object.assign( fieldsToReturn, _.keyBy( [fieldsRequested], r => r ) );
     } else {
       fieldsToReturn = Object.assign( fieldsToReturn, fieldsRequested );
     }
@@ -275,7 +289,7 @@ const main = ( ) => {
         } );
         const props = req.operationDoc.requestBody.content["multipart/form-data"].schema.properties;
         const parameters = _.map( _.keys( props ), k => ( {
-          in: "formData",
+          in: req.headers["content-type"] === "application/json" ? "body" : "formData",
           name: k,
           schema: req.operationDoc.requestBody.content["multipart/form-data"].schema.properties[k]
         } ) );
@@ -287,7 +301,8 @@ const main = ( ) => {
         } );
         coercer.coerce( req );
 
-        upload.fields( _.map( knownUploadFields, f => ( { name: f } ) ) )( req, res => {
+        const uploadMiddleware = upload.fields( _.map( knownUploadFields, f => ( { name: f } ) ) );
+        uploadMiddleware( req, res, ( ) => {
           const originalBody = _.cloneDeep( req.body );
           const newBody = { };
           _.each( originalBody, ( v, k ) => {
@@ -318,8 +333,8 @@ const main = ( ) => {
         } );
         return;
       }
-      // console.log( "Error trace from errorMiddleware ------->" );
-      // console.trace( err );
+      console.log( "Error trace from errorMiddleware ------->" );
+      console.trace( err );
       res.status( err.status || 500 ).json( err instanceof Error
         ? {
           status: err.status || 500,

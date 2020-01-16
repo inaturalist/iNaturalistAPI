@@ -46,7 +46,7 @@ module.exports = sendWrapper => {
   };
 
   async function POST( req, res ) {
-    ObservationsController.show( { params: { id: "1000000" }, query: { } }, ( err, results ) => {
+    ObservationsController.create( req, ( err, results ) => {
       sendWrapper( req, res, err, results );
     } );
   }
