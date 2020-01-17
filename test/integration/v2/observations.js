@@ -80,19 +80,17 @@ describe( "Observations", ( ) => {
         .reply( 200, [{ id: o.id, uuid: o.uuid }] );
       request( app ).post( "/v2/observations" )
         .set( "Authorization", token )
-        .set( "Content-Type", "application/json" )
-        .send( {
-          // it doesn't really matter what we post since we're just stubbing the
-          // Rails app to return obs 6 to load from the ES index
-          observation: { },
-          // We're testing with these fields so let's make sure to get them in the response
-          fields: {
-            private_geojson: {
-              coordinates: true
-            },
-            private_location: true
-          }
-        } )
+        .set( "Content-Type", "multipart/form-data" )
+        // it doesn't really matter what we post since we're just stubbing the
+        // Rails app to return obs 6 to load from the ES index
+        .field( "observation", JSON.stringify( { } ) )
+        // We're testing with these fields so let's make sure to get them in the response
+        .field( "fields", JSON.stringify( {
+          private_geojson: {
+            coordinates: true
+          },
+          private_location: true
+        } ) )
         .expect( 200 )
         .expect( res => {
           const resObs = res.body.results[0];
