@@ -1,7 +1,11 @@
-const { expect } = require( "chai" );
+const chai = require( "chai" );
+const chaiAsPromised = require( "chai-as-promised" );
 const Taxon = require( "../../lib/models/taxon" );
 const List = require( "../../lib/models/list" );
 const ESModel = require( "../../lib/models/es_model" );
+
+const { expect } = chai;
+chai.use( chaiAsPromised );
 
 describe( "ESModel", ( ) => {
   describe( "fetchBelongsTo", ( ) => {
@@ -36,19 +40,15 @@ describe( "ESModel", ( ) => {
   } );
 
   describe( "fetchInstancesByIDsObject", ( ) => {
-    it( "returns an error if not given an object", done => {
-      ESModel.fetchInstancesByIDsObject( null, Taxon, { }, err => {
-        expect( err ).to.eq( "idsObject must be an object" );
-        done( );
-      } );
+    it( "returns an error if not given an object", async ( ) => {
+      await expect( ESModel.fetchInstancesByIDsObject( null, Taxon, { } ) )
+        .to.be.rejectedWith( Error );
     } );
 
-    it( "fetches instances", done => {
-      ESModel.fetchInstancesByIDsObject( { 11: null }, Taxon, { }, ( err, instances ) => {
-        expect( instances["11"].id ).to.eq( 11 );
-        expect( instances["11"].name ).to.eq( "Junonia hierta" );
-        done( );
-      } );
+    it( "fetches instances", async ( ) => {
+      const instances = await ESModel.fetchInstancesByIDsObject( { 11: null }, Taxon, { } );
+      expect( instances["11"].id ).to.eq( 11 );
+      expect( instances["11"].name ).to.eq( "Junonia hierta" );
     } );
   } );
 } );
