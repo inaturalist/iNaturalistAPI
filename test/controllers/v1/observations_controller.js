@@ -30,61 +30,61 @@ describe( "ObservationsController", ( ) => {
   } );
 
   it( "creates", done => {
-    testHelper.testInatJSPreload(
+    testHelper.testInatJSPreloadAsync(
       ObservationsController, observations, "create", Observation, done
     );
   } );
 
   it( "updates", done => {
-    testHelper.testInatJSPreload(
+    testHelper.testInatJSPreloadAsync(
       ObservationsController, observations, "update", Observation, done
     );
   } );
 
   it( "deletes", done => {
-    testHelper.testInatJSNoPreload(
+    testHelper.testInatJSNoPreloadAsync(
       ObservationsController, observations, "delete", done
     );
   } );
 
   it( "faves", done => {
-    testHelper.testInatJSPreload(
+    testHelper.testInatJSPreloadAsync(
       ObservationsController, observations, "fave", Observation, done
     );
   } );
 
   it( "unfaves", done => {
-    testHelper.testInatJSPreload(
+    testHelper.testInatJSPreloadAsync(
       ObservationsController, observations, "unfave", Observation, done
     );
   } );
 
   it( "reviews", done => {
-    testHelper.testInatJSNoPreload(
+    testHelper.testInatJSNoPreloadAsync(
       ObservationsController, observations, "review", done
     );
   } );
 
   it( "unreviews", done => {
-    testHelper.testInatJSNoPreload(
+    testHelper.testInatJSNoPreloadAsync(
       ObservationsController, observations, "unreview", done
     );
   } );
 
   it( "sets quality metrics", done => {
-    testHelper.testInatJSNoPreload(
+    testHelper.testInatJSNoPreloadAsync(
       ObservationsController, observations, "setQualityMetric", done
     );
   } );
 
   it( "deletes quality metrics", done => {
-    testHelper.testInatJSNoPreload(
+    testHelper.testInatJSNoPreloadAsync(
       ObservationsController, observations, "deleteQualityMetric", done
     );
   } );
 
   it( "calls viewed_updates", done => {
-    testHelper.testInatJSNoPreload(
+    testHelper.testInatJSNoPreloadAsync(
       ObservationsController, observations, "viewedUpdates", done
     );
   } );
@@ -740,11 +740,8 @@ describe( "ObservationsController", ( ) => {
   } );
 
   describe( "index", ( ) => {
-    it( "fetches results", done => {
-      ObservationsController.search( { query: { } }, ( ) => {
-        // this needs some work - fixtures, etc
-        done( );
-      } );
+    it( "fetches results", async ( ) => {
+      await ObservationsController.search( { query: { } } );
     } );
   } );
 
