@@ -4,6 +4,6 @@ const PhotosController = require( "../../../lib/controllers/v1/photos_controller
 
 describe( "PhotosController", ( ) => {
   it( "creates", done => {
-    testHelper.testInatJSNoPreload( PhotosController, photos, "create", done );
+    testHelper.testInatJSNoPreloadAsync( PhotosController, photos, "create", done );
   } );
 } );

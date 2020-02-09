@@ -81,7 +81,7 @@ describe( "TaxaController", ( ) => {
     it( "includes all taxa by defaul", done => {
       const req = { query: { }, inat: { } };
       const leafCounts = [{ taxon_id: 1, count: 100 }, { taxon_id: 2, count: 99 }];
-      TaxaController.speciesCountsResponse( req, leafCounts, { }, ( err, response ) => {
+      TaxaController.speciesCountsResponse( req, leafCounts ).then( response => {
         expect( response.results.length ).to.eq( 2 );
         done( );
       } );
@@ -93,7 +93,7 @@ describe( "TaxaController", ( ) => {
         .callsFake( taxonID => ( taxonID === 1 ) );
       const req = { query: { include_only_vision_taxa: true }, inat: { } };
       const leafCounts = [{ taxon_id: 1, count: 100 }, { taxon_id: 2, count: 99 }];
-      TaxaController.speciesCountsResponse( req, leafCounts, { }, ( err, response ) => {
+      TaxaController.speciesCountsResponse( req, leafCounts ).then( response => {
         expect( response.results.length ).to.eq( 1 );
         done( );
       } );

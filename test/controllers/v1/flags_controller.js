@@ -4,10 +4,10 @@ const FlagsController = require( "../../../lib/controllers/v1/flags_controller" 
 
 describe( "FlagsController", ( ) => {
   it( "creates", done => {
-    testHelper.testInatJSNoPreload( FlagsController, flags, "create", done );
+    testHelper.testInatJSNoPreloadAsync( FlagsController, flags, "create", done );
   } );
 
   it( "deletes", done => {
-    testHelper.testInatJSNoPreload( FlagsController, flags, "delete", done );
+    testHelper.testInatJSNoPreloadAsync( FlagsController, flags, "delete", done );
   } );
 } );

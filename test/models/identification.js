@@ -10,12 +10,10 @@ describe( "Identification", ( ) => {
   } );
 
   describe( "preloadInto", ( ) => {
-    it( "adds Identification instances", done => {
+    it( "adds Identification instances", async ( ) => {
       const arr = [{ identification_id: 102 }];
-      Identification.preloadInto( arr, { }, () => {
-        expect( arr[0].identification ).to.not.be.undefined;
-        done( );
-      } );
+      await Identification.preloadInto( arr );
+      expect( arr[0].identification ).to.not.be.undefined;
     } );
   } );
 } );

@@ -23,19 +23,19 @@ const Q = async params => {
 
 describe( "IdentificationsController", ( ) => {
   it( "creates", done => {
-    testHelper.testInatJSPreload(
+    testHelper.testInatJSPreloadAsync(
       IdentificationsController, identifications, "create", Identification, done
     );
   } );
 
   it( "updates", done => {
-    testHelper.testInatJSPreload(
+    testHelper.testInatJSPreloadAsync(
       IdentificationsController, identifications, "update", Identification, done
     );
   } );
 
   it( "deletes", done => {
-    testHelper.testInatJSNoPreload(
+    testHelper.testInatJSNoPreloadAsync(
       IdentificationsController, identifications, "delete", done
     );
   } );
@@ -261,7 +261,7 @@ describe( "IdentificationsController", ( ) => {
 
   describe( "identifiers", ( ) => {
     it( "returns identification counts grouped by identifier", done => {
-      IdentificationsController.identifiers( { query: { } }, ( e, r ) => {
+      IdentificationsController.identifiers( { query: { } } ).then( r => {
         expect( r.total_results ).to.eq(
           _.uniqBy( _.filter( fixtures.elasticsearch.identifications.identification,
             i => i.user ), i => i.user.id ).length
@@ -280,7 +280,7 @@ describe( "IdentificationsController", ( ) => {
 
   describe( "observers", ( ) => {
     it( "returns identification counts grouped by observer", done => {
-      IdentificationsController.observers( { query: { } }, ( e, r ) => {
+      IdentificationsController.observers( { query: { } } ).then( r => {
         expect( r.total_results ).to.eq(
           _.uniqBy( _.filter( fixtures.elasticsearch.identifications.identification,
             i => i.observation ), i => i.observation.user_id ).length

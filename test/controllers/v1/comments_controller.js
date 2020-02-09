@@ -5,14 +5,14 @@ const CommentsController = require( "../../../lib/controllers/v1/comments_contro
 
 describe( "CommentsController", ( ) => {
   it( "creates", done => {
-    testHelper.testInatJSPreload( CommentsController, comments, "create", Comment, done );
+    testHelper.testInatJSPreloadAsync( CommentsController, comments, "create", Comment, done );
   } );
 
   it( "updates", done => {
-    testHelper.testInatJSPreload( CommentsController, comments, "update", Comment, done );
+    testHelper.testInatJSPreloadAsync( CommentsController, comments, "update", Comment, done );
   } );
 
   it( "deletes", done => {
-    testHelper.testInatJSNoPreload( CommentsController, comments, "delete", done );
+    testHelper.testInatJSNoPreloadAsync( CommentsController, comments, "delete", done );
   } );
 } );
