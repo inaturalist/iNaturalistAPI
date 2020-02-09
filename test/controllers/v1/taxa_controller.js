@@ -7,9 +7,10 @@ describe( "TaxaController", ( ) => {
   describe( "replaceInactiveTaxaCounts", ( ) => {
     it( "replaces inactive taxa with their active counterparts", done => {
       const counts = [{ taxon_id: 10003, count: 100 }];
-      TaxaController.replaceInactiveTaxaCounts( counts, { }, ( err, newCounts ) => {
-        expect( newCounts[0].taxon_id ).to.eq( 123 );
-        expect( newCounts[0].count ).to.eq( 100 );
+      TaxaController.replaceInactiveTaxaCounts( counts, { } ).then( r => {
+        const { updatedCounts } = r;
+        expect( updatedCounts[0].taxon_id ).to.eq( 123 );
+        expect( updatedCounts[0].count ).to.eq( 100 );
         done( );
       } );
     } );
@@ -19,10 +20,11 @@ describe( "TaxaController", ( ) => {
         { taxon_id: 10003, count: 100 },
         { taxon_id: 10004, count: 99 }
       ];
-      TaxaController.replaceInactiveTaxaCounts( counts, { }, ( err, newCounts ) => {
-        expect( newCounts.length ).to.eq( 2 );
-        expect( newCounts[1].taxon_id ).to.eq( 10004 );
-        expect( newCounts[1].count ).to.eq( 99 );
+      TaxaController.replaceInactiveTaxaCounts( counts, { } ).then( r => {
+        const { updatedCounts } = r;
+        expect( updatedCounts.length ).to.eq( 2 );
+        expect( updatedCounts[1].taxon_id ).to.eq( 10004 );
+        expect( updatedCounts[1].count ).to.eq( 99 );
         done( );
       } );
     } );
@@ -32,13 +34,14 @@ describe( "TaxaController", ( ) => {
         { taxon_id: 10003, count: 100 },
         { taxon_id: 10004, count: 99 }
       ];
-      TaxaController.replaceInactiveTaxaCounts( counts, { removeInactive: true },
-        ( err, newCounts ) => {
-          expect( newCounts.length ).to.eq( 1 );
-          expect( newCounts[0].taxon_id ).to.eq( 123 );
-          expect( newCounts[0].count ).to.eq( 100 );
-          done( );
-        } );
+      const opts = { removeInactive: true };
+      TaxaController.replaceInactiveTaxaCounts( counts, opts ).then( r => {
+        const { updatedCounts } = r;
+        expect( updatedCounts.length ).to.eq( 1 );
+        expect( updatedCounts[0].taxon_id ).to.eq( 123 );
+        expect( updatedCounts[0].count ).to.eq( 100 );
+        done( );
+      } );
     } );
 
     it( "replaces inactive taxon with all results of a split", done => {
@@ -46,18 +49,19 @@ describe( "TaxaController", ( ) => {
         { taxon_id: 10005, count: 100 },
         { taxon_id: 3, count: 99 }
       ];
-      TaxaController.replaceInactiveTaxaCounts( counts, { removeInactive: true },
-        ( err, newCounts ) => {
-          expect( newCounts.length ).to.eq( 3 );
-          expect( newCounts[0].taxon_id ).to.eq( 1 );
-          // the replacements carry the same score as their original taxa
-          expect( newCounts[0].count ).to.eq( 100 );
-          expect( newCounts[1].taxon_id ).to.eq( 2 );
-          expect( newCounts[1].count ).to.eq( 100 );
-          expect( newCounts[2].taxon_id ).to.eq( 3 );
-          expect( newCounts[2].count ).to.eq( 99 );
-          done( );
-        } );
+      const opts = { removeInactive: true };
+      TaxaController.replaceInactiveTaxaCounts( counts, opts ).then( r => {
+        const { updatedCounts } = r;
+        expect( updatedCounts.length ).to.eq( 3 );
+        expect( updatedCounts[0].taxon_id ).to.eq( 1 );
+        // the replacements carry the same score as their original taxa
+        expect( updatedCounts[0].count ).to.eq( 100 );
+        expect( updatedCounts[1].taxon_id ).to.eq( 2 );
+        expect( updatedCounts[1].count ).to.eq( 100 );
+        expect( updatedCounts[2].taxon_id ).to.eq( 3 );
+        expect( updatedCounts[2].count ).to.eq( 99 );
+        done( );
+      } );
     } );
 
     it( "does not replace existing scores when adding active taxa", done => {
@@ -65,15 +69,16 @@ describe( "TaxaController", ( ) => {
         { taxon_id: 1, count: 100 },
         { taxon_id: 10005, count: 20 }
       ];
-      TaxaController.replaceInactiveTaxaCounts( counts, { removeInactive: true },
-        ( err, newCounts ) => {
-          expect( newCounts.length ).to.eq( 2 );
-          expect( newCounts[0].taxon_id ).to.eq( 1 );
-          expect( newCounts[0].count ).to.eq( 100 );
-          expect( newCounts[1].taxon_id ).to.eq( 2 );
-          expect( newCounts[1].count ).to.eq( 20 );
-          done( );
-        } );
+      const opts = { removeInactive: true };
+      TaxaController.replaceInactiveTaxaCounts( counts, opts ).then( r => {
+        const { updatedCounts } = r;
+        expect( updatedCounts.length ).to.eq( 2 );
+        expect( updatedCounts[0].taxon_id ).to.eq( 1 );
+        expect( updatedCounts[0].count ).to.eq( 100 );
+        expect( updatedCounts[1].taxon_id ).to.eq( 2 );
+        expect( updatedCounts[1].count ).to.eq( 20 );
+        done( );
+      } );
     } );
   } );
 

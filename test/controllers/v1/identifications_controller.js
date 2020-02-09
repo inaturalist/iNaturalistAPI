@@ -229,7 +229,7 @@ describe( "IdentificationsController", ( ) => {
 
   describe( "categories", ( ) => {
     it( "returns identification counts grouped by category", done => {
-      IdentificationsController.categories( { query: { } }, ( e, r ) => {
+      IdentificationsController.categories( { query: { } } ).then( r => {
         expect( r.total_results ).to.eq(
           _.uniqBy( _.filter( fixtures.elasticsearch.identifications.identification,
             i => i.category ), i => i.category ).length
@@ -247,7 +247,7 @@ describe( "IdentificationsController", ( ) => {
 
   describe( "speciesCounts", ( ) => {
     it( "returns taxa", done => {
-      IdentificationsController.speciesCounts( { query: { } }, ( e, r ) => {
+      IdentificationsController.speciesCounts( { query: { } } ).then( r => {
         expect( r.total_results ).to.eq(
           _.uniqBy( _.filter( fixtures.elasticsearch.identifications.identification,
             i => i.taxon ), i => i.taxon.id ).length

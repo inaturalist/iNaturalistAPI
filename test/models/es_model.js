@@ -11,7 +11,7 @@ describe( "ESModel", ( ) => {
   describe( "fetchBelongsTo", ( ) => {
     it( "fetches belongs to associations with ids", done => {
       const o = { taxon_id: 1 };
-      ESModel.fetchBelongsTo( [o], Taxon, { }, ( ) => {
+      ESModel.fetchBelongsTo( [o], Taxon ).then( ( ) => {
         expect( o.taxon ).to.not.be.undefined;
         expect( o.taxon.id ).to.eq( 1 );
         expect( o.taxon_id ).to.eq( 1 );
@@ -21,7 +21,7 @@ describe( "ESModel", ( ) => {
 
     it( "fetches belongs to associations with ids", done => {
       const o = { taxon: { id: 1, existingData: "something" } };
-      ESModel.fetchBelongsTo( [o], Taxon, { }, ( ) => {
+      ESModel.fetchBelongsTo( [o], Taxon ).then( ( ) => {
         expect( o.taxon ).to.not.be.undefined;
         expect( o.taxon.id ).to.eq( 1 );
         expect( o.taxon.existingData ).to.eq( "something" );
@@ -30,12 +30,10 @@ describe( "ESModel", ( ) => {
       } );
     } );
 
-    it( "returns errors", done => {
+    it( "returns errors", async ( ) => {
       const o = { list_id: 1 };
-      ESModel.fetchBelongsTo( [o], List, { }, err => {
-        expect( err.message ).to.include( "index_not_found_exception" );
-        done( );
-      } );
+      await expect( ESModel.fetchBelongsTo( [o], List ) )
+        .to.be.rejectedWith( Error );
     } );
   } );
 
