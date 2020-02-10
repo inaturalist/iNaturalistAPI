@@ -36,13 +36,10 @@ describe( "Project", ( ) => {
   } );
 
   describe( "searchParams", ( ) => {
-    it( "returns false if none exists", done => {
+    it( "returns false if none exists", async ( ) => {
       const p = new Project( { id: "3333" } );
-      p.projectList( ( err, l ) => {
-        expect( err ).to.be.null;
-        expect( l ).to.be.false;
-        done( );
-      } );
+      const l = await p.projectList( );
+      expect( l ).to.be.false;
     } );
   } );
 

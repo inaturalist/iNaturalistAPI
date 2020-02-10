@@ -4,6 +4,6 @@ const SoundsController = require( "../../../lib/controllers/v1/sounds_controller
 
 describe( "SoundsController", ( ) => {
   it( "creates", done => {
-    testHelper.testInatJSNoPreloadAsync( SoundsController, sounds, "create", done );
+    testHelper.testInatJSNoPreload( SoundsController, sounds, "create", done );
   } );
 } );

@@ -4,6 +4,6 @@ const PostsController = require( "../../../lib/controllers/v1/posts_controller" 
 
 describe( "PostsController", ( ) => {
   it( "fetches posts for_user", done => {
-    testHelper.testInatJSNoPreloadAsync( PostsController, posts, "for_user", done );
+    testHelper.testInatJSNoPreload( PostsController, posts, "for_user", done );
   } );
 } );

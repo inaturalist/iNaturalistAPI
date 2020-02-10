@@ -6,19 +6,19 @@ const ObservationPhotosController = require(
 
 describe( "ObservationPhotosController", ( ) => {
   it( "creates", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ObservationPhotosController, observation_photos, "create", done
     );
   } );
 
   it( "updates", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ObservationPhotosController, observation_photos, "update", done
     );
   } );
 
   it( "deletes", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ObservationPhotosController, observation_photos, "delete", done
     );
   } );

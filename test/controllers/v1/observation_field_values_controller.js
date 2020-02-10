@@ -6,19 +6,19 @@ const ObservationFieldValuesController = require(
 
 describe( "ObservationFieldValuesController", ( ) => {
   it( "creates", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ObservationFieldValuesController, observation_field_values, "create", done
     );
   } );
 
   it( "updates", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ObservationFieldValuesController, observation_field_values, "update", done
     );
   } );
 
   it( "deletes", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ObservationFieldValuesController, observation_field_values, "delete", done
     );
   } );

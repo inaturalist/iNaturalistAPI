@@ -30,61 +30,61 @@ describe( "ObservationsController", ( ) => {
   } );
 
   it( "creates", done => {
-    testHelper.testInatJSPreloadAsync(
+    testHelper.testInatJSPreload(
       ObservationsController, observations, "create", Observation, done
     );
   } );
 
   it( "updates", done => {
-    testHelper.testInatJSPreloadAsync(
+    testHelper.testInatJSPreload(
       ObservationsController, observations, "update", Observation, done
     );
   } );
 
   it( "deletes", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ObservationsController, observations, "delete", done
     );
   } );
 
   it( "faves", done => {
-    testHelper.testInatJSPreloadAsync(
+    testHelper.testInatJSPreload(
       ObservationsController, observations, "fave", Observation, done
     );
   } );
 
   it( "unfaves", done => {
-    testHelper.testInatJSPreloadAsync(
+    testHelper.testInatJSPreload(
       ObservationsController, observations, "unfave", Observation, done
     );
   } );
 
   it( "reviews", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ObservationsController, observations, "review", done
     );
   } );
 
   it( "unreviews", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ObservationsController, observations, "unreview", done
     );
   } );
 
   it( "sets quality metrics", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ObservationsController, observations, "setQualityMetric", done
     );
   } );
 
   it( "deletes quality metrics", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ObservationsController, observations, "deleteQualityMetric", done
     );
   } );
 
   it( "calls viewed_updates", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ObservationsController, observations, "viewedUpdates", done
     );
   } );

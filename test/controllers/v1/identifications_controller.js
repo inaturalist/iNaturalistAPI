@@ -23,19 +23,19 @@ const Q = async params => {
 
 describe( "IdentificationsController", ( ) => {
   it( "creates", done => {
-    testHelper.testInatJSPreloadAsync(
+    testHelper.testInatJSPreload(
       IdentificationsController, identifications, "create", Identification, done
     );
   } );
 
   it( "updates", done => {
-    testHelper.testInatJSPreloadAsync(
+    testHelper.testInatJSPreload(
       IdentificationsController, identifications, "update", Identification, done
     );
   } );
 
   it( "deletes", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       IdentificationsController, identifications, "delete", done
     );
   } );

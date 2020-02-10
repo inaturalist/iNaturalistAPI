@@ -5,55 +5,55 @@ const Project = require( "../../../lib/models/project" );
 
 describe( "ProjectsController", ( ) => {
   it( "joins", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ProjectsController, projects, "join", done
     );
   } );
 
   it( "leaves", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ProjectsController, projects, "leave", done
     );
   } );
 
   it( "adds", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ProjectsController, projects, "add", done
     );
   } );
 
   it( "removes", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ProjectsController, projects, "remove", done
     );
   } );
 
   it( "creates", done => {
-    testHelper.testInatJSPreloadAsync(
+    testHelper.testInatJSPreload(
       ProjectsController, projects, "create", Project, done
     );
   } );
 
   it( "updates", done => {
-    testHelper.testInatJSPreloadAsync(
+    testHelper.testInatJSPreload(
       ProjectsController, projects, "update", Project, done
     );
   } );
 
   it( "deletes", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ProjectsController, projects, "delete", done
     );
   } );
 
   it( "features", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ProjectsController, projects, "feature", done
     );
   } );
 
   it( "unfeatures", done => {
-    testHelper.testInatJSNoPreloadAsync(
+    testHelper.testInatJSNoPreload(
       ProjectsController, projects, "unfeature", done
     );
   } );

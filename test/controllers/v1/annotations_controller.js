@@ -4,18 +4,18 @@ const AnnotationsController = require( "../../../lib/controllers/v1/annotations_
 
 describe( "AnnotationsController", ( ) => {
   it( "creates", done => {
-    testHelper.testInatJSNoPreloadAsync( AnnotationsController, annotations, "create", done );
+    testHelper.testInatJSNoPreload( AnnotationsController, annotations, "create", done );
   } );
 
   it( "deletes", done => {
-    testHelper.testInatJSNoPreloadAsync( AnnotationsController, annotations, "delete", done );
+    testHelper.testInatJSNoPreload( AnnotationsController, annotations, "delete", done );
   } );
 
   it( "votes", done => {
-    testHelper.testInatJSNoPreloadAsync( AnnotationsController, annotations, "vote", done );
+    testHelper.testInatJSNoPreload( AnnotationsController, annotations, "vote", done );
   } );
 
   it( "unvotes", done => {
-    testHelper.testInatJSNoPreloadAsync( AnnotationsController, annotations, "unvote", done );
+    testHelper.testInatJSNoPreload( AnnotationsController, annotations, "unvote", done );
   } );
 } );
