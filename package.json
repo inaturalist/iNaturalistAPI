@@ -33,7 +33,7 @@
     "form-data": "^2.3.3",
     "geoip-lite": "^1.3.4",
     "handlebars": "^4.5.3",
-    "inaturalistjs": "github:ternandsparrow/inaturalistjs#posts-endpoints",
+    "inaturalistjs": "github:inaturalist/inaturalistjs",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.15",
     "lodash.merge": "^4.6.2",
