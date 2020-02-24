@@ -1,6 +1,9 @@
-const { expect } = require( "chai" );
+const chai = require( "chai" );
+const chaiAsPromised = require( "chai-as-promised" );
 const Taxon = require( "../../lib/models/taxon" );
 
+const { expect } = chai;
+chai.use( chaiAsPromised );
 let t;
 
 describe( "Taxon", ( ) => {
@@ -54,35 +57,25 @@ describe( "Taxon", ( ) => {
   } );
 
   describe( "findByID", ( ) => {
-    it( "returns a taxon given an ID", done => {
-      Taxon.findByID( 123, ( err, tax ) => {
-        expect( tax.id ).to.eq( 123 );
-        expect( tax.name ).to.eq( "itsname" );
-        done( );
-      } );
+    it( "returns a taxon given an ID", async ( ) => {
+      const tax = await Taxon.findByID( 123 );
+      expect( tax.id ).to.eq( 123 );
+      expect( tax.name ).to.eq( "itsname" );
     } );
 
-    it( "returns a taxon from the cache", done => {
-      Taxon.findByID( 123, ( err, tax ) => {
-        expect( tax.id ).to.eq( 123 );
-        expect( tax.name ).to.eq( "itsname" );
-        done( );
-      } );
+    it( "returns a taxon from the cache", async ( ) => {
+      const tax = await Taxon.findByID( 123 );
+      expect( tax.id ).to.eq( 123 );
+      expect( tax.name ).to.eq( "itsname" );
     } );
 
-    it( "returns an error given a bad ID", done => {
-      Taxon.findByID( "notanint", err => {
-        expect( err ).to.deep.eq( { messsage: "invalid taxon_id", status: 422 } );
-        done( );
-      } );
+    it( "returns an error given a bad ID", async ( ) => {
+      await expect( Taxon.findByID( "notanint" ) ).to.be.rejectedWith( Error );
     } );
 
-    it( "returns null given an unknown ID", done => {
-      Taxon.findByID( 55555, ( err, tax ) => {
-        expect( err ).to.eq( null );
-        expect( tax ).to.eq( null );
-        done( );
-      } );
+    it( "returns null given an unknown ID", async ( ) => {
+      const tax = await Taxon.findByID( 55555 );
+      expect( tax ).to.eq( null );
     } );
   } );
 

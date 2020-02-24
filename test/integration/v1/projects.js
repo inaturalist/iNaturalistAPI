@@ -59,7 +59,6 @@ describe( "Projects Routes", ( ) => {
       }
       request( app ).get( `/v1/projects/${ids.join( "," )}` )
         .expect( res => {
-          expect( res.body.error ).to.eq( "Too many IDs" );
           expect( res.body.status ).to.eq( 422 );
         } ).expect( "Content-Type", /json/ )
         .expect( 422, done );
@@ -111,7 +110,6 @@ describe( "Projects Routes", ( ) => {
     it( "returns an error given an unknown project ID", done => {
       request( app ).get( "/v1/projects/888/members" )
         .expect( res => {
-          expect( res.body.error ).to.eq( "Unknown project_id" );
           expect( res.body.status ).to.eq( 422 );
         } ).expect( "Content-Type", /json/ )
         .expect( 422, done );

@@ -2,23 +2,21 @@ const inaturalistjs = require( "inaturalistjs" );
 const Taxon = require( "../lib/models/taxon" );
 const testHelper = require( "../lib/test_helper" );
 
-before( function ( done ) {
+before( async function ( ) {
   this.timeout( 10000 );
-  testHelper.createIndices( ( ) => {
-    testHelper.loadElasticsearchFixtures( done );
-  } );
+  await testHelper.createIndices( );
+  await testHelper.loadElasticsearchFixtures( );
 } );
 
-before( function ( done ) {
+before( async function ( ) {
   this.timeout( 10000 );
-  testHelper.loadPostgresqlFixtures( ( ) => {
-    Taxon.loadIconicTaxa( done );
-  } );
+  await testHelper.loadPostgresqlFixtures( );
+  await Taxon.loadIconicTaxa( );
 } );
 
-after( function ( done ) {
+after( async function ( ) {
   this.timeout( 10000 );
-  testHelper.deleteIndices( done );
+  await testHelper.deleteIndices( );
 } );
 
 beforeEach( ( ) => {

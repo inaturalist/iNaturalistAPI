@@ -18,7 +18,6 @@ describe( "ControlledTerms", ( ) => {
     it( "requires a taxon_id param", done => {
       request( app ).get( "/v1/controlled_terms/for_taxon" )
         .expect( res => {
-          expect( res.body.error ).to.eq( "Missing required parameter `taxon_id`" );
           expect( res.body.status ).to.eq( 422 );
         } ).expect( "Content-Type", /json/ )
         .expect( 422, done );
