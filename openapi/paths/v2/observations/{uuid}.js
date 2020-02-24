@@ -4,9 +4,8 @@ const observationsController = require( "../../../../lib/controllers/v2/observat
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    observationsController.show( req, ( err, results ) => {
-      sendWrapper( req, res, err, results );
-    } );
+    const results = await observationsController.show( req );
+    sendWrapper( req, res, null, results );
   }
 
   GET.apiDoc = {

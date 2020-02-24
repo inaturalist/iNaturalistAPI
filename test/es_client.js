@@ -11,33 +11,29 @@ describe( "esClient", ( ) => {
   } );
 
   describe( "search", ( ) => {
-    it( "can specify source fields to return", done => {
-      esClient.search( "taxa", {
+    it( "can specify source fields to return", async ( ) => {
+      const results = await esClient.search( "taxa", {
         body: {
           query: { bool: { must: { term: { id: 9898 } } } },
           _source: ["id"]
         },
         size: 1
-      }, ( err, results ) => {
-        expect( results.hits.total.value ).to.eql( 1 );
-        expect( results.hits.hits[0]._source.id ).to.eql( 9898 );
-        expect( results.hits.hits[0]._source.name ).to.be.undefined;
-        done( );
       } );
+      expect( results.hits.total.value ).to.eql( 1 );
+      expect( results.hits.hits[0]._source.id ).to.eql( 9898 );
+      expect( results.hits.hits[0]._source.name ).to.be.undefined;
     } );
 
-    it( "can choose not to return source", done => {
-      esClient.search( "taxa", {
+    it( "can choose not to return source", async ( ) => {
+      const results = await esClient.search( "taxa", {
         body: {
           query: { bool: { must: { term: { id: 9898 } } } },
           _source: false
         },
         size: 1
-      }, ( err, results ) => {
-        expect( results.hits.total.value ).to.eql( 1 );
-        expect( results.hits.hits[0]._source ).to.be.undefined;
-        done( );
       } );
+      expect( results.hits.total.value ).to.eql( 1 );
+      expect( results.hits.hits[0]._source ).to.be.undefined;
     } );
   } );
 

@@ -6,9 +6,8 @@ const UsersController = require( "../../../../lib/controllers/v1/users_controlle
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    UsersController.show( req, ( err, results ) => {
-      sendWrapper( req, res, err, results );
-    } );
+    const results = await UsersController.show( req );
+    sendWrapper( req, res, null, results );
   }
 
   GET.apiDoc = {

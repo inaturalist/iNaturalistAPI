@@ -4,26 +4,26 @@ const testHelper = require( "../lib/test_helper" );
 const pgClient = require( "../lib/pg_client" );
 const util = require( "../lib/util" );
 
-before( function ( done ) {
+before( async function ( ) {
   this.timeout( 10000 );
-  testHelper.createIndices( ( ) => {
-    testHelper.loadElasticsearchFixtures( done );
-  } );
+  await testHelper.createIndices( );
+  await testHelper.loadElasticsearchFixtures( );
 } );
 
-before( function ( done ) {
+before( async function ( ) {
   this.timeout( 10000 );
-  pgClient.connect( err => {
-    if ( err ) { util.debug( err ); }
-    testHelper.loadPostgresqlFixtures( ( ) => {
-      Taxon.loadIconicTaxa( done );
-    } );
-  } );
+  try {
+    await pgClient.connect( );
+    await testHelper.loadPostgresqlFixtures( );
+    await Taxon.loadIconicTaxa( );
+  } catch ( e ) {
+    console.error( e );
+  }
 } );
 
-after( function ( done ) {
+after( async function ( ) {
   this.timeout( 10000 );
-  testHelper.deleteIndices( done );
+  await testHelper.deleteIndices( );
 } );
 
 beforeEach( ( ) => {
