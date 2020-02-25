@@ -1,5 +1,9 @@
-const { expect } = require( "chai" );
+const chai = require( "chai" );
+const chaiAsPromised = require( "chai-as-promised" );
 const pgClient = require( "../lib/pg_client" );
+
+const { expect } = chai;
+chai.use( chaiAsPromised );
 
 describe( "pgClient", ( ) => {
   describe( "connect", ( ) => {
@@ -7,34 +11,23 @@ describe( "pgClient", ( ) => {
       process.env.NODE_ENV = "test";
     } );
 
-    it( "fails if it can't connect", ( ) => {
+    it( "fails if it can't connect", async ( ) => {
       process.env.NODE_ENV = "nonsense";
       pgClient.connection = null;
-      pgClient.connect( ( err, connection ) => {
-        expect( err ).not.to.be.null;
-        expect( connection ).to.be.undefined;
-      } );
+      await expect( pgClient.connect( ) ).to.be.rejectedWith( Error );
     } );
 
-    it( "uses the test database", done => {
-      pgClient.connect( ( err, connection ) => {
-        expect( err ).to.be.null;
-        expect( connection.database ).to.eq( "inaturalist_test" );
-        done( );
-      } );
+    it( "uses the test database", async ( ) => {
+      const connection = await pgClient.connect( );
+      expect( connection.database ).to.eq( "inaturalist_test" );
     } );
 
-    it( "returns the open connection", done => {
-      pgClient.connect( ( err, connection1 ) => {
-        expect( err ).to.be.null;
-        expect( connection1.processID ).to.not.be.undefined;
-        pgClient.connect( ( errr, connection2 ) => {
-          expect( err ).to.be.null;
-          expect( connection1.processID ).to.eq( connection2.processID );
-          expect( connection1 ).to.eq( connection2 );
-          done( );
-        } );
-      } );
+    it( "returns the open connection", async ( ) => {
+      const connection1 = await pgClient.connect( );
+      expect( connection1.processID ).to.not.be.undefined;
+      const connection2 = await pgClient.connect( );
+      expect( connection1.processID ).to.eq( connection2.processID );
+      expect( connection1 ).to.eq( connection2 );
     } );
   } );
 } );

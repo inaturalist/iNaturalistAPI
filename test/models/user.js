@@ -3,34 +3,26 @@ const User = require( "../../lib/models/user" );
 
 describe( "User", ( ) => {
   describe( "findByLogin", ( ) => {
-    it( "returns a user given an login", done => {
-      User.findByLogin( "a-user", ( err, u ) => {
-        expect( u.id ).to.eq( 123 );
-        expect( u.login ).to.eq( "a-user" );
-        done( );
-      } );
+    it( "returns a user given an login", async ( ) => {
+      const u = await User.findByLogin( "a-user" );
+      expect( u.id ).to.eq( 123 );
+      expect( u.login ).to.eq( "a-user" );
     } );
 
-    it( "returns a user from the cache", done => {
-      User.findByLogin( "a-user", ( err, u ) => {
-        expect( u.id ).to.eq( 123 );
-        expect( u.login ).to.eq( "a-user" );
-        done( );
-      } );
+    it( "returns a user from the cache", async ( ) => {
+      const u = await User.findByLogin( "a-user" );
+      expect( u.id ).to.eq( 123 );
+      expect( u.login ).to.eq( "a-user" );
     } );
 
-    it( "returns undefined for missing users", done => {
-      User.findByLogin( "nonsense", ( err, u ) => {
-        expect( u ).to.be.undefined;
-        done( );
-      } );
+    it( "returns undefined for missing users", async ( ) => {
+      const u = await User.findByLogin( "nonsense" );
+      expect( u ).to.be.null;
     } );
 
-    it( "returns nothing given nothing", done => {
-      User.findByLogin( undefined, ( err, u ) => {
-        expect( u ).to.be.undefined;
-        done( );
-      } );
+    it( "returns nothing given nothing", async ( ) => {
+      const u = await User.findByLogin( undefined );
+      expect( u ).to.be.null;
     } );
   } );
 
@@ -84,38 +76,26 @@ describe( "User", ( ) => {
   } );
 
   describe( "findByLoginOrID", ( ) => {
-    it( "should not error if given an unknown login", done => {
-      User.findByLoginOrID( "nobody", ( err, u ) => {
-        expect( err ).to.eq( null );
-        expect( u ).to.eq( false );
-        done( );
-      } );
+    it( "should not error if given an unknown login", async ( ) => {
+      const u = await User.findByLoginOrID( "nobody" );
+      expect( u ).to.be.null;
     } );
 
-    it( "should not error if given an unknown ID", done => {
-      User.findByLoginOrID( 123456789, ( err, u ) => {
-        expect( err ).to.eq( null );
-        expect( u ).to.eq( false );
-        done( );
-      } );
+    it( "should not error if given an unknown ID", async ( ) => {
+      const u = await User.findByLoginOrID( 123456789 );
+      expect( u ).to.be.null;
     } );
 
-    it( "returns a user given an ID", done => {
-      User.findByLoginOrID( 1, ( err, u ) => {
-        expect( err ).to.eq( null );
-        expect( u.id ).to.eq( 1 );
-        expect( u.login ).to.eq( "userlogin" );
-        done( );
-      } );
+    it( "returns a user given an ID", async ( ) => {
+      const u = await User.findByLoginOrID( 1 );
+      expect( u.id ).to.eq( 1 );
+      expect( u.login ).to.eq( "userlogin" );
     } );
 
-    it( "returns a user given a login", done => {
-      User.findByLoginOrID( "userlogin", ( err, u ) => {
-        expect( err ).to.eq( null );
-        expect( u.id ).to.eq( 1 );
-        expect( u.login ).to.eq( "userlogin" );
-        done( );
-      } );
+    it( "returns a user given a login", async ( ) => {
+      const u = await User.findByLoginOrID( "userlogin" );
+      expect( u.id ).to.eq( 1 );
+      expect( u.login ).to.eq( "userlogin" );
     } );
   } );
 } );

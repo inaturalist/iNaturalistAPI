@@ -6,4 +6,16 @@ describe( "PostsController", ( ) => {
   it( "fetches posts for_user", done => {
     testHelper.testInatJSNoPreload( PostsController, posts, "for_user", done );
   } );
+
+  it( "creates", done => {
+    testHelper.testInatJSNoPreload( PostsController, posts, "create", done );
+  } );
+
+  it( "updates", done => {
+    testHelper.testInatJSNoPreload( PostsController, posts, "update", done );
+  } );
+
+  it( "deletes", done => {
+    testHelper.testInatJSNoPreload( PostsController, posts, "delete", done );
+  } );
 } );

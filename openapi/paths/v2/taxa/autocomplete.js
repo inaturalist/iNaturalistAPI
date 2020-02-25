@@ -6,9 +6,8 @@ const TaxaController = require( "../../../../lib/controllers/v1/taxa_controller"
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    TaxaController.autocomplete( req, ( err, results ) => {
-      sendWrapper( req, res, err, results );
-    } );
+    const results = await TaxaController.autocomplete( req );
+    sendWrapper( req, res, null, results );
   }
 
   GET.apiDoc = {

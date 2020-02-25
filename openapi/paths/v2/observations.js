@@ -17,9 +17,8 @@ module.exports = sendWrapper => {
       req.originalQuery = req.query;
       req.query = _.mapValues( req.body, v => v.toString( ) );
     }
-    ObservationsController.search( req, ( err, results ) => {
-      sendWrapper( req, res, err, results );
-    } );
+    const results = await ObservationsController.search( req );
+    sendWrapper( req, res, null, results );
   }
 
   GET.apiDoc = {
@@ -46,9 +45,8 @@ module.exports = sendWrapper => {
   };
 
   async function POST( req, res ) {
-    ObservationsController.show( { params: { id: "1000000" }, query: { } }, ( err, results ) => {
-      sendWrapper( req, res, err, results );
-    } );
+    const results = await ObservationsController.show( { params: { id: "1000000" }, query: { } } );
+    sendWrapper( req, res, null, results );
   }
 
   POST.apiDoc = {
