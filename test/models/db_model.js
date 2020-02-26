@@ -1,73 +1,56 @@
-const { expect } = require( "chai" );
+const chai = require( "chai" );
+const chaiAsPromised = require( "chai-as-promised" );
 const Identification = require( "../../lib/models/identification" );
 const User = require( "../../lib/models/user" );
 const DBModel = require( "../../lib/models/db_model" );
 
+const { expect } = chai;
+chai.use( chaiAsPromised );
+
 describe( "DBModel", ( ) => {
   describe( "fetchBelongsTo", ( ) => {
-    it( "fetches belongs to associations with ids", done => {
+    it( "fetches belongs to associations with ids", async ( ) => {
       const o = { user_id: 123 };
-      DBModel.fetchBelongsTo( [o], User, ( ) => {
-        expect( o.user ).to.not.be.undefined;
-        expect( o.user.id ).to.eq( 123 );
-        expect( o.user_id ).to.eq( 123 );
-        done( );
-      } );
+      await DBModel.fetchBelongsTo( [o], User );
+      expect( o.user ).to.not.be.undefined;
+      expect( o.user.id ).to.eq( 123 );
+      expect( o.user_id ).to.eq( 123 );
     } );
 
-    it( "fetches belongs to associations with objects", done => {
+    it( "fetches belongs to associations with objects", async ( ) => {
       const o = { user: { id: 123, existingData: "something" } };
-      DBModel.fetchBelongsTo( [o], User, ( ) => {
-        expect( o.user ).to.not.be.undefined;
-        expect( o.user.id ).to.eq( 123 );
-        expect( o.user.existingData ).to.eq( "something" );
-        expect( o.user_id ).to.be.undefined;
-        done( );
-      } );
+      await DBModel.fetchBelongsTo( [o], User );
+      expect( o.user ).to.not.be.undefined;
+      expect( o.user.id ).to.eq( 123 );
+      expect( o.user.existingData ).to.eq( "something" );
+      expect( o.user_id ).to.be.undefined;
     } );
 
-    it( "returns postgresql errors", done => {
+    it( "returns postgresql errors", async ( ) => {
       const o = { user_id: "not an integer" };
-      DBModel.fetchBelongsTo( [o], User, err => {
-        expect( err.message ).to.eq(
-          "invalid input syntax for integer: \"not an integer\""
-        );
-        done( );
-      } );
+      await expect( DBModel.fetchBelongsTo( [o], User ) ).to.be.rejectedWith( Error );
     } );
   } );
 
   describe( "fetchHasMany", ( ) => {
-    it( "does nothing if there are no objects", done => {
-      DBModel.fetchHasMany( [], User, "observation_id", { }, err => {
-        expect( err ).to.be.undefined;
-        done( );
-      } );
+    it( "does nothing if there are no objects", async ( ) => {
+      await DBModel.fetchHasMany( [], User, "observation_id" );
     } );
 
-    it( "does nothing if there are no valid IDs", done => {
-      DBModel.fetchHasMany( [{ id: null }], Identification, "observation_id", { }, err => {
-        expect( err ).to.be.undefined;
-        done( );
-      } );
+    it( "does nothing if there are no valid IDs", async ( ) => {
+      await DBModel.fetchHasMany( [{ id: null }], Identification, "observation_id" );
     } );
 
-    it( "fetches has many associations", done => {
+    it( "fetches has many associations", async ( ) => {
       const o = { id: 1 };
-      DBModel.fetchHasMany( [o], Identification, "observation_id", { }, ( ) => {
-        expect( o.identifications.length ).to.eq( 2 );
-        done( );
-      } );
+      await DBModel.fetchHasMany( [o], Identification, "observation_id" );
+      expect( o.identifications.length ).to.eq( 2 );
     } );
 
-    it( "postgresql errors", done => {
+    it( "postgresql errors", async ( ) => {
       const o = { id: "not an integer" };
-      DBModel.fetchHasMany( [o], Identification, "observation_id", { }, err => {
-        expect( err.message ).to.eq(
-          "invalid input syntax for integer: \"not an integer\""
-        );
-        done( );
-      } );
+      await expect( DBModel.fetchHasMany( [o], Identification, "observation_id" ) )
+        .to.be.rejectedWith( Error );
     } );
   } );
 } );

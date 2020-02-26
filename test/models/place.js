@@ -1,6 +1,10 @@
-const { expect } = require( "chai" );
+const chai = require( "chai" );
+const chaiAsPromised = require( "chai-as-promised" );
 const _ = require( "lodash" );
 const Place = require( "../../lib/models/place" );
+
+const { expect } = chai;
+chai.use( chaiAsPromised );
 
 describe( "Place", ( ) => {
   describe( "constructor", ( ) => {
@@ -12,46 +16,36 @@ describe( "Place", ( ) => {
   } );
 
   describe( "findByID", ( ) => {
-    it( "returns a place given an ID", done => {
-      Place.findByID( 123, ( err, p ) => {
-        expect( p.id ).to.eq( 123 );
-        expect( p.name ).to.eq( "itsname" );
-        done( );
-      } );
+    it( "returns a place given an ID", async ( ) => {
+      const p = await Place.findByID( 123 );
+      expect( p.id ).to.eq( 123 );
+      expect( p.name ).to.eq( "itsname" );
     } );
 
-    it( "returns a place from the cache", done => {
-      Place.findByID( 123, ( err, p ) => {
-        expect( p.id ).to.eq( 123 );
-        expect( p.name ).to.eq( "itsname" );
-        done( );
-      } );
+    it( "returns a place from the cache", async ( ) => {
+      const p = await Place.findByID( 123 );
+      expect( p.id ).to.eq( 123 );
+      expect( p.name ).to.eq( "itsname" );
     } );
 
-    it( "returns an error given a bad ID", done => {
-      Place.findByID( "notanint", err => {
-        expect( err ).to.deep.eq( { messsage: "invalid place_id", status: 422 } );
-        done( );
-      } );
+    it( "returns an error given a bad ID", async ( ) => {
+      await expect( Place.findByID( "notanint" ) ).to.be.rejectedWith( Error );
     } );
 
-    it( "returns null given an unknown ID", done => {
-      Place.findByID( 5, ( err, p ) => {
-        expect( err ).to.eq( null );
-        expect( p ).to.eq( false );
-        done( );
-      } );
+    it( "returns null given an unknown ID", async ( ) => {
+      const p = await Place.findByID( 5 );
+      expect( p ).to.eq( null );
     } );
   } );
 
   describe( "assignToObject", ( ) => {
     it( "assigns place instances to objects", done => {
       const o = { 1: { }, 123: { }, 432: { } };
-      Place.assignToObject( o, ( err, withPlaces ) => {
-        expect( _.keys( withPlaces ) ).to.deep.eq( ["1", "123", "432"] );
-        expect( withPlaces["1"].display_name ).to.be.undefined;
-        expect( withPlaces["123"].display_name ).to.be.undefined;
-        expect( withPlaces["432"].display_name ).to.eq( "a-place" );
+      Place.assignToObject( o ).then( ( ) => {
+        expect( _.keys( o ) ).to.deep.eq( ["1", "123", "432"] );
+        expect( o["1"].display_name ).to.be.undefined;
+        expect( o["123"].display_name ).to.be.undefined;
+        expect( o["432"].display_name ).to.eq( "a-place" );
         done( );
       } );
     } );

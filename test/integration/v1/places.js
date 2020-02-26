@@ -66,7 +66,7 @@ describe( "Places", ( ) => {
       }
       request( app ).get( `/v1/places/${ids.join( "," )}` )
         .expect( res => {
-          expect( res.body.error ).to.eq( "Too many IDs" );
+          expect( res.body.error ).to.eq( "Unprocessable Entity" );
           expect( res.body.status ).to.eq( 422 );
         } ).expect( "Content-Type", /json/ )
         .expect( 422, done );

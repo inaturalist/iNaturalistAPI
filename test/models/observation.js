@@ -1,7 +1,11 @@
-const { expect } = require( "chai" );
+const chai = require( "chai" );
+const chaiAsPromised = require( "chai-as-promised" );
 const sinon = require( "sinon" );
 const _ = require( "lodash" );
 const Observation = require( "../../lib/models/observation" );
+
+const { expect } = chai;
+chai.use( chaiAsPromised );
 
 describe( "Observation", ( ) => {
   describe( "removeUnviewableComments", ( ) => {
@@ -61,14 +65,11 @@ describe( "Observation", ( ) => {
   } );
 
   describe( "preloadAllAssociations", ( ) => {
-    it( "returns preload errors", done => {
+    it( "returns preload errors", async ( ) => {
       const stub = sinon.stub( Observation, "preloadAnnotationControlledTerms" )
-        .callsFake( ( p, cb ) => cb( "terms-error" ) );
-      Observation.preloadAllAssociations( [], null, e => {
-        expect( e ).to.eq( "terms-error" );
-        stub.restore( );
-        done( );
-      } );
+        .callsFake( ( ) => { throw new Error( "terms-error" ); } );
+      await expect( Observation.preloadAllAssociations( [], null ) ).to.be.rejectedWith( Error );
+      stub.restore( );
     } );
   } );
 } );
