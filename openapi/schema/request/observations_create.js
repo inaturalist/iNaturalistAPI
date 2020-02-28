@@ -1,12 +1,7 @@
 const Joi = require( "@hapi/joi" );
 
 module.exports = Joi.object( ).keys( {
-  fields: Joi.object( ).keys( {
-    private_geojson: Joi.object( ).keys( {
-      coordinates: Joi.boolean( )
-    } ),
-    private_location: Joi.boolean( )
-  } ),
+  fields: Joi.any( ),
   observation: Joi.object( )
   // observation: Joi.object( ).keys( {
   //   species_guess: Joi.string( )

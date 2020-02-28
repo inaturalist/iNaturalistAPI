@@ -68,7 +68,7 @@ module.exports = sendWrapper => {
           schema: j2s( observationsCreateSchema ).swagger
         },
         "application/json": {
-          schema: j2s( observationsSearchSchema ).swagger
+          schema: j2s( observationsCreateSchema ).swagger
         }
       }
     },

@@ -32,7 +32,6 @@ const main = ( ) => {
 
   app.use( bodyParser.json( {
     type: req => {
-      console.log( "[DEBUG] bodyParser middleware, req.headers[content-type]: ", req.headers["content-type"] );
       // Parse the request body for everything other than multipart requests,
       // which should specify body data as plain old form data which express can
       // parse on its own.
@@ -224,7 +223,6 @@ const main = ( ) => {
         if ( validation.errors ) {
           const errorList = Array.from( validation.errors ).map( e => e.message ).join( "," );
           validationMessage = `Invalid response for status code ${res.statusCode}: ${errorList}`;
-          console.warn( ["validationMessage", validationMessage] );
           // Set to avoid a loop, and to provide the original status code
           res.set( "x-express-openapi-validation-error-for", res.statusCode.toString( ) );
         }
@@ -300,8 +298,9 @@ const main = ( ) => {
           enableObjectCoercion: true
         } );
         coercer.coerce( req );
-
-        const uploadMiddleware = upload.fields( _.map( knownUploadFields, f => ( { name: f } ) ) );
+        const uploadMiddleware = upload.fields(
+          _.map( knownUploadFields, f => ( { name: f } ) )
+        );
         uploadMiddleware( req, res, ( ) => {
           const originalBody = _.cloneDeep( req.body );
           const newBody = { };

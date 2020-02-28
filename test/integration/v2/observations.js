@@ -66,9 +66,6 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "create", ( ) => {
-    // IDK why this fails. For some reason the request body is invalid, despite
-    // many attempts to make it valid or to change the validation to accommodate
-    // it ~~kueda 2020-01-16
     it( "returns private coordinates when geoprivacy is private", done => {
       const o = fixtures.elasticsearch.observations.observation[5];
       expect( o.geoprivacy ).to.eq( "private" );
