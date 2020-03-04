@@ -84,13 +84,7 @@ describe( "InaturalistMapServer", ( ) => {
       } );
     } );
 
-    it( "defaults to captive=false", done => {
-      stubReq.params.style = "summary";
-      MapServer.prepareQuery( stubReq, ( ) => {
-        expect( stubReq.query.captive ).to.eql( "false" );
-        done( );
-      } );
-    } );
+
     it( "allows captive=true", done => {
       stubReq.params.style = "summary";
       stubReq.query.captive = "true";
@@ -99,6 +93,7 @@ describe( "InaturalistMapServer", ( ) => {
         done( );
       } );
     } );
+
     it( "allows captive=any", done => {
       stubReq.params.style = "summary";
       stubReq.query.captive = "any";
