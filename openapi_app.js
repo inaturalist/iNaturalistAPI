@@ -304,6 +304,8 @@ const main = ( ) => {
         uploadMiddleware( req, res, ( ) => {
           const originalBody = _.cloneDeep( req.body );
           const newBody = { };
+
+          // I think this is just removing blank strings?!
           _.each( originalBody, ( v, k ) => {
             if ( _.isObject( v ) ) {
               newBody[k] = { };
@@ -316,6 +318,13 @@ const main = ( ) => {
               newBody[k] = v;
             }
           } );
+
+          // multer puts files in a `files` attribute, but we need them in the
+          // body
+          _.each( knownUploadFields, f => {
+            newBody[f] = req.files[f];
+          } );
+
           req.body = newBody;
           coercer.coerce( req );
           next( );
@@ -325,18 +334,26 @@ const main = ( ) => {
     // this needs all 4 parameters even if next is not used
     /* eslint-disable-next-line no-unused-vars */
     errorMiddleware: ( err, req, res, next ) => {
+      const status = err.status || ( err.response && err.response.status );
       if ( err.errorCode === "authentication.openapi.security" ) {
-        res.status( err.status || 401 ).json( {
-          status: err.status || 401,
+        res.status( status || 401 ).json( {
+          status: status || 401,
           message: "Unauthorized"
         } );
         return;
       }
+      // Rails will often return errors with a json body. Is there a good way to
+      // incorporate that into the response here?
+      // if ( err.response ) {
+      //   err.response.json( ).then( json => {
+      //     console.log( "[DEBUG] json: ", json );
+      //   } );
+      // }
       console.log( "Error trace from errorMiddleware ------->" );
       console.trace( err );
-      res.status( err.status || 500 ).json( err instanceof Error
+      res.status( status || 500 ).json( err instanceof Error
         ? {
-          status: err.status || 500,
+          status: status || 500,
           message: err.message,
           // TODO Remove in production, right?
           stack: err.stack.split( "\n" ),

@@ -7,6 +7,7 @@ const geojson = require( "./geo_json" );
 const identification = require( "./identification" );
 const observationFieldValue = require( "./observation_field_value" );
 const photo = require( "./photo" );
+const observationPhoto = require( "./observation_photo" );
 const project = require( "./project" );
 const qualityMetric = require( "./quality_metric" );
 const sound = require( "./sound" );
@@ -58,12 +59,7 @@ module.exports = Joi.object( ).keys( {
   num_identification_disagreements: Joi.number( ).integer( ),
   oauth_application_id: Joi.number( ).integer( ).valid( null ),
   obscured: Joi.boolean( ),
-  observation_photos: Joi.array( ).items( Joi.object( ).keys( {
-    id: Joi.number( ).integer( ).description( "Unique auto-increment integer identifier." ),
-    photo,
-    position: Joi.number( ).integer( ),
-    uuid: Joi.string( ).guid( { version: "uuidv4" } )
-  } ).unknown( false ) ),
+  observation_photos: Joi.array( ).items( observationPhoto ),
   observed_on: Joi.string( ).valid( null ),
   observed_on_details: dateDetails,
   observed_on_string: Joi.string( ).valid( null ),
