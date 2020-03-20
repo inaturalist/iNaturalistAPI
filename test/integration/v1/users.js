@@ -144,4 +144,33 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "mute", ( ) => {
+    const currentUser = fixtures.elasticsearch.users.user[0];
+    const mutedUser = fixtures.elasticsearch.users.user[1];
+    const token = jwt.sign( { user_id: currentUser.id }, config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+    describe( "post", ( ) => {
+      it( "succeeds", done => {
+        nock( "http://localhost:3000" )
+          .post( `/users/${mutedUser.id}/mute` )
+          .reply( 200 );
+        request( app )
+          .post( `/v1/users/${mutedUser.id}/mute` )
+          .set( "Authorization", token )
+          .expect( 200, done );
+      } );
+    } );
+    describe( "delete", ( ) => {
+      it( "succeeds", done => {
+        nock( "http://localhost:3000" )
+          .delete( `/users/${mutedUser.id}/mute` )
+          .reply( 200 );
+        request( app )
+          .delete( `/v1/users/${mutedUser.id}/mute` )
+          .set( "Authorization", token )
+          .expect( 200, done );
+      } );
+    } );
+  } );
 } );
