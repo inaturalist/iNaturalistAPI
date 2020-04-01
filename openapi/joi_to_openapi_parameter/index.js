@@ -89,9 +89,15 @@ const convert = joiSchema => {
       throw new TypeError( `${type} is not a Joi type recognized by parameterize.` );
   }
 
-  const inPath = _.find( joiSchema._meta, m => m.in && m.in === "path" );
+  const metaIns = _.compact( _.map( joiSchema._meta, m => m.in ) );
+  let metaIn = "query";
+  if ( metaIns.indexOf( "path" ) >= 0 ) {
+    metaIn = "path";
+  } else if ( metaIns.indexOf( "header" ) >= 0 ) {
+    metaIn = "header";
+  }
   const baseDefinition = {
-    in: inPath ? "path" : "query",
+    in: metaIn,
     schema,
     ...universalDecorator( joiSchema ),
     ...arrayDecorator( joiSchema )

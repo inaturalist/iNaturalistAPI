@@ -9,7 +9,7 @@ const crypto = require( "crypto" );
 const jwt = require( "jsonwebtoken" );
 const openapiCoercer = require( "openapi-request-coercer" );
 const config = require( "./config" );
-const v1ApiDoc = require( "./openapi/doc" );
+const v2ApiDoc = require( "./openapi/doc" );
 const util = require( "./lib/util" );
 const Logstasher = require( "./lib/logstasher" );
 
@@ -54,19 +54,41 @@ const main = ( ) => {
   // an observation, but if you set the X-HTTP-Method-Override to GET and POST
   // to /observations, you could instead send a complicated query object to
   // retrieve records (see requestFields below)
+  //
+  // Note that this requires that a GET or a POST definition for an endpoint
+  // defines a X-HTTP-Method-Override param in the header.
+  //
+  // When you POST, the presumption is that the URL has no query and will match
+  // the URL pattern exactly
   app.use( ( req, res, next ) => {
     const methodOverride = req.header( "X-HTTP-Method-Override" );
     if ( req.method === "POST" && methodOverride === "GET" && initializedApi ) {
       const basePath = initializedApi.basePaths[0].path;
       const basePathRegex = new RegExp( `^${_.escapeRegExp( basePath )}` );
       const apiPath = req.path.replace( basePathRegex, "" );
-      const apiMethod = initializedApi.apiDoc.paths[apiPath];
-      if ( apiMethod && apiMethod.post ) {
-        const allowsOverride = _.find( apiMethod.post.parameters, p => (
-          p.name === "X-HTTP-Method-Override" && p.in === "header"
-        ) );
+      let apiMethod = initializedApi.apiDoc.paths[apiPath];
+      const paths = _.keys( initializedApi.apiDoc.paths );
+      for ( let i = 0; i < paths.length; i += 1 ) {
+        const knownPath = paths[i];
+        // This is admittedly crude: assumes the URL exactly matches the route pattern
+        const pathRegex = new RegExp( `^${knownPath.replace( /\{.+?\}/, ".+?" )}$` );
+        if ( pathRegex.test( apiPath ) ) {
+          apiMethod = initializedApi.apiDoc.paths[knownPath];
+          break;
+        }
+      }
+      if ( apiMethod ) {
+        let allowsOverride = false;
+        if ( apiMethod.post ) {
+          allowsOverride = _.find( apiMethod.post.parameters, p => (
+            p.name === "X-HTTP-Method-Override" && p.in === "header"
+          ) );
+        } else if ( apiMethod.get ) {
+          allowsOverride = _.find( apiMethod.get.parameters, p => (
+            p.name === "X-HTTP-Method-Override" && p.in === "header"
+          ) );
+        }
         if ( allowsOverride ) {
-          // console.log( "[DEBUG] Method-Override middleware, req.body: ", req.body );
           if ( _.isEmpty( req.body ) ) {
             const err = new Error( "X-HTTP-Method-Override requires Content-Type: application/json" );
             err.status = 422;
@@ -122,7 +144,7 @@ const main = ( ) => {
       } catch {
         // ignore parse failures
       }
-      const fieldsStringMatch = fields.match( /^[a-z_]+(,[a-z_]+)?$/ );
+      const fieldsStringMatch = fields.match( /^[a-z_]+(,[a-z_]+)*$/ );
       if ( fieldsStringMatch ) {
         return fields.split( "," );
       }
@@ -170,15 +192,22 @@ const main = ( ) => {
       fieldsToReturn = Object.assign( fieldsToReturn, fieldsRequested );
     }
     const prunedItem = { };
-    // loop through the requested fields
-    _.each( fieldsToReturn, ( v, k ) => {
-      // the root item has the field, and is in the root item definition
-      const fieldSchema = itemSchema.properties[k];
-      if ( item[k] && fieldSchema ) {
-        const propertySchema = resolveSchema( req, fieldSchema );
-        prunedItem[k] = applyFieldSelectionToItem( req, item[k], v, propertySchema );
-      }
-    } );
+    if ( fieldsToReturn.all ) {
+      _.each( itemSchema.properties, ( v, k ) => {
+        const propertySchema = resolveSchema( req, v );
+        prunedItem[k] = applyFieldSelectionToItem( req, item[k], { all: true }, propertySchema );
+      } );
+    } else {
+      // loop through the requested fields
+      _.each( fieldsToReturn, ( v, k ) => {
+        // the root item has the field, and is in the root item definition
+        const fieldSchema = itemSchema.properties[k];
+        if ( item[k] !== undefined && fieldSchema ) {
+          const propertySchema = resolveSchema( req, fieldSchema );
+          prunedItem[k] = applyFieldSelectionToItem( req, item[k], v, propertySchema );
+        }
+      } );
+    }
     return prunedItem;
   };
 
@@ -208,7 +237,9 @@ const main = ( ) => {
           const fields = requestFields( req );
           if ( fields === false ) {
             res.set( "x-express-openapi-validated", true );
-            return sendWrapper( req, res, new Error( "invalid fields parameter" ) );
+            const error = new Error( "invalid fields parameter" );
+            error.status = 422;
+            return sendWrapper( req, res, error );
           }
           if ( fields !== "all" ) {
             body.results = applyFieldSelectionToItem( req, body.results, fields, itemSchema );
@@ -257,7 +288,7 @@ const main = ( ) => {
     app,
     docPath: "api-docs",
     apiDoc: {
-      ...v1ApiDoc,
+      ...v2ApiDoc,
       "x-express-openapi-additional-middleware": [validateAllResponses],
       "x-express-openapi-validation-strict": true
     },

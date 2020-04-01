@@ -8,6 +8,8 @@ module.exports = Joi.object( ).keys( {
   id: Joi.number( ).integer( )
     .description( "Unique auto-increment integer identifier." )
     .required( ),
+  // TODO make this required when we've added taxon.uuid to the ident index
+  uuid: Joi.string( ).guid( { version: "uuidv4" } ),
   ancestors: Joi.array( ).items(
     Joi.object( ).meta( { className: "Taxon" } )
   ),

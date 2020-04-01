@@ -22,6 +22,26 @@ describe( "Observations", ( ) => {
         expect( res.body.results[0].uuid ).to.eq( fixtureObs.uuid );
       } ).expect( 200, done );
     } );
+    it( "returns the uuid and quality_grade when all fields", done => {
+      request( app ).get( `/v2/observations/${fixtureObs.uuid}?fields=all` ).expect( res => {
+        expect( res.body.results[0].uuid ).to.eq( fixtureObs.uuid );
+        expect( res.body.results[0].quality_grade ).to.eq( fixtureObs.quality_grade );
+      } ).expect( 200, done );
+    } );
+    it( "returns the user name and login when requesting all user fields", done => {
+      request( app )
+        .post( `/v2/observations/${fixtureObs.uuid}` )
+        .set( "Content-Type", "application/json" )
+        .send( {
+          fields: { user: "all" }
+        } )
+        .set( "X-HTTP-Method-Override", "GET" )
+        .expect( res => {
+          expect( res.body.results[0].user.login ).to.eq( fixtureObs.user.login );
+          expect( res.body.results[0].user.name ).to.eq( fixtureObs.user.name );
+        } )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "search", ( ) => {

@@ -4,6 +4,8 @@ module.exports = Joi.object( ).keys( {
   id: Joi.number( ).integer( )
     .description( "Unique auto-increment integer identifier." )
     .required( ),
+  // TODO make this required when we've added taxon.uuid to the ident index
+  uuid: Joi.string( ).guid( { version: "uuidv4" } ),
   activity_count: Joi.number( ).integer( ),
   created_at: Joi.string( ),
   icon: Joi.string( ).valid( null ),

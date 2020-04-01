@@ -1,9 +1,12 @@
 const Joi = require( "@hapi/joi" );
 
 module.exports = Joi.object( ).keys( {
-  acc: Joi.boolean( ),
-  captive: Joi.boolean( ),
-  endemic: Joi.boolean( ),
+  acc: Joi.boolean( )
+    .description( "Filter by whether `positional_accuracy` is set or not" ),
+  captive: Joi.boolean( )
+    .description( "Filter by captive / cultivated status" ),
+  endemic: Joi.boolean( )
+    .description( "Filter by whether the observation is in a place with a check list entry indicating the establishment means is `endemic`" ),
   geo: Joi.boolean( ),
   id_please: Joi.boolean( ),
   identified: Joi.boolean( ),
@@ -16,10 +19,12 @@ module.exports = Joi.object( ).keys( {
   popular: Joi.boolean( ),
   sounds: Joi.boolean( ),
   taxon_is_active: Joi.boolean( ),
-  threatened: Joi.boolean( ),
-  verifiable: Joi.boolean( ),
-  id: Joi.array( ).items( Joi.number( ).integer( ) ),
-  not_id: Joi.array( ).items( Joi.number( ).integer( ) ),
+  threatened: Joi.boolean( )
+    .description( "Filter by whether the observed taxon has a conservation status of \"threatened\" or worse" ),
+  verifiable: Joi.boolean( )
+    .description( "Filter by whether observations are 'verifiable' (have quality grades `research` or `needs_id`)" ),
+  id: Joi.array( ).items( Joi.string( ).guid( ) ),
+  not_id: Joi.array( ).items( Joi.string( ).guid( ) ),
   license: Joi.array( ).items( Joi.string( ).valid(
     "cc-by",
     "cc-by-nc",
@@ -38,7 +43,7 @@ module.exports = Joi.object( ).keys( {
     "cc-by-nc-sa",
     "cc0"
   ) ),
-  place_id: Joi.array( ).items( Joi.number( ).integer( ) ),
+  place_id: Joi.array( ).items( Joi.string( ).guid( ) ),
   project_id: Joi.array( ).items( Joi.number( ).integer( ) ),
   rank: Joi.array( ).items( Joi.string( ).valid(
     "kingdom",
@@ -76,8 +81,8 @@ module.exports = Joi.object( ).keys( {
     "cc-by-nc-sa",
     "cc0"
   ) ),
-  taxon_id: Joi.array( ).items( Joi.number( ).integer( ) ),
-  without_taxon_id: Joi.array( ).items( Joi.number( ).integer( ) ),
+  taxon_id: Joi.array( ).items( Joi.string( ).guid( ) ),
+  without_taxon_id: Joi.array( ).items( Joi.string( ).guid( ) ),
   taxon_name: Joi.string( ),
   user_id: Joi.array( ).items( Joi.string( ) ),
   user_login: Joi.array( ).items( Joi.string( ) ),

@@ -136,6 +136,7 @@
       "identification": [
         {
           "id": 102,
+          "uuid": "a74986ff-ebcb-4646-bc6e-f26d191df10b",
           "user": {
             "id": 123
            },
@@ -145,6 +146,7 @@
           "current_taxon": true,
           "taxon": {
             "id": 5,
+            "uuid": "e6c0f90f-8527-4b56-a552-fe2273b61ec4",
             "min_species_taxon_id": 5,
             "is_active": true,
             "iconic_taxon_id": 1,
@@ -169,6 +171,7 @@
         },
         {
           "id": 103,
+          "uuid": "928f56be-4c01-459c-ae3a-804dfc8407f1",
           "user": {
             "id": 5
            },
@@ -178,6 +181,7 @@
           "current_taxon": false,
           "taxon": {
             "id": 5,
+            "uuid": "df5717a6-4690-4240-8411-a18e447db81c",
             "min_species_taxon_id": 5,
             "iconic_taxon_id": 101,
             "ancestor_ids": [1,2,3,4,5],
@@ -217,6 +221,7 @@
         },
         {
           "id": 105,
+          "uuid": "9ea80970-afe8-4575-bd61-e9395c768b85",
           "user": {
             "id": 1234
            },
@@ -226,6 +231,7 @@
           "current_taxon": true,
           "taxon": {
             "id": 5,
+            "uuid": "1b945e4b-c9f4-4fd2-a149-36e05d338c80",
             "min_species_taxon_id": 5,
             "is_active": true,
             "iconic_taxon_id": 1,
@@ -254,6 +260,7 @@
         },
         {
           "id": 121,
+          "uuid": "6351abcb-8ed4-4b7d-84ff-066ece491338",
           "current": true,
           "observation": {
             "id": 12,
@@ -332,7 +339,11 @@
         {
           "id": 1,
           "uuid": "cabbd853-39c0-429c-86f1-b36063d3d475",
-          "user": { "id": 123 },
+          "user": {
+            "id": 123,
+            "login": "a-user",
+            "name": "A User"
+          },
           "created_at": "2015-12-31T00:00:00",
           "quality_grade": "research",
           "oauth_application_id": 3,
@@ -345,6 +356,7 @@
           "private_location": "1,2",
           "taxon": {
             "id": 5,
+            "uuid": "cabbd853-39c0-429c-86f1-b36063d3d475",
             "iconic_taxon_id": 1,
             "ancestor_ids": [1,2,3,4,5],
             "min_species_ancestry": "1,2,3,4,5",
@@ -1129,6 +1141,7 @@
     "identifications": [
       {
         "id": 102,
+        "uuid": "cabbd853-39c0-429c-86f1-b36063d3d475",
         "observation_id": 1,
         "taxon_id": 5,
         "user_id": 123,
@@ -1136,6 +1149,7 @@
       },
       {
         "id": 103,
+        "uuid": "4a4d2853-1d89-4f97-9cba-9b8c930534b9",
         "observation_id": 1,
         "taxon_id": 5,
         "user_id": 5,
@@ -1518,54 +1532,67 @@
     "taxa": [
       {
         "id": 101,
+        "uuid": "21441033-24f6-4d8b-9bd3-b2718292b776",
         "name": "Actinopterygii"
       },
       {
         "id": 102,
+        "uuid": "ffa18900-408e-4c34-bcfe-802086f0c5a8",
         "name": "Amphibia"
       },
       {
         "id": 103,
+        "uuid": "3037d958-0456-468b-ba6f-551adbb53105",
         "name": "Animalia"
       },
       {
         "id": 104,
+        "uuid": "1decf1b7-e97d-483a-b1e3-7d9424a4b3ac",
         "name": "Arachnida"
       },
       {
         "id": 105,
+        "uuid": "ad3adcf8-0fa5-45c4-9bde-bedd77f740c1",
         "name": "Aves"
       },
       {
         "id": 106,
+        "uuid": "d18908c7-6cab-4a41-af72-d0e1453820cd",
         "name": "Chromista"
       },
       {
         "id": 107,
+        "uuid": "15d05eb3-cba7-480a-a77c-00a1961e9c25",
         "name": "Insecta"
       },
       {
         "id": 108,
+        "uuid": "f8eb356d-8169-4425-b6b2-b997f4a5cbc6",
         "name": "Fungi"
       },
       {
         "id": 109,
+        "uuid": "bd3fba7d-28cf-4bc7-995b-da3e92067fef",
         "name": "Mammalia"
       },
       {
         "id": 110,
+        "uuid": "c15a8a6d-769c-4931-bee3-ab7a6a36a433",
         "name": "Mollusca"
       },
       {
         "id": 111,
+        "uuid": "b2dccdb0-a85f-46e2-bda1-4cb904d090e9",
         "name": "Plantae"
       },
       {
         "id": 112,
+        "uuid": "0f5d4e84-618c-48db-8515-7c3e67b8727f",
         "name": "Protozoa"
       },
       {
         "id": 113,
+        "uuid": "9779a5d3-6b7c-43fe-8168-10c6744fe35c",
         "name": "Reptilia"
       }
     ]

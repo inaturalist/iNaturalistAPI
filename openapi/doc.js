@@ -34,8 +34,10 @@ const apiDoc = {
   }],
   info: {
     title: "Test iNaturalist Version 2 API",
-    version: "1.0.0",
+    version: "2.0.0-alpha",
     description: `## ${url}
+**UNDER ACTIVE DEVELOPMENT, USE OF THIS ALPHA RELEASE NOT RECOMMENDED**
+
 These API methods return data in JSON/JSONP and PNG response formats. Visit our
 [developers page](https://www.inaturalist.org/pages/developers) for more
 information. Write operations that expect and return JSON describe a single
@@ -69,14 +71,14 @@ what you want in the response. For GET requests, this can be as simple as
 [${url}/observations?fields=species_guess,observed_on](${url}/observations?fields=species_guess,observed_on)
 to return the \`species_guess\` and \`observed_on\` fields of the observations.
 
-For more complex responses, all GET endpoints also support POST requests
-with the \`X-HTTP-Method-Override: GET\` header to so you can specify the
-response fields in a JSON object, e.g.
+For more complex responses, included nested objects, all GET endpoints also
+support POST requests with the \`X-HTTP-Method-Override: GET\` header to so you
+can specify the response fields in a JSON object, e.g.
 \`\`\`
   curl -XPOST \\
     -H "X-HTTP-Method-Override: GET" \\
     -H "Content-Type: application/json" \\
-    -d '{fields: {"species_guess": true, "geojson": {"coordinates": true}}' \\
+    -d '{"fields": {"species_guess": true, "user": {"login": true}}}' \\
     "${url}/observations"
 \`\`\`
 

@@ -17,7 +17,8 @@ const vote = require( "./vote" );
 
 module.exports = Joi.object( ).keys( {
   id: Joi.number( ).integer( )
-    .description( "Unique auto-increment integer identifier." ),
+    .description( "Unique auto-increment integer identifier." )
+    .valid( null ),
   annotations: Joi.array( ).items( annotation ),
   application: Joi.object( ).keys( {
     id: Joi.number( ).integer( ),
