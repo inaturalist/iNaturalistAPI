@@ -1,16 +1,16 @@
 const Joi = require( "@hapi/joi" );
-const transform = require( "../../../joi_to_openapi_parameter" );
-const observationsController = require( "../../../../lib/controllers/v2/observations_controller" );
+const transform = require( "../../../../joi_to_openapi_parameter" );
+const observationsController = require( "../../../../../lib/controllers/v2/observations_controller" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    const results = await observationsController.show( req );
+    const results = await observationsController.qualityMetrics( req );
     sendWrapper( req, res, null, results );
   }
 
   GET.apiDoc = {
     tags: ["Observations"],
-    summary: "Fetch observations",
+    summary: "Fetch quality metrics for observations",
     security: [{
       jwtOptional: []
     }],
@@ -28,11 +28,11 @@ module.exports = sendWrapper => {
     ],
     responses: {
       200: {
-        description: "An array of observations.",
+        description: "An array of quality metrics",
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/ResultsObservations"
+              $ref: "#/components/schemas/ResultsQualityMetrics"
             }
           }
         }
