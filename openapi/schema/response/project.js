@@ -40,7 +40,10 @@ module.exports = Joi.object( ).keys( {
     operator: Joi.string( )
   } ).unknown( false ) ),
   project_type: Joi.string( ).valid( null ),
-  rule_preferences: Joi.array( ).items( Joi.date( ) ),
+  rule_preferences: Joi.array( ).items( Joi.object( ).keys( {
+    field: Joi.string( ).description( "Observation attribute this rule assesses" ),
+    value: Joi.any( ).description( "Required observation attribute value(s)" )
+  } ) ),
   search_parameters: Joi.array( ).items( Joi.object( ).keys( {
     field: Joi.string( ),
     value: Joi.any( ).description( "TODO: values can be single values or arrays" ),

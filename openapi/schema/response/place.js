@@ -9,6 +9,8 @@ module.exports = Joi.object( ).keys( {
     Joi.number( ).integer( )
   ),
   display_name: Joi.string( ),
-  name: Joi.string( )
+  name: Joi.string( ),
+  place_type: Joi.number( ).integer( ).valid( null ),
+  uuid: Joi.string( ).guid( { version: "uuidv4" } )
 } ).unknown( false ).meta( { className: "Place" } )
   .valid( null );

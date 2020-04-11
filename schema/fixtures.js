@@ -34,6 +34,7 @@
       "place": [
         {
           "id": 1,
+          "uuid": "48fba6f4-8627-411b-bf38-af9e280e5cfc",
           "name": "United States",
           "slug": "united-states",
           "display_name_autocomplete": "United States",
@@ -55,6 +56,7 @@
         },
         {
           "id": 2,
+          "uuid": "3fc3929f-08c4-443d-9dda-52ee7609c0a5",
           "name": "Massachusetts",
           "slug": "massachusetts",
           "display_name_autocomplete": "Massachusetts",
@@ -76,6 +78,7 @@
         },
         {
           "id": 3,
+          "uuid": "a0fc3188-85f1-4684-8855-f84e248d4b5a",
           "name": "Community",
           "slug": "community",
           "display_name_autocomplete": "Community",
@@ -96,6 +99,7 @@
         },
         {
           "id": 4,
+          "uuid": "30d4d2a1-0fe1-46e9-a4ca-ca06afcd1048",
           "name": "Search Test Place",
           "display_name_autocomplete": "search test place",
           "admin_level": null,
@@ -115,11 +119,13 @@
         },
         {
           "id": 123,
+          "uuid": "21b9dc61-b1f6-46be-84ca-75c899cdb57c",
           "name": "itsname",
           "slug": "itsname"
         },
         {
           "id": 432,
+          "uuid": "06c869b1-e145-4ae9-a383-81aacdddcad0",
           "name": "a-place",
           "slug": "a-place",
           "display_name_autocomplete": "a-place"
@@ -1208,6 +1214,11 @@
       }
     ],
     "places": [
+      {
+        "id": 1,
+        "uuid": "48fba6f4-8627-411b-bf38-af9e280e5cfc",
+        "name": "United States"
+      },
       {
         "id": 111,
         "name": "United States",
