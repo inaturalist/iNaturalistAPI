@@ -4,27 +4,33 @@ const observationsController = require( "../../../../../lib/controllers/v2/obser
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    const results = await observationsController.qualityMetrics( req );
+    const results = await observationsController.taxonSummary( req );
     sendWrapper( req, res, null, results );
   }
 
   GET.apiDoc = {
     tags: ["Observations"],
-    summary: "Fetch quality metrics for observations",
+    summary: "Additional information about an observation's taxon",
+    description: "Shows additional information about an observation's "
+      + "taxon given the observation's coordinates, including relevant a "
+      + "conservation status and establishment means",
     security: [{
       jwtOptional: []
     }],
     parameters: [
       transform(
-        Joi.array( )
-          .items( Joi.string( ).guid( ) )
+        Joi.string( ).guid( )
           .label( "uuid" )
           .meta( { in: "path" } )
           .required( )
-          .description( "A single UUID or a comma-separated list of them" )
+          .description( "A single observation UUID" )
       ),
-      transform( Joi.string( ).label( "fields" ).meta( { in: "query" } ) ),
-      transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
+      transform(
+        Joi.boolean( )
+          .label( "community" )
+          .description( "Show info about the community taxon instead of the observation taxon" )
+          .meta( { in: "query" } )
+      )
     ],
     responses: {
       200: {
@@ -32,7 +38,7 @@ module.exports = sendWrapper => {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/ResultsQualityMetrics"
+              $ref: "#/components/schemas/ResultsTaxonSummary"
             }
           }
         }

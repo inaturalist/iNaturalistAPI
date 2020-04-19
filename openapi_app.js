@@ -233,7 +233,11 @@ const main = ( ) => {
         }
         const body = args[0];
         const itemSchema = responseItemSchema( req );
-        if ( body && !_.isEmpty( body.results ) && itemSchema ) {
+        if (
+          body
+          && !_.isEmpty( body.results )
+          && itemSchema
+        ) {
           const fields = requestFields( req );
           if ( fields === false ) {
             res.set( "x-express-openapi-validated", true );
