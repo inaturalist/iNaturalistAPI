@@ -27,6 +27,67 @@
               "label": "The WORST Term"
             }
           ]
+        },
+        {
+          "id": 3,
+          "uri": "uri",
+          "is_value": "false",
+          "taxon_ids": [2],
+          "values": [
+            {
+              "id": 4,
+              "uri": "uri",
+              "labels": [
+                {
+                  "id": 4,
+                  "locale": "en",
+                  "label": "Value 4"
+                }
+              ]
+            },
+            {
+              "id": 5,
+              "uri": "uri",
+              "labels": [
+                {
+                  "id": 5,
+                  "locale": "en",
+                  "label": "Value 5"
+                }
+              ]
+            }
+          ],
+          "labels": [
+            {
+              "id": 3,
+              "locale": "en",
+              "label": "Term with values"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "uri": "uri",
+          "is_value": "true",
+          "labels": [
+            {
+              "id": 4,
+              "locale": "en",
+              "label": "Value 4"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "uri": "uri",
+          "is_value": "true",
+          "labels": [
+            {
+              "id": 5,
+              "locale": "en",
+              "label": "Value 5"
+            }
+          ]
         }
       ]
     },
@@ -753,6 +814,7 @@
       "taxon": [
         {
           "id": 1001,
+          "uuid": "9cdac31a-87fa-4361-8b7f-348ccebbe2f1",
           "ancestor_ids": [ 1001 ],
           "min_species_ancestry": "1001",
           "name": "Life",
@@ -766,6 +828,7 @@
         },
         {
           "id": 1,
+          "uuid": "94c3e33b-ad67-41af-96cd-a91a58a2c4eb",
           "name": "Los",
           "ancestor_ids": [ 1001, 1 ],
           "min_species_ancestry": "1001,1",
@@ -781,6 +844,7 @@
         },
         {
           "id": 2,
+          "uuid": "a23748a0-65e3-40e8-a455-40a233ce7587",
           "name": "Los",
           "parent_id": 1,
           "ancestor_ids": [ 1001, 1, 2 ],
@@ -795,6 +859,7 @@
         },
         {
           "id": 3,
+          "uuid": "5a1320aa-96c0-4118-b705-fcbb7430d1db",
           "name": "Los lobos",
           "parent_id": 2,
           "ancestor_ids": [ 1001, 1, 2, 3 ],
@@ -811,6 +876,7 @@
         },
         {
           "id": 4,
+          "uuid": "6da04f2f-8906-4589-83a8-5d77a104b993",
           "names": [{
             "name_autocomplete": "眼紋疏廣蠟蟬",
             "exact": "眼紋疏廣蠟蟬",
@@ -821,6 +887,7 @@
         },
         {
           "id": 5,
+          "uuid": "e5567150-66fd-4e20-b291-662701e9d4c1",
           "iconic_taxon_id": 101,
           "is_active": true,
           "ancestor_ids": [1,2,3,4,5],
@@ -830,6 +897,7 @@
         },
         {
           "id": 6,
+          "uuid": "94dbefce-e621-4aae-85e0-c2f644c99091",
           "iconic_taxon_id": 101,
           "is_active": true,
           "ancestor_ids": [1,2,3,4,6],
@@ -839,6 +907,7 @@
         },
         {
           "id": 123,
+          "uuid": "083ced86-f44c-4876-81c1-23dd45badb0f",
           "name": "itsname",
           "names": [
             { "name": "BestEnglish", "locale": "en" },
@@ -864,40 +933,48 @@
         },
         {
           "id": 999,
+          "uuid": "6a33f840-aba6-4026-9883-a20dca4f71e7",
           "name": "ataxon"
         },
         {
           "id": 9898,
+          "uuid": "07be3740-55ad-41d6-9ad6-fc2d6e8dfe39",
           "name": "ataxon"
         },
         {
           "id": 10001,
+          "uuid": "ffb95782-59b0-4fac-930a-6dbe150691e0",
           "name": "DetailsTaxon",
           "ancestor_ids": [ 10001 ]
         },
         {
           "id": 10002,
+          "uuid": "899c70b3-5045-48ca-8872-b7fa352357d9",
           "name": "Taxon for a swap"
         },
         {
           "id": 10003,
+          "uuid": "122f0605-a520-440e-9226-bd5c44d096d8",
           "name": "Inactive, replaced by 123",
           "is_active": false,
           "current_synonymous_taxon_ids": [123]
         },
         {
           "id": 10004,
+          "uuid": "1b0fa776-8792-456b-9c15-e7eab0774f90",
           "name": "Inactive, unreplaced",
           "is_active": false
         },
         {
           "id": 10005,
+          "uuid": "dfa4d3bd-d453-41b6-b5eb-bd5106fe6e3e",
           "name": "Inactive, replaced by 1 and 2",
           "is_active": false,
           "current_synonymous_taxon_ids": [1,2]
         },
         {
           "id": 7,
+          "uuid": "81bbc106-b372-4df5-af7d-50452cf9956e",
           "name": "Los",
           "parent_id": 1,
           "ancestor_ids": [ 1001, 1, 2 ],
@@ -911,6 +988,7 @@
         },
         {
           "id": 8,
+          "uuid": "95d84231-4e6b-4e4c-b9e2-4efad455f4ce",
           "name": "Mimulus guttatus",
           "parent_id": 1,
           "ancestor_ids": [ 1001, 1, 2 ],
@@ -933,6 +1011,7 @@
         },
         {
           "id": 9,
+          "uuid": "2365b7d1-e4ab-4f54-a9af-f879d809409c",
           "name": "Ulva intestinalis",
           "parent_id": 1,
           "ancestor_ids": [ 1001, 1, 2 ],
@@ -955,6 +1034,7 @@
         },
         {
           "id": 10,
+          "uuid": "e1290908-66c0-4207-89db-bb55f1195b28",
           "name": "Viola pedunculata",
           "parent_id": 1,
           "ancestor_ids": [ 1001, 1, 2 ],
@@ -983,6 +1063,7 @@
         },
         {
           "id": 11,
+          "uuid": "042b6588-7b63-41e9-98d2-c38b93a8b6f4",
           "name": "Junonia hierta",
           "parent_id": 1,
           "ancestor_ids": [ 1001, 1, 2 ],
@@ -1011,6 +1092,7 @@
         },
         {
           "id": 12,
+          "uuid": "3d489440-b79e-4a1a-9b5c-4dbc594339ae",
           "name": "Search test taxon",
           "rank": "species",
           "rank_level": 10,
@@ -1541,6 +1623,21 @@
       }
     ],
     "taxa": [
+      {
+        "id": 1001,
+        "uuid": "9cdac31a-87fa-4361-8b7f-348ccebbe2f1",
+        "name": "Life"
+      },
+      {
+        "id": 1,
+        "uuid": "94c3e33b-ad67-41af-96cd-a91a58a2c4eb",
+        "name": "Los"
+      },
+      {
+        "id": 2,
+        "uuid": "a23748a0-65e3-40e8-a455-40a233ce7587",
+        "name": "Los"
+      },
       {
         "id": 101,
         "uuid": "21441033-24f6-4d8b-9bd3-b2718292b776",
