@@ -276,6 +276,9 @@
         },
         {
           "id": 104,
+          "user": {
+            "id": 1
+          },
           "current": true,
           "taxon_change": {
             "id": 1,
