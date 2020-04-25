@@ -1,6 +1,7 @@
 const Joi = require( "@hapi/joi" );
 const dateDetails = require( "./date_details" );
 const flag = require( "./flag" );
+const moderatorAction = require( "./moderator_action" );
 const taxon = require( "./taxon" );
 const user = require( "./user" );
 
@@ -15,6 +16,7 @@ module.exports = Joi.object( ).keys( {
   current: Joi.boolean( ),
   disagreement: Joi.boolean( ).valid( null ),
   flags: Joi.array( ).items( flag ),
+  moderator_actions: Joi.array( ).items( moderatorAction ),
   own_observation: Joi.boolean( ),
   previous_observation_taxon_id: Joi.number( ).integer( ).valid( null ),
   previous_observation_taxon: taxon,

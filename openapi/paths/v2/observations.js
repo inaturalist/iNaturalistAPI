@@ -15,7 +15,7 @@ module.exports = sendWrapper => {
   async function GET( req, res ) {
     if ( req.originalMethod === "POST" ) {
       req.originalQuery = req.query;
-      req.query = _.mapValues( req.body, v => v.toString( ) );
+      req.query = _.mapValues( req.body, v => ( v === null ? null : v.toString( ) ) );
     }
     const results = await ObservationsController.search( req );
     sendWrapper( req, res, null, results );

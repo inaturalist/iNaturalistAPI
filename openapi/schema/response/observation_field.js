@@ -11,5 +11,6 @@ module.exports = Joi.object( ).keys( {
   name: Joi.string( ),
   name_autocomplete: Joi.string( ),
   users_count: Joi.number( ).integer( ).valid( null ),
+  uuid: Joi.string( ).guid( { version: "uuidv4" } ),
   values_count: Joi.number( ).integer( ).valid( null )
 } ).unknown( false ).meta( { className: "ObservationField" } );
