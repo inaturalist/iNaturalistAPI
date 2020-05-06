@@ -156,13 +156,16 @@ const main = ( ) => {
   const responseItemSchema = req => {
     if ( req.operationDoc
       && req.operationDoc.responses["200"]
+      && req.operationDoc.responses["200"].content
       && req.operationDoc.responses["200"].content["application/json"]
-      && req.operationDoc.responses["200"].content["application/json"].schema ) {
+      && req.operationDoc.responses["200"].content["application/json"].schema
+    ) {
       const responseSchema = resolveSchema( req,
         req.operationDoc.responses["200"].content["application/json"].schema );
       if ( responseSchema.properties
         && responseSchema.properties.results
-        && responseSchema.properties.results.items ) {
+        && responseSchema.properties.results.items
+      ) {
         return resolveSchema( req, responseSchema.properties.results );
       }
     }

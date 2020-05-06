@@ -5,6 +5,7 @@ const moderatorAction = require( "./moderator_action" );
 const user = require( "./user" );
 
 module.exports = Joi.object( ).keys( {
+  // TODO make this not required when we update the obs index
   id: Joi.number( ).integer( )
     .description( "Unique auto-increment integer identifier." )
     .required( ),
