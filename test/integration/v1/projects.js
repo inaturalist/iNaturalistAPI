@@ -192,23 +192,83 @@ describe( "Projects Routes", ( ) => {
   } );
 
   describe( "subscriptions", ( ) => {
+    const projectSubscription = _.find( fixtures.postgresql.subscriptions,
+      s => s.resource_type === "Project" && s.resource_id === 543 );
     it( "fails for unauthenticated requests", done => {
-      request( app ).get( "/v1/projects/543/subscriptions" ).expect( res => {
+      request( app ).get( `/v1/projects/${projectSubscription.resource_id}/subscriptions` ).expect( res => {
         expect( res.error.text ).to.eq( "{\"error\":\"Unauthorized\",\"status\":401}" );
       } ).expect( "Content-Type", /json/ )
         .expect( 401, done );
     } );
 
-    it( "returns posts", done => {
+    it( "returns subscriptions", done => {
       const token = jwt.sign( { user_id: 1 }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/projects/543/subscriptions" ).set( "Authorization", token )
+      request( app ).get( `/v1/projects/${projectSubscription.resource_id}/subscriptions` ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.total_results ).to.eq( 1 );
           expect( res.body.results[0].user_id ).to.eq( 1 );
-          expect( res.body.results[0].resource_id ).to.eq( 543 );
+          expect( res.body.results[0].resource_id ).to.eq( projectSubscription.resource_id );
         } )
         .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "membership", ( ) => {
+    const projectUser = fixtures.postgresql.project_users[0];
+    const token = jwt.sign( { user_id: projectUser.user_id }, config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+
+    it( "fails for unauthenticated requests", done => {
+      request( app ).get( `/v1/projects/${projectUser.project_id}/membership` ).expect( res => {
+        expect( res.error.text ).to.eq( "{\"error\":\"Unauthorized\",\"status\":401}" );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 401, done );
+    } );
+    it( "returns prefers_curator_coordinate_access_for", done => {
+      request( app )
+        .get( `/v1/projects/${projectUser.project_id}/membership` )
+        .set( "Authorization", token )
+        .expect( 200 )
+        .expect( res => {
+          const rpu = res.body.results[0];
+          expect( rpu.project_id ).to.eq( projectUser.project_id );
+          expect( rpu.prefers_curator_coordinate_access_for ).to.eq( "taxon" );
+        } )
+        .expect( 200, done );
+    } );
+    it( "returns prefers_curator_coordinate_access_for=none if preference not expressed", done => {
+      const projectUserWithoutPreference = _.find( fixtures.postgresql.project_users,
+        pu => pu.id === 2 );
+      expect( _.find( fixtures.postgresql.preferences, p => (
+        p.owner_type === "ProjectUser"
+        && p.owner_id === projectUserWithoutPreference.id
+        && p.name === "curator_coordinate_access_for"
+      ) ) ).to.be.undefined;
+      const otherToken = jwt.sign( { user_id: projectUserWithoutPreference.user_id },
+        config.jwtSecret || "secret", { algorithm: "HS512" } );
+      request( app )
+        .get( `/v1/projects/${projectUserWithoutPreference.project_id}/membership` )
+        .set( "Authorization", otherToken )
+        .expect( 200 )
+        .expect( res => {
+          const rpu = res.body.results[0];
+          expect( rpu.project_id ).to.eq( projectUserWithoutPreference.project_id );
+          expect( rpu.prefers_curator_coordinate_access_for ).to.eq( "none" );
+        } )
+        .expect( 200, done );
+    } );
+    it( "returns nothing for projects the user has not joined", done => {
+      const otherProject = _.find( fixtures.postgresql.projects,
+        p => p.id !== projectUser.project_id );
+      request( app )
+        .get( `/v1/projects/${otherProject.id}/membership` )
+        .set( "Authorization", token )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results.length ).to.eq( 0 );
+        } )
         .expect( 200, done );
     } );
   } );

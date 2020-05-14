@@ -1233,7 +1233,15 @@
         "owner_id": 1,
         "owner_type": "User",
         "value": "t"
-      }    ],
+      },
+      {
+        "id": 302,
+        "name": "curator_coordinate_access_for",
+        "owner_type": "ProjectUser",
+        "owner_id": 1,
+        "value": "taxon"
+      }
+    ],
     "project_observations": [
       {
         "id": 101,
@@ -1259,11 +1267,13 @@
     ],
     "project_users": [
       {
+        "id": 1,
         "project_id": 543,
         "user_id": 5,
         "observations_count": 1000
       },
       {
+        "id": 2,
         "project_id": 543,
         "user_id": 6,
         "observations_count": 800
