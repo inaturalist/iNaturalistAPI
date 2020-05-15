@@ -10,15 +10,25 @@ module.exports = sendWrapper => {
     sendWrapper( req, res, null, results );
   }
 
+  const parameters = [
+    {
+      in: "header",
+      name: "X-HTTP-Method-Override",
+      schema: {
+        type: "string"
+      }
+    }
+  ].concat( _.map( taxaAutocompleteSchema._inner.children, child => (
+    transform( child.schema.label( child.key ) )
+  ) ) );
+
   GET.apiDoc = {
     tags: ["Taxa"],
     summary: "Search taxa.",
     security: [{
       jwtOptional: []
     }],
-    parameters: _.map( taxaAutocompleteSchema._inner.children, child => (
-      transform( child.schema.label( child.key ) )
-    ) ),
+    parameters,
     responses: {
       200: {
         description: "An array of taxa.",
