@@ -1279,17 +1279,20 @@
         "observations_count": 800
       },
       {
+        "id": 3,
         "project_id": 543,
         "user_id": 123,
         "role": "curator",
         "observations_count": 900
       },
       {
+        "id": 4,
         "project_id": 1,
         "user_id": 123,
         "role": "curator"
       },
       {
+        "id": 5,
         "project_id": 2,
         "user_id": 123,
         "role": "curator"
