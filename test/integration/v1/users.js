@@ -37,9 +37,9 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "returns a 422 for unknown users", done => {
+    it( "returns a 404 for unknown users", done => {
       request( app ).get( "/v1/users/123123" )
-        .expect( "Content-Type", /json/ ).expect( 422, done );
+        .expect( "Content-Type", /json/ ).expect( 404, done );
     } );
   } );
 
