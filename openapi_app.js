@@ -27,7 +27,10 @@ const main = ( ) => {
 
   const sendWrapper = ( req, res, err, results ) => {
     if ( err ) { return void initializedApi.args.errorMiddleware( err, null, res, null ); }
-    res.status( 200 ).header( "Content-Type", "application/json" ).send( results );
+    if ( !res.status ) {
+      res.status( 200 );
+    }
+    res.header( "Content-Type", "application/json" ).send( results );
   };
 
   app.use( bodyParser.json( {

@@ -513,6 +513,8 @@
           "created_at": "2001-06-01T01:00:00",
           "annotations": [
             {
+              "id": 1,
+              "uuid": "fe79f455-171c-4a60-90bd-a9b772856b60",
               "controlled_attribute_id": 1,
               "controlled_value_id": 1,
               "concatenated_attr_val": "1|1",
@@ -529,6 +531,8 @@
           "created_at": "2001-06-01T01:00:00",
           "annotations": [
             {
+              "id": 2,
+              "uuid": "1e203fa7-5239-4df4-a562-ffff21628cf2",
               "controlled_attribute_id": 1,
               "controlled_value_id": 2,
               "concatenated_attr_val": "1|2",
@@ -545,6 +549,8 @@
           "created_at": "2001-06-01T01:00:00",
           "annotations": [
             {
+              "id": 3,
+              "uuid": "a4e0d1f7-3463-4754-b3b5-0920216a9514",
               "controlled_attribute_id": 1,
               "controlled_value_id": 2,
               "concatenated_attr_val": "1|2",
@@ -652,6 +658,8 @@
           "created_at": "2001-06-01T01:00:00",
           "annotations": [
             {
+              "id": 4,
+              "uuid": "948ea8f3-b4ec-4cc0-b8db-f811fdd45c48",
               "controlled_attribute_id": 2,
               "controlled_value_id": 3,
               "concatenated_attr_val": "2|3",
@@ -669,6 +677,8 @@
           "created_at": "2001-06-01T01:00:00",
           "annotations": [
             {
+              "id": 5,
+              "uuid": "ac7b8905-40e2-4b35-b972-b3bcc24b455e",
               "controlled_attribute_id": 1,
               "controlled_value_id": 1,
               "concatenated_attr_val": "1|1",
