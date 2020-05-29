@@ -34,16 +34,30 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "shows authenticated project curators private info if they have access", done => {
-      const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+    it( "shows authenticated traditional project curators private info if they have access", done => {
+      const obsInTradProject = _.find(
+        fixtures.elasticsearch.observations.observation,
+        o => o.id === 10
+      );
+      const projectID = obsInTradProject.project_ids[0];
+      const curatorProjectUser = _.find(
+        fixtures.postgresql.project_users,
+        pu => ( pu.project_id === projectID && pu.role === "curator" )
+      );
+      const token = jwt.sign( { user_id: curatorProjectUser.user_id }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/10" ).set( "Authorization", token )
+      request( app ).get( `/v1/observations/${obsInTradProject.id}` ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results[0].private_location ).to.not.be.undefined;
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    // TODO this is A LOT to set up in fixtures: collection project, obs that
+    // falls in collection project search params by user who has joined and
+    // trusts the collection project, curator of collection project
+    it( "shows authenticated collection project curators private info if they have access" );
 
     it( "shows authenticated trusted users private info", done => {
       const token = jwt.sign( { user_id: 125 }, config.jwtSecret || "secret",
@@ -56,7 +70,7 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "does not show authenticated project curators private info if they do not have access", done => {
+    it( "does not show authenticated traditional project curators private info if they do not have access", done => {
       const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
       request( app ).get( "/v1/observations/11" ).set( "Authorization", token )
