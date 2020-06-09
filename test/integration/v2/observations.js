@@ -1,3 +1,4 @@
+const _ = require( "lodash" );
 const { expect } = require( "chai" );
 const fs = require( "fs" );
 const request = require( "supertest" );
@@ -42,6 +43,60 @@ describe( "Observations", ( ) => {
         } )
         .expect( 200, done );
     } );
+    it( "shows authenticated users their own private info", done => {
+      const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/1?fields=all" ).set( "Authorization", token )
+        .expect( res => {
+          expect( res.body.results[0].private_location ).to.not.be.undefined;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "shows authenticated project curators private info if they have access", done => {
+      const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/10?fields=all" ).set( "Authorization", token )
+        .expect( res => {
+          expect( res.body.results[0].private_location ).to.not.be.undefined;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "shows authenticated trusted users private info", done => {
+      const token = jwt.sign( { user_id: 125 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/14?fields=all" ).set( "Authorization", token )
+        .expect( res => {
+          expect( res.body.results[0].private_location ).to.not.be.undefined;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "does not show authenticated project curators private info if they do not have access", done => {
+      const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/11?fields=all" ).set( "Authorization", token )
+        .expect( res => {
+          expect( res.body.results[0].private_location ).to.be.undefined;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "does not show authenticated users others' private info", done => {
+      const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations/333?fields=all" ).set( "Authorization", token )
+        .expect( res => {
+          expect( res.body.results[0].private_location ).to.be.undefined;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "search", ( ) => {
@@ -79,6 +134,31 @@ describe( "Observations", ( ) => {
         .set( "X-HTTP-Method-Override", "GET" )
         .expect( res => {
           expect( res.body.results[0].user.id ).to.eq( fixtureObs.user.id );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "shows authenticated users their own private info", done => {
+      const userId = 123;
+      const token = jwt.sign( { user_id: userId }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( `/v1/observations?user_id=${userId}&fields=all` ).set( "Authorization", token )
+        .expect( res => {
+          const obscuredObs = _.find( res.body.results, o => o.obscured );
+          expect( obscuredObs.private_location ).to.not.be.undefined;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "does not show authenticated users others' private info", done => {
+      const token = jwt.sign( { user_id: 5 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations?user_id=123&fields=all" ).set( "Authorization", token )
+        .expect( res => {
+          const obscuredObs = _.find( res.body.results, o => o.obscured );
+          expect( obscuredObs.private_location ).to.be.undefined;
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
