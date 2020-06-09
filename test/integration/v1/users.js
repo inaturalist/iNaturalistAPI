@@ -1,10 +1,14 @@
 const { expect } = require( "chai" );
 const jwt = require( "jsonwebtoken" );
 const request = require( "supertest" );
+const nock = require( "nock" );
+const fs = require( "fs" );
 const iNaturalistAPI = require( "../../../lib/inaturalist_api" );
 const config = require( "../../../config.js" );
 
 const app = iNaturalistAPI.server( );
+
+const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 describe( "Users", ( ) => {
   describe( "show", ( ) => {
@@ -33,9 +37,30 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "returns a 422 for unknown users", done => {
+    it( "returns a 404 for unknown users", done => {
       request( app ).get( "/v1/users/123123" )
-        .expect( "Content-Type", /json/ ).expect( 422, done );
+        .expect( "Content-Type", /json/ ).expect( 404, done );
+    } );
+  } );
+
+  describe( "update", ( ) => {
+    const currentUser = fixtures.elasticsearch.users.user[0];
+    const token = jwt.sign( { user_id: currentUser.id }, config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+
+    it( "should return JSON", done => {
+      nock( "http://localhost:3000" )
+        .put( `/users/${currentUser.login}` )
+        .reply( 200, { id: currentUser.id, login: currentUser.login } );
+      request( app )
+        .put( `/v1/users/${currentUser.login}` )
+        .set( "Authorization", token )
+        .expect( "Content-Type", /json/ )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.login ).to.eq( currentUser.login );
+        } )
+        .expect( 200, done );
     } );
   } );
 
@@ -117,6 +142,35 @@ describe( "Users", ( ) => {
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
+    } );
+  } );
+
+  describe( "mute", ( ) => {
+    const currentUser = fixtures.elasticsearch.users.user[0];
+    const mutedUser = fixtures.elasticsearch.users.user[1];
+    const token = jwt.sign( { user_id: currentUser.id }, config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+    describe( "post", ( ) => {
+      it( "succeeds", done => {
+        nock( "http://localhost:3000" )
+          .post( `/users/${mutedUser.id}/mute` )
+          .reply( 200 );
+        request( app )
+          .post( `/v1/users/${mutedUser.id}/mute` )
+          .set( "Authorization", token )
+          .expect( 200, done );
+      } );
+    } );
+    describe( "delete", ( ) => {
+      it( "succeeds", done => {
+        nock( "http://localhost:3000" )
+          .delete( `/users/${mutedUser.id}/mute` )
+          .reply( 200 );
+        request( app )
+          .delete( `/v1/users/${mutedUser.id}/mute` )
+          .set( "Authorization", token )
+          .expect( 200, done );
+      } );
     } );
   } );
 } );

@@ -234,6 +234,17 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
+    it( "finds observations by without_ident_user_id", done => {
+      const userID = 121;
+      request( app ).get( `/v1/observations?without_ident_user_id=${userID}` )
+        .expect( res => {
+          expect( res.body.results.length ).to.be.above( 0 );
+          const obsIdentifiedByUser = _.filter( res.body.results,
+            o => _.find( o.identifications, i => i.user.id === userID ) );
+          expect( obsIdentifiedByUser.length ).to.eq( 0 );
+        } ).expect( 200, done );
+    } );
+
     it( "looks up projects by slug", done => {
       request( app ).get( "/v1/observations?projects=a-project" )
         .expect( res => {
