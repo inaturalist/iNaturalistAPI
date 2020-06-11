@@ -82,6 +82,9 @@ can specify the response fields in a JSON object, e.g.
     "${url}/observations"
 \`\`\`
 
+To see all available fields, you can use \`fields=all\`, e.g.
+<${url}/observations?fields=all>
+
 iNaturalist Website: <https://www.inaturalist.org/>
 
 Open Source Software: <https://github.com/inaturalist/>

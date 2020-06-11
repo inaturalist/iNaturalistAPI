@@ -13,9 +13,11 @@ const v2ApiDoc = require( "./openapi/doc" );
 const util = require( "./lib/util" );
 const Logstasher = require( "./lib/logstasher" );
 
+const PORT = Number( process.env.PORT || 4000 );
+
 const main = ( ) => {
   const logstashPath = path.join(
-    path.dirname( fs.realpathSync( __filename ) ), "./log", "inaturalist_api.4000.log"
+    path.dirname( fs.realpathSync( __filename ) ), "./log", `inaturalist_api.${PORT}.log`
   );
   Logstasher.setLogStreamFilePath( logstashPath );
 
@@ -390,14 +392,14 @@ const main = ( ) => {
       //     console.log( "[DEBUG] json: ", json );
       //   } );
       // }
-      console.log( "Error trace from errorMiddleware ------->" );
-      console.trace( err );
+      // console.log( "Error trace from errorMiddleware ------->" );
+      // console.trace( err );
       res.status( status || 500 ).json( err instanceof Error
         ? {
           status: status || 500,
           message: err.message,
-          // TODO Remove in production, right?
-          stack: err.stack.split( "\n" ),
+          // // TODO Remove in production, right?
+          // stack: err.stack.split( "\n" ),
           from: "errorMiddleware"
         } : err );
     }
@@ -409,7 +411,10 @@ const main = ( ) => {
 };
 
 if ( require.main === module ) {
-  main( ).listen( 4000 );
+  main( ).listen( PORT );
+  if ( process.pid ) {
+    console.log( `This process is your pid: ${process.pid}` );
+  }
 }
 
 module.exports = main( );

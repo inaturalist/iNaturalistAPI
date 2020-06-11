@@ -9,7 +9,7 @@ const app = require( "../../../openapi_app" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
-describe.only( "Annotations", ( ) => {
+describe( "Annotations", ( ) => {
   const a = {
     id: 123,
     uuid: "dcd68b65-e5ae-4581-8cea-5788cbefe53d"
