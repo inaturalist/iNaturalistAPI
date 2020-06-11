@@ -1,7 +1,7 @@
 const { expect } = require( "chai" );
 const request = require( "supertest" );
 const fs = require( "fs" );
-const app = require( "../../../openapi_app" );
+const app = require( "../../../app" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 

@@ -5,7 +5,7 @@ const nock = require( "nock" );
 const jwt = require( "jsonwebtoken" );
 const fs = require( "fs" );
 const config = require( "../../../config.js" );
-const app = require( "../../../openapi_app" );
+const app = require( "../../../app" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 

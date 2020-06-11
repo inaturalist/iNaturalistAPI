@@ -3,7 +3,7 @@ const request = require( "supertest" );
 const jwt = require( "jsonwebtoken" );
 const nock = require( "nock" );
 const fs = require( "fs" );
-const app = require( "../../../openapi_app" );
+const app = require( "../../../app" );
 const config = require( "../../../config.js" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );

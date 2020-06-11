@@ -3,7 +3,7 @@ const request = require( "supertest" );
 const nock = require( "nock" );
 const jwt = require( "jsonwebtoken" );
 const config = require( "../../../config.js" );
-const app = require( "../../../openapi_app" );
+const app = require( "../../../app" );
 
 describe( "ObservationPhotos", ( ) => {
   describe( "create", ( ) => {
