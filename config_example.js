@@ -26,7 +26,11 @@ module.exports = {
     port: 5432,
     geometry_field: "geom",
     srid: 4326,
-    dbname: `inaturalist_${environment}`,
+    // Use a different db name in a test environment so our test data is
+    // isolated from the web app's test database
+    dbname: environment === "test"
+      ? "inaturalistapi_test"
+      : `inaturalist_${environment}`,
     password: "password",
     ssl: false
   },
