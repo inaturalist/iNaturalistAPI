@@ -1,25 +1,23 @@
 const chai = require( "chai" );
 const chaiAsPromised = require( "chai-as-promised" );
 const pgClient = require( "../lib/pg_client" );
+const config = require( "../config" );
 
 const { expect } = chai;
 chai.use( chaiAsPromised );
 
 describe( "pgClient", ( ) => {
   describe( "connect", ( ) => {
-    afterEach( ( ) => {
-      process.env.NODE_ENV = "test";
-    } );
-
     it( "fails if it can't connect", async ( ) => {
-      process.env.NODE_ENV = "nonsense";
       pgClient.connection = null;
-      await expect( pgClient.connect( ) ).to.be.rejectedWith( Error );
+      await expect(
+        pgClient.connect( { database: { dbname: "foofoo" } } )
+      ).to.be.rejectedWith( Error );
     } );
 
     it( "uses the test database", async ( ) => {
       const connection = await pgClient.connect( );
-      expect( connection.database ).to.eq( "inaturalist_test" );
+      expect( connection.database ).to.eq( config.database.dbname );
     } );
 
     it( "returns the open connection", async ( ) => {
