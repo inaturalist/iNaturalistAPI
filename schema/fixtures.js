@@ -1103,6 +1103,13 @@
         "updated_at": "2016-01-01 00:00:00"
       }
     ],
+    "friendships": [
+      {
+        "user_id": 126,
+        "friend_id": 125,
+        "trust": true
+      }
+    ],
     "identifications": [
       {
         "id": 102,
@@ -1429,6 +1436,60 @@
         "user_id": 1
       }
     ],
+    "taxa": [
+      {
+        "id": 101,
+        "name": "Actinopterygii"
+      },
+      {
+        "id": 102,
+        "name": "Amphibia"
+      },
+      {
+        "id": 103,
+        "name": "Animalia"
+      },
+      {
+        "id": 104,
+        "name": "Arachnida"
+      },
+      {
+        "id": 105,
+        "name": "Aves"
+      },
+      {
+        "id": 106,
+        "name": "Chromista"
+      },
+      {
+        "id": 107,
+        "name": "Insecta"
+      },
+      {
+        "id": 108,
+        "name": "Fungi"
+      },
+      {
+        "id": 109,
+        "name": "Mammalia"
+      },
+      {
+        "id": 110,
+        "name": "Mollusca"
+      },
+      {
+        "id": 111,
+        "name": "Plantae"
+      },
+      {
+        "id": 112,
+        "name": "Protozoa"
+      },
+      {
+        "id": 113,
+        "name": "Reptilia"
+      }
+    ],
     "users": [
       {
         "id": 1,
@@ -1485,65 +1546,11 @@
         "login": "totally-trusting"
       }
     ],
-    "friendships": [
+    "user_privileges": [
       {
-        "user_id": 126,
-        "friend_id": 125,
-        "trust": true
-      }
-    ],
-    "taxa": [
-      {
-        "id": 101,
-        "name": "Actinopterygii"
-      },
-      {
-        "id": 102,
-        "name": "Amphibia"
-      },
-      {
-        "id": 103,
-        "name": "Animalia"
-      },
-      {
-        "id": 104,
-        "name": "Arachnida"
-      },
-      {
-        "id": 105,
-        "name": "Aves"
-      },
-      {
-        "id": 106,
-        "name": "Chromista"
-      },
-      {
-        "id": 107,
-        "name": "Insecta"
-      },
-      {
-        "id": 108,
-        "name": "Fungi"
-      },
-      {
-        "id": 109,
-        "name": "Mammalia"
-      },
-      {
-        "id": 110,
-        "name": "Mollusca"
-      },
-      {
-        "id": 111,
-        "name": "Plantae"
-      },
-      {
-        "id": 112,
-        "name": "Protozoa"
-      },
-      {
-        "id": 113,
-        "name": "Reptilia"
+        "id": 1,
+        "user_id": 1,
+        "privilege": "speech"
       }
     ]
   }
