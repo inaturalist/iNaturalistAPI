@@ -35,23 +35,6 @@ const main = ( ) => {
     res.header( "Content-Type", "application/json" ).send( results );
   };
 
-  app.use( bodyParser.json( {
-    type: req => {
-      // Parse the request body for everything other than multipart requests,
-      // which should specify body data as plain old form data which express can
-      // parse on its own.
-      if ( !req.headers["content-type"] ) {
-        // console.log( "[DEBUG] no content-type" );
-        return true;
-      }
-      return req.headers["content-type"].match( /multipart/ ) === null;
-    }
-  } ) );
-
-  app.use( ( req, res, next ) => {
-    util.timingMiddleware( req, res, next );
-  } );
-
   // Middleware to detect to X-HTTP-Method-Override header. We use this header
   // to support long, complex retrieval requests at POST endpoints as well as
   // the more traditional creation requests to the same POST endpoints. For

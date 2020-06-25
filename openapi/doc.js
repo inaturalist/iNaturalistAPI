@@ -1,6 +1,8 @@
 const _ = require( "lodash" );
 const fs = require( "fs" );
 const j2s = require( "hapi-joi-to-swagger" );
+const nodeUrl = require( "url" );
+const config = require( "../config" );
 
 const schemas = { };
 fs.readdirSync( "./openapi/schema/response" ).forEach( file => {
@@ -25,7 +27,8 @@ fs.readdirSync( "./openapi/schema/request" ).forEach( file => {
   schemas[modelName] = schemas[modelName] || swagger;
 } );
 
-const url = "http://localhost:4000/v2";
+const parsedUrl = nodeUrl.parse( config.currentVersionURL );
+const url = `${parsedUrl.protocol}//${parsedUrl.host}/v2`;
 
 const apiDoc = {
   openapi: "3.0.0",
