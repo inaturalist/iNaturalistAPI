@@ -1239,6 +1239,13 @@
         "updated_at": "2016-01-01 00:00:00"
       }
     ],
+    "friendships": [
+      {
+        "user_id": 126,
+        "friend_id": 125,
+        "trust": true
+      }
+    ],
     "identifications": [
       {
         "id": 102,
@@ -1572,69 +1579,6 @@
         "user_id": 1
       }
     ],
-    "users": [
-      {
-        "id": 1,
-        "login": "userlogin",
-        "name": "username",
-        "site_id": 1
-      },
-      {
-        "id": 5,
-        "login": "b-user",
-        "name": "B User"
-      },
-      {
-        "id": 6,
-        "login": "z-user",
-        "name": "Z User",
-        "icon_content_type": "image/jpeg",
-        "icon_file_name": "img.jpg"
-      },
-      {
-        "id": 121,
-        "login": "user121",
-        "name": "user121",
-        "icon_content_type": "image/jpeg",
-        "icon_file_name": "img.jpg"
-      },
-      {
-        "id": 122,
-        "login": "user122",
-        "name": "user122",
-        "icon_content_type": "image/jpeg",
-        "icon_file_name": "img.jpg"
-      },
-      {
-        "id": 123,
-        "login": "a-user",
-        "name": "A User",
-        "icon_content_type": "image/jpeg",
-        "icon_file_name": "img.jpg"
-      },
-      {
-        "id": 124,
-        "login": "es-user",
-        "name": "ES User",
-        "locale": "es",
-        "place_id": 222
-      },
-      {
-        "id": 125,
-        "login": "totally-trustworthy"
-      },
-      {
-        "id": 126,
-        "login": "totally-trusting"
-      }
-    ],
-    "friendships": [
-      {
-        "user_id": 126,
-        "friend_id": 125,
-        "trust": true
-      }
-    ],
     "taxa": [
       {
         "id": 1001,
@@ -1715,6 +1659,69 @@
         "id": 113,
         "uuid": "9779a5d3-6b7c-43fe-8168-10c6744fe35c",
         "name": "Reptilia"
+      }
+    ],
+    "users": [
+      {
+        "id": 1,
+        "login": "userlogin",
+        "name": "username",
+        "site_id": 1
+      },
+      {
+        "id": 5,
+        "login": "b-user",
+        "name": "B User"
+      },
+      {
+        "id": 6,
+        "login": "z-user",
+        "name": "Z User",
+        "icon_content_type": "image/jpeg",
+        "icon_file_name": "img.jpg"
+      },
+      {
+        "id": 121,
+        "login": "user121",
+        "name": "user121",
+        "icon_content_type": "image/jpeg",
+        "icon_file_name": "img.jpg"
+      },
+      {
+        "id": 122,
+        "login": "user122",
+        "name": "user122",
+        "icon_content_type": "image/jpeg",
+        "icon_file_name": "img.jpg"
+      },
+      {
+        "id": 123,
+        "login": "a-user",
+        "name": "A User",
+        "icon_content_type": "image/jpeg",
+        "icon_file_name": "img.jpg"
+      },
+      {
+        "id": 124,
+        "login": "es-user",
+        "name": "ES User",
+        "locale": "es",
+        "place_id": 222
+      },
+      {
+        "id": 125,
+        "login": "totally-trustworthy"
+      },
+      {
+        "id": 126,
+        "login": "totally-trusting"
+      }
+    ],
+    "user_privileges": [
+      {
+        "id": 1,
+        "user_id": 1,
+        "privilege": "speech"
       }
     ]
   }
