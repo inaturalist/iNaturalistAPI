@@ -1,6 +1,14 @@
 const fs = require( "fs" );
 const path = require( "path" );
 const Logstasher = require( "./lib/logstasher" );
+
+// NewRelic is stats module, which needs newrelic.js in the app root
+// do as little as possible before loading NewRelic
+const newrelicPath = path.join( path.dirname( fs.realpathSync( __filename ) ), "newrelic.js" );
+if ( fs.existsSync( newrelicPath ) ) {
+  require( "newrelic" ); // eslint-disable-line global-require
+}
+
 const InaturalistAPI = require( "./lib/inaturalist_api" );
 const InaturalistAPIV2 = require( "./lib/inaturalist_api_v2" );
 
