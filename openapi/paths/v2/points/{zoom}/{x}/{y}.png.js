@@ -13,27 +13,28 @@ const transformedObsSearchParams = _.map( inheritdObsSearchParams, p => (
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    req.params.style = "grid";
-    req.params.format = "grid.json";
-    ElasticMapper.routeWithCallback( req, res, ( err, data ) => {
-      sendWrapper( req, res, err, data );
+    req.params.style = "points";
+    req.params.format = "png";
+    ElasticMapper.route( req, res, ( err, data ) => {
+      sendWrapper( req, res, err, data, "image/png" );
     } );
   }
 
   GET.apiDoc = {
-    tags: ["UTFGrid"],
-    summary: "JSON for grid tiles",
+    tags: ["Observation Tiles"],
+    summary: "Grid Tiles",
     security: [{
       jwtOptional: []
     }],
     parameters: tilePathParams.concat( transformedObsSearchParams ),
     responses: {
       200: {
-        description: "Returns a UTFGrid.",
+        description: "Returns points tiles.",
         content: {
-          "application/json": {
+          "image/png": {
             schema: {
-              $ref: "#/components/schemas/UtfGrid"
+              type: "string",
+              format: "binary"
             }
           }
         }

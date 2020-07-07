@@ -13,7 +13,7 @@ const transformedObsSearchParams = _.map( inheritdObsSearchParams, p => (
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    req.params.style = "grid";
+    req.params.style = "points";
     req.params.format = "grid.json";
     ElasticMapper.routeWithCallback( req, res, ( err, data ) => {
       sendWrapper( req, res, err, data );
@@ -22,7 +22,7 @@ module.exports = sendWrapper => {
 
   GET.apiDoc = {
     tags: ["UTFGrid"],
-    summary: "JSON for grid tiles",
+    summary: "JSON for points tiles",
     security: [{
       jwtOptional: []
     }],
