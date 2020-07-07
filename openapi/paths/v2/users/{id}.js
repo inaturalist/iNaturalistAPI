@@ -34,13 +34,12 @@ module.exports = sendWrapper => {
     }
   };
 
-  async function POST( req, res ) {
-    UsersController.update( req, ( err, results ) => {
-      sendWrapper( req, res, err, results );
-    } );
+  async function PUT( req, res ) {
+    const results = await UsersController.update( req );
+    sendWrapper( req, res, null, results );
   }
 
-  POST.apiDoc = {
+  PUT.apiDoc = {
     tags: ["Users"],
     summary: "Update users.",
     security: [{
@@ -78,6 +77,6 @@ module.exports = sendWrapper => {
 
   return {
     GET,
-    POST
+    PUT
   };
 };
