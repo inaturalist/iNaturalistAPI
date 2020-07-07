@@ -2,6 +2,7 @@ const _ = require( "lodash" );
 // We use this to convert Joi schema definitions to swagger/openapi response
 // schemas. Joi is a slightly more concise, JS-style of expressing a schema
 const j2s = require( "hapi-joi-to-swagger" );
+const Joi = require( "@hapi/joi" );
 const observationsCreateSchema = require( "../../schema/request/observations_create" );
 const observationsSearchSchema = require( "../../schema/request/observations_search" );
 // This is a custom method to convert Joi schema definitions to swagger/openapi
@@ -21,15 +22,22 @@ module.exports = sendWrapper => {
     sendWrapper( req, res, null, results );
   }
 
+  const getParameters = _.map(
+    observationsSearchSchema._inner.children, child => (
+      transform( child.schema.label( child.key ) )
+    )
+  );
+  getParameters.push(
+    transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
+  );
+
   GET.apiDoc = {
     tags: ["Observations"],
     summary: "Search observations.",
     security: [{
       jwtOptional: []
     }],
-    parameters: _.map( observationsSearchSchema._inner.children, child => (
-      transform( child.schema.label( child.key ) )
-    ) ),
+    parameters: getParameters,
     responses: {
       200: {
         description: "A list of observations.",
@@ -54,13 +62,6 @@ module.exports = sendWrapper => {
     summary: "Create observations.",
     security: [{
       jwtRequired: []
-    }],
-    parameters: [{
-      in: "header",
-      name: "X-HTTP-Method-Override",
-      schema: {
-        type: "string"
-      }
     }],
     requestBody: {
       content: {
