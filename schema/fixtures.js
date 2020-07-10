@@ -27,6 +27,67 @@
               "label": "The WORST Term"
             }
           ]
+        },
+        {
+          "id": 3,
+          "uri": "uri",
+          "is_value": "false",
+          "taxon_ids": [2],
+          "values": [
+            {
+              "id": 4,
+              "uri": "uri",
+              "labels": [
+                {
+                  "id": 4,
+                  "locale": "en",
+                  "label": "Value 4"
+                }
+              ]
+            },
+            {
+              "id": 5,
+              "uri": "uri",
+              "labels": [
+                {
+                  "id": 5,
+                  "locale": "en",
+                  "label": "Value 5"
+                }
+              ]
+            }
+          ],
+          "labels": [
+            {
+              "id": 3,
+              "locale": "en",
+              "label": "Term with values"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "uri": "uri",
+          "is_value": "true",
+          "labels": [
+            {
+              "id": 4,
+              "locale": "en",
+              "label": "Value 4"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "uri": "uri",
+          "is_value": "true",
+          "labels": [
+            {
+              "id": 5,
+              "locale": "en",
+              "label": "Value 5"
+            }
+          ]
         }
       ]
     },
@@ -34,6 +95,7 @@
       "place": [
         {
           "id": 1,
+          "uuid": "48fba6f4-8627-411b-bf38-af9e280e5cfc",
           "name": "United States",
           "slug": "united-states",
           "display_name_autocomplete": "United States",
@@ -55,6 +117,7 @@
         },
         {
           "id": 2,
+          "uuid": "3fc3929f-08c4-443d-9dda-52ee7609c0a5",
           "name": "Massachusetts",
           "slug": "massachusetts",
           "display_name_autocomplete": "Massachusetts",
@@ -76,6 +139,7 @@
         },
         {
           "id": 3,
+          "uuid": "a0fc3188-85f1-4684-8855-f84e248d4b5a",
           "name": "Community",
           "slug": "community",
           "display_name_autocomplete": "Community",
@@ -96,6 +160,7 @@
         },
         {
           "id": 4,
+          "uuid": "30d4d2a1-0fe1-46e9-a4ca-ca06afcd1048",
           "name": "Search Test Place",
           "display_name_autocomplete": "search test place",
           "admin_level": null,
@@ -115,11 +180,13 @@
         },
         {
           "id": 123,
+          "uuid": "21b9dc61-b1f6-46be-84ca-75c899cdb57c",
           "name": "itsname",
           "slug": "itsname"
         },
         {
           "id": 432,
+          "uuid": "06c869b1-e145-4ae9-a383-81aacdddcad0",
           "name": "a-place",
           "slug": "a-place",
           "display_name_autocomplete": "a-place"
@@ -136,6 +203,7 @@
       "identification": [
         {
           "id": 102,
+          "uuid": "a74986ff-ebcb-4646-bc6e-f26d191df10b",
           "user": {
             "id": 123
            },
@@ -145,6 +213,7 @@
           "current_taxon": true,
           "taxon": {
             "id": 5,
+            "uuid": "e6c0f90f-8527-4b56-a552-fe2273b61ec4",
             "min_species_taxon_id": 5,
             "is_active": true,
             "iconic_taxon_id": 1,
@@ -169,6 +238,7 @@
         },
         {
           "id": 103,
+          "uuid": "928f56be-4c01-459c-ae3a-804dfc8407f1",
           "user": {
             "id": 5
            },
@@ -178,6 +248,7 @@
           "current_taxon": false,
           "taxon": {
             "id": 5,
+            "uuid": "df5717a6-4690-4240-8411-a18e447db81c",
             "min_species_taxon_id": 5,
             "iconic_taxon_id": 101,
             "ancestor_ids": [1,2,3,4,5],
@@ -205,6 +276,9 @@
         },
         {
           "id": 104,
+          "user": {
+            "id": 1
+          },
           "current": true,
           "taxon_change": {
             "id": 1,
@@ -217,6 +291,7 @@
         },
         {
           "id": 105,
+          "uuid": "9ea80970-afe8-4575-bd61-e9395c768b85",
           "user": {
             "id": 1234
            },
@@ -226,6 +301,7 @@
           "current_taxon": true,
           "taxon": {
             "id": 5,
+            "uuid": "1b945e4b-c9f4-4fd2-a149-36e05d338c80",
             "min_species_taxon_id": 5,
             "is_active": true,
             "iconic_taxon_id": 1,
@@ -254,6 +330,7 @@
         },
         {
           "id": 121,
+          "uuid": "6351abcb-8ed4-4b7d-84ff-066ece491338",
           "current": true,
           "observation": {
             "id": 12,
@@ -331,7 +408,12 @@
       "observation": [
         {
           "id": 1,
-          "user": { "id": 123 },
+          "uuid": "cabbd853-39c0-429c-86f1-b36063d3d475",
+          "user": {
+            "id": 123,
+            "login": "a-user",
+            "name": "A User"
+          },
           "created_at": "2015-12-31T00:00:00",
           "quality_grade": "research",
           "oauth_application_id": 3,
@@ -344,6 +426,7 @@
           "private_location": "1,2",
           "taxon": {
             "id": 5,
+            "uuid": "cabbd853-39c0-429c-86f1-b36063d3d475",
             "iconic_taxon_id": 1,
             "ancestor_ids": [1,2,3,4,5],
             "min_species_ancestry": "1,2,3,4,5",
@@ -354,6 +437,7 @@
         },
         {
           "id": 2,
+          "uuid": "9a4046ff-2005-4c8c-8127-48ef2c8e3ab9",
           "user": { "id": 5 },
           "created_at": "2016-01-01T01:00:00",
           "location": "2,3",
@@ -368,6 +452,7 @@
         },
         {
           "id": 333,
+          "uuid": "5e26217c-5a88-421b-81fc-0ce4f07f634a",
           "user": { "id": 333 },
           "created_at": "2010-01-01T02:00:00",
           "private_location": "1,2",
@@ -376,6 +461,7 @@
         },
         {
           "id": 4,
+          "uuid": "e29e68ca-0ecf-4c6b-8fd5-71a28603fb5d",
           "user": { "id": 333 },
           "created_at": "1500-01-01T05:00:00",
           "observed_on": "1500-01-01T05:00:00",
@@ -397,6 +483,7 @@
         },
         {
           "id": 5,
+          "uuid": "e60d4116-f327-4ce1-bd46-27048fdc68a0",
           "user": { "id": 333 },
           "taxon": {
             "id": 123,
@@ -413,6 +500,7 @@
         },
         {
           "id": 6,
+          "uuid": "e1aabcda-0d06-4454-8959-9b000e555610",
           "user": { "id": 333 },
           "geoprivacy": "private",
           "private_location": "1.234,1.234",
@@ -420,10 +508,13 @@
         },
         {
           "id": 7,
+          "uuid": "f88b97cf-6515-4f5b-9a94-5f484167e4a9",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
           "annotations": [
             {
+              "id": 1,
+              "uuid": "fe79f455-171c-4a60-90bd-a9b772856b60",
               "controlled_attribute_id": 1,
               "controlled_value_id": 1,
               "concatenated_attr_val": "1|1",
@@ -435,10 +526,13 @@
         },
         {
           "id": 8,
+          "uuid": "02ad4be1-9f21-41a9-82d3-444d6c1078da",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
           "annotations": [
             {
+              "id": 2,
+              "uuid": "1e203fa7-5239-4df4-a562-ffff21628cf2",
               "controlled_attribute_id": 1,
               "controlled_value_id": 2,
               "concatenated_attr_val": "1|2",
@@ -450,10 +544,13 @@
         },
         {
           "id": 9,
+          "uuid": "dc223c38-8389-44cc-8d22-8a0e77a67cbf",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
           "annotations": [
             {
+              "id": 3,
+              "uuid": "a4e0d1f7-3463-4754-b3b5-0920216a9514",
               "controlled_attribute_id": 1,
               "controlled_value_id": 2,
               "concatenated_attr_val": "1|2",
@@ -472,6 +569,7 @@
         },
         {
           "id": 10,
+          "uuid": "b1aa0a03-3256-4913-aef4-c308ee51dd29",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
           "private_location": "1,2",
@@ -480,6 +578,7 @@
         },
         {
           "id": 11,
+          "uuid": "5adf654d-3aef-48ee-8fd3-48b4a1e2268d",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
           "private_location": "1,2",
@@ -488,16 +587,19 @@
         },
         {
           "id": 12,
+          "uuid": "95e01721-e302-4ac7-b395-f7e4384c76a3",
           "user": { "id": 5 },
           "identifier_user_ids": [ 121, 122 ]
         },
         {
           "id": 13,
+          "uuid": "97aaf567-3998-4a05-b743-a261b9e65031",
           "user": { "id": 5 },
           "identifier_user_ids": [ 121 ]
         },
         {
           "id": 14,
+          "uuid": "6d59a34c-efb3-498a-9aef-eb6ef60ac0ec",
           "user": { "id": 126, "login": "totally-trusting" },
           "description": "Observation by user 126 who trusts user 125",
           "private_location": "1,2",
@@ -505,6 +607,7 @@
         },
         {
           "id": 15,
+          "uuid": "dba1f134-f95c-45c2-8381-22b445cf73ef",
           "user": { "id": 5 },
           "description": "Observation of an obscured taxon",
           "private_location": "1,2",
@@ -513,6 +616,7 @@
         },
         {
           "id": 16,
+          "uuid": "0ae6884e-151e-4d5b-a916-889f01f95985",
           "user": { "id": 5 },
           "description": "Observation of an obscured taxon AND user geoprivacy",
           "private_location": "1,2",
@@ -522,6 +626,7 @@
         },
         {
           "id": 17,
+          "uuid": "450a7b9c-19f2-43ef-9cc9-38b0d6df9bde",
           "user": { "id": 5 },
           "description": "obs with a large positional_accuracy",
           "private_location": "1,2",
@@ -530,6 +635,7 @@
         },
         {
           "id": 18,
+          "uuid": "bf423b43-684a-4aed-bb0c-c8c5ded663c2",
           "user": { "id": 5 },
           "description": "obs with a small positional_accuracy",
           "private_location": "1,2",
@@ -538,6 +644,7 @@
         },
         {
           "id": 19,
+          "uuid": "6e2602c7-1529-4dce-bd62-32f9d0af62f2",
           "user": { "id": 5 },
           "description": "obs with no positional_accuracy",
           "private_location": "1,2",
@@ -545,11 +652,14 @@
         },
         {
           "id": 20,
+          "uuid": "50891b33-96d9-4e46-954d-6215a9ef8147",
           "description": "Has term 2",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
           "annotations": [
             {
+              "id": 4,
+              "uuid": "948ea8f3-b4ec-4cc0-b8db-f811fdd45c48",
               "controlled_attribute_id": 2,
               "controlled_value_id": 3,
               "concatenated_attr_val": "2|3",
@@ -561,11 +671,14 @@
         },
         {
           "id": 21,
+          "uuid": "048a064f-efb1-4671-afeb-a2fae902df52",
           "description": "Has term 1 and 2",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
           "annotations": [
             {
+              "id": 5,
+              "uuid": "ac7b8905-40e2-4b35-b972-b3bcc24b455e",
               "controlled_attribute_id": 1,
               "controlled_value_id": 1,
               "concatenated_attr_val": "1|1",
@@ -585,6 +698,7 @@
         },
         {
           "id": 22,
+          "uuid": "4307798e-d8d8-4030-8e08-60de0cbb8323",
           "description": "Observation field value of type numeric",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
@@ -596,6 +710,7 @@
         },
         {
           "id": 23,
+          "uuid": "aded9e76-ba9a-427c-8346-5530a1dd4866",
           "description": "Observation field value of type taxon",
           "user": { "id": 5 },
           "created_at": "2001-06-01T01:00:00",
@@ -712,6 +827,7 @@
       "taxon": [
         {
           "id": 1001,
+          "uuid": "9cdac31a-87fa-4361-8b7f-348ccebbe2f1",
           "ancestor_ids": [ 1001 ],
           "min_species_ancestry": "1001",
           "name": "Life",
@@ -725,6 +841,7 @@
         },
         {
           "id": 1,
+          "uuid": "94c3e33b-ad67-41af-96cd-a91a58a2c4eb",
           "name": "Los",
           "ancestor_ids": [ 1001, 1 ],
           "min_species_ancestry": "1001,1",
@@ -740,6 +857,7 @@
         },
         {
           "id": 2,
+          "uuid": "a23748a0-65e3-40e8-a455-40a233ce7587",
           "name": "Los",
           "parent_id": 1,
           "ancestor_ids": [ 1001, 1, 2 ],
@@ -754,6 +872,7 @@
         },
         {
           "id": 3,
+          "uuid": "5a1320aa-96c0-4118-b705-fcbb7430d1db",
           "name": "Los lobos",
           "parent_id": 2,
           "ancestor_ids": [ 1001, 1, 2, 3 ],
@@ -770,6 +889,7 @@
         },
         {
           "id": 4,
+          "uuid": "6da04f2f-8906-4589-83a8-5d77a104b993",
           "names": [{
             "name_autocomplete": "眼紋疏廣蠟蟬",
             "exact": "眼紋疏廣蠟蟬",
@@ -780,6 +900,7 @@
         },
         {
           "id": 5,
+          "uuid": "e5567150-66fd-4e20-b291-662701e9d4c1",
           "iconic_taxon_id": 101,
           "is_active": true,
           "ancestor_ids": [1,2,3,4,5],
@@ -789,6 +910,7 @@
         },
         {
           "id": 6,
+          "uuid": "94dbefce-e621-4aae-85e0-c2f644c99091",
           "iconic_taxon_id": 101,
           "is_active": true,
           "ancestor_ids": [1,2,3,4,6],
@@ -798,6 +920,7 @@
         },
         {
           "id": 123,
+          "uuid": "083ced86-f44c-4876-81c1-23dd45badb0f",
           "name": "itsname",
           "names": [
             { "name": "BestEnglish", "locale": "en" },
@@ -823,40 +946,48 @@
         },
         {
           "id": 999,
+          "uuid": "6a33f840-aba6-4026-9883-a20dca4f71e7",
           "name": "ataxon"
         },
         {
           "id": 9898,
+          "uuid": "07be3740-55ad-41d6-9ad6-fc2d6e8dfe39",
           "name": "ataxon"
         },
         {
           "id": 10001,
+          "uuid": "ffb95782-59b0-4fac-930a-6dbe150691e0",
           "name": "DetailsTaxon",
           "ancestor_ids": [ 10001 ]
         },
         {
           "id": 10002,
+          "uuid": "899c70b3-5045-48ca-8872-b7fa352357d9",
           "name": "Taxon for a swap"
         },
         {
           "id": 10003,
+          "uuid": "122f0605-a520-440e-9226-bd5c44d096d8",
           "name": "Inactive, replaced by 123",
           "is_active": false,
           "current_synonymous_taxon_ids": [123]
         },
         {
           "id": 10004,
+          "uuid": "1b0fa776-8792-456b-9c15-e7eab0774f90",
           "name": "Inactive, unreplaced",
           "is_active": false
         },
         {
           "id": 10005,
+          "uuid": "dfa4d3bd-d453-41b6-b5eb-bd5106fe6e3e",
           "name": "Inactive, replaced by 1 and 2",
           "is_active": false,
           "current_synonymous_taxon_ids": [1,2]
         },
         {
           "id": 7,
+          "uuid": "81bbc106-b372-4df5-af7d-50452cf9956e",
           "name": "Los",
           "parent_id": 1,
           "ancestor_ids": [ 1001, 1, 2 ],
@@ -870,6 +1001,7 @@
         },
         {
           "id": 8,
+          "uuid": "95d84231-4e6b-4e4c-b9e2-4efad455f4ce",
           "name": "Mimulus guttatus",
           "parent_id": 1,
           "ancestor_ids": [ 1001, 1, 2 ],
@@ -892,6 +1024,7 @@
         },
         {
           "id": 9,
+          "uuid": "2365b7d1-e4ab-4f54-a9af-f879d809409c",
           "name": "Ulva intestinalis",
           "parent_id": 1,
           "ancestor_ids": [ 1001, 1, 2 ],
@@ -914,6 +1047,7 @@
         },
         {
           "id": 10,
+          "uuid": "e1290908-66c0-4207-89db-bb55f1195b28",
           "name": "Viola pedunculata",
           "parent_id": 1,
           "ancestor_ids": [ 1001, 1, 2 ],
@@ -942,6 +1076,7 @@
         },
         {
           "id": 11,
+          "uuid": "042b6588-7b63-41e9-98d2-c38b93a8b6f4",
           "name": "Junonia hierta",
           "parent_id": 1,
           "ancestor_ids": [ 1001, 1, 2 ],
@@ -970,6 +1105,7 @@
         },
         {
           "id": 12,
+          "uuid": "3d489440-b79e-4a1a-9b5c-4dbc594339ae",
           "name": "Search test taxon",
           "rank": "species",
           "rank_level": 10,
@@ -1113,6 +1249,7 @@
     "identifications": [
       {
         "id": 102,
+        "uuid": "cabbd853-39c0-429c-86f1-b36063d3d475",
         "observation_id": 1,
         "taxon_id": 5,
         "user_id": 123,
@@ -1120,6 +1257,7 @@
       },
       {
         "id": 103,
+        "uuid": "4a4d2853-1d89-4f97-9cba-9b8c930534b9",
         "observation_id": 1,
         "taxon_id": 5,
         "user_id": 5,
@@ -1178,6 +1316,11 @@
       }
     ],
     "places": [
+      {
+        "id": 1,
+        "uuid": "48fba6f4-8627-411b-bf38-af9e280e5cfc",
+        "name": "United States"
+      },
       {
         "id": 111,
         "name": "United States",
@@ -1438,55 +1581,83 @@
     ],
     "taxa": [
       {
+        "id": 1001,
+        "uuid": "9cdac31a-87fa-4361-8b7f-348ccebbe2f1",
+        "name": "Life"
+      },
+      {
+        "id": 1,
+        "uuid": "94c3e33b-ad67-41af-96cd-a91a58a2c4eb",
+        "name": "Los"
+      },
+      {
+        "id": 2,
+        "uuid": "a23748a0-65e3-40e8-a455-40a233ce7587",
+        "name": "Los"
+      },
+      {
         "id": 101,
+        "uuid": "21441033-24f6-4d8b-9bd3-b2718292b776",
         "name": "Actinopterygii"
       },
       {
         "id": 102,
+        "uuid": "ffa18900-408e-4c34-bcfe-802086f0c5a8",
         "name": "Amphibia"
       },
       {
         "id": 103,
+        "uuid": "3037d958-0456-468b-ba6f-551adbb53105",
         "name": "Animalia"
       },
       {
         "id": 104,
+        "uuid": "1decf1b7-e97d-483a-b1e3-7d9424a4b3ac",
         "name": "Arachnida"
       },
       {
         "id": 105,
+        "uuid": "ad3adcf8-0fa5-45c4-9bde-bedd77f740c1",
         "name": "Aves"
       },
       {
         "id": 106,
+        "uuid": "d18908c7-6cab-4a41-af72-d0e1453820cd",
         "name": "Chromista"
       },
       {
         "id": 107,
+        "uuid": "15d05eb3-cba7-480a-a77c-00a1961e9c25",
         "name": "Insecta"
       },
       {
         "id": 108,
+        "uuid": "f8eb356d-8169-4425-b6b2-b997f4a5cbc6",
         "name": "Fungi"
       },
       {
         "id": 109,
+        "uuid": "bd3fba7d-28cf-4bc7-995b-da3e92067fef",
         "name": "Mammalia"
       },
       {
         "id": 110,
+        "uuid": "c15a8a6d-769c-4931-bee3-ab7a6a36a433",
         "name": "Mollusca"
       },
       {
         "id": 111,
+        "uuid": "b2dccdb0-a85f-46e2-bda1-4cb904d090e9",
         "name": "Plantae"
       },
       {
         "id": 112,
+        "uuid": "0f5d4e84-618c-48db-8515-7c3e67b8727f",
         "name": "Protozoa"
       },
       {
         "id": 113,
+        "uuid": "9779a5d3-6b7c-43fe-8168-10c6744fe35c",
         "name": "Reptilia"
       }
     ],
