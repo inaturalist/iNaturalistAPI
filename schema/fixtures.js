@@ -604,6 +604,74 @@
             "name_ci": "Eating",
             "value_ci": 3
           } ]
+        },
+        {
+          "id": 24,
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) by user who trusts curators with everything",
+          "user": { "id": 5 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1],
+          "private_place_ids": [1,2],
+          "location": "42.8,-73.6",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.6, 42.8 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 25,
+          "user": { "id": 6 },
+          "description": "Observation of a threatened taxon in project 2005 (Massachusetts) by user who trusts curators with obs obscured by taxon",
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1],
+          "private_place_ids": [1,2],
+          "location": "42.8,-73.6",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.6, 42.8 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "taxon_geoprivacy": "obscured"
+        },
+        {
+          "id": 26,
+          "user": { "id": 6 },
+          "description": "Observation with geoprivacy of a threatened taxon in project 2005 (Massachusetts) by user who trusts curators with obs obscured by taxon",
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1],
+          "private_place_ids": [1,2],
+          "location": "42.8,-73.6",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.6, 42.8 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "taxon_geoprivacy": "obscured",
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 27,
+          "user": { "id": 6 },
+          "description": "Observation with geoprivacy in project 2005 (Massachusetts) by user who trusts curators with obs obscured by taxon",
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1],
+          "private_place_ids": [1,2],
+          "location": "42.8,-73.6",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.6, 42.8 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 28,
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) that isn't at the edge of the place by user who trusts curators with everything",
+          "user": { "id": 5 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.1,-71.5",
+          "private_location": "42.1,-71.5",
+          "geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] },
+          "geoprivacy": "obscured"
         }
       ]
     },
@@ -705,6 +773,40 @@
           "slug": "spammiest-spam-project",
           "user_ids": [ ],
           "spam": true
+        },
+        {
+          "id": 2005,
+          "project_type": "collection",
+          "title": "Observations in Massachusetts",
+          "title_autocomplete": "Observations in Massachusetts",
+          "title_exact": "Observations in Massachusetts",
+          "slug": "observations-in-massachusetts",
+          "search_parameters": [
+            {
+              "field": "place_id",
+              "value": 2
+            }
+          ],
+          "search_parameter_fields": {
+            "place_id": 2
+          }
+        },
+        {
+          "id": 2006,
+          "project_type": "collection",
+          "title": "Redundant Observations in Massachusetts",
+          "title_autocomplete": "Redundant Observations in Massachusetts",
+          "title_exact": "Redundant Observations in Massachusetts",
+          "slug": "redundant-observations-in-massachusetts",
+          "search_parameters": [
+            {
+              "field": "place_id",
+              "value": 2
+            }
+          ],
+          "search_parameter_fields": {
+            "place_id": 2
+          }
         }
       ]
     },
@@ -1240,6 +1342,20 @@
         "owner_type": "ProjectUser",
         "owner_id": 1,
         "value": "taxon"
+      },
+      {
+        "id": 303,
+        "name": "curator_coordinate_access_for",
+        "owner_type": "ProjectUser",
+        "owner_id": 7,
+        "value": "any"
+      },
+      {
+        "id": 304,
+        "name": "curator_coordinate_access_for",
+        "owner_type": "ProjectUser",
+        "owner_id": 8,
+        "value": "taxon"
       }
     ],
     "project_observations": [
@@ -1296,6 +1412,22 @@
         "project_id": 2,
         "user_id": 123,
         "role": "curator"
+      },
+      {
+        "id": 6,
+        "project_id": 2005,
+        "user_id": 123,
+        "role": "curator"
+      },
+      {
+        "id": 7,
+        "project_id": 2005,
+        "user_id": 5
+      },
+      {
+        "id": 8,
+        "project_id": 2005,
+        "user_id": 6
       }
     ],
     "projects": [
@@ -1318,6 +1450,12 @@
         "slug": "project-two",
         "title": "Project Two",
         "user_id": 123
+      },
+      {
+        "id": 2005,
+        "project_type": "collection",
+        "title": "Observations in Massachusetts",
+        "slug": "observations-in-massachusetts"
       }
     ],
     "posts": [
