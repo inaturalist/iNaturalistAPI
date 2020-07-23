@@ -226,4 +226,25 @@ describe( "Observations", ( ) => {
   //       .expect( 200, done );
   //   } );
   // } );
+
+  describe( "fave", ( ) => {
+    const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+    it( "returns an empty success on POST", done => {
+      nock( "http://localhost:3000" )
+        .post( `/votes/vote/observation/${fixtureObs.id}` )
+        .reply( 200 );
+      request( app ).post( `/v2/observations/${fixtureObs.uuid}/fave` )
+        .set( "Authorization", token )
+        .expect( 204, done );
+    } );
+    it( "returns an empty success on DELETE", done => {
+      nock( "http://localhost:3000" )
+        .delete( `/votes/unvote/observation/${fixtureObs.id}` )
+        .reply( 204 );
+      request( app ).delete( `/v2/observations/${fixtureObs.uuid}/fave` )
+        .set( "Authorization", token )
+        .expect( 204, done );
+    } );
+  } );
 } );
