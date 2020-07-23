@@ -5,10 +5,8 @@ const moderatorAction = require( "./moderator_action" );
 const user = require( "./user" );
 
 module.exports = Joi.object( ).keys( {
-  // TODO make this not required when we update the obs index
   id: Joi.number( ).integer( )
-    .description( "Unique auto-increment integer identifier." )
-    .required( ),
+    .description( "Unique auto-increment integer identifier." ),
   body: Joi.string( ),
   created_at: Joi.string( ),
   created_at_details: dateDetails,
@@ -16,5 +14,5 @@ module.exports = Joi.object( ).keys( {
   hidden: Joi.boolean( ),
   moderator_actions: Joi.array( ).items( moderatorAction ),
   user,
-  uuid: Joi.string( ).guid( { version: "uuidv4" } )
+  uuid: Joi.string( ).guid( { version: "uuidv4" } ).required()
 } ).unknown( false ).meta( { className: "Comment" } );
