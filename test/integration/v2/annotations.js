@@ -58,7 +58,7 @@ describe( "Annotations", ( ) => {
     );
     const anno = obs.annotations[0];
 
-    describe( "vote", ( ) => {
+    describe( "POST vote", ( ) => {
       it( "returns 204 for success", done => {
         // Note that it doesn't really matter what Rails returns. The API just
         // cares about the HTTP status
@@ -82,12 +82,12 @@ describe( "Annotations", ( ) => {
           .expect( 204, done );
       } );
     } );
-    describe( "unvote", ( ) => {
+    describe( "DELETE vote", ( ) => {
       it( "returns 204 for success", done => {
         nock( "http://localhost:3000" )
           .delete( `/votes/unvote/annotation/${anno.uuid}` )
           .reply( 204, {} );
-        request( app ).delete( `/v2/annotations/${anno.uuid}/unvote` )
+        request( app ).delete( `/v2/annotations/${anno.uuid}/vote` )
           .set( "Authorization", token )
           .expect( 204, done );
       } );

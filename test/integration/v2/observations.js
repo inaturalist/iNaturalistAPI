@@ -247,4 +247,50 @@ describe( "Observations", ( ) => {
         .expect( 204, done );
     } );
   } );
+
+  describe( "quality metric voting", ( ) => {
+    const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+    describe( "POST", ( ) => {
+      it( "should fail on a bad metric", done => {
+        request( app ).delete( `/v2/observations/${fixtureObs.uuid}/quality/wyld` )
+          .set( "Authorization", token )
+          .expect( 400, done );
+      } );
+      it( "should accept the agree query param", done => {
+        nock( "http://localhost:3000" )
+          .post( `/observations/${fixtureObs.id}/quality/wild` )
+          .reply( 204 );
+        request( app ).post( `/v2/observations/${fixtureObs.uuid}/quality/wild` )
+          .set( "Authorization", token )
+          .set( "Content-Type", "application/json" )
+          .send( {
+            agree: false
+          } )
+          .expect( 204, done );
+      } );
+      it( "should treat needs_id the same even though it's not a QualityMetric", done => {
+        nock( "http://localhost:3000" )
+          .post( `/votes/vote/observation/${fixtureObs.id}` )
+          .reply( 204 );
+        request( app ).post( `/v2/observations/${fixtureObs.uuid}/quality/needs_id` )
+          .set( "Authorization", token )
+          .set( "Content-Type", "application/json" )
+          .send( {
+            agree: false
+          } )
+          .expect( 204, done );
+      } );
+    } );
+    describe( "DELETE", ( ) => {
+      it( "should return an empty success", done => {
+        nock( "http://localhost:3000" )
+          .delete( `/observations/${fixtureObs.id}/quality/wild` )
+          .reply( 204 );
+        request( app ).delete( `/v2/observations/${fixtureObs.uuid}/quality/wild` )
+          .set( "Authorization", token )
+          .expect( 204, done );
+      } );
+    } );
+  } );
 } );
