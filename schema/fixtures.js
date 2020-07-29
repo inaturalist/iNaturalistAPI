@@ -231,6 +231,7 @@
               "id": 5,
               "iconic_taxon_id": 1,
               "ancestor_ids": [1,2,3,4,5],
+              "min_species_taxon_id": 5,
               "min_species_ancestry": "1,2,3,4,5",
               "rank_level": 10
             }
@@ -267,6 +268,7 @@
               "id": 6,
               "iconic_taxon_id": 101,
               "ancestor_ids": [1,2,3,4,6],
+              "min_species_taxon_id": 6,
               "min_species_ancestry": "1,2,3,4,6",
               "rank_level": 10,
               "rank": "species",
@@ -322,6 +324,7 @@
               "id": 5,
               "iconic_taxon_id": 1,
               "ancestor_ids": [1,2,3,4,5],
+              "min_species_taxon_id": 5,
               "min_species_ancestry": "1,2,3,4,5",
               "rank_level": 10,
               "rank": "species"
@@ -429,6 +432,7 @@
             "uuid": "cabbd853-39c0-429c-86f1-b36063d3d475",
             "iconic_taxon_id": 1,
             "ancestor_ids": [1,2,3,4,5],
+            "min_species_taxon_id": 5,
             "min_species_ancestry": "1,2,3,4,5",
             "rank_level": 10
           },
@@ -444,6 +448,7 @@
           "taxon": {
             "id": 4,
             "ancestor_ids": [1,2,3,4],
+            "min_species_taxon_id": 4,
             "min_species_ancestry": "1,2,3,4"
           },
           "identifications":[{ "user": { "id": 123 }, "own_observation": false }],
@@ -469,6 +474,7 @@
             "id": 123,
             "iconic_taxon_id": 1,
             "ancestor_ids": [11,22,33,123],
+            "min_species_taxon_id": 123,
             "min_species_ancestry": "11,22,33,123",
             "rank_level": 10
           },
@@ -489,6 +495,7 @@
             "id": 123,
             "iconic_taxon_id": 1,
             "ancestor_ids": [11,22,33,123],
+            "min_species_taxon_id": 123,
             "min_species_ancestry": "11,22,33,123",
             "rank_level": 10
           },
@@ -1593,7 +1600,18 @@
       {
         "id": 2,
         "uuid": "a23748a0-65e3-40e8-a455-40a233ce7587",
-        "name": "Los"
+        "name": "Los",
+        "ancestry": "1"
+      },
+      {
+        "id": 4,
+        "uuid": "a23748a0-65e3-40e8-a455-40a433ce7587",
+        "ancestry": "1/2/3"
+      },
+      {
+        "id": 5,
+        "uuid": "a23748a0-65e3-40e8-a455-40a533ce7587",
+        "ancestry": "1/2/3/4"
       },
       {
         "id": 101,
