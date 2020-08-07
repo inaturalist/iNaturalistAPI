@@ -81,7 +81,8 @@ module.exports = Joi.object( ).keys( {
     "cc-by-nc-sa",
     "cc0"
   ) ),
-  // TODO replace with UUIDs when we have them in the taxa index
+  // TODO replace with UUIDs when we have them in the taxa index and we've made
+  // ancestor UUIDs available
   // taxon_id: Joi.array( ).items( Joi.string( ).guid( ) ),
   taxon_id: Joi.array( ).items( Joi.number( ).integer( ) ),
   // TODO replace with UUIDs when we have them in the taxa index

@@ -16,9 +16,17 @@ module.exports = sendWrapper => {
   GET.apiDoc = {
     tags: ["Places"],
     summary: "Search places",
-    parameters: _.map( placesSearchSchema._inner.children, child => (
+    parameters: [
+      {
+        in: "header",
+        name: "X-HTTP-Method-Override",
+        schema: {
+          type: "string"
+        }
+      }
+    ].concat( _.map( placesSearchSchema._inner.children, child => (
       transform( child.schema.label( child.key ) )
-    ) ),
+    ) ) ),
     responses: {
       200: {
         description: "A list of places",
