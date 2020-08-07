@@ -1,16 +1,16 @@
 const Joi = require( "@hapi/joi" );
 const transform = require( "../../../../joi_to_openapi_parameter" );
-const AnnotationsController = require( "../../../../../lib/controllers/v2/annotations_controller" );
+const observationsController = require( "../../../../../lib/controllers/v2/observations_controller" );
 
 module.exports = sendWrapper => {
   async function POST( req, res ) {
-    const results = await AnnotationsController.vote( req );
-    sendWrapper( req, res.status( 204 ), null, results );
+    await observationsController.fave( req );
+    sendWrapper( req, res.status( 204 ) );
   }
 
   POST.apiDoc = {
-    tags: ["Annotations"],
-    summary: "Vote on an annotation",
+    tags: ["Observations"],
+    summary: "Fave an observation observations",
     security: [{
       jwtRequired: []
     }],
@@ -21,24 +21,24 @@ module.exports = sendWrapper => {
           .label( "uuid" )
           .meta( { in: "path" } )
           .required( )
-          .description( "A single UUID" )
+          .description( "A single UUID or a comma-separated list of them" )
       )
     ],
     responses: {
       204: {
-        description: "Vote was successful"
+        description: "Observation faved"
       }
     }
   };
 
   async function DELETE( req, res ) {
-    const results = await AnnotationsController.unvote( req );
-    sendWrapper( req, res.status( 204 ), null, results );
+    await observationsController.unfave( req );
+    sendWrapper( req, res.status( 204 ) );
   }
 
   DELETE.apiDoc = {
-    tags: ["Annotations"],
-    summary: "Remove the authenticated user's vote on an annotation",
+    tags: ["Observations"],
+    summary: "Remove a fave on an observation",
     security: [{
       jwtRequired: []
     }],
@@ -49,15 +49,18 @@ module.exports = sendWrapper => {
           .label( "uuid" )
           .meta( { in: "path" } )
           .required( )
-          .description( "A single UUID" )
+          .description( "A single UUID or a comma-separated list of them" )
       )
     ],
     responses: {
       204: {
-        description: "Vote removal was successful"
+        description: "Observation fave removed"
       }
     }
   };
 
-  return { POST, DELETE };
+  return {
+    POST,
+    DELETE
+  };
 };

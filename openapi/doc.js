@@ -68,13 +68,14 @@ hours. Authentication required for all PUT and POST requests. Some GET
 requests will also include private information like hidden coordinates if
 the authenticated user has permission to view them.
 
-By default, all endpoints will return a very minimal response, usually just the
-UUID. To receive more data, include the \`fields\` parameter to specify exactly
-what you want in the response. For GET requests, this can be as simple as
+By default, all endpoints will return a very minimal response for the requested
+resources (e.g. the contents of the \`results\` array), usually just the UUID.
+To receive more data, include the \`fields\` parameter to specify exactly what
+you want from these reousrces. For GET requests, this can be as simple as
 [${url}/observations?fields=species_guess,observed_on](${url}/observations?fields=species_guess,observed_on)
 to return the \`species_guess\` and \`observed_on\` fields of the observations.
 
-For more complex responses, included nested objects, all GET endpoints also
+For more complex responses, including nested objects, all GET endpoints also
 support POST requests with the \`X-HTTP-Method-Override: GET\` header to so you
 can specify the response fields in a JSON object, e.g.
 \`\`\`

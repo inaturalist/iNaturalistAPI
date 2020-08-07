@@ -1,3 +1,7 @@
+/*
+ * Converts a Joi schema to an OpenAPI request parameter (*not* a response field)
+ */
+
 const _ = require( "lodash" );
 const numberParser = require( "./types/number" );
 const stringParser = require( "./types/string" );
@@ -5,7 +9,7 @@ const booleanParser = require( "./types/boolean" );
 const arrayParser = require( "./types/array" );
 const dateParser = require( "./types/date" );
 const objectParser = require( "./types/object" );
-const alternativesParser = require( "./types/alternatives" );
+// const alternativesParser = require( "./types/alternatives" );
 
 const universalDecorator = joiSchema => {
   const universalParams = { };
@@ -14,9 +18,12 @@ const universalDecorator = joiSchema => {
     universalParams.name = joiSchema._flags.label;
   }
 
-  if ( joiSchema._valids && joiSchema._valids.has( null ) ) {
-    universalParams.nullable = true;
-  }
+  // Not sure what this was doing, but when you had a joi param like
+  // .valid("foo", null) it would raise an exception about nullable being an
+  // additional parameter ~~kueda 20200806
+  // if ( joiSchema._valids && joiSchema._valids.has( null ) ) {
+  //   universalParams.nullable = true;
+  // }
 
   if ( joiSchema._description ) {
     universalParams.description = joiSchema._description;
@@ -105,6 +112,9 @@ const convert = joiSchema => {
   if ( _.find( joiSchema._meta, m => m.in && m.deprecated ) ) {
     baseDefinition.deprecated = true;
   }
+  // Remove empty values from valids. This means that if a parameter has a set
+  // of allowed values, we do not allow a blank, e.g. if param can be yes or no,
+  // we allow param=no, but not param=
   if ( joiSchema._valids && joiSchema._valids._set.size ) {
     const validValues = Array.from( joiSchema._valids._set );
     const notEmptyValues = validValues.filter( value => value !== null && value !== "" );

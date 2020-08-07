@@ -26,7 +26,7 @@ describe( "Comments", ( ) => {
         .expect( 200 )
         .expect( res => {
           const resComment = res.body.results[0];
-          expect( resComment.id ).to.eq( c.id );
+          expect( resComment.uuid ).to.eq( c.uuid );
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
