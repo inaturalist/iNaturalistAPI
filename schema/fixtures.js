@@ -1203,6 +1203,19 @@
         "name": "a-place-in-a-place",
         "display_name": "A Place In A Place",
         "ancestry": "432/433"
+      },
+      {
+        "id": 511,
+        "name": "locale-place",
+        "code": "LP",
+        "admin_level": 0,
+        "ancestry": "111"
+      },
+      {
+        "id": 512,
+        "name": "locale-place-admin-level-1",
+        "code": "LPA",
+        "admin_level": 1
       }
     ],
     "preferences": [

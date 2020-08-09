@@ -34,6 +34,7 @@
     "geoip-lite": "^1.3.4",
     "handlebars": "^4.5.3",
     "inaturalistjs": "github:inaturalist/inaturalistjs",
+    "intl": "^1.2.5",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.15",
     "lodash.merge": "^4.6.2",
