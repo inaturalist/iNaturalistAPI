@@ -1,3 +1,4 @@
+const _ = require( "lodash" );
 const { expect } = require( "chai" );
 const request = require( "supertest" );
 const fs = require( "fs" );
@@ -27,7 +28,7 @@ describe( "ControlledTerms", ( ) => {
       const fixtureTerms = fixtures.elasticsearch.controlled_terms.controlled_term;
       request( app ).get( "/v1/controlled_terms/for_taxon?taxon_id=11" )
         .expect( res => {
-          expect( res.body.total_results ).to.eq( fixtureTerms.length );
+          expect( res.body.total_results ).to.eq( _.filter( fixtureTerms, t => t.is_value === "true" ).length );
           expect( res.body.results[0].id ).to.eq( 1 );
           expect( res.body.results[0].is_value ).to.eq( "false" );
           expect( res.body.results[0].uri ).to.not.be.undefined;

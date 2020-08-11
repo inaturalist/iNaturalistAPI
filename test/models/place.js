@@ -62,13 +62,16 @@ describe( "Place", ( ) => {
   describe( "assignToObject", ( ) => {
     it( "assigns place instances to objects", done => {
       const o = { 1: { }, 123: { }, 432: { } };
-      Place.assignToObject( o ).then( ( ) => {
-        expect( _.keys( o ) ).to.deep.eq( ["1", "123", "432"] );
-        expect( o["1"].display_name ).to.be.undefined;
-        expect( o["123"].display_name ).to.be.undefined;
-        expect( o["432"].display_name ).to.eq( "a-place" );
-        done( );
-      } );
+      const promise = Place.assignToObject( o );
+      expect( promise ).to.be.fulfilled;
+      promise
+        .then( ( ) => {
+          expect( _.keys( o ) ).to.deep.eq( ["1", "123", "432"] );
+          expect( o["1"].id ).to.eq( 1 );
+          expect( o["123"].id ).to.be.undefined;
+          expect( o["432"].display_name ).to.eq( "a-place" );
+        } )
+        .finally( done );
     } );
   } );
 } );
