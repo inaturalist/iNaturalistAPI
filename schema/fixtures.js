@@ -726,6 +726,38 @@
             "name_ci": "Eating",
             "value_ci": 3
           } ]
+        },
+        {
+          "id": 24,
+          "uuid": "3fef8ec3-4f4f-4b69-864e-27ebe7f1d6b7",
+          "description": "Research-grade candidate without a taxon",
+          "user": { "id": 5 },
+          "created_at": "2020-08-08T17:17:10.545-07:00",
+          "photos": [
+            {
+              "id": 1,
+              "license_code": "cc-by",
+              "url": "https://static.inaturalist.org/photos/88972976/square.jpeg?1596932241",
+              "attribution": "(c) B User, some rights reserved (CC BY)",
+              "original_dimensions": {
+                "width": 1536,
+                "height": 2048
+              },
+              "flags": []
+            }
+          ],
+          "private_location": "1,2",
+          "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] },
+          "observed_on": "2020-08-08",
+          "observed_on_string": "2020-08-08 2:27:03 PM PDT",
+          "observed_on_details": {
+            "date": "2020-08-08",
+            "week": 32,
+            "month": 8,
+            "hour": 14,
+            "year": 2020,
+            "day": 8
+          }
         }
       ]
     },
@@ -1322,6 +1354,42 @@
         "updated_at": "2018-04-01 01:00:00"
       }
     ],
+    "observation_photos": [
+      {
+        "id": 1,
+        "observation_id": 24,
+        "photo_id": 1,
+        "position": 0,
+        "created_at": "2020-03-13 16:50:17.98273",
+        "updated_at": "2020-03-13 16:50:17.98273",
+        "uuid": "8d841055-5850-42ee-be5e-d9068c5f31fd"
+      }
+    ],
+    "photos": [
+      {
+        "id": 1,
+        "user_id": 5,
+        "native_photo_id": 1,
+        "square_url": "https://static.inaturalist.org/photos/58769366/square.jpeg",
+        "thumb_url": "https://static.inaturalist.org/photos/58769366/thumb.jpeg",
+        "small_url": "https://static.inaturalist.org/photos/58769366/small.jpeg",
+        "medium_url": "https://static.inaturalist.org/photos/58769366/medium.jpeg",
+        "large_url": "https://static.inaturalist.org/photos/58769366/large.jpeg",
+        "original_url": "https://static.inaturalist.org/photos/58769366/original.jpeg",
+        "created_at": "2019-12-30 19:37:52.986735",
+        "updated_at": "2019-12-30 19:37:52.986735",
+        "native_page_url": "https://www.inaturalist.org/photos/58769366",
+        "native_username": "b-user",
+        "native_realname": "B User",
+        "license": 4,
+        "type": "LocalPhoto",
+        "file_content_type": "image/jpeg",
+        "file_file_name": "091a1e05-aecc-4b9c-b99f-81163f46191f.jpeg",
+        "file_file_size": 2040108,
+        "file_updated_at": "2019-12-30 19:37:51.542313",
+        "uuid": "e1a058c7-258b-4250-90a8-6902aa310312"
+      }
+    ],
     "places": [
       {
         "id": 1,
@@ -1636,7 +1704,8 @@
       {
         "id": 105,
         "uuid": "ad3adcf8-0fa5-45c4-9bde-bedd77f740c1",
-        "name": "Aves"
+        "name": "Aves",
+        "ancestry": "1001/103"
       },
       {
         "id": 106,
