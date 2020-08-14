@@ -1288,11 +1288,13 @@
     "identifications": [
       {
         "id": 102,
-        "uuid": "cabbd853-39c0-429c-86f1-b36063d3d475",
+        "uuid": "a74986ff-ebcb-4646-bc6e-f26d191df10b",
         "observation_id": 1,
         "taxon_id": 5,
         "user_id": 123,
-        "body": "id1"
+        "body": "id1",
+        "category": "leading",
+        "current": true
       },
       {
         "id": 103,

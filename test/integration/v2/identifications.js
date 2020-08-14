@@ -49,4 +49,58 @@ describe( "Identifications", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "update", ( ) => {
+    const token = jwt.sign( { user_id: 333 }, config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+    const ident = fixtures.elasticsearch.identifications.identification[0];
+    it( "returns JSON", done => {
+      nock( "http://localhost:3000" )
+        .put( `/identifications/${ident.uuid}` )
+        .reply( 200, ident );
+      request( app ).put( `/v2/identifications/${ident.uuid}` )
+        .set( "Authorization", token )
+        .set( "Content-Type", "application/json" )
+        .send( {
+          identification: {
+            body: "this is an updated body"
+          }
+        } )
+        .expect( 200 )
+        .expect( res => {
+          const resIdent = res.body.results[0];
+          expect( resIdent.uuid ).to.eq( ident.uuid );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "bails without an identification in the request body", done => {
+      nock( "http://localhost:3000" )
+        .put( `/identifications/${ident.uuid}` )
+        .reply( 200, ident );
+      request( app ).put( `/v2/identifications/${ident.uuid}` )
+        .set( "Authorization", token )
+        .set( "Content-Type", "application/json" )
+        .send( {
+          body: "this is an updated body"
+        } )
+        .expect( 400, done );
+    } );
+  } );
+
+  describe( "delete", ( ) => {
+    const token = jwt.sign( { user_id: 333 }, config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+    const ident = fixtures.elasticsearch.identifications.identification[0];
+    it( "returns 200", done => {
+      nock( "http://localhost:3000" )
+        .delete( `/identifications/${ident.uuid}` )
+        .reply( 200 );
+      request( app ).delete( `/v2/identifications/${ident.uuid}` )
+        .set( "Authorization", token )
+        .set( "Content-Type", "application/json" )
+        .expect( 200, done );
+    } );
+  } );
 } );
