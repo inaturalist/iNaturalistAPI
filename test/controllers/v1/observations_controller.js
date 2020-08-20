@@ -557,9 +557,27 @@ describe( "ObservationsController", ( ) => {
         created_d1: "2015-01-01T00:00:00+00:00",
         created_d2: "2015-02-02T23:59:59+00:00"
       } );
-      expect( q.filters[0].range.created_at ).to.eql( {
+      const shoulds = q.filters[0].bool.should;
+      expect( shoulds[0].bool.filter[0].range.created_at ).to.eql( {
         gte: "2015-01-01T00:00:00+00:00",
         lte: "2015-02-02T23:59:59+00:00"
+      } );
+      expect( shoulds[0].bool.filter[1].exists.field ).to.eql( "created_at" );
+      expect( shoulds[1].bool.filter[0].range["created_at_details.date"] ).to.eql( {
+        gte: "2015-01-01",
+        lte: "2015-02-02"
+      } );
+      expect( shoulds[1].bool.must_not[0].exists.field ).to.eql( "created_at" );
+    } );
+
+    it( "filters created_at date", async ( ) => {
+      const q = await Q( {
+        created_d1: "2015-01-01",
+        created_d2: "2015-02-02"
+      } );
+      expect( q.filters[0].range["created_at_details.date"] ).to.eql( {
+        gte: "2015-01-01",
+        lte: "2015-02-02"
       } );
     } );
 

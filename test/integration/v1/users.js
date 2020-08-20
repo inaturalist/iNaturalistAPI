@@ -37,9 +37,9 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "returns a 422 for unknown users", done => {
+    it( "returns a 404 for unknown users", done => {
       request( app ).get( "/v1/users/123123" )
-        .expect( "Content-Type", /json/ ).expect( 422, done );
+        .expect( "Content-Type", /json/ ).expect( 404, done );
     } );
   } );
 
@@ -139,6 +139,18 @@ describe( "Users", ( ) => {
           expect( res.body.results[0].site.place_id ).to.eq( 1 );
           expect( res.body.results[0].site.locale ).to.eq( "en" );
           expect( res.body.results[0].site.site_name_short ).to.eq( "iNat" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns user privileges", done => {
+      const token = jwt.sign( { user_id: 1 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/users/me" ).set( "Authorization", token )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results[0].privileges[0] ).to.eq( "speech" );
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );

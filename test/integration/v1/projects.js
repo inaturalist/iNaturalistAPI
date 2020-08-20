@@ -97,10 +97,16 @@ describe( "Projects Routes", ( ) => {
     } );
 
     it( "can filter by member_id", done => {
-      request( app ).get( "/v1/projects/autocomplete?member_id=123" )
+      const userID = 123;
+      request( app ).get( `/v1/projects/autocomplete?member_id=${userID}` )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
-          expect( res.body.results.length ).to.eq( 2 );
+          expect( res.body.results.length ).to.eq(
+            _.filter(
+              fixtures.elasticsearch.projects.project,
+              p => ( p.user_ids && p.user_ids.indexOf( userID ) >= 0 )
+            ).length
+          );
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
