@@ -54,27 +54,61 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "shows authenticated collection project curators private info if they have access", done => {
+    describe( "for authenticated collection project curators", ( ) => {
       const project = _.find( fixtures.elasticsearch.projects.project, p => p.id === 2005 );
       const curatorProjectUser = _.find( fixtures.postgresql.project_users, pu => pu.id === 6 );
       const projectUserTrustingForAny = _.find(
         fixtures.postgresql.project_users,
         pu => pu.id === 7
       );
+      const projectUserTrustingForTaxon = _.find(
+        fixtures.postgresql.project_users,
+        pu => pu.id === 8
+      );
       const placeId = _.find( project.search_parameters, sp => sp.field === "place_id" ).value;
-      const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
-        o.private_place_ids
-        && o.private_place_ids.includes( placeId )
-        && o.user.id === projectUserTrustingForAny.user_id
-      ) );
       const token = jwt.sign( { user_id: curatorProjectUser.user_id }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( `/v1/observations/${obs.id}?include_new_projects=true` ).set( "Authorization", token )
-        .expect( res => {
-          expect( res.body.results[0].private_location ).to.not.be.undefined;
-        } )
-        .expect( "Content-Type", /json/ )
-        .expect( 200, done );
+      it( "shows authenticated collection project curators private info if observer trusts them with anything", done => {
+        const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
+          o.private_place_ids
+          && o.private_place_ids.includes( placeId )
+          && o.user.id === projectUserTrustingForAny.user_id
+        ) );
+        request( app ).get( `/v1/observations/${obs.id}?include_new_projects=true` ).set( "Authorization", token )
+          .expect( res => {
+            expect( res.body.results[0].private_location ).to.not.be.undefined;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+      it( "shows authenticated collection project curators private info if observer trusts them with taxon and taxon is threatened", done => {
+        const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
+          o.private_place_ids
+          && o.private_place_ids.includes( placeId )
+          && o.user.id === projectUserTrustingForTaxon.user_id
+          && ["obscured", "private"].includes( o.taxon_geoprivacy )
+          && !["obscured", "private"].includes( o.geoprivacy )
+        ) );
+        request( app ).get( `/v1/observations/${obs.id}?include_new_projects=true` ).set( "Authorization", token )
+          .expect( res => {
+            expect( res.body.results[0].private_location ).to.not.be.undefined;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+      it( "does not show authenticated collection project curators private info if observer trusts them with taxon and taxon is threatened and obs has geoprivacy", done => {
+        const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
+          o.id === 26
+        ) );
+        expect( obs.geoprivacy ).to.eq( "obscured" );
+        expect( obs.taxon_geoprivacy ).to.eq( "obscured" );
+        request( app ).get( `/v1/observations/${obs.id}?include_new_projects=true` ).set( "Authorization", token )
+          .expect( res => {
+            expect( res.body.results[0].private_location ).to.be.undefined;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
     } );
 
     it( "shows authenticated trusted users private info", done => {
@@ -569,7 +603,12 @@ describe( "Observations", ( ) => {
       const obsWithPositionalAccuracy5000 = 17;
       const obsWithPositionalAccuracy5 = 18;
       const obsWithNoPositionalAccuracy = 19;
-      request( app ).get( "/v1/observations?acc=false" )
+      const requestIds = [
+        obsWithPositionalAccuracy5000,
+        obsWithPositionalAccuracy5,
+        obsWithNoPositionalAccuracy
+      ];
+      request( app ).get( `/v1/observations?id=${requestIds.join( "," )}&acc=false` )
         .expect( res => {
           const ids = res.body.results.map( r => r.id );
           expect( ids ).not.to.contain( obsWithPositionalAccuracy5 );
@@ -595,7 +634,8 @@ describe( "Observations", ( ) => {
             && !o.place_ids.includes( placeId )
             && o.user.id === projectUserTrustingForAny.user_id
           ) );
-          request( app ).get( `/v1/observations?project_id=${project.id}` ).set( "Authorization", token )
+          request( app ).get( `/v1/observations?project_id=${project.id}` )
+            .set( "Authorization", token )
             .expect( res => {
               const resultObs = _.find( res.body.results, o => o.id === obs.id );
               expect( resultObs.private_location ).to.not.be.undefined;
@@ -603,7 +643,7 @@ describe( "Observations", ( ) => {
             .expect( "Content-Type", /json/ )
             .expect( 200, done );
         } );
-        describe( "by members who trust them obs of threatened taxa", ( ) => {
+        describe( "by members who trust them with obs of threatened taxa", ( ) => {
           const projectUserTrustingForTaxon = _.find(
             fixtures.postgresql.project_users,
             pu => pu.id === 8
@@ -659,7 +699,7 @@ describe( "Observations", ( ) => {
           } );
         } );
       } );
-      it( "should not hidden coords for an obs in a collection project they do not curate", done => {
+      it( "should not include hidden coords for an obs in a collection project they do not curate", done => {
         const project = _.find( fixtures.elasticsearch.projects.project, p => p.id === 2006 );
         const placeId = _.find( project.search_parameters, sp => sp.field === "place_id" ).value;
         const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
@@ -675,6 +715,127 @@ describe( "Observations", ( ) => {
           } )
           .expect( "Content-Type", /json/ )
           .expect( 200, done );
+      } );
+      describe( "coords_viewable_for_proj", ( ) => {
+        const curatedProject = _.find(
+          fixtures.elasticsearch.projects.project,
+          p => p.id === curatorProjectUser.project_id
+        );
+        it( "should include obscured obs by people who trust the viewer", done => {
+          const obsByUserWhoTrustsCurator = _.find(
+            fixtures.elasticsearch.observations.observation,
+            o => o.id === 32
+          );
+          request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
+            .set( "Authorization", token )
+            .expect( 200 )
+            .expect( res => {
+              expect( _.map( res.body.results, "id" ) ).to.include( obsByUserWhoTrustsCurator.id );
+            } )
+            .expect( "Content-Type", /json/ )
+            .expect( 200, done );
+        } );
+        it( "should not include obscured obs by people who do not trust the viewer", done => {
+          const obsByUserWhoDoesNotTrustsCurator = _.find(
+            fixtures.elasticsearch.observations.observation,
+            o => o.id === 33
+          );
+          request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
+            .set( "Authorization", token )
+            .expect( 200 )
+            .expect( res => {
+              expect( _.map( res.body.results, "id" ) ).not.to.include( obsByUserWhoDoesNotTrustsCurator.id );
+            } )
+            .expect( "Content-Type", /json/ )
+            .expect( 200, done );
+        } );
+        it( "should include unobscured obs by people who do not trust the viewer", done => {
+          const obsByUserWhoDoesNotTrustsCurator = _.find(
+            fixtures.elasticsearch.observations.observation,
+            o => o.id === 34
+          );
+          request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
+            .set( "Authorization", token )
+            .expect( 200 )
+            .expect( res => {
+              expect( _.map( res.body.results, "id" ) ).to.include( obsByUserWhoDoesNotTrustsCurator.id );
+            } )
+            .expect( "Content-Type", /json/ )
+            .expect( 200, done );
+        } );
+        it( "should not include obs without open geoprivacy", done => {
+          const obs = _.find(
+            fixtures.elasticsearch.observations.observation,
+            o => o.id === 30
+          );
+          request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
+            .set( "Authorization", token )
+            .expect( 200 )
+            .expect( res => {
+              expect( _.map( res.body.results, "id" ) ).not.to.include( obs.id );
+            } )
+            .expect( "Content-Type", /json/ )
+            .expect( 200, done );
+        } );
+        it( "should not include obs without open taxon geoprivacy", done => {
+          const obs = _.find(
+            fixtures.elasticsearch.observations.observation,
+            o => o.id === 35
+          );
+          request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
+            .set( "Authorization", token )
+            .expect( 200 )
+            .expect( res => {
+              expect( _.map( res.body.results, "id" ) ).not.to.include( obs.id );
+            } )
+            .expect( "Content-Type", /json/ )
+            .expect( 200, done );
+        } );
+        it( "should include obs with geoprivacy when observer trusts a project the viewer curates with anything", done => {
+          const obs = _.find(
+            fixtures.elasticsearch.observations.observation,
+            o => o.id === 28
+          );
+          request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
+            .set( "Authorization", token )
+            .expect( 200 )
+            .expect( res => {
+              expect( _.map( res.body.results, "id" ) ).to.include( obs.id );
+            } )
+            .expect( "Content-Type", /json/ )
+            .expect( 200, done );
+        } );
+        it( "should not include obs with geoprivacy when observer trusts a project the viewer curates with taxa", done => {
+          const obs = _.find(
+            fixtures.elasticsearch.observations.observation,
+            o => o.id === 26
+          );
+          expect( obs.geoprivacy ).to.eq( "obscured" );
+          request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
+            .set( "Authorization", token )
+            .expect( 200 )
+            .expect( res => {
+              expect( _.map( res.body.results, "id" ) ).not.to.include( obs.id );
+            } )
+            .expect( "Content-Type", /json/ )
+            .expect( 200, done );
+        } );
+        it( "should include obs with taxon geoprivacy when observer trusts a project the viewer curates with taxa", done => {
+          const obs = _.find(
+            fixtures.elasticsearch.observations.observation,
+            o => o.id === 25
+          );
+          expect( obs.taxon_geoprivacy ).to.eq( "obscured" );
+          expect( obs.geoprivacy ).to.be.undefined;
+          request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
+            .set( "Authorization", token )
+            .expect( 200 )
+            .expect( res => {
+              expect( _.map( res.body.results, "id" ) ).to.include( obs.id );
+            } )
+            .expect( "Content-Type", /json/ )
+            .expect( 200, done );
+        } );
       } );
     } );
   } );

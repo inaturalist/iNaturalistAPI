@@ -831,6 +831,94 @@
             "year": 2020,
             "day": 8
           }
+        },
+        {
+          "id": 30,
+          "uuid": "7f8be603-454e-42ad-b1de-c60da018770a",
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) by user who is not in the project",
+          "user": { "id": 2 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.7,-73.4",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 31,
+          "uuid": "54bdcf6f-aa5e-4316-be7a-417c6a20838a",
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) by user who is in the project but doesn't trust the curators",
+          "user": { "id": 121 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.7,-73.4",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] }
+        },
+        {
+          "id": 32,
+          "uuid": "d17058eb-f864-49b2-8546-b46bf99c3e68",
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) by user who trusts user 123, a project curator",
+          "user": { "id": 127 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.1,-71.5",
+          "private_location": "42.1,-71.5",
+          "geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] },
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 33,
+          "uuid": "3ff91940-4bda-4552-ba9e-def0570d3ac7",
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) by user who does not trust user 123, a project curator",
+          "user": { "id": 128 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.1,-71.5",
+          "private_location": "42.1,-71.5",
+          "geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] },
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 34,
+          "uuid": "3ee2447c-8139-49c5-97d8-54f5d5719125",
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) that is not obscured by user who does not trust user 123, a project curator",
+          "user": { "id": 128 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.1,-71.5",
+          "private_location": "42.1,-71.5",
+          "geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] }
+        },
+        {
+          "id": 35,
+          "uuid": "47748d0d-ddf2-45ac-8f56-7cb75282ebc1",
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) with taxon_geoprivacy by user who is not in the project",
+          "user": { "id": 2 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.7,-73.4",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "taxon_geoprivacy": "obscured"
         }
       ]
     },
@@ -950,7 +1038,7 @@
             "place_id": 2
           },
           "user_id": 1,
-          "user_ids": [5, 123]
+          "user_ids": [1, 5, 6, 123, 121]
         },
         {
           "id": 2006,
@@ -1280,6 +1368,13 @@
           "site_id": 1
         },
         {
+          "id": 2,
+          "login": "search_test_user",
+          "login_autocomplete": "search_test_user",
+          "name": "Search Test User",
+          "name_autocomplete": "Search Test User"
+        },
+        {
           "id": 5,
           "login": "b-user",
           "name": "B User"
@@ -1305,11 +1400,31 @@
           "name": "A User"
         },
         {
-          "id": 2,
-          "login": "search_test_user",
-          "login_autocomplete": "search_test_user",
-          "name": "Search Test User",
-          "name_autocomplete": "Search Test User"
+          "id": 124,
+          "login": "es-user",
+          "name": "ES User",
+          "locale": "es",
+          "place_id": 222
+        },
+        {
+          "id": 125,
+          "login": "totally-trustworthy"
+        },
+        {
+          "id": 126,
+          "login": "totally-trusting"
+        },
+        {
+          "id": 127,
+          "login": "user124",
+          "name": "User 124",
+          "description": "Observer that trusts user 123"
+        },
+        {
+          "id": 128,
+          "login": "user125",
+          "name": "User 125",
+          "description": "Observer that does NOT trust user 123"
         }
       ]
     },
@@ -1391,6 +1506,11 @@
       {
         "user_id": 126,
         "friend_id": 125,
+        "trust": true
+      },
+      {
+        "user_id": 127,
+        "friend_id": 123,
         "trust": true
       }
     ],
@@ -1590,6 +1710,13 @@
         "owner_type": "ProjectUser",
         "owner_id": 8,
         "value": "taxon"
+      },
+      {
+        "id": 305,
+        "name": "curator_coordinate_access_for",
+        "owner_type": "ProjectUser",
+        "owner_id": 9,
+        "value": "none"
       }
     ],
     "project_observations": [
@@ -1662,6 +1789,11 @@
         "id": 8,
         "project_id": 2005,
         "user_id": 6
+      },
+      {
+        "id": 9,
+        "project_id": 2005,
+        "user_id": 121
       }
     ],
     "projects": [
@@ -1962,6 +2094,18 @@
       {
         "id": 126,
         "login": "totally-trusting"
+      },
+      {
+        "id": 127,
+        "login": "user124",
+        "name": "User 124",
+        "description": "Observer that trusts user 123"
+      },
+      {
+        "id": 128,
+        "login": "user125",
+        "name": "User 125",
+        "description": "Observer that does NOT trust user 123"
       }
     ],
     "user_privileges": [

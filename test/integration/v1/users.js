@@ -1,3 +1,4 @@
+const _ = require( "lodash" );
 const { expect } = require( "chai" );
 const jwt = require( "jsonwebtoken" );
 const request = require( "supertest" );
@@ -98,9 +99,7 @@ describe( "Users", ( ) => {
       request( app ).get( "/v1/users/1/projects" )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
-          expect( res.body.per_page ).to.eq( 2 );
-          expect( res.body.total_results ).to.eq( 2 );
-          expect( res.body.results[0].slug ).to.eq( "project-one" );
+          expect( _.find( res.body.results, p => p.slug === "project-one" ) ).not.to.be.undefined;
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
@@ -109,9 +108,7 @@ describe( "Users", ( ) => {
       request( app ).get( "/v1/users/userlogin/projects" )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
-          expect( res.body.per_page ).to.eq( 2 );
-          expect( res.body.total_results ).to.eq( 2 );
-          expect( res.body.results[0].slug ).to.eq( "project-one" );
+          expect( _.find( res.body.results, p => p.slug === "project-one" ) ).not.to.be.undefined;
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
