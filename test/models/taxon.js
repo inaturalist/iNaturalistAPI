@@ -148,9 +148,14 @@ describe( "Taxon", ( ) => {
       expect( t.establishmentMeans( p ) ).to.deep.eq( { place_id: 222, establishment_means: "introduced" } );
     } );
 
-    it( "returns the means from an ancestor place", ( ) => {
+    it( "returns the means from an ancestor place when introduced", ( ) => {
+      const p = { id: 333, ancestor_place_ids: [222, 333] };
+      expect( t.establishmentMeans( p ) ).to.deep.eq( { place_id: 222, establishment_means: "introduced" } );
+    } );
+
+    it( "does not return the means from an ancestor place when endemic", ( ) => {
       const p = { id: 333, ancestor_place_ids: [111, 333] };
-      expect( t.establishmentMeans( p ) ).to.deep.eq( { place_id: 111, establishment_means: "endemic" } );
+      expect( t.establishmentMeans( p ) ).to.not.eq( { place_id: 111, establishment_means: "endemic" } );
     } );
 
     it( "skips listed taxa without means", ( ) => {
