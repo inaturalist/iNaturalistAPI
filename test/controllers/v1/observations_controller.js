@@ -704,6 +704,20 @@ describe( "ObservationsController", ( ) => {
       expect( q.filters ).to.eql( [{ terms: { geoprivacy: ["obscured", "private"] } }] );
     } );
 
+    it( "filters by licensed", async ( ) => {
+      let q = await Q( { licensed: "true" } );
+      expect( q.filters ).to.eql( [{ exists: { field: "license_code" } }] );
+      q = await Q( { licensed: "false" } );
+      expect( q.inverse_filters ).to.eql( [{ exists: { field: "license_code" } }] );
+    } );
+
+    it( "filters by photo_licensed", async ( ) => {
+      let q = await Q( { photo_licensed: "true" } );
+      expect( q.filters ).to.eql( [{ exists: { field: "photo_licenses" } }] );
+      q = await Q( { photo_licensed: "false" } );
+      expect( q.inverse_filters ).to.eql( [{ exists: { field: "photo_licenses" } }] );
+    } );
+
     //
     // Sorting
     //

@@ -43,6 +43,10 @@ module.exports = Joi.object( ).keys( {
     "cc-by-nc-sa",
     "cc0"
   ) ),
+  licensed: Joi.boolean( )
+    .description( "Filter by observations where the license attribute is not null, i.e. it is licensed" ),
+  photo_licensed: Joi.boolean( )
+    .description( "Filter by observations where the license attribute of at least one photo is not null" ),
   place_id: Joi.array( ).items( Joi.string( ).guid( ) ),
   project_id: Joi.array( ).items( Joi.number( ).integer( ) ),
   rank: Joi.array( ).items( Joi.string( ).valid(

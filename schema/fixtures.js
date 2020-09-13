@@ -427,6 +427,7 @@
             "value_ci": "marine"
           } ],
           "private_location": "1,2",
+          "license_code": "cc-by",
           "taxon": {
             "id": 5,
             "uuid": "cabbd853-39c0-429c-86f1-b36063d3d475",
@@ -732,6 +733,7 @@
           "uuid": "3fef8ec3-4f4f-4b69-864e-27ebe7f1d6b7",
           "description": "Research-grade candidate without a taxon",
           "user": { "id": 5 },
+          "photo_licenses": ["cc-by"],
           "created_at": "2020-08-08T17:17:10.545-07:00",
           "photos": [
             {
