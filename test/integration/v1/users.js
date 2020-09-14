@@ -1,3 +1,4 @@
+const _ = require( "lodash" );
 const { expect } = require( "chai" );
 const jwt = require( "jsonwebtoken" );
 const request = require( "supertest" );
@@ -128,17 +129,39 @@ describe( "Users", ( ) => {
     it( "returns the logged-in users object", done => {
       const token = jwt.sign( { user_id: 1 }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
+      // The default state for most users will be to not have this preference
+      // explicitly set, but the default should still be true, so I'm just
+      // making sure that's the case for this user
+      const existingCommonNamesPref = _.find( fixtures.postgresql.preferences,
+        p => p.name === "common_names" && p.owner_type === "User" && p.owner_id === 1 );
+      expect( existingCommonNamesPref ).to.be.undefined;
       request( app ).get( "/v1/users/me" ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.total_results ).to.eq( 1 );
           expect( res.body.results[0].id ).to.eq( 1 );
           expect( res.body.results[0].prefers_scientific_name_first ).to.eq( true );
-          expect( res.body.results[0].site_id ).to.eq( 1 );
+          expect( res.body.results[0].prefers_common_names ).to.eq( true );
           expect( res.body.results[0].site.id ).to.eq( 1 );
           expect( res.body.results[0].site.url ).to.eq( "https://www.inaturalist.org" );
           expect( res.body.results[0].site.place_id ).to.eq( 1 );
           expect( res.body.results[0].site.locale ).to.eq( "en" );
           expect( res.body.results[0].site.site_name_short ).to.eq( "iNat" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns prefers_common_names if set to false", done => {
+      const user = _.find( fixtures.postgresql.users, u => u.login === "prefers-no-common-names" );
+      const existingCommonNamesPref = _.find( fixtures.postgresql.preferences,
+        p => p.name === "common_names" && p.owner_type === "User" && p.owner_id === user.id );
+      expect( existingCommonNamesPref.value ).to.eq( "f" );
+      const token = jwt.sign( { user_id: user.id }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/users/me" ).set( "Authorization", token )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results[0].prefers_common_names ).to.eq( false );
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );

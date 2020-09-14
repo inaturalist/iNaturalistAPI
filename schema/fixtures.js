@@ -1201,6 +1201,11 @@
           "login_autocomplete": "search_test_user",
           "name": "Search Test User",
           "name_autocomplete": "Search Test User"
+        },
+        {
+          "id": 127,
+          "login": "prefers-no-common-names",
+          "name": "Prefers No Common Names"
         }
       ]
     },
@@ -1460,7 +1465,15 @@
         "owner_id": 1,
         "owner_type": "User",
         "value": "t"
-      }    ],
+      },
+      {
+        "id": 302,
+        "name": "common_names",
+        "owner_id": 127,
+        "owner_type": "User",
+        "value": "f"
+      }
+    ],
     "project_observations": [
       {
         "id": 101,
@@ -1804,6 +1817,10 @@
       {
         "id": 126,
         "login": "totally-trusting"
+      },
+      {
+        "id": 127,
+        "login": "prefers-no-common-names"
       }
     ],
     "user_privileges": [
