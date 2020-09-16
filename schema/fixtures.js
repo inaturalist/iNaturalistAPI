@@ -1425,6 +1425,18 @@
           "login": "user125",
           "name": "User 125",
           "description": "Observer that does NOT trust user 123"
+        },
+        {
+          "id": 2,
+          "login": "search_test_user",
+          "login_autocomplete": "search_test_user",
+          "name": "Search Test User",
+          "name_autocomplete": "Search Test User"
+        },
+        {
+          "id": 129,
+          "login": "prefers-no-common-names",
+          "name": "Prefers No Common Names"
         }
       ]
     },
@@ -1717,6 +1729,13 @@
         "owner_type": "ProjectUser",
         "owner_id": 9,
         "value": "none"
+      },
+      {
+        "id": 306,
+        "name": "common_names",
+        "owner_id": 129,
+        "owner_type": "User",
+        "value": "f"
       }
     ],
     "project_observations": [
@@ -2106,6 +2125,10 @@
         "login": "user125",
         "name": "User 125",
         "description": "Observer that does NOT trust user 123"
+      },
+      {
+        "id": 129,
+        "login": "prefers-no-common-names"
       }
     ],
     "user_privileges": [
