@@ -325,6 +325,13 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
+    it( "filter by photos=true", done => {
+      request( app ).get( "/v1/observations?photos=true" )
+        .expect( res => {
+          expect( res.body.results[0].photos[0] ).to.not.be.undefined;
+        } ).expect( 200, done );
+    } );
+
     it( "includes soundcloud identifiers", done => {
       request( app ).get( "/v1/observations?sounds=true" )
         .expect( res => {

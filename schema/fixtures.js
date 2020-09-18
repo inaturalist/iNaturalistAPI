@@ -485,7 +485,8 @@
               "attribution": "Slartibartfast",
               "native_sound_id": 123
             }
-          ]
+          ],
+          "sounds_count": 1
         },
         {
           "id": 5,
@@ -733,19 +734,7 @@
           "description": "Research-grade candidate without a taxon",
           "user": { "id": 5 },
           "created_at": "2020-08-08T17:17:10.545-07:00",
-          "photos": [
-            {
-              "id": 1,
-              "license_code": "cc-by",
-              "url": "https://static.inaturalist.org/photos/88972976/square.jpeg?1596932241",
-              "attribution": "(c) B User, some rights reserved (CC BY)",
-              "original_dimensions": {
-                "width": 1536,
-                "height": 2048
-              },
-              "flags": []
-            }
-          ],
+          "photos_count": 1,
           "private_location": "1,2",
           "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] },
           "observed_on": "2020-08-08",

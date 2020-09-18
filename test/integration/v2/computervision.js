@@ -22,7 +22,8 @@ describe( "Computervision", ( ) => {
       nock( config.imageProcesing.tensorappURL )
         .post( "/" )
         .reply( 200, fakeVisionResults );
-      request( app ).get( `/v2/computervision/score_observation/${fixtureObs.uuid}` )
+      const url = `/v2/computervision/score_observation/${fixtureObs.uuid}`;
+      request( app ).get( url )
         .set( "Authorization", token )
         .expect( 200 )
         .expect( res => {

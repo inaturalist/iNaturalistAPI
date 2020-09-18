@@ -99,23 +99,13 @@ describe( "ObservationsController", ( ) => {
       } );
       expect( q.filters ).to.deep.include( { term: { captive: false } } );
       expect( q.filters ).to.deep.include( {
-        bool: {
-          should: [
-            { exists: { field: "photos.url" } },
-            { exists: { field: "photos_count" } }
-          ]
-        }
+        range: { photos_count: { gte: 1 } }
       } );
       expect( q.filters ).to.deep.include( {
-        bool: {
-          should: [
-            { exists: { field: "sounds" } },
-            { exists: { field: "sounds_count" } }
-          ]
-        }
+        range: { sounds_count: { gte: 1 } }
       } );
       expect( q.filters ).to.deep.include( { exists: { field: "geojson" } } );
-      expect( q.filters ).to.deep.include( { exists: { field: "taxon" } } );
+      expect( q.filters ).to.deep.include( { exists: { field: "taxon.id" } } );
       // plus a complicated date filter
     } );
 
@@ -130,23 +120,13 @@ describe( "ObservationsController", ( ) => {
       } );
       expect( q.grouped_inverse_filters ).to.deep.include( { term: { captive: false } } );
       expect( q.grouped_inverse_filters ).to.deep.include( {
-        bool: {
-          should: [
-            { exists: { field: "photos.url" } },
-            { exists: { field: "photos_count" } }
-          ]
-        }
+        range: { photos_count: { gte: 1 } }
       } );
       expect( q.grouped_inverse_filters ).to.deep.include( {
-        bool: {
-          should: [
-            { exists: { field: "sounds" } },
-            { exists: { field: "sounds_count" } }
-          ]
-        }
+        range: { sounds_count: { gte: 1 } }
       } );
       expect( q.grouped_inverse_filters ).to.deep.include( { exists: { field: "geojson" } } );
-      expect( q.grouped_inverse_filters ).to.deep.include( { exists: { field: "taxon" } } );
+      expect( q.grouped_inverse_filters ).to.deep.include( { exists: { field: "taxon.id" } } );
       // plus a complicated date filter
     } );
 
@@ -214,14 +194,7 @@ describe( "ObservationsController", ( ) => {
     it( "turns has[] into params", async ( ) => {
       const q = await Q( { has: ["photos"] } );
       expect( q.filters ).to.eql( [
-        {
-          bool: {
-            should: [
-              { exists: { field: "photos.url" } },
-              { exists: { field: "photos_count" } }
-            ]
-          }
-        }
+        { range: { photos_count: { gte: 1 } } }
       ] );
     } );
 
@@ -339,10 +312,8 @@ describe( "ObservationsController", ( ) => {
         }
       };
       await Promise.all( _.map( [
-        { http_param: "photos", es_field: ["photos.url", "photos_count"] },
-        { http_param: "sounds", es_field: ["sounds", "sounds_count"] },
         { http_param: "geo", es_field: "geojson" },
-        { http_param: "identified", es_field: "taxon" }
+        { http_param: "identified", es_field: "taxon.id" }
       ], f => asyncTest( f ) ) );
     } );
 
