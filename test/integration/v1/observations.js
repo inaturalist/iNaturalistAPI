@@ -111,6 +111,34 @@ describe( "Observations", ( ) => {
       } );
     } );
 
+    describe( "for authenticated curators of collection projects with trust disabled", ( ) => {
+      const project = _.find( fixtures.elasticsearch.projects.project, p => p.id === 2020100101 );
+      const curatorProjectUser = _.find( fixtures.postgresql.project_users, pu => pu.id === 2020100101 );
+      const projectUserTrustingForAny = _.find(
+        fixtures.postgresql.project_users,
+        pu => pu.id === 2020100102
+      );
+      const placeId = _.find( project.search_parameters, sp => sp.field === "place_id" ).value;
+      const token = jwt.sign( { user_id: curatorProjectUser.user_id }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      it( "does not show private info if observer trusts them with anything", async ( ) => {
+        const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
+          o.private_place_ids
+          && o.private_place_ids.includes( placeId )
+          && o.user.id === projectUserTrustingForAny.user_id
+        ) );
+        return request( app )
+          .get( `/v1/observations/${obs.id}?include_new_projects=true` )
+          .set( "Authorization", token )
+          .expect( 200 )
+          .expect( res => {
+            expect( res.body.results[0].private_location ).to.be.undefined;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200 );
+      } );
+    } );
+
     it( "shows authenticated trusted users private info", done => {
       const token = jwt.sign( { user_id: 125 }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
@@ -843,6 +871,48 @@ describe( "Observations", ( ) => {
             .expect( "Content-Type", /json/ )
             .expect( 200, done );
         } );
+        it( "should not include obs with geoprivacy when observer trusts a project with trust disabled that the viewer curates", done => {
+          const proj = _.find(
+            fixtures.elasticsearch.projects.project,
+            p => p.id === 2020100101
+          );
+          const tok = jwt.sign( { user_id: proj.user_id }, config.jwtSecret || "secret",
+            { algorithm: "HS512" } );
+          const obs = _.find(
+            fixtures.elasticsearch.observations.observation,
+            p => p.id === 2020100101
+          );
+          request( app ).get( `/v1/observations?project_id=${proj.id}&coords_viewable_for_proj=true` )
+            .set( "Authorization", tok )
+            .expect( 200 )
+            .expect( res => {
+              expect( _.map( res.body.results, "id" ) ).not.to.include( obs.id );
+            } )
+            .expect( "Content-Type", /json/ )
+            .expect( 200, done );
+        } );
+      } );
+    } );
+    describe( "by project curator filtering by a collection project they curate with user trust disabled", ( ) => {
+      const curatorProjectUser = _.find( fixtures.postgresql.project_users,
+        pu => pu.id === 2020100101 );
+      const token = jwt.sign( { user_id: curatorProjectUser.user_id }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      const project = _.find( fixtures.elasticsearch.projects.project,
+        p => p.id === curatorProjectUser.project_id );
+      it( "should not include hidden coords for obs by members who trust them with obs of anything", done => {
+        const projectUserTrustingForAny = _.find(
+          fixtures.postgresql.project_users,
+          pu => pu.id === 2020100102
+        );
+        request( app ).get( `/v1/observations?project_id=${project.id}&user_id=${projectUserTrustingForAny.user_id}` )
+          .set( "Authorization", token )
+          .expect( res => {
+            const resultObs = _.find( res.body.results, o => o.geoprivacy === "obscured" );
+            expect( resultObs.private_location ).to.be.undefined;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
       } );
     } );
   } );

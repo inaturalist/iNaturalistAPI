@@ -908,6 +908,21 @@
           "geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
           "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
           "taxon_geoprivacy": "obscured"
+        },
+        {
+          "id": 2020100101,
+          "uuid": "64d02611-a44f-4247-b213-8be23e1fbd21",
+          "captive": false,
+          "description": "Observation in project 2020100101 (Massachusetts) by user who trusts curators with everything",
+          "user": { "id": 2020100102 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.8,-73.6",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.6, 42.8 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "geoprivacy": "obscured"
         }
       ]
     },
@@ -1027,7 +1042,8 @@
             "place_id": 2
           },
           "user_id": 1,
-          "user_ids": [1, 5, 6, 123, 121]
+          "user_ids": [1, 5, 6, 123, 121],
+          "prefers_user_trust": true
         },
         {
           "id": 2006,
@@ -1045,6 +1061,26 @@
           "search_parameter_fields": {
             "place_id": 2
           }
+        },
+        {
+          "id": 2020100101,
+          "project_type": "collection",
+          "title": "Redundant Observations in Massachusetts With Disabled Trust",
+          "title_autocomplete": "Redundant Observations in Massachusetts With Disabled Trust",
+          "title_exact": "Redundant Observations in Massachusetts With Disabled Trust",
+          "slug": "redundant-observations-in-massachusetts-with-disabled-trust",
+          "search_parameters": [
+            {
+              "field": "place_id",
+              "value": 2
+            }
+          ],
+          "search_parameter_fields": {
+            "place_id": 2
+          },
+          "user_id": 2020100101,
+          "user_ids": [2020100101, 2020100102],
+          "prefers_user_trust": false
         }
       ]
     },
@@ -1725,6 +1761,27 @@
         "owner_id": 129,
         "owner_type": "User",
         "value": "f"
+      },
+      {
+        "id": 2020100101,
+        "name": "curator_coordinate_access_for",
+        "owner_type": "ProjectUser",
+        "owner_id": 2020100102,
+        "value": "any"
+      },
+      {
+        "id": 2020100102,
+        "name": "user_trust",
+        "owner_type": "Project",
+        "owner_id": 2020100101,
+        "value": "f"
+      },
+      {
+        "id": 2020100103,
+        "name": "user_trust",
+        "owner_type": "Project",
+        "owner_id": 2005,
+        "value": "t"
       }
     ],
     "project_observations": [
@@ -1802,6 +1859,22 @@
         "id": 9,
         "project_id": 2005,
         "user_id": 121
+      },
+      {
+        "id": 10,
+        "project_id": 2005,
+        "user_id": 121
+      },
+      {
+        "id": 2020100101,
+        "project_id": 2020100101,
+        "user_id": 2020100101,
+        "role": "curator"
+      },
+      {
+        "id": 2020100102,
+        "project_id": 2020100101,
+        "user_id": 2020100102
       }
     ],
     "projects": [
@@ -1830,6 +1903,12 @@
         "project_type": "collection",
         "title": "Observations in Massachusetts",
         "slug": "observations-in-massachusetts"
+      },
+      {
+        "id": 2020100101,
+        "project_type": "collection",
+        "title": "Redundant Observations in Massachusetts With Disabled Trust",
+        "slug": "redundant-observations-in-massachusetts-with-disabled-trust"
       }
     ],
     "posts": [
@@ -2118,6 +2197,14 @@
       {
         "id": 129,
         "login": "prefers-no-common-names"
+      },
+      {
+        "id": 2020100101,
+        "login": "project_2020100101_admin"
+      },
+      {
+        "id": 2020100102,
+        "login": "project_2020100101_trusting"
       }
     ],
     "user_privileges": [
