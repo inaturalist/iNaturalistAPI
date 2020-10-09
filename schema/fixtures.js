@@ -486,7 +486,8 @@
               "attribution": "Slartibartfast",
               "native_sound_id": 123
             }
-          ]
+          ],
+          "sounds_count": 1
         },
         {
           "id": 5,
@@ -735,19 +736,7 @@
           "user": { "id": 5 },
           "photo_licenses": ["cc-by"],
           "created_at": "2020-08-08T17:17:10.545-07:00",
-          "photos": [
-            {
-              "id": 1,
-              "license_code": "cc-by",
-              "url": "https://static.inaturalist.org/photos/88972976/square.jpeg?1596932241",
-              "attribution": "(c) B User, some rights reserved (CC BY)",
-              "original_dimensions": {
-                "width": 1536,
-                "height": 2048
-              },
-              "flags": []
-            }
-          ],
+          "photos_count": 1,
           "private_location": "1,2",
           "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] },
           "observed_on": "2020-08-08",
@@ -1203,6 +1192,11 @@
           "login_autocomplete": "search_test_user",
           "name": "Search Test User",
           "name_autocomplete": "Search Test User"
+        },
+        {
+          "id": 127,
+          "login": "prefers-no-common-names",
+          "name": "Prefers No Common Names"
         }
       ]
     },
@@ -1462,7 +1456,15 @@
         "owner_id": 1,
         "owner_type": "User",
         "value": "t"
-      }    ],
+      },
+      {
+        "id": 302,
+        "name": "common_names",
+        "owner_id": 127,
+        "owner_type": "User",
+        "value": "f"
+      }
+    ],
     "project_observations": [
       {
         "id": 101,
@@ -1806,6 +1808,10 @@
       {
         "id": 126,
         "login": "totally-trusting"
+      },
+      {
+        "id": 127,
+        "login": "prefers-no-common-names"
       }
     ],
     "user_privileges": [

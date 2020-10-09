@@ -82,6 +82,7 @@ module.exports = Joi.object( ).keys( {
   } ).unknown( false ),
   private_geojson: geojson,
   private_location: Joi.string( ).valid( null ),
+  private_place_guess: Joi.string( ).valid( null ),
   project_ids: Joi.array( ).items( Joi.number( ).integer( ) ),
   project_ids_with_curator_id: Joi.array( ).items( Joi.number( ).integer( ) ),
   project_ids_without_curator_id: Joi.array( ).items( Joi.number( ).integer( ) ),
