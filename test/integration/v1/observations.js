@@ -300,7 +300,7 @@ describe( "Observations", ( ) => {
     } );
 
     it( "filters by captive", done => {
-      request( app ).get( "/v1/observations?sounds=true" )
+      request( app ).get( "/v1/observations?captive=true" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.not.be.undefined; // captive
           expect( res.body.results.map( r => r.id ).indexOf( 1 ) ).to.eq( -1 ); // not-captive
@@ -322,6 +322,38 @@ describe( "Observations", ( ) => {
           expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.not.be.undefined; // captive
           expect( res.body.results.map( r => r.id ).indexOf( 1 ) )
             .to.not.be.undefined; // not-captive
+        } ).expect( 200, done );
+    } );
+
+    it( "filters by licensed", done => {
+      request( app ).get( "/v1/observations?licensed=true" )
+        .expect( res => {
+          expect( res.body.results.map( r => r.id ).includes( 1 ) ).to.be.true; // licensed
+          expect( res.body.results.map( r => r.id ).includes( 5 ) ).to.be.false; // not licensed
+        } ).expect( 200, done );
+    } );
+
+    it( "filters by not licensed", done => {
+      request( app ).get( "/v1/observations?licensed=false" )
+        .expect( res => {
+          expect( res.body.results.map( r => r.id ).includes( 1 ) ).to.be.false; // licensed
+          expect( res.body.results.map( r => r.id ).includes( 5 ) ).to.be.true; // not licensed
+        } ).expect( 200, done );
+    } );
+
+    it( "filters by photo_licensed", done => {
+      request( app ).get( "/v1/observations?photo_licensed=true" )
+        .expect( res => {
+          expect( res.body.results.map( r => r.id ).includes( 24 ) ).to.be.true; // photo_licensed
+          expect( res.body.results.map( r => r.id ).includes( 1 ) ).to.be.false; // not licensed
+        } ).expect( 200, done );
+    } );
+
+    it( "filters by not photo_licensed", done => {
+      request( app ).get( "/v1/observations?photo_licensed=false" )
+        .expect( res => {
+          expect( res.body.results.map( r => r.id ).includes( 24 ) ).to.be.false; // photo_licensed
+          expect( res.body.results.map( r => r.id ).includes( 1 ) ).to.be.true; // not licensed
         } ).expect( 200, done );
     } );
 
