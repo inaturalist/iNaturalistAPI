@@ -17,7 +17,7 @@ describe( "Taxa", ( ) => {
       request( app ).get( "/v1/taxa/autocomplete?q=los" )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
-          expect( res.body.per_page ).to.eq( 30 );
+          expect( res.body.per_page ).to.eq( 10 );
           expect( res.body.total_results ).to.eq( 3 );
           expect( res.body.results.length ).to.eq( 3 );
           expect( res.body.results[0].matched_term ).to.eq( "Los" );
@@ -61,10 +61,10 @@ describe( "Taxa", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "returns default per_page of 30 if fewer than 1 were requested", done => {
+    it( "returns default per_page of 10 if fewer than 1 were requested", done => {
       request( app ).get( "/v1/taxa/autocomplete?q=los&per_page=-1" )
         .expect( res => {
-          expect( res.body.per_page ).to.eq( 30 );
+          expect( res.body.per_page ).to.eq( 10 );
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
