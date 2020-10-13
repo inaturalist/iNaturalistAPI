@@ -139,7 +139,6 @@ describe( "Users", ( ) => {
         .expect( res => {
           expect( res.body.total_results ).to.eq( 1 );
           expect( res.body.results[0].id ).to.eq( 1 );
-          expect( res.body.results[0].prefers_scientific_name_first ).to.eq( true );
           expect( res.body.results[0].prefers_common_names ).to.eq( true );
           expect( res.body.results[0].site.id ).to.eq( 1 );
           expect( res.body.results[0].site.url ).to.eq( "https://www.inaturalist.org" );
@@ -177,6 +176,41 @@ describe( "Users", ( ) => {
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
+    } );
+
+    _.each( [
+      "created_at",
+      "description",
+      "email",
+      "id",
+      "login",
+      "name",
+      "preferred_observation_fields_by",
+      "preferred_observation_license",
+      "preferred_photo_license",
+      "preferred_project_addition_by",
+      "preferred_sound_license",
+      "prefers_automatic_taxon_changes",
+      "prefers_common_names",
+      "prefers_community_taxa",
+      "prefers_monthly_supporters_badge",
+      "prefers_no_tracking",
+      "prefers_scientific_name_first",
+      "search_place_id",
+      "time_zone",
+      "updated_at"
+    ], a => {
+      it( `returns ${a}`, done => {
+        const token = jwt.sign( { user_id: 1 }, config.jwtSecret || "secret",
+          { algorithm: "HS512" } );
+        request( app ).get( "/v1/users/me" ).set( "Authorization", token )
+          .expect( 200 )
+          .expect( res => {
+            expect( res.body.results[0][a] ).not.to.be.undefined;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
     } );
   } );
 
