@@ -193,7 +193,7 @@ describe( "Users", ( ) => {
       "prefers_automatic_taxon_changes",
       "prefers_common_names",
       "prefers_community_taxa",
-      "prefers_monthly_supporters_badge",
+      "prefers_monthly_supporter_badge",
       "prefers_no_tracking",
       "prefers_scientific_name_first",
       "search_place_id",
