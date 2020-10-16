@@ -651,7 +651,7 @@ describe( "Observations", ( ) => {
           expect( ids ).to.contain( obsWithNoPositionalAccuracy );
         } ).expect( 200, done );
     } );
-    describe( "by project curator", ( ) => {
+    describe( "viewed by project curator", ( ) => {
       const curatorProjectUser = _.find( fixtures.postgresql.project_users, pu => pu.id === 6 );
       const token = jwt.sign( { user_id: curatorProjectUser.user_id }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
@@ -663,16 +663,26 @@ describe( "Observations", ( ) => {
             fixtures.postgresql.project_users,
             pu => pu.id === 7
           );
+          // Note that this obs should only appear to be in the project by
+          // people who have permission to see the hidden coordinates, b/c its
+          // private coordinates are inside the project place oundary, but its
+          // public coordinates are outside
           const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
             o.private_place_ids
             && o.private_place_ids.includes( placeId )
             && !o.place_ids.includes( placeId )
             && o.user.id === projectUserTrustingForAny.user_id
           ) );
+          expect( obs ).to.not.be.undefined;
           request( app ).get( `/v1/observations?project_id=${project.id}` )
             .set( "Authorization", token )
             .expect( res => {
               const resultObs = _.find( res.body.results, o => o.id === obs.id );
+              // Failure here means the target observation wasn't even included
+              // in the search results
+              expect( resultObs ).to.not.be.undefined;
+              // Failure here means the observation was included but the viewer
+              // couldn't see the private location
               expect( resultObs.private_location ).to.not.be.undefined;
             } )
             .expect( "Content-Type", /json/ )
@@ -893,7 +903,7 @@ describe( "Observations", ( ) => {
         } );
       } );
     } );
-    describe( "by project curator filtering by a collection project they curate with user trust disabled", ( ) => {
+    describe( "viewed by project curator filtering by a collection project they curate with user trust disabled", ( ) => {
       const curatorProjectUser = _.find( fixtures.postgresql.project_users,
         pu => pu.id === 2020100101 );
       const token = jwt.sign( { user_id: curatorProjectUser.user_id }, config.jwtSecret || "secret",
@@ -910,6 +920,118 @@ describe( "Observations", ( ) => {
           .expect( res => {
             const resultObs = _.find( res.body.results, o => o.geoprivacy === "obscured" );
             expect( resultObs.private_location ).to.be.undefined;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+    } );
+    describe( "viewed by trusting member of project", ( ) => {
+      const project = _.find( fixtures.elasticsearch.projects.project, p => p.id === 2005 );
+      const placeId = _.find( project.search_parameters, sp => sp.field === "place_id" ).value;
+      const projectUserTrustingForAny = _.find(
+        fixtures.postgresql.project_users,
+        pu => pu.id === 7
+      );
+      const token = jwt.sign(
+        { user_id: projectUserTrustingForAny.user_id },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" }
+      );
+      it( "should include an observation by the viewer that is privately inside the place but publicly outside", done => {
+        const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
+          o.private_place_ids
+          && o.private_place_ids.includes( placeId )
+          && !o.place_ids.includes( placeId )
+          && o.user.id === projectUserTrustingForAny.user_id
+        ) );
+        expect( obs ).to.not.be.undefined;
+        request( app ).get( `/v1/observations?project_id=${project.id}` )
+          .set( "Authorization", token )
+          .expect( res => {
+            const resultObs = _.find( res.body.results, o => o.id === obs.id );
+            // Failure here means the target observation wasn't even included
+            // in the search results
+            expect( resultObs ).to.not.be.undefined;
+            // Failure here means the observation was included but the viewer
+            // couldn't see the private location
+            expect( resultObs.private_location ).to.not.be.undefined;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+      it( "should not include an observation by someone else that is privately inside the place but publicly outside", done => {
+        const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
+          o.private_place_ids
+          && o.private_place_ids.includes( placeId )
+          && !o.place_ids.includes( placeId )
+          && o.user.id !== projectUserTrustingForAny.user_id
+        ) );
+        expect( obs ).to.not.be.undefined;
+        request( app ).get( `/v1/observations?project_id=${project.id}` )
+          .set( "Authorization", token )
+          .expect( res => {
+            const resultObs = _.find( res.body.results, o => o.id === obs.id );
+            expect( resultObs ).to.be.undefined;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+    } );
+    describe( "viewed by non-trusting member of project", ( ) => {
+      const project = _.find( fixtures.elasticsearch.projects.project, p => p.id === 2005 );
+      const placeId = _.find( project.search_parameters, sp => sp.field === "place_id" ).value;
+      const projectUserTrustingForNone = _.find(
+        fixtures.postgresql.project_users,
+        pu => pu.id === 9
+      );
+      const token = jwt.sign(
+        { user_id: projectUserTrustingForNone.user_id },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" }
+      );
+      it( "should not include an observation by the viewer that is privately inside the place but publicly outside", done => {
+        const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
+          o.private_place_ids
+          && o.private_place_ids.includes( placeId )
+          && !o.place_ids.includes( placeId )
+          && o.user.id === projectUserTrustingForNone.user_id
+        ) );
+        expect( obs ).to.not.be.undefined;
+        request( app ).get( `/v1/observations?project_id=${project.id}` )
+          .set( "Authorization", token )
+          .expect( res => {
+            const resultObs = _.find( res.body.results, o => o.id === obs.id );
+            expect( resultObs ).to.be.undefined;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+    } );
+    describe( "viewed by non-member of project", ( ) => {
+      const project = _.find( fixtures.elasticsearch.projects.project, p => p.id === 2005 );
+      const placeId = _.find( project.search_parameters, sp => sp.field === "place_id" ).value;
+      const nonMemberUser = _.find(
+        fixtures.elasticsearch.users.user,
+        u => u.id === 2
+      );
+      const token = jwt.sign(
+        { user_id: nonMemberUser.id },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" }
+      );
+      it( "should not include an observation by the viewer that is privately inside the place but publicly outside", done => {
+        const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
+          o.private_place_ids
+          && o.private_place_ids.includes( placeId )
+          && !o.place_ids.includes( placeId )
+          && o.user.id === nonMemberUser.id
+        ) );
+        expect( obs ).to.not.be.undefined;
+        request( app ).get( `/v1/observations?project_id=${project.id}` )
+          .set( "Authorization", token )
+          .expect( res => {
+            const resultObs = _.find( res.body.results, o => o.id === obs.id );
+            expect( resultObs ).to.be.undefined;
           } )
           .expect( "Content-Type", /json/ )
           .expect( 200, done );

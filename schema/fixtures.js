@@ -923,6 +923,36 @@
           "geojson": { "type": "Point", "coordinates": [ -73.6, 42.8 ] },
           "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
           "geoprivacy": "obscured"
+        },
+        {
+          "id": 2020101501,
+          "uuid": "dcccb9cd-6ffb-4a1e-bbbc-28765cf13779",
+          "captive": false,
+          "description": "Observation not in project 2005 (Massachusetts) b/c it is publicly outside but private inside the place boundary by user who is not in the project",
+          "user": { "id": 2 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1],
+          "private_place_ids": [1,2],
+          "location": "42.8,-73.6",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.6, 42.8 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 2020101502,
+          "uuid": "dcccb9cd-6ffb-4a1e-bbbc-28765cf13779",
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) b/c it is publicly outside but private inside the place boundary by user who is in the project but doesn't trust the curators",
+          "user": { "id": 121 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1],
+          "private_place_ids": [1,2],
+          "location": "42.8,-73.6",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.6, 42.8 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "geoprivacy": "obscured"
         }
       ]
     },
