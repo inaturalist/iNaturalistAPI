@@ -655,6 +655,36 @@ describe( "Observations", ( ) => {
       const curatorProjectUser = _.find( fixtures.postgresql.project_users, pu => pu.id === 6 );
       const token = jwt.sign( { user_id: curatorProjectUser.user_id }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
+      it( "only includes non_traditional_projects when filtered by project_id for relevant projects", done => {
+        const includedProject = _.find(
+          fixtures.elasticsearch.projects.project, p => p.id === 2005
+        );
+        const excludedProject = _.find(
+          fixtures.elasticsearch.projects.project, p => p.id === 2001
+        );
+        const includedObs = _.find(
+          fixtures.elasticsearch.observations.observation,
+          o => o.uuid === "ca81b849-a052-4b12-9755-7c5d49190fb3"
+        );
+        request( app )
+          .get(
+            `/v1/observations?include_new_projects=true&project_id=${includedProject.id},${excludedProject.id}`
+          )
+          .set( "Authorization", token )
+          .expect( 200 )
+          .expect( res => {
+            const ids = res.body.results.map( r => r.id );
+            expect( ids ).to.contain( includedObs.id );
+            const resObs = _.find( res.body.results, r => r.uuid === includedObs.uuid );
+            // The obs is *supposed* to be in the includedProject, which should be
+            // a collection / non-traditional project
+            expect( resObs.non_traditional_projects ).not.to.be.undefined;
+            const nonTradIds = _.map( resObs.non_traditional_projects, "project_id" );
+            expect( nonTradIds ).to.contain( includedProject.id );
+            expect( nonTradIds ).not.to.contain( excludedProject.id );
+          } )
+          .expect( 200, done );
+      } );
       describe( "filtering by a collection project they curate", ( ) => {
         const project = _.find( fixtures.elasticsearch.projects.project, p => p.id === 2005 );
         const placeId = _.find( project.search_parameters, sp => sp.field === "place_id" ).value;
