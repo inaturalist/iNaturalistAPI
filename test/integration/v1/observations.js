@@ -257,14 +257,20 @@ describe( "Observations", ( ) => {
     it( "finds observations by user login", done => {
       request( app ).get( "/v1/observations?user_id=a-user" )
         .expect( res => {
-          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.total_results ).not.to.eq( 0 );
+          _.forEach( res.body.results, obs => {
+            expect( obs.user.login ).to.eq( "a-user" );
+          } );
         } ).expect( 200, done );
     } );
 
     it( "finds observations by user_id", done => {
       request( app ).get( "/v1/observations?user_id=123" )
         .expect( res => {
-          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.total_results ).not.to.eq( 0 );
+          _.forEach( res.body.results, obs => {
+            expect( obs.user.id ).to.eq( 123 );
+          } );
         } ).expect( 200, done );
     } );
 
@@ -436,18 +442,34 @@ describe( "Observations", ( ) => {
     } );
 
     it( "filters by photo_licensed", done => {
-      request( app ).get( "/v1/observations?photo_licensed=true" )
+      request( app ).get( "/v1/observations?photo_licensed=true&photos=true" )
         .expect( res => {
-          expect( res.body.results.map( r => r.id ).includes( 24 ) ).to.be.true; // photo_licensed
-          expect( res.body.results.map( r => r.id ).includes( 1 ) ).to.be.false; // not licensed
+          expect( res.body.results ).not.to.be.empty;
+          _.forEach( res.body.results, obs => {
+            expect( obs.photos ).not.to.be.empty;
+            _.forEach( obs.photos, photo => {
+              // Everything should begin with cc
+              expect( photo.license_code ).to.match( /^cc/ );
+            } );
+          } );
         } ).expect( 200, done );
     } );
 
     it( "filters by not photo_licensed", done => {
-      request( app ).get( "/v1/observations?photo_licensed=false" )
+      request( app ).get( "/v1/observations?photo_licensed=false&photos=true" )
         .expect( res => {
-          expect( res.body.results.map( r => r.id ).includes( 24 ) ).to.be.false; // photo_licensed
-          expect( res.body.results.map( r => r.id ).includes( 1 ) ).to.be.true; // not licensed
+          expect( res.body.results ).not.to.be.empty;
+          // The fixtures should have at least one obs that has an unlicensed
+          // photo
+          expect(
+            _.filter( res.body.results, obs => ( obs.photos && obs.photos.length > 0 ) )
+          ).not.to.be.empty;
+          _.forEach( res.body.results, obs => {
+            _.forEach( obs.photos, photo => {
+              // Everything should have no license
+              expect( photo.license_code ).to.be.null;
+            } );
+          } );
         } ).expect( 200, done );
     } );
 
@@ -1313,8 +1335,13 @@ describe( "Observations", ( ) => {
   describe( "quality_grades", ( ) => {
     it( "returns quality_grade counts", done => {
       request( app ).get( "/v1/observations/quality_grades" ).expect( res => {
-        expect( res.body.results[0].quality_grade ).to.eq( "research" );
-        expect( res.body.results[0].count ).to.eq( 1 );
+        const numRG = _.filter(
+          fixtures.elasticsearch.observations.observation,
+          o => o.quality_grade === "research"
+        ).length;
+        const rgResult = _.find( res.body.results, r => r.quality_grade === "research" );
+        expect( rgResult ).not.to.be.undefined;
+        expect( rgResult.count ).to.eq( numRG );
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
