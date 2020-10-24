@@ -118,7 +118,7 @@ describe( "Users", ( ) => {
     } );
   } );
 
-  describe( "me", ( ) => {
+  describe.only( "me", ( ) => {
     it( "fails for unauthenticated requests", done => {
       request( app ).get( "/v1/users/me" ).expect( res => {
         expect( res.error.text ).to.eq( "{\"error\":\"Unauthorized\",\"status\":401}" );
@@ -190,12 +190,25 @@ describe( "Users", ( ) => {
       "preferred_photo_license",
       "preferred_project_addition_by",
       "preferred_sound_license",
-      "prefers_automatic_taxon_changes",
+      "prefers_automatic_taxonomic_changes",
+      "prefers_comment_email_notification",
       "prefers_common_names",
       "prefers_community_taxa",
+      "prefers_identification_email_notification",
+      "prefers_mention_email_notification",
+      "prefers_message_email_notification",
       "prefers_monthly_supporter_badge",
+      "prefers_no_email",
       "prefers_no_tracking",
+      "prefers_project_added_your_observation_email_notification",
+      "prefers_project_curator_change_email_notification",
+      "prefers_project_journal_post_email_notification",
+      "prefers_receive_mentions",
+      "prefers_redundant_identification_notifications",
       "prefers_scientific_name_first",
+      "prefers_taxon_change_email_notification",
+      "prefers_taxon_or_place_observation_email_notification",
+      "prefers_user_observation_email_notification",
       "search_place_id",
       "time_zone",
       "updated_at"
