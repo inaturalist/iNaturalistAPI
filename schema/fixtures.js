@@ -1671,6 +1671,47 @@
         "redirect_uri": "redirect_uri",
         "created_at": "2018-04-01 01:00:00",
         "updated_at": "2018-04-01 01:00:00"
+      },
+      {
+        "id": 2020102901,
+        "name": "Totally Trustworthy Endeavor",
+        "uid": "sdkjgha3934",
+        "secret": "dshghkjgh395",
+        "redirect_uri": "redirect_uri",
+        "created_at": "2020-10-29 01:00:00",
+        "updated_at": "2020-10-29 01:00:00"
+      }
+    ],
+    "oauth_access_tokens": [
+      {
+        "id": 2020102801,
+        "resource_owner_id": 123,
+        "application_id": 3,
+        "token": "sdjgnaldkfjfg",
+        "expires_in": 600,
+        "created_at": "2020-10-28 11:54:15.314522",
+        "revoked_at": null,
+        "scopes": "write login"
+      },
+      {
+        "id": 2020102901,
+        "resource_owner_id": 1,
+        "application_id": 3,
+        "token": "sdjgnaldkfjfg",
+        "expires_in": 600,
+        "created_at": "2020-10-28 11:54:15.314522",
+        "revoked_at": null,
+        "scopes": "write login"
+      },
+      {
+        "id": 2020102902,
+        "resource_owner_id": 123,
+        "application_id": 2020102901,
+        "token": "alskhkjsdghlakjgh",
+        "expires_in": 600,
+        "created_at": "2020-10-20 01:54:15.314522",
+        "revoked_at": "2020-10-20 03:54:15.314522",
+        "scopes": "write login"
       }
     ],
     "observation_photos": [

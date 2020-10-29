@@ -114,7 +114,7 @@ describe( "Users", ( ) => {
     } );
   } );
 
-  describe.only( "me", ( ) => {
+  describe( "me", ( ) => {
     it( "fails for unauthenticated requests", done => {
       request( app ).get( "/v1/users/me" ).expect( res => {
         expect( res.error.text ).to.eq( "{\"error\":\"Unauthorized\",\"status\":401}" );
