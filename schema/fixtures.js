@@ -731,6 +731,79 @@
         },
         {
           "id": 24,
+          "uuid": "8d863d0e-cbc8-41cc-bf99-8faa6b449541",
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) by user who trusts curators with everything",
+          "user": { "id": 5 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1],
+          "private_place_ids": [1,2],
+          "location": "42.8,-73.6",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.6, 42.8 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 25,
+          "uuid": "b7254e49-e396-42cd-8e39-369d68c76fc2",
+          "user": { "id": 6 },
+          "description": "Observation of a threatened taxon in project 2005 (Massachusetts) by user who trusts curators with obs obscured by taxon",
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1],
+          "private_place_ids": [1,2],
+          "location": "42.8,-73.6",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.6, 42.8 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "taxon_geoprivacy": "obscured"
+        },
+        {
+          "id": 26,
+          "uuid": "bc688517-3cfa-4282-81f0-66784cb7dbdf",
+          "user": { "id": 6 },
+          "description": "Observation with geoprivacy of a threatened taxon in project 2005 (Massachusetts) by user who trusts curators with obs obscured by taxon",
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1],
+          "private_place_ids": [1,2],
+          "location": "42.8,-73.6",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.6, 42.8 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "taxon_geoprivacy": "obscured",
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 27,
+          "uuid": "5d73bb4e-5052-4e1f-ae92-b1cc97ce5baa",
+          "user": { "id": 6 },
+          "description": "Observation with geoprivacy in project 2005 (Massachusetts) by user who trusts curators with obs obscured by taxon",
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1],
+          "private_place_ids": [1,2],
+          "location": "42.8,-73.6",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.6, 42.8 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 28,
+          "uuid": "ca81b849-a052-4b12-9755-7c5d49190fb3",
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) that isn't at the edge of the place by user who trusts curators with everything",
+          "user": { "id": 5 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.1,-71.5",
+          "private_location": "42.1,-71.5",
+          "geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] },
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 29,
           "uuid": "3fef8ec3-4f4f-4b69-864e-27ebe7f1d6b7",
           "description": "Research-grade candidate without a taxon",
           "user": { "id": 5 },
@@ -749,6 +822,158 @@
             "year": 2020,
             "day": 8
           }
+        },
+        {
+          "id": 30,
+          "uuid": "7f8be603-454e-42ad-b1de-c60da018770a",
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) by user who is not in the project",
+          "user": { "id": 2 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.7,-73.4",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 31,
+          "uuid": "54bdcf6f-aa5e-4316-be7a-417c6a20838a",
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) by user who is in the project but doesn't trust the curators",
+          "user": { "id": 121 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.7,-73.4",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] }
+        },
+        {
+          "id": 32,
+          "uuid": "d17058eb-f864-49b2-8546-b46bf99c3e68",
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) by user who trusts user 123, a project curator",
+          "user": { "id": 127 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.1,-71.5",
+          "private_location": "42.1,-71.5",
+          "geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] },
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 33,
+          "uuid": "3ff91940-4bda-4552-ba9e-def0570d3ac7",
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) by user who does not trust user 123, a project curator",
+          "user": { "id": 128 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.1,-71.5",
+          "private_location": "42.1,-71.5",
+          "geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] },
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 34,
+          "uuid": "3ee2447c-8139-49c5-97d8-54f5d5719125",
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) that is not obscured by user who does not trust user 123, a project curator",
+          "user": { "id": 128 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.1,-71.5",
+          "private_location": "42.1,-71.5",
+          "geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] }
+        },
+        {
+          "id": 35,
+          "uuid": "47748d0d-ddf2-45ac-8f56-7cb75282ebc1",
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) with taxon_geoprivacy by user who is not in the project",
+          "user": { "id": 2 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.7,-73.4",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "taxon_geoprivacy": "obscured"
+        },
+        {
+          "id": 2020100101,
+          "uuid": "64d02611-a44f-4247-b213-8be23e1fbd21",
+          "captive": false,
+          "description": "Observation in project 2020100101 (Massachusetts) by user who trusts curators with everything",
+          "user": { "id": 2020100102 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.8,-73.6",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.6, 42.8 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 2020101501,
+          "uuid": "dcccb9cd-6ffb-4a1e-bbbc-28765cf13779",
+          "captive": false,
+          "description": "Observation not in project 2005 (Massachusetts) b/c it is publicly outside but private inside the place boundary by user who is not in the project",
+          "user": { "id": 2 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1],
+          "private_place_ids": [1,2],
+          "location": "42.8,-73.6",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.6, 42.8 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 2020101502,
+          "uuid": "dcccb9cd-6ffb-4a1e-bbbc-28765cf13779",
+          "captive": false,
+          "description": "Observation in project 2005 (Massachusetts) b/c it is publicly outside but private inside the place boundary by user who is in the project but doesn't trust the curators",
+          "user": { "id": 121 },
+          "created_at": "2001-06-01T01:00:00",
+          "place_ids": [1],
+          "private_place_ids": [1,2],
+          "location": "42.8,-73.6",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.6, 42.8 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "geoprivacy": "obscured"
+        },
+        {
+          "id": 2020101601,
+          "uuid": "03db7d8f-7fe8-44a0-a0a0-9cfe52b13405",
+          "captive": false,
+          "description": "Verifiable observation with an unlicensed photo",
+          "user": {
+            "id": 123,
+            "login": "a-user",
+            "name": "A User"
+          },
+          "created_at": "2015-12-31T00:00:00",
+          "quality_grade": "needs_id",
+          "oauth_application_id": 3,
+          "private_location": "1,2",
+          "license_code": null,
+          "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] },
+          "photo_licenses": [],
+          "photos_count": 1
         }
       ]
     },
@@ -848,8 +1073,65 @@
           "title_autocomplete": "Spammiest Spam Project",
           "title_exact": "Spammiest Spam Project",
           "slug": "spammiest-spam-project",
-          "user_ids": [ ],
+          "user_ids": [5],
           "spam": true
+        },
+        {
+          "id": 2005,
+          "project_type": "collection",
+          "title": "Observations in Massachusetts",
+          "title_autocomplete": "Observations in Massachusetts",
+          "title_exact": "Observations in Massachusetts",
+          "slug": "observations-in-massachusetts",
+          "search_parameters": [
+            {
+              "field": "place_id",
+              "value": 2
+            }
+          ],
+          "search_parameter_fields": {
+            "place_id": 2
+          },
+          "user_id": 1,
+          "user_ids": [1, 5, 6, 123, 121],
+          "prefers_user_trust": true
+        },
+        {
+          "id": 2006,
+          "project_type": "collection",
+          "title": "Redundant Observations in Massachusetts",
+          "title_autocomplete": "Redundant Observations in Massachusetts",
+          "title_exact": "Redundant Observations in Massachusetts",
+          "slug": "redundant-observations-in-massachusetts",
+          "search_parameters": [
+            {
+              "field": "place_id",
+              "value": 2
+            }
+          ],
+          "search_parameter_fields": {
+            "place_id": 2
+          }
+        },
+        {
+          "id": 2020100101,
+          "project_type": "collection",
+          "title": "Redundant Observations in Massachusetts With Disabled Trust",
+          "title_autocomplete": "Redundant Observations in Massachusetts With Disabled Trust",
+          "title_exact": "Redundant Observations in Massachusetts With Disabled Trust",
+          "slug": "redundant-observations-in-massachusetts-with-disabled-trust",
+          "search_parameters": [
+            {
+              "field": "place_id",
+              "value": 2
+            }
+          ],
+          "search_parameter_fields": {
+            "place_id": 2
+          },
+          "user_id": 2020100101,
+          "user_ids": [2020100101, 2020100102],
+          "prefers_user_trust": false
         }
       ]
     },
@@ -1162,6 +1444,13 @@
           "site_id": 1
         },
         {
+          "id": 2,
+          "login": "search_test_user",
+          "login_autocomplete": "search_test_user",
+          "name": "Search Test User",
+          "name_autocomplete": "Search Test User"
+        },
+        {
           "id": 5,
           "login": "b-user",
           "name": "B User"
@@ -1187,6 +1476,33 @@
           "name": "A User"
         },
         {
+          "id": 124,
+          "login": "es-user",
+          "name": "ES User",
+          "locale": "es",
+          "place_id": 222
+        },
+        {
+          "id": 125,
+          "login": "totally-trustworthy"
+        },
+        {
+          "id": 126,
+          "login": "totally-trusting"
+        },
+        {
+          "id": 127,
+          "login": "user124",
+          "name": "User 124",
+          "description": "Observer that trusts user 123"
+        },
+        {
+          "id": 128,
+          "login": "user125",
+          "name": "User 125",
+          "description": "Observer that does NOT trust user 123"
+        },
+        {
           "id": 2,
           "login": "search_test_user",
           "login_autocomplete": "search_test_user",
@@ -1194,7 +1510,7 @@
           "name_autocomplete": "Search Test User"
         },
         {
-          "id": 127,
+          "id": 129,
           "login": "prefers-no-common-names",
           "name": "Prefers No Common Names"
         }
@@ -1278,6 +1594,11 @@
       {
         "user_id": 126,
         "friend_id": 125,
+        "trust": true
+      },
+      {
+        "user_id": 127,
+        "friend_id": 123,
         "trust": true
       }
     ],
@@ -1396,12 +1717,21 @@
     "observation_photos": [
       {
         "id": 1,
-        "observation_id": 24,
+        "observation_id": 29,
         "photo_id": 1,
         "position": 0,
         "created_at": "2020-03-13 16:50:17.98273",
         "updated_at": "2020-03-13 16:50:17.98273",
         "uuid": "8d841055-5850-42ee-be5e-d9068c5f31fd"
+      },
+      {
+        "id": 2020101601,
+        "observation_id": 2020101601,
+        "photo_id": 2020101601,
+        "position": 0,
+        "created_at": "2020-10-15 16:50:17.98273",
+        "updated_at": "2020-10-15 16:50:17.98273",
+        "uuid": "79b758eb-b0c3-4879-b8c0-f642a7104802"
       }
     ],
     "photos": [
@@ -1427,6 +1757,29 @@
         "file_file_size": 2040108,
         "file_updated_at": "2019-12-30 19:37:51.542313",
         "uuid": "e1a058c7-258b-4250-90a8-6902aa310312"
+      },
+      {
+        "id": 2020101601,
+        "user_id": 123,
+        "native_photo_id": 2020101601,
+        "square_url": "https://static.inaturalist.org/photos/2020101601/square.jpeg",
+        "thumb_url": "https://static.inaturalist.org/photos/2020101601/thumb.jpeg",
+        "small_url": "https://static.inaturalist.org/photos/2020101601/small.jpeg",
+        "medium_url": "https://static.inaturalist.org/photos/2020101601/medium.jpeg",
+        "large_url": "https://static.inaturalist.org/photos/2020101601/large.jpeg",
+        "original_url": "https://static.inaturalist.org/photos/2020101601/original.jpeg",
+        "created_at": "2020-10-15 19:37:52.986735",
+        "updated_at": "2020-10-15 19:37:52.986735",
+        "native_page_url": "https://www.inaturalist.org/photos/2020101601",
+        "native_username": "b-user",
+        "native_realname": "B User",
+        "license": 0,
+        "type": "LocalPhoto",
+        "file_content_type": "image/jpeg",
+        "file_file_name": "091a1e05-aecc-4b9c-b99f-81163f46191f.jpeg",
+        "file_file_size": 2040108,
+        "file_updated_at": "2019-12-30 19:37:51.542313",
+        "uuid": "a24ccc42-fb8a-4585-972b-7cd4f5ffcbad"
       }
     ],
     "places": [
@@ -1500,10 +1853,59 @@
       },
       {
         "id": 302,
+        "name": "curator_coordinate_access_for",
+        "owner_type": "ProjectUser",
+        "owner_id": 1,
+        "value": "taxon"
+      },
+      {
+        "id": 303,
+        "name": "curator_coordinate_access_for",
+        "owner_type": "ProjectUser",
+        "owner_id": 7,
+        "value": "any"
+      },
+      {
+        "id": 304,
+        "name": "curator_coordinate_access_for",
+        "owner_type": "ProjectUser",
+        "owner_id": 8,
+        "value": "taxon"
+      },
+      {
+        "id": 305,
+        "name": "curator_coordinate_access_for",
+        "owner_type": "ProjectUser",
+        "owner_id": 9,
+        "value": "none"
+      },
+      {
+        "id": 306,
         "name": "common_names",
-        "owner_id": 127,
+        "owner_id": 129,
         "owner_type": "User",
         "value": "f"
+      },
+      {
+        "id": 2020100101,
+        "name": "curator_coordinate_access_for",
+        "owner_type": "ProjectUser",
+        "owner_id": 2020100102,
+        "value": "any"
+      },
+      {
+        "id": 2020100102,
+        "name": "user_trust",
+        "owner_type": "Project",
+        "owner_id": 2020100101,
+        "value": "f"
+      },
+      {
+        "id": 2020100103,
+        "name": "user_trust",
+        "owner_type": "Project",
+        "owner_id": 2005,
+        "value": "t"
       }
     ],
     "project_observations": [
@@ -1531,30 +1933,72 @@
     ],
     "project_users": [
       {
+        "id": 1,
         "project_id": 543,
         "user_id": 5,
         "observations_count": 1000
       },
       {
+        "id": 2,
         "project_id": 543,
         "user_id": 6,
         "observations_count": 800
       },
       {
+        "id": 3,
         "project_id": 543,
         "user_id": 123,
         "role": "curator",
         "observations_count": 900
       },
       {
+        "id": 4,
         "project_id": 1,
         "user_id": 123,
         "role": "curator"
       },
       {
+        "id": 5,
         "project_id": 2,
         "user_id": 123,
         "role": "curator"
+      },
+      {
+        "id": 6,
+        "project_id": 2005,
+        "user_id": 123,
+        "role": "curator"
+      },
+      {
+        "id": 7,
+        "project_id": 2005,
+        "user_id": 5
+      },
+      {
+        "id": 8,
+        "project_id": 2005,
+        "user_id": 6
+      },
+      {
+        "id": 9,
+        "project_id": 2005,
+        "user_id": 121
+      },
+      {
+        "id": 10,
+        "project_id": 2005,
+        "user_id": 121
+      },
+      {
+        "id": 2020100101,
+        "project_id": 2020100101,
+        "user_id": 2020100101,
+        "role": "curator"
+      },
+      {
+        "id": 2020100102,
+        "project_id": 2020100101,
+        "user_id": 2020100102
       }
     ],
     "projects": [
@@ -1577,6 +2021,18 @@
         "slug": "project-two",
         "title": "Project Two",
         "user_id": 123
+      },
+      {
+        "id": 2005,
+        "project_type": "collection",
+        "title": "Observations in Massachusetts",
+        "slug": "observations-in-massachusetts"
+      },
+      {
+        "id": 2020100101,
+        "project_type": "collection",
+        "title": "Redundant Observations in Massachusetts With Disabled Trust",
+        "slug": "redundant-observations-in-massachusetts-with-disabled-trust"
       }
     ],
     "posts": [
@@ -1852,7 +2308,27 @@
       },
       {
         "id": 127,
+        "login": "user124",
+        "name": "User 124",
+        "description": "Observer that trusts user 123"
+      },
+      {
+        "id": 128,
+        "login": "user125",
+        "name": "User 125",
+        "description": "Observer that does NOT trust user 123"
+      },
+      {
+        "id": 129,
         "login": "prefers-no-common-names"
+      },
+      {
+        "id": 2020100101,
+        "login": "project_2020100101_admin"
+      },
+      {
+        "id": 2020100102,
+        "login": "project_2020100101_trusting"
       }
     ],
     "user_privileges": [

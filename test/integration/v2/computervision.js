@@ -12,9 +12,10 @@ const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 describe( "Computervision", ( ) => {
   describe( "score_observation", ( ) => {
     it( "returns JSON", done => {
+      const obsPhoto = fixtures.postgresql.observation_photos[0];
       const fixtureObs = _.find(
         fixtures.elasticsearch.observations.observation,
-        o => o.id === 24
+        o => o.id === obsPhoto.observation_id
       );
       const token = jwt.sign( { user_id: 333 }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
