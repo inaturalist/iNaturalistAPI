@@ -11,7 +11,7 @@ const app = iNaturalistAPI.server( );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
-describe.only( "AuthorizedApplications", ( ) => {
+describe( "AuthorizedApplications", ( ) => {
   const user = _.find( fixtures.postgresql.users, u => u.id === 123 );
   const token = jwt.sign( { user_id: user.id }, config.jwtSecret || "secret",
     { algorithm: "HS512" } );
