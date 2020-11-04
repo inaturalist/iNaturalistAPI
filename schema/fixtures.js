@@ -1697,7 +1697,7 @@
         "id": 2020102901,
         "resource_owner_id": 1,
         "application_id": 3,
-        "token": "sdjgnaldkfjfg",
+        "token": "g2sdgdjgndgsdfgdsaldkfjfg",
         "expires_in": 600,
         "created_at": "2020-10-28 11:54:15.314522",
         "revoked_at": null,
