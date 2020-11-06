@@ -1513,6 +1513,12 @@
           "id": 129,
           "login": "prefers-no-common-names",
           "name": "Prefers No Common Names"
+        },
+        {
+          "id": 2020110501,
+          "login": "user2020110501",
+          "name": "User 2020110501",
+          "description": "User that follows user 126 and trusts them"
         }
       ]
     },
@@ -1600,6 +1606,18 @@
         "user_id": 127,
         "friend_id": 123,
         "trust": true
+      },
+      {
+        "user_id": 126,
+        "friend_id": 2020110501,
+        "trust": false,
+        "following": true
+      },
+      {
+        "user_id": 2020110501,
+        "friend_id": 126,
+        "trust": true,
+        "following": true
       }
     ],
     "identifications": [
@@ -2329,6 +2347,12 @@
       {
         "id": 2020100102,
         "login": "project_2020100101_trusting"
+      },
+      {
+        "id": 2020110501,
+        "login": "user2020110501",
+        "name": "User 2020110501",
+        "description": "User that follows user 126 and trusts them"
       }
     ],
     "user_privileges": [

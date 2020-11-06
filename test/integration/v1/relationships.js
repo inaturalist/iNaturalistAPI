@@ -1,4 +1,5 @@
 const { expect } = require( "chai" );
+const _ = require( "lodash" );
 const fs = require( "fs" );
 const request = require( "supertest" );
 const nock = require( "nock" );
@@ -20,6 +21,22 @@ describe( "Relationships", ( ) => {
         .expect( response => {
           expect( response.body.results.length ).to.be.above( 0 );
           expect( response.body.results[0].friend_user.login ).to.not.be.undefined;
+        } )
+        .expect( 200, done );
+    } );
+    it( "should return reciprocal_trust", done => {
+      const trustingFollowedFriendship = _.find(
+        fixtures.postgresql.friendships,
+        f => f.friend_id === userId && f.trust
+      );
+      expect( trustingFollowedFriendship ).not.to.be.undefined;
+      request( app ).get( "/v1/relationships" )
+        .set( "Authorization", token )
+        .expect( 200 )
+        .expect( response => {
+          const relat = _.find( response.body.results,
+            r => r.friend_user.id === trustingFollowedFriendship.user_id );
+          expect( relat.reciprocal_trust ).to.be.true;
         } )
         .expect( 200, done );
     } );
