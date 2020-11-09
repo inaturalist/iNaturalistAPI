@@ -41,7 +41,7 @@
     "graphql-fields": "*",
     "handlebars": "^4.7.6",
     "hapi-joi-to-swagger": "github:inaturalist/hapi-joi-to-swagger#0ec177ccc9f8306f6fbcc7066174313e593c0600",
-    "inaturalistjs": "git://github.com/inaturalist/inaturalistjs.git#12e51ef76397d96ef06f9b2e7b720e14f08fe75e",
+    "inaturalistjs": "git://github.com/inaturalist/inaturalistjs.git#bfce66c2927a756d654454362bc67fc3892ba7a3",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.15",
     "lodash.merge": "^4.6.2",
