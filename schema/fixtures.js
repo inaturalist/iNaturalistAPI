@@ -1519,6 +1519,12 @@
           "login": "user2020110501",
           "name": "User 2020110501",
           "description": "User that follows user 126 and trusts them"
+        },
+        {
+          "id": 2020111201,
+          "login": "user2020111201",
+          "name": "User 2020111201",
+          "description": "User that follows user 126 and does NOT trusts them"
         }
       ]
     },
@@ -1617,6 +1623,18 @@
         "user_id": 2020110501,
         "friend_id": 126,
         "trust": true,
+        "following": true
+      },
+      {
+        "user_id": 126,
+        "friend_id": 2020111201,
+        "trust": true,
+        "following": true
+      },
+      {
+        "user_id": 2020111201,
+        "friend_id": 126,
+        "trust": false,
         "following": true
       }
     ],
@@ -2353,6 +2371,12 @@
         "login": "user2020110501",
         "name": "User 2020110501",
         "description": "User that follows user 126 and trusts them"
+      },
+      {
+        "id": 2020111201,
+        "login": "user2020111201",
+        "name": "User 2020111201",
+        "description": "User that follows user 126 and does NOT trusts them"
       }
     ],
     "user_privileges": [
