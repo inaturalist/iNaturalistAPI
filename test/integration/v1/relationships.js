@@ -47,6 +47,18 @@ describe( "Relationships", ( ) => {
         } )
         .expect( 200, done );
     } );
+    it( "should filter by q", done => {
+      const friendUserId = fixtures.postgresql.friendships[0].friend_id;
+      const friendUser = _.find( fixtures.postgresql.users, u => u.id === friendUserId );
+      request( app ).get( `/v1/relationships?q=${friendUser.login}` )
+        .set( "Authorization", token )
+        .expect( 200 )
+        .expect( response => {
+          expect( response.body.results.length ).to.eq( 1 );
+          expect( response.body.results[0].friend_user.login ).to.eq( friendUser.login );
+        } )
+        .expect( 200, done );
+    } );
   } );
   describe( "create", ( ) => {
     it( "should succeed", done => {
