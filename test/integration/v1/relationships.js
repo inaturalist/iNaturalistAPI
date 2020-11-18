@@ -29,14 +29,33 @@ describe( "Relationships", ( ) => {
         fixtures.postgresql.friendships,
         f => f.friend_id === userId && f.trust
       );
+      const untrustingFollowedFriendship = _.find(
+        fixtures.postgresql.friendships,
+        f => f.friend_id === userId && !f.trust
+      );
       expect( trustingFollowedFriendship ).not.to.be.undefined;
       request( app ).get( "/v1/relationships" )
         .set( "Authorization", token )
         .expect( 200 )
         .expect( response => {
-          const relat = _.find( response.body.results,
+          const trustingRelat = _.find( response.body.results,
             r => r.friend_user.id === trustingFollowedFriendship.user_id );
-          expect( relat.reciprocal_trust ).to.be.true;
+          expect( trustingRelat.reciprocal_trust ).to.be.true;
+          const untrustingRelat = _.find( response.body.results,
+            r => r.friend_user.id === untrustingFollowedFriendship.user_id );
+          expect( untrustingRelat.reciprocal_trust ).to.be.false;
+        } )
+        .expect( 200, done );
+    } );
+    it( "should filter by q", done => {
+      const friendUserId = fixtures.postgresql.friendships[0].friend_id;
+      const friendUser = _.find( fixtures.postgresql.users, u => u.id === friendUserId );
+      request( app ).get( `/v1/relationships?q=${friendUser.login}` )
+        .set( "Authorization", token )
+        .expect( 200 )
+        .expect( response => {
+          expect( response.body.results.length ).to.eq( 1 );
+          expect( response.body.results[0].friend_user.login ).to.eq( friendUser.login );
         } )
         .expect( 200, done );
     } );
