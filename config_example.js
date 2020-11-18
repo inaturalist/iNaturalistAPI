@@ -36,6 +36,8 @@ module.exports = {
   },
   tileSize: 512,
   debug: true,
+  staticImagePrefix: "http://localhost:3000/attachments/",
+  userImagePrefix: "/attachments/users/icons/",
   imageProcesing: {
     // Path to a file listing the taxonomy used in the computer vision model
     taxaFilePath: "",

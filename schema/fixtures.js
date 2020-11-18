@@ -1704,6 +1704,7 @@
         "name": "iNaturalist iPhone App",
         "uid": "uid",
         "secret": "secret",
+        "official": true,
         "redirect_uri": "redirect_uri",
         "created_at": "2018-04-01 01:00:00",
         "updated_at": "2018-04-01 01:00:00"
@@ -1713,6 +1714,7 @@
         "name": "Totally Trustworthy Endeavor",
         "uid": "sdkjgha3934",
         "secret": "dshghkjgh395",
+        "official": false,
         "redirect_uri": "redirect_uri",
         "created_at": "2020-10-29 01:00:00",
         "updated_at": "2020-10-29 01:00:00"
@@ -2017,11 +2019,6 @@
       },
       {
         "id": 9,
-        "project_id": 2005,
-        "user_id": 121
-      },
-      {
-        "id": 10,
         "project_id": 2005,
         "user_id": 121
       },

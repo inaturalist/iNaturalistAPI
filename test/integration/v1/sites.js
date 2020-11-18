@@ -14,6 +14,7 @@ describe( "Sites", ( ) => {
           expect( res.body.total_results ).to.eq( 2 );
           expect( res.body.results[0].id ).to.eq( 1 );
           expect( res.body.results[0].name ).to.eq( "iNaturalist" );
+          expect( res.body.results[0].icon_url ).not.to.be.undefined;
           expect( res.body.results[1].id ).to.eq( 2 );
           expect( res.body.results[1].name ).to.eq( "NaturaLista" );
         } ).expect( "Content-Type", /json/ )

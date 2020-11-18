@@ -141,6 +141,7 @@ describe( "Users", ( ) => {
           expect( res.body.results[0].site.place_id ).to.eq( 1 );
           expect( res.body.results[0].site.locale ).to.eq( "en" );
           expect( res.body.results[0].site.site_name_short ).to.eq( "iNat" );
+          expect( res.body.results[0].icon_url ).not.to.be.undefined;
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
