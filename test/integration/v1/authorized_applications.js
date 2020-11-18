@@ -34,6 +34,7 @@ describe( "AuthorizedApplications", ( ) => {
           const r = res.body.results[0];
           expect( r.application.id ).to.eq( oauthApp.id );
           expect( r.application.name ).to.eq( oauthApp.name );
+          expect( r.application.official ).to.eq( oauthApp.official );
           expect( r.created_at ).not.to.be.undefined;
           expect( r.scopes ).not.to.be.undefined;
           expect( res.body.total_results ).to.eq( _.filter(

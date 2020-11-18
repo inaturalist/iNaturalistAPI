@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 11.1
--- Dumped by pg_dump version 11.1
+-- Dumped from database version 13.0
+-- Dumped by pg_dump version 13.0
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -12,6 +12,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -274,7 +275,7 @@ CREATE AGGREGATE public.median(numeric) (
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: annotations; Type: TABLE; Schema: public; Owner: -
@@ -993,6 +994,51 @@ CREATE SEQUENCE public.custom_projects_id_seq
 --
 
 ALTER SEQUENCE public.custom_projects_id_seq OWNED BY public.custom_projects.id;
+
+
+--
+-- Name: data_partners; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.data_partners (
+    id integer NOT NULL,
+    name character varying,
+    url character varying,
+    partnership_url character varying,
+    frequency character varying,
+    dwca_params json,
+    dwca_last_export_at timestamp without time zone,
+    api_request_url character varying,
+    description text,
+    requirements text,
+    last_sync_observation_links_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    logo_file_name character varying,
+    logo_content_type character varying,
+    logo_file_size bigint,
+    logo_updated_at timestamp without time zone
+);
+
+
+--
+-- Name: data_partners_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.data_partners_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: data_partners_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.data_partners_id_seq OWNED BY public.data_partners.id;
 
 
 --
@@ -2312,7 +2358,8 @@ CREATE TABLE public.oauth_applications (
     url character varying(255),
     description text,
     scopes character varying DEFAULT ''::character varying NOT NULL,
-    confidential boolean DEFAULT true NOT NULL
+    confidential boolean DEFAULT true NOT NULL,
+    official boolean DEFAULT false
 );
 
 
@@ -3654,6 +3701,36 @@ ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
 
 
 --
+-- Name: simplified_tree_milestone_taxa; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.simplified_tree_milestone_taxa (
+    id integer NOT NULL,
+    taxon_id integer
+);
+
+
+--
+-- Name: simplified_tree_milestone_taxa_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.simplified_tree_milestone_taxa_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: simplified_tree_milestone_taxa_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.simplified_tree_milestone_taxa_id_seq OWNED BY public.simplified_tree_milestone_taxa.id;
+
+
+--
 -- Name: site_admins; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -4097,7 +4174,8 @@ CREATE TABLE public.taxa (
     complete_rank character varying,
     complete boolean,
     taxon_framework_relationship_id integer,
-    uuid uuid DEFAULT public.uuid_generate_v4()
+    uuid uuid DEFAULT public.uuid_generate_v4(),
+    photos_locked boolean DEFAULT false
 );
 
 
@@ -4397,7 +4475,8 @@ CREATE TABLE public.taxon_names (
     name_provider character varying(255),
     creator_id integer,
     updater_id integer,
-    "position" integer DEFAULT 0
+    "position" integer DEFAULT 0,
+    parameterized_lexicon character varying
 );
 
 
@@ -4914,7 +4993,11 @@ CREATE TABLE public.users (
     donorbox_plan_type character varying,
     donorbox_plan_status character varying,
     donorbox_plan_started_at date,
-    uuid uuid DEFAULT public.uuid_generate_v4()
+    uuid uuid DEFAULT public.uuid_generate_v4(),
+    species_count integer DEFAULT 0,
+    locked_at timestamp without time zone,
+    failed_attempts integer DEFAULT 0,
+    unlock_token character varying
 );
 
 
@@ -4935,6 +5018,41 @@ CREATE SEQUENCE public.users_id_seq
 --
 
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: versions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.versions (
+    id integer NOT NULL,
+    item_type character varying NOT NULL,
+    item_id bigint NOT NULL,
+    event character varying NOT NULL,
+    whodunnit character varying,
+    created_at timestamp without time zone,
+    object_changes json
+);
+
+
+--
+-- Name: versions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.versions_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: versions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.versions_id_seq OWNED BY public.versions.id;
 
 
 --
@@ -5256,6 +5374,13 @@ ALTER TABLE ONLY public.countries_simplified_1 ALTER COLUMN id SET DEFAULT nextv
 --
 
 ALTER TABLE ONLY public.custom_projects ALTER COLUMN id SET DEFAULT nextval('public.custom_projects_id_seq'::regclass);
+
+
+--
+-- Name: data_partners id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.data_partners ALTER COLUMN id SET DEFAULT nextval('public.data_partners_id_seq'::regclass);
 
 
 --
@@ -5707,6 +5832,13 @@ ALTER TABLE ONLY public.sessions ALTER COLUMN id SET DEFAULT nextval('public.ses
 
 
 --
+-- Name: simplified_tree_milestone_taxa id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.simplified_tree_milestone_taxa ALTER COLUMN id SET DEFAULT nextval('public.simplified_tree_milestone_taxa_id_seq'::regclass);
+
+
+--
 -- Name: site_admins id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -5938,6 +6070,13 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
+-- Name: versions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.versions ALTER COLUMN id SET DEFAULT nextval('public.versions_id_seq'::regclass);
+
+
+--
 -- Name: votes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -6130,6 +6269,14 @@ ALTER TABLE ONLY public.countries_simplified_1
 
 ALTER TABLE ONLY public.custom_projects
     ADD CONSTRAINT custom_projects_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: data_partners data_partners_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.data_partners
+    ADD CONSTRAINT data_partners_pkey PRIMARY KEY (id);
 
 
 --
@@ -6645,6 +6792,14 @@ ALTER TABLE ONLY public.sessions
 
 
 --
+-- Name: simplified_tree_milestone_taxa simplified_tree_milestone_taxa_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.simplified_tree_milestone_taxa
+    ADD CONSTRAINT simplified_tree_milestone_taxa_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: site_admins site_admins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6909,6 +7064,14 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: versions versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.versions
+    ADD CONSTRAINT versions_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: votes votes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6974,6 +7137,13 @@ CREATE INDEX index_annotations_on_controlled_value_id ON public.annotations USIN
 --
 
 CREATE INDEX index_annotations_on_resource_id_and_resource_type ON public.annotations USING btree (resource_id, resource_type);
+
+
+--
+-- Name: index_annotations_on_unique_resource_and_attribute; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_annotations_on_unique_resource_and_attribute ON public.annotations USING btree (resource_type, resource_id, controlled_attribute_id, controlled_value_id);
 
 
 --
@@ -7555,6 +7725,13 @@ CREATE INDEX index_identifications_on_previous_observation_taxon_id ON public.id
 --
 
 CREATE INDEX index_identifications_on_taxon_change_id ON public.identifications USING btree (taxon_change_id);
+
+
+--
+-- Name: index_identifications_on_taxon_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_identifications_on_taxon_id ON public.identifications USING btree (taxon_id);
 
 
 --
@@ -8517,6 +8694,13 @@ CREATE INDEX index_project_users_on_user_id ON public.project_users USING btree 
 
 
 --
+-- Name: index_project_users_on_user_id_and_project_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_project_users_on_user_id_and_project_id ON public.project_users USING btree (user_id, project_id);
+
+
+--
 -- Name: index_projects_on_cached_slug; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8542,6 +8726,13 @@ CREATE INDEX index_projects_on_source_url ON public.projects USING btree (source
 --
 
 CREATE INDEX index_projects_on_user_id ON public.projects USING btree (user_id);
+
+
+--
+-- Name: index_provider_authorizations_on_provider_name_and_provider_uid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_provider_authorizations_on_provider_name_and_provider_uid ON public.provider_authorizations USING btree (provider_name, provider_uid);
 
 
 --
@@ -9196,6 +9387,13 @@ CREATE INDEX index_users_on_state ON public.users USING btree (state);
 
 
 --
+-- Name: index_users_on_unlock_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_unlock_token ON public.users USING btree (unlock_token);
+
+
+--
 -- Name: index_users_on_updated_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9214,6 +9412,20 @@ CREATE INDEX index_users_on_uri ON public.users USING btree (uri);
 --
 
 CREATE UNIQUE INDEX index_users_on_uuid ON public.users USING btree (uuid);
+
+
+--
+-- Name: index_versions_on_item_type_and_item_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_versions_on_item_type_and_item_id ON public.versions USING btree (item_type, item_id);
+
+
+--
+-- Name: index_votes_on_unique_obs_fave; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_votes_on_unique_obs_fave ON public.votes USING btree (votable_type, votable_id, voter_type, voter_id) WHERE (((votable_type)::text = 'Observation'::text) AND ((voter_type)::text = 'User'::text) AND (vote_scope IS NULL) AND (vote_flag = true));
 
 
 --
@@ -10123,4 +10335,34 @@ INSERT INTO schema_migrations (version) VALUES ('20200130191142');
 INSERT INTO schema_migrations (version) VALUES ('20200220211829');
 
 INSERT INTO schema_migrations (version) VALUES ('20200226211718');
+
+INSERT INTO schema_migrations (version) VALUES ('20200318193130');
+
+INSERT INTO schema_migrations (version) VALUES ('20200604181750');
+
+INSERT INTO schema_migrations (version) VALUES ('20200706035032');
+
+INSERT INTO schema_migrations (version) VALUES ('20200708223315');
+
+INSERT INTO schema_migrations (version) VALUES ('20200710004607');
+
+INSERT INTO schema_migrations (version) VALUES ('20200710004608');
+
+INSERT INTO schema_migrations (version) VALUES ('20200822002822');
+
+INSERT INTO schema_migrations (version) VALUES ('20200824210059');
+
+INSERT INTO schema_migrations (version) VALUES ('20200826001446');
+
+INSERT INTO schema_migrations (version) VALUES ('20200910001039');
+
+INSERT INTO schema_migrations (version) VALUES ('20200918185507');
+
+INSERT INTO schema_migrations (version) VALUES ('20200918230545');
+
+INSERT INTO schema_migrations (version) VALUES ('20200925210606');
+
+INSERT INTO schema_migrations (version) VALUES ('20201023174221');
+
+INSERT INTO schema_migrations (version) VALUES ('20201118012108');
 
