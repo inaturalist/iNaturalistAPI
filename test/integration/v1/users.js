@@ -181,6 +181,7 @@ describe( "Users", ( ) => {
       "email",
       "id",
       "login",
+      "monthly_supporter",
       "name",
       "preferred_observation_fields_by",
       "preferred_observation_license",
