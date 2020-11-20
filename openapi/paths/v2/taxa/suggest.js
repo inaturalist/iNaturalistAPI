@@ -29,7 +29,7 @@ module.exports = sendWrapper => {
     summary: "Suggest taxa for identifications given conditions",
     description: "Retrieve automated identification suggestions for an observation or a set of filters like taxon and place",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     parameters,
     responses: {

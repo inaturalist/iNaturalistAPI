@@ -12,7 +12,7 @@ module.exports = sendWrapper => {
     tags: ["Annotation"],
     summary: "Create an annotation",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     requestBody: {
       content: {

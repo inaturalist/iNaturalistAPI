@@ -12,7 +12,7 @@ module.exports = sendWrapper => {
     tags: ["Identifications"],
     summary: "Create an identification",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     requestBody: {
       content: {

@@ -25,7 +25,7 @@ module.exports = sendWrapper => {
     tags: ["Taxa"],
     summary: "Search taxa.",
     security: [{
-      jwtOptional: []
+      userJwtOptional: []
     }],
     parameters,
     responses: {

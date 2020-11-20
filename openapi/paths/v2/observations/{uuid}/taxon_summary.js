@@ -15,7 +15,7 @@ module.exports = sendWrapper => {
       + "taxon given the observation's coordinates, including relevant a "
       + "conservation status and establishment means",
     security: [{
-      jwtOptional: []
+      userJwtOptional: []
     }],
     parameters: [
       transform(
