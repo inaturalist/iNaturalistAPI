@@ -44,4 +44,38 @@ describe( "InaturalistAPI", ( ) => {
       } );
     } );
   } );
+
+  describe( "lookupPreferredPlaceMiddleware", ( ) => {
+    it( "looks up preferred_place by preferred_place_id", done => {
+      const req = { query: { preferred_place_id: 1, locale: "zh-LP"}, inat: {} };
+      InaturalistAPI.lookupPreferredPlaceMiddleware( req, null, () => {
+        expect( req.inat.preferredPlace.id ).to.eq( 1 );
+        done( );
+      } );
+    } );
+
+    it( "looks up preferred_place by locale", done => {
+      const req = { query: { locale: "zh-LP" }, inat: {} };
+      InaturalistAPI.lookupPreferredPlaceMiddleware( req, null, () => {
+        expect( req.inat.preferredPlace.id ).to.eq( 511 );
+        done( );
+      } );
+    } );
+
+    it( "does not set preferred_place if locale is malformed", done => {
+      const req = { query: { locale: "zh-LP-LP" }, inat: {} };
+      InaturalistAPI.lookupPreferredPlaceMiddleware( req, null, () => {
+        expect( req.inat.preferredPlace ).to.be.undefined;
+        done( );
+      } );
+    } );
+
+    it( "does not set preferred_place if country is not found", done => {
+      const req = { query: { locale: "zh-LPB" } };
+      InaturalistAPI.lookupPreferredPlaceMiddleware( req, null, () => {
+        expect( req.inat ).to.be.undefined;
+        done( );
+      } );
+    } );
+  } );
 } );
