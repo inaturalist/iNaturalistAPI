@@ -1,3 +1,4 @@
+const _ = require( "lodash" );
 const { expect } = require( "chai" );
 const fs = require( "fs" );
 const request = require( "supertest" );
@@ -28,6 +29,7 @@ describe( "Taxa", ( ) => {
           fields: { name: true }
         } )
         .set( "X-HTTP-Method-Override", "GET" )
+        .expect( 200 )
         .expect( res => {
           expect( res.body.results[0].name ).to.eq( fixtureTaxon.name );
         } )
@@ -50,6 +52,25 @@ describe( "Taxa", ( ) => {
         .expect( 200 )
         .expect( res => {
           expect( res.body.results.length ).to.be.greaterThan( 0 );
+        } )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "autocomplete", ( ) => {
+    it( "supports fields via X-HTTP-Method-Override", done => {
+      const taxon = _.find( fixtures.elasticsearch.taxa.taxon, t => t.name === "Search test taxon" );
+      request( app )
+        .post( "/v2/taxa/autocomplete" )
+        .set( "Content-Type", "application/json" )
+        .send( {
+          q: taxon.name,
+          fields: { name: true }
+        } )
+        .set( "X-HTTP-Method-Override", "GET" )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results[0].name ).to.eq( taxon.name );
         } )
         .expect( 200, done );
     } );

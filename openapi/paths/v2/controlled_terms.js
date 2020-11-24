@@ -12,7 +12,7 @@ module.exports = sendWrapper => {
     tags: ["Controlled Terms"],
     summary: "Search controlled terms",
     security: [{
-      jwtOptional: []
+      userJwtOptional: []
     }],
     parameters: [
       transform( Joi.string( ).label( "fields" ).meta( { in: "query" } ) ),

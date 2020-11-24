@@ -12,7 +12,7 @@ module.exports = sendWrapper => {
     tags: ["ObservationPhotos"],
     summary: "Create observation photos",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     requestBody: {
       content: {

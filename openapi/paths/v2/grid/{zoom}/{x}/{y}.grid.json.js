@@ -24,7 +24,7 @@ module.exports = sendWrapper => {
     tags: ["UTFGrid"],
     summary: "JSON for grid tiles",
     security: [{
-      jwtOptional: []
+      userJwtOptional: []
     }],
     parameters: tilePathParams.concat( transformedObsSearchParams ),
     responses: {

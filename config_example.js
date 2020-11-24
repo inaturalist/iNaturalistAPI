@@ -36,9 +36,15 @@ module.exports = {
   },
   tileSize: 512,
   debug: true,
+  staticImagePrefix: "http://localhost:3000/attachments/",
+  userImagePrefix: "/attachments/users/icons/",
   imageProcesing: {
+    // Path to a file listing the taxonomy used in the computer vision model
     taxaFilePath: "",
-    uploadsDir: "",
+    // Path to a directory where uploads should be stored. /tmp/ is fine on most
+    // *nix systems
+    uploadsDir: "/tmp/",
+    // Base URL for the web app returning computer vision results
     tensorappURL: ""
   },
   redis: {

@@ -12,7 +12,7 @@ module.exports = sendWrapper => {
     tags: ["Annotations"],
     summary: "Vote on an annotation",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     parameters: [
       transform(
@@ -40,7 +40,7 @@ module.exports = sendWrapper => {
     tags: ["Annotations"],
     summary: "Remove the authenticated user's vote on an annotation",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     parameters: [
       transform(

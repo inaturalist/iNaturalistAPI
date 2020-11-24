@@ -12,7 +12,7 @@ module.exports = sendWrapper => {
     tags: ["Observations"],
     summary: "Fetch observations",
     security: [{
-      jwtOptional: []
+      userJwtOptional: []
     }],
     parameters: [
       transform(

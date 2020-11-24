@@ -64,7 +64,7 @@ Authentication in the Node API is handled via JSON Web Tokens (JWT). To
 obtain one, make an [OAuth-authenticated
 request](http://www.inaturalist.org/pages/api+reference#auth) to
 <https://www.inaturalist.org/users/api_token>. Each JWT will expire after 24
-hours. Authentication required for all PUT and POST requests. Some GET
+hours. Authentication is required for all PUT and POST requests. Some GET
 requests will also include private information like hidden coordinates if
 the authenticated user has permission to view them.
 
@@ -126,15 +126,23 @@ Privacy Policy: <https://www.inaturalist.org/privacy>`
   components: {
     schemas,
     securitySchemes: {
-      jwtOptional: {
+      userJwtRequired: {
         type: "apiKey",
         name: "Authorization",
-        in: "header"
+        in: "header",
+        description: "User-specific JSON Web Token required"
       },
-      jwtRequired: {
+      userJwtOptional: {
         type: "apiKey",
         name: "Authorization",
-        in: "header"
+        in: "header",
+        description: "User-specific JSON Web Token optional, may be used to customize responses for the authenticated user, e.g. localizing common names"
+      },
+      appOrUserJwtRequired: {
+        type: "apiKey",
+        name: "Authorization",
+        in: "header",
+        description: "User or application JSON Web Token (application tokens only available to official apps)"
       }
     },
     responses: {

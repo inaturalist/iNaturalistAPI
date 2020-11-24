@@ -60,6 +60,8 @@ module.exports = Joi.object( ).keys( {
   native: Joi.boolean( ),
   observations_count: Joi.number( ).integer( ),
   parent_id: Joi.number( ).integer( ).valid( null ),
+  photos_locked: Joi.boolean( )
+    .description( "Whether or not photos for this taxon can be edited" ),
   preferred_common_name: Joi.string( ),
   rank: Joi.string( ),
   rank_level: Joi.number( ),
