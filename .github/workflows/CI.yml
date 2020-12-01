@@ -1,0 +1,69 @@
+name: iNaturalstAPI CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    services:
+      postgres:
+        image: postgis/postgis:11-2.5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: inaturalist_test
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+
+    - name: Configure sysctl limits
+      run: |
+        sudo swapoff -a
+        sudo sysctl -w vm.swappiness=1
+        sudo sysctl -w fs.file-max=262144
+        sudo sysctl -w vm.max_map_count=262144
+
+    - name: Runs Elasticsearch
+      uses: miyataka/elastic-github-actions/elasticsearch@feature/plugin_support
+      with:
+        stack-version: 7.6.0
+        plugins: analysis-kuromoji
+
+    - name: Elasticsearch is reachable
+      run: |
+        curl --verbose --show-error http://localhost:9200
+
+    - name: Copy config
+      run: |
+        cp config.js.travis config.js
+        touch vision-taxa.txt
+
+    - run: npm install
+
+    - run: npm test
+      env:
+        PGHOST: 0.0.0.0
+        PGUSER: postgres
+        PGPASSWORD: postgres
+        CI: true
+
+    - run: npm run coveralls
+
+  notify:
+    name: Notify Slack
+    needs: [build]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: iRoachie/slack-github-actions@v2.0.1
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_BUILDS_WEBHOOK_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
