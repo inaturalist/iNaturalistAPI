@@ -1,4 +1,5 @@
 const Joi = require( "@hapi/joi" );
+const commonAncestor = require( "./common_ancestor" );
 const taxon = require( "./taxon" );
 const listedTaxon = require( "./listed_taxon" );
 
@@ -23,10 +24,11 @@ module.exports = Joi.object( ).keys( {
       If blank or absent, that means the suggestions may or may not be
       comprehensive. Currently only set when \`source\` is \`checklist\`
     `.replace( /\s+/m, " " ) ),
+  common_ancestor: commonAncestor,
   results: Joi.array( ).items( Joi.object( ).keys( {
-    sourceType: Joi.string( ).required( ),
+    source_type: Joi.string( ).required( ),
     score: Joi.number( ).required( ),
-    sourceDetails: Joi.object( ).keys( {
+    source_details: Joi.object( ).keys( {
       combined_score: Joi.number( ),
       frequency_score: Joi.number( ),
       listed_taxon: listedTaxon,

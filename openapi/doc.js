@@ -68,6 +68,8 @@ hours. Authentication is required for all PUT and POST requests. Some GET
 requests will also include private information like hidden coordinates if
 the authenticated user has permission to view them.
 
+## Specifying Response Fields
+
 By default, all endpoints will return a very minimal response for the requested
 resources (e.g. the contents of the \`results\` array), usually just the UUID.
 To receive more data, include the \`fields\` parameter to specify exactly what
@@ -86,12 +88,12 @@ can specify the response fields in a JSON object, e.g.
     "${url}/observations"
 \`\`\`
 
+When making \`multipart/form-data\` POST requests, you can still specify
+\`fields\` as part of the form data, either as a commma-separated list of field
+names or a JSON string.
+
 To see all available fields, you can use \`fields=all\`, e.g.
 <${url}/observations?fields=all>
-
-iNaturalist Website: <https://www.inaturalist.org/>
-
-Open Source Software: <https://github.com/inaturalist/>
 
 ## About iNaturalist
 
@@ -102,6 +104,10 @@ creating high quality citizen science data for science and conservation.
 The iNaturalist technology infrastructure and open source software is
 administered by the [California Academy of Sciences](https://www.calacademy.org/) as
 part of their mission to explore, explain, and sustain life on Earth.
+
+iNaturalist Website: <https://www.inaturalist.org/>
+
+Open Source Software: <https://github.com/inaturalist/>
 
 ## Terms of Use
 

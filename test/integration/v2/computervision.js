@@ -36,7 +36,7 @@ describe( "Computervision", ( ) => {
         .expect( 200, done );
     } );
     it( "works with an application token", done => {
-      const token = jwt.sign( { application: "whatever" }, config.jwtApplicationSecret || "secret",
+      const token = jwt.sign( { application: "whatever" }, config.jwtApplicationSecret || "appsecret",
         { algorithm: "HS512" } );
       request( app ).get( url )
         .set( "Authorization", token )

@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 const _ = require( "lodash" );
+const { getLength, getMinLength, getMaxLength } = require( "./_string" );
 
 const getFormat = tests => {
   if ( _.find( tests, { name: "guid" } ) ) {
@@ -18,21 +19,6 @@ const getFormat = tests => {
     return { format: "date-time" };
   }
   return null;
-};
-
-const getLength = tests => {
-  const length = _.find( tests, { name: "length" } );
-  return length ? { length: length.arg } : null;
-};
-
-const getMinLength = tests => {
-  const min = _.find( tests, { name: "min" } );
-  return min ? { minLength: min.arg } : null;
-};
-
-const getMaxLength = tests => {
-  const max = _.find( tests, { name: "max" } );
-  return max ? { maxLength: max.arg } : null;
 };
 
 const alphanumPattern = tests => {
