@@ -72,7 +72,6 @@ describe( "Taxa", ( ) => {
           .reply( 200, fakeVisionResults );
         const spy = sandbox.spy( ComputervisionControllerV1, "scoreImage" );
         request( app ).post( "/v2/taxa/suggest" )
-          // .set( "Content-Type", "application/json" )
           .set( "Content-Type", "multipart/form-data" )
           .set( "Authorization", token )
           .field( "source", "visual" )
