@@ -1,18 +1,12 @@
 const Joi = require( "@hapi/joi" );
 const taxon = require( "./taxon" );
+const commonAncestor = require( "./common_ancestor" );
 
 module.exports = Joi.object( ).keys( {
   total_results: Joi.number( ).integer( ).required( ),
   page: Joi.number( ).integer( ).required( ),
   per_page: Joi.number( ).integer( ).required( ),
-  common_ancestor: Joi.object( ).keys( {
-    score: Joi.number( ),
-    taxon: taxon.required( )
-  } ).description( `
-    Common ancestor taxon of some of the top results weighted by combined score.
-    If present, it generally has a much higher chance of being accurate (if not
-    precise), often by as much as 30-40 percentage points.
-  `.replace( /\s+/m, " " ) ),
+  common_ancestor: commonAncestor,
   results: Joi.array( ).items( Joi.object( ).keys( {
     combined_score: Joi.number( ).required( ).description( `
       Combination of the vision and frequency scores, i.e. a score that

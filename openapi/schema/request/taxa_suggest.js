@@ -4,14 +4,17 @@ module.exports = Joi.object( ).keys( {
   featured_observation_id: Joi.string( ).guid( )
     .description( "When `source` is `observations`, ignore this observation" ),
   fields: Joi.any( ),
-  image_url: Joi.string( ).uri( ).description( "URL for image to use when `source` is `visual`" ),
   lat: Joi.number( ).min( -90 ).max( 90 )
     .description( "Coordinate used when fetching nearby results `source` is `visual` or `*observations`" ),
   lng: Joi.number( ).min( -180 ).max( 180 )
     .description( "Coordinate used when fetching nearby results `source` is `visual` or `*observations`" ),
   locale: Joi.string( ),
   observation_id: Joi.string( ).guid( )
-    .description( "Automatically set place and taxon filters based on this observation" ),
+    .description( `
+      Automatically set place and taxon filters based on this observation; this
+      will override the values of \`place_id\` and \`taxon_id\` if these values
+      can be derived from the observation
+    `.replace( /\s+/m, " " ) ),
   order_by: Joi.string( ).valid( "taxonomy", "default" )
     .description( `
       How the suggestions will be ordered. The default is to order by whatever default
@@ -22,7 +25,10 @@ module.exports = Joi.object( ).keys( {
       same genus).
     `.replace( /\s+/m, " " ) ),
   place_id: Joi.number( ).integer( )
-    .description( "Only retrieve suggestions from this place when `source` is `checklist` or `*observations`" ),
+    .description( `
+      Only retrieve suggestions from this place when \`source\` is \`checklist\`
+      or \`*observations\`
+    `.replace( /\s+/m, " " ) ),
   source: Joi.string( )
     .valid(
       "captive_observations",

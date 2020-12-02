@@ -1,10 +1,17 @@
 const _ = require( "lodash" );
 const { expect } = require( "chai" );
 const fs = require( "fs" );
+const nock = require( "nock" );
 const request = require( "supertest" );
+const sinon = require( "sinon" );
+const chai = require( "chai" );
+const sinonChai = require( "sinon-chai" );
 const jwt = require( "jsonwebtoken" );
 const config = require( "../../../config.js" );
 const app = require( "../../../app" );
+const ComputervisionControllerV1 = require( "../../../lib/controllers/v1/computervision_controller.js" );
+
+chai.use( sinonChai );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
@@ -54,6 +61,39 @@ describe( "Taxa", ( ) => {
           expect( res.body.results.length ).to.be.greaterThan( 0 );
         } )
         .expect( 200, done );
+    } );
+    describe( "with image upload", ( ) => {
+      const sandbox = sinon.createSandbox( );
+      afterEach( ( ) => sandbox.restore( ) );
+      it( "accepts an image and returns results", done => {
+        const fakeVisionResults = { 1: 0.01 };
+        nock( config.imageProcesing.tensorappURL )
+          .post( "/" )
+          .reply( 200, fakeVisionResults );
+        const spy = sandbox.spy( ComputervisionControllerV1, "scoreImage" );
+        request( app ).post( "/v2/taxa/suggest" )
+          // .set( "Content-Type", "application/json" )
+          .set( "Content-Type", "multipart/form-data" )
+          .set( "Authorization", token )
+          .field( "source", "visual" )
+          // eslint-disable-next-line quotes
+          .field( "fields", '{ "taxon": {"name": true, "id": true } }' )
+          .attach( "image", "test/fixtures/cuthona_abronia-tagged.jpg" )
+          .expect( "Content-Type", /json/ )
+          .expect( 200 )
+          .expect( res => {
+            // Ensure ComputervisionController.scoreImage gets called and not scoreImageURL
+            expect( spy ).to.have.been.calledOnce;
+            // Ensure response includes the taxon from vision
+            expect( res.body.results[0].taxon.id ).to.eq(
+              parseInt( _.keys( fakeVisionResults )[0], 0 )
+            );
+            // Ensure fields is working on the results
+            expect( res.body.results[0].taxon.name ).not.to.be.undefined;
+            expect( res.body.results[0].taxon.rank ).to.be.undefined;
+          } )
+          .expect( 200, done );
+      } );
     } );
   } );
 
