@@ -10,6 +10,7 @@ const jwt = require( "jsonwebtoken" );
 const config = require( "../../../config.js" );
 const app = require( "../../../app" );
 const ComputervisionControllerV1 = require( "../../../lib/controllers/v1/computervision_controller.js" );
+const ObservationsControllerV1 = require( "../../../lib/controllers/v1/observations_controller.js" );
 
 chai.use( sinonChai );
 
@@ -70,11 +71,16 @@ describe( "Taxa", ( ) => {
         nock( config.imageProcesing.tensorappURL )
           .post( "/" )
           .reply( 200, fakeVisionResults );
-        const spy = sandbox.spy( ComputervisionControllerV1, "scoreImage" );
+        const scoreImageSpy = sandbox.spy( ComputervisionControllerV1, "scoreImage" );
+        const speciesCountsSpy = sandbox.spy( ObservationsControllerV1, "speciesCounts" );
         request( app ).post( "/v2/taxa/suggest" )
           .set( "Content-Type", "multipart/form-data" )
           .set( "Authorization", token )
           .field( "source", "visual" )
+          .field( "observed_on", "2020-12-01" )
+          .field( "lat", "1" )
+          .field( "lng", "1" )
+          .field( "locale", "en" )
           // eslint-disable-next-line quotes
           .field( "fields", '{ "taxon": {"name": true, "id": true } }' )
           .attach( "image", "test/fixtures/cuthona_abronia-tagged.jpg" )
@@ -82,7 +88,9 @@ describe( "Taxa", ( ) => {
           .expect( 200 )
           .expect( res => {
             // Ensure ComputervisionController.scoreImage gets called and not scoreImageURL
-            expect( spy ).to.have.been.calledOnce;
+            expect( scoreImageSpy ).to.have.been.calledOnce;
+            // Ensure lat/lng and observed_on trigger a call to get obs frequencies
+            expect( speciesCountsSpy ).to.have.been.calledOnce;
             // Ensure response includes the taxon from vision
             expect( res.body.results[0].taxon.id ).to.eq(
               parseInt( _.keys( fakeVisionResults )[0], 0 )
