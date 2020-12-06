@@ -4,6 +4,7 @@ module.exports = Joi.object( ).keys( {
   featured_observation_id: Joi.string( ).guid( )
     .description( "When `source` is `observations`, ignore this observation" ),
   fields: Joi.any( ),
+  limit: Joi.number( ).min( 0 ).description( "Number of results to return" ),
   lat: Joi.number( ).min( -90 ).max( 90 )
     .description( "Coordinate used when fetching nearby results `source` is `visual` or `*observations`" ),
   lng: Joi.number( ).min( -180 ).max( 180 )
@@ -29,6 +30,13 @@ module.exports = Joi.object( ).keys( {
       Only retrieve suggestions from this place when \`source\` is \`checklist\`
       or \`*observations\`
     `.replace( /\s+/m, " " ) ),
+  place_lat: Joi.number( ).min( -90 ).max( 90 )
+    .description( `
+      Coordinate used to set a place filter when source is \`*observations\` by
+      choosing the place whose boundary contains the coordinate. Only chooses
+      from places curated by staff (aka "standard" places)
+    `.replace( /\s+/m, " " ) ),
+  place_lng: Joi.number( ).min( -180 ).max( 180 ).description( "See `place_lat`" ),
   source: Joi.string( )
     .valid(
       "captive_observations",

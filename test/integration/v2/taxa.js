@@ -63,6 +63,51 @@ describe( "Taxa", ( ) => {
         } )
         .expect( 200, done );
     } );
+    it( "limit response size with the limit param", done => {
+      const limit = 1;
+      request( app )
+        .get( `/v2/taxa/suggest?source=observations&limit=${limit}` )
+        .set( "Authorization", token )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results.length ).to.eq( limit );
+        } )
+        .expect( 200, done );
+    } );
+    it( "sets place based on place_lat and place_lng params", done => {
+      const place = _.find( fixtures.elasticsearch.places.place, p => p.name === "Massachusetts" );
+      const taxonInPlace = _.find(
+        fixtures.elasticsearch.observations.observation,
+        o => (
+          ( o.quality_grade === "needs_id" || o.quality_grade === "research" )
+          && o.place_ids
+          && o.place_ids.includes( place.id )
+        )
+      ).taxon;
+      const taxonNotInPlace = _.find(
+        fixtures.elasticsearch.observations.observation,
+        o => (
+          ( o.quality_grade === "needs_id" || o.quality_grade === "research" )
+          && o.place_ids
+          && !o.place_ids.includes( place.id )
+        )
+      ).taxon;
+      const [placeLat, placeLng] = place.location.split( "," ).map( c => parseInt( c, 0 ) );
+      request( app )
+        .get( `/v2/taxa/suggest?source=observations&place_lat=${placeLat}&place_lng=${placeLng}` )
+        .set( "Authorization", token )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.query.place_id ).to.eq( place.id );
+          expect(
+            _.find( res.body.results, r => r.taxon.id === taxonInPlace.id )
+          ).not.to.be.undefined;
+          expect(
+            _.find( res.body.results, r => r.taxon.id === taxonNotInPlace.id )
+          ).to.be.undefined;
+        } )
+        .expect( 200, done );
+    } );
     describe( "with image upload", ( ) => {
       const sandbox = sinon.createSandbox( );
       afterEach( ( ) => sandbox.restore( ) );
