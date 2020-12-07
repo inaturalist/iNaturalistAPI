@@ -108,6 +108,28 @@ describe( "Taxa", ( ) => {
         } )
         .expect( 200, done );
     } );
+    it( "includes queryTaxon when query has taxon_id", done => {
+      const taxon = fixtures.elasticsearch.taxa.taxon[0];
+      request( app )
+        .get( `/v2/taxa/suggest?taxon_id=${taxon.id}` )
+        .set( "Authorization", token )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.queryTaxon.name ).to.eq( taxon.name );
+        } )
+        .expect( 200, done );
+    } );
+    it( "includes queryPlace when query has place_id", done => {
+      const place = _.find( fixtures.elasticsearch.places.place, p => p.name === "Massachusetts" );
+      request( app )
+        .get( `/v2/taxa/suggest?place_id=${place.id}` )
+        .set( "Authorization", token )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.queryPlace.name ).to.eq( place.name );
+        } )
+        .expect( 200, done );
+    } );
     describe( "with image upload", ( ) => {
       const sandbox = sinon.createSandbox( );
       afterEach( ( ) => sandbox.restore( ) );

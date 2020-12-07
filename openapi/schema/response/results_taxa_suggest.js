@@ -1,5 +1,6 @@
 const Joi = require( "@hapi/joi" );
 const commonAncestor = require( "./common_ancestor" );
+const place = require( "./place" );
 const taxon = require( "./taxon" );
 const listedTaxon = require( "./listed_taxon" );
 
@@ -42,5 +43,9 @@ module.exports = Joi.object( ).keys( {
       Query parameters used to generate these results. When \`source\` is
       \`*observations\` this may have some additional parameters used to set
       defaults for the observations query.
-    `.replace( /\s+/m, " " ) )
+    `.replace( /\s+/m, " " ) ),
+  queryTaxon: taxon
+    .description( "If query contains `taxon_id`, this is the corresponding taxon object" ),
+  queryPlace: place
+    .description( "If query contains `place_id`, this is the corresponding place object" )
 } ).unknown( false );
