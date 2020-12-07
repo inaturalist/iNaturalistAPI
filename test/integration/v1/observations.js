@@ -1194,16 +1194,14 @@ describe( "Observations", ( ) => {
 
     it( "sorts by count desc by default", done => {
       request( app ).get( "/v1/observations/species_counts" ).expect( res => {
-        expect( res.body.results[0].count ).to.eq( 2 );
-        expect( res.body.results[1].count ).to.eq( 1 );
+        expect( res.body.results[0].count ).to.be.at.least( res.body.results[1].count );
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
 
     it( "can sort by count asc", done => {
       request( app ).get( "/v1/observations/species_counts?order=asc" ).expect( res => {
-        expect( res.body.results[0].count ).to.eq( 1 );
-        expect( res.body.results[1].count ).to.eq( 2 );
+        expect( res.body.results[1].count ).to.be.at.least( res.body.results[0].count );
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
@@ -1351,7 +1349,7 @@ describe( "Observations", ( ) => {
     it( "returns category counts", done => {
       request( app ).get( "/v1/observations/identification_categories" ).expect( res => {
         expect( res.body.results[0].category ).to.eq( "leading" );
-        expect( res.body.results[0].count ).to.eq( 1 );
+        expect( res.body.results[0].count ).to.be.at.least( 1 );
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );

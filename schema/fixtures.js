@@ -196,6 +196,56 @@
           "name": "a-place-in-a-place",
           "display_name_autocomplete": "A Place In A Place",
           "ancestor_place_ids": [432, 433]
+        },
+        {
+          "id": 2020120501,
+          "uuid": "9dc9c5a9-41b4-4a45-9a20-41c4a0be2ae8",
+          "name": "Alameda County",
+          "slug": "alameda-county",
+          "display_name_autocomplete": "Alameda County",
+          "location": "37.6505468421,-121.9178854495",
+          "admin_level": 2,
+          "bbox_area": 0.408537282384,
+          "geometry_geojson": {
+            "type": "MultiPolygon",
+            "coordinates": [
+              [
+                [
+                  [-122.28088,37.70723],
+                  [-122.373782,37.883725],
+                  [-122.264027,37.903775],
+                  [-122.217376,37.871724],
+                  [-122.185977,37.820726],
+                  [-122.045473,37.798126],
+                  [-121.997771,37.763227],
+                  [-122.011771,37.747428],
+                  [-121.96077,37.718629],
+                  [-121.55916,37.818927],
+                  [-121.556655,37.542732],
+                  [-121.501475,37.525003],
+                  [-121.469275,37.489093],
+                  [-121.865267,37.484637],
+                  [-121.925041,37.454186],
+                  [-121.944914,37.469163],
+                  [-122.051244,37.459007],
+                  [-122.109574,37.497637],
+                  [-122.28088,37.70723]
+                ]
+              ]
+            ]
+          },
+          "bounding_box_geojson": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [-122.373782,37.454186],
+                [-122.373782,37.905824],
+                [-121.469214,37.905824],
+                [-121.469214,37.454186],
+                [-122.373782,37.454186]
+              ]
+            ]
+          }
         }
       ]
     },
@@ -974,6 +1024,72 @@
           "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] },
           "photo_licenses": [],
           "photos_count": 1
+        },
+        {
+          "id": 2020120501,
+          "uuid": "e6cc40bf-8de3-4b89-bc05-0e05e59ad6d7",
+          "description": "Needs ID of taxon 6 in Massachusetts",
+          "user": {
+            "id": 123,
+            "login": "a-user",
+            "name": "A User"
+          },
+          "created_at": "2015-12-31T00:00:00",
+          "quality_grade": "needs_id",
+          "identification_categories": ["leading"],
+          "ident_taxon_ids": [6],
+          "license_code": "cc-by",
+          "taxon": {
+            "id": 6,
+            "uuid": "94dbefce-e621-4aae-85e0-c2f644c99091",
+            "iconic_taxon_id": 101,
+            "is_active": true,
+            "ancestor_ids": [1,2,3,4,6],
+            "min_species_ancestry": "1,2,3,4,6",
+            "min_species_taxon_id": 6,
+            "rank_level": 10,
+            "rank": "species"
+          },
+          "place_ids": [1,2],
+          "private_place_ids": [1,2],
+          "location": "42.7,-73.4",
+          "private_location": "42.7,-73.4",
+          "geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] }
+        },
+        {
+          "id": 2020120501,
+          "uuid": "e6cc40bf-8de3-4b89-bc05-0e05e59ad6d7",
+          "description": "Needs ID of taxon 7 in Alameda County",
+          "user": {
+            "id": 123,
+            "login": "a-user",
+            "name": "A User"
+          },
+          "created_at": "2015-12-31T00:00:00",
+          "quality_grade": "needs_id",
+          "identification_categories": ["leading"],
+          "ident_taxon_ids": [6],
+          "license_code": "cc-by",
+          "taxon": {
+            "ancestor_ids": [ 1001, 1, 2 ],
+            "iconic_taxon_id": 101,
+            "id": 7,
+            "is_active": true,
+            "min_species_ancestry": "1001,1,2,7",
+            "min_species_taxon_id": 7,
+            "name": "Los",
+            "parent_id": 1,
+            "rank": "species",
+            "rank_level": 10,
+            "uuid": "81bbc106-b372-4df5-af7d-50452cf9956e"
+          },
+          "place_ids": [2020120501],
+          "private_place_ids": [2020120501],
+          "location": "37.6505468421,-121.9178854495,",
+          "private_location": "37.6505468421,-121.9178854495,",
+          "geojson": { "type": "Point", "coordinates": [ -121.9178854495, 42.7 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -121.9178854495, 37.6505468421 ] }
         }
       ]
     },
