@@ -2197,6 +2197,17 @@
         "slug": "redundant-observations-in-massachusetts-with-disabled-trust"
       }
     ],
+    "provider_authorizations": [
+      {
+        "id": 1234,
+        "provider_name": "orcid",
+        "provider_uid": "0000-0001-0002-0004",
+        "user_id": 123,
+        "created_at": "2020-11-12 21:40:02.779904",
+        "updated_at": "2020-11-12 21:40:02.779904",
+        "scope": ""
+      }
+    ],
     "posts": [
       {
         "id": 1,
