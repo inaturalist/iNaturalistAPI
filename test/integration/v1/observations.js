@@ -1121,6 +1121,16 @@ describe( "Observations", ( ) => {
           .expect( 200, done );
       } );
     } );
+    it( "shows authenticated trusted users private info", done => {
+      const trustedUserToken = jwt.sign( { user_id: 125 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations?id=14" ).set( "Authorization", trustedUserToken )
+        .expect( res => {
+          expect( res.body.results[0].private_location ).to.not.be.undefined;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "histogram", ( ) => {
