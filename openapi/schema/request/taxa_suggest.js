@@ -34,7 +34,8 @@ module.exports = Joi.object( ).keys( {
     .description( `
       Coordinate used to set a place filter when source is \`*observations\` by
       choosing the place whose boundary contains the coordinate. Only chooses
-      from places curated by staff (aka "standard" places)
+      from places curated by staff (aka "standard" places) and only sets the
+      place when lat, lng, and place_id are blank
     `.replace( /\s+/m, " " ) ),
   place_lng: Joi.number( ).min( -180 ).max( 180 ).description( "See `place_lat`" ),
   source: Joi.string( )
@@ -52,7 +53,8 @@ module.exports = Joi.object( ).keys( {
     `.replace( /\s+/m, " " ) ),
   taxon_id: Joi.number( ).integer( )
     .description( `
-      Only retrieve suggestions in this taxon. When \`source\` is
+      Only retrieve suggestions in this taxon. If taxon is below genus level it
+      will be replaced with the genus that contains it. When \`source\` is
       \`misidentifications\`, suggestions will be species commonly misidentified
       as this taxon
     `.replace( /\s+/m, " " ) )
