@@ -84,6 +84,12 @@ describe( "Taxa", ( ) => {
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "limits search string to 1000 characters", done => {
+      request( app ).get( `/v1/taxa/autocomplete?q=${"".padStart( 1001, "a" )}` )
+        .expect( "Content-Type", /json/ )
+        .expect( 422, done );
+    } );
   } );
 
   describe( "show", ( ) => {
