@@ -1,0 +1,6 @@
+version: "2"
+services:
+  inaturalist_api:
+    environment:
+      INAT_DB_USER : 'username'
+      INAT_DB_PASS: 'password'
