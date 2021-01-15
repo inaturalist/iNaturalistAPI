@@ -5,7 +5,7 @@ const jwt = require( "jsonwebtoken" );
 const config = require( "../../../config.js" );
 const app = require( "../../../app" );
 
-describe.only( "ObservationSounds", ( ) => {
+describe( "ObservationSounds", ( ) => {
   const token = jwt.sign( { user_id: 333 }, config.jwtSecret || "secret",
     { algorithm: "HS512" } );
   const obsSound = {
