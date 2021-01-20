@@ -57,6 +57,7 @@
     "redis": "^2.8.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
+    "scramjet": "^4.35.10",
     "squel": "^5.13.0",
     "sshpk": "^1.15.2",
     "swagger-ui-express": "^4.1.4",
