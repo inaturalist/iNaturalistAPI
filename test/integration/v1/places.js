@@ -66,6 +66,7 @@ describe( "Places", ( ) => {
         } ).expect( "Content-Type", /json/ )
         .expect( 422, done );
     } );
+
     it( "filters by admin_level", done => {
       request( app ).get( "/v1/places/1,2,3?admin_level=1" )
         .expect( res => {
@@ -75,6 +76,16 @@ describe( "Places", ( ) => {
             .includes( 3 ) ).to.be.false; // admin_level = null
           expect( res.body.results.map( r => r.id )
             .includes( 2 ) ).to.be.true; // admin_level = 1
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "filters by admin_level and id", done => {
+      request( app ).get( "/v1/places/1,3?admin_level=1" )
+        .expect( res => {
+          expect( res.body.results.map( r => r.id )
+            .includes( 2 ) ).to.be.false; // admin_level = 1
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
