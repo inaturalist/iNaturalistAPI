@@ -56,6 +56,14 @@ module.exports = Joi.object( ).keys( {
   map_scale: Joi.number( ).integer( ).valid( null ),
   mappable: Joi.boolean( ),
   non_owner_ids: Joi.array( ).items( identification ),
+  non_traditional_projects: Joi.array( ).items( Joi.object( ).keys( {
+    current_user_is_member: Joi.boolean( ),
+    project,
+    projectUser: Joi.object( ).keys( {
+      role: Joi.string( ),
+      prefers_curator_coordinate_access_for: Joi.string( )
+    } )
+  } ) ),
   num_identification_agreements: Joi.number( ).integer( ),
   num_identification_disagreements: Joi.number( ).integer( ),
   oauth_application_id: Joi.number( ).integer( ).valid( null ),
@@ -87,6 +95,7 @@ module.exports = Joi.object( ).keys( {
   project_ids_with_curator_id: Joi.array( ).items( Joi.number( ).integer( ) ),
   project_ids_without_curator_id: Joi.array( ).items( Joi.number( ).integer( ) ),
   project_observations: Joi.array( ).items( Joi.object( ).keys( {
+    current_user_is_member: Joi.boolean( ),
     id: Joi.number( ).integer( ).description( "Unique auto-increment integer identifier." ),
     preferences: Joi.object( ).keys( {
       allows_curator_coordinate_access: Joi.boolean( )
