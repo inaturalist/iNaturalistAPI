@@ -112,8 +112,10 @@ describe( "Observations", ( ) => {
     } );
 
     describe( "for authenticated curators of collection projects with trust disabled", ( ) => {
-      const project = _.find( fixtures.elasticsearch.projects.project, p => p.id === 2020100101 );
-      const curatorProjectUser = _.find( fixtures.postgresql.project_users, pu => pu.id === 2020100101 );
+      const project = _.find( fixtures.elasticsearch.projects.project,
+        p => p.id === 2020100101 );
+      const curatorProjectUser = _.find( fixtures.postgresql.project_users,
+        pu => pu.id === 2020100101 );
       const projectUserTrustingForAny = _.find(
         fixtures.postgresql.project_users,
         pu => pu.id === 2020100102
