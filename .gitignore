@@ -21,3 +21,4 @@ lib/vision/**
 cache/**
 log/**
 openapi/uploads/**
+lib/tasks/**.csv

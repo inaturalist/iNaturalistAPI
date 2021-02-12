@@ -15,6 +15,10 @@ describe( "ProviderAuthorizations", ( ) => {
   const user = _.find( fixtures.postgresql.users, u => u.id === 123 );
   const token = jwt.sign( { user_id: user.id }, config.jwtSecret || "secret",
     { algorithm: "HS512" } );
+  const authorization = _.find(
+    fixtures.postgresql.provider_authorizations,
+    pa => pa.user_id === user.id
+  );
   describe( "index", ( ) => {
     it( "should 401 without auth", done => {
       request( app )
@@ -22,10 +26,6 @@ describe( "ProviderAuthorizations", ( ) => {
         .expect( 401, done );
     } );
     it( "should return JSON", done => {
-      const authorization = _.find(
-        fixtures.postgresql.provider_authorizations,
-        pa => pa.user_id === user.id
-      );
       request( app )
         .get( "/v1/provider_authorizations" )
         .set( "Authorization", token )
@@ -44,10 +44,10 @@ describe( "ProviderAuthorizations", ( ) => {
   describe( "delete", ( ) => {
     it( "should hit the Rails equivalent and return 200", done => {
       const nockScope = nock( "http://localhost:3000" )
-        .delete( "/provider_authorizations/1" )
+        .delete( `/provider_authorizations/${authorization.id}` )
         .reply( 200 );
       request( app )
-        .delete( "/v1/provider_authorizations/1" )
+        .delete( `/v1/provider_authorizations/${authorization.id}` )
         .set( "Authorization", token )
         .expect( ( ) => {
           // Raise an exception if the nocked endpoint doesn't get called

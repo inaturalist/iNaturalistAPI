@@ -112,8 +112,10 @@ describe( "Observations", ( ) => {
     } );
 
     describe( "for authenticated curators of collection projects with trust disabled", ( ) => {
-      const project = _.find( fixtures.elasticsearch.projects.project, p => p.id === 2020100101 );
-      const curatorProjectUser = _.find( fixtures.postgresql.project_users, pu => pu.id === 2020100101 );
+      const project = _.find( fixtures.elasticsearch.projects.project,
+        p => p.id === 2020100101 );
+      const curatorProjectUser = _.find( fixtures.postgresql.project_users,
+        pu => pu.id === 2020100101 );
       const projectUserTrustingForAny = _.find(
         fixtures.postgresql.project_users,
         pu => pu.id === 2020100102
@@ -272,6 +274,41 @@ describe( "Observations", ( ) => {
             expect( obs.user.id ).to.eq( 123 );
           } );
         } ).expect( 200, done );
+    } );
+
+    it( "finds observations by not_user_id", done => {
+      const taxonId = 1;
+      const fixtureObs = _.filter(
+        fixtures.elasticsearch.observations.observation,
+        o => o.taxon && o.taxon.ancestor_ids.includes( taxonId )
+      );
+      const fixtureObsUserIds = fixtureObs.map( o => o.user.id );
+      const notUserId = fixtureObsUserIds[0];
+      expect( fixtureObsUserIds.length ).to.be.above( 1 );
+      request( app )
+        .get( `/v1/observations?taxon_id=${taxonId}&not_user_id=${notUserId}` )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results.map( o => o.user.id ) ).not.to.include( notUserId );
+        } )
+        .expect( 200, done );
+    } );
+    it( "finds observations when not_user_id is a login", done => {
+      const taxonId = 1;
+      const fixtureObs = _.filter(
+        fixtures.elasticsearch.observations.observation,
+        o => o.taxon && o.taxon.ancestor_ids.includes( taxonId )
+      );
+      const fixtureObsUserLogins = fixtureObs.map( o => o.user.login );
+      const notUserLogin = fixtureObsUserLogins[0];
+      expect( fixtureObsUserLogins.length ).to.be.above( 1 );
+      request( app )
+        .get( `/v1/observations?taxon_id=${taxonId}&not_user_id=${notUserLogin}` )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results.map( o => o.user.notUserLogin ) ).not.to.include( notUserLogin );
+        } )
+        .expect( 200, done );
     } );
 
     it( "finds observations by taxon_id", done => {
@@ -1120,6 +1157,16 @@ describe( "Observations", ( ) => {
           .expect( "Content-Type", /json/ )
           .expect( 200, done );
       } );
+    } );
+    it( "shows authenticated trusted users private info", done => {
+      const trustedUserToken = jwt.sign( { user_id: 125 }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/observations?id=14" ).set( "Authorization", trustedUserToken )
+        .expect( res => {
+          expect( res.body.results[0].private_location ).to.not.be.undefined;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
     } );
   } );
 

@@ -1210,7 +1210,8 @@
           },
           "user_id": 1,
           "user_ids": [1, 5, 6, 123, 121],
-          "prefers_user_trust": true
+          "prefers_user_trust": true,
+          "observation_requirements_updated_at": "2020-01-01 00:00:00"
         },
         {
           "id": 2006,
@@ -2188,7 +2189,8 @@
         "id": 2005,
         "project_type": "collection",
         "title": "Observations in Massachusetts",
-        "slug": "observations-in-massachusetts"
+        "slug": "observations-in-massachusetts",
+        "observation_requirements_updated_at": "2020-01-01 00:00:00"
       },
       {
         "id": 2020100101,
