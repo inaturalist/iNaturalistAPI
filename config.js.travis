@@ -21,5 +21,7 @@ module.exports = {
     uploadsDir: "/tmp/",
     tensorappURL: "http://localhost:6006"
   },
-  debug: true
+  debug: true,
+  jwtSecret: "jwtSecret",
+  jwtApplicationSecret: "jwtApplicationSecret"
 }

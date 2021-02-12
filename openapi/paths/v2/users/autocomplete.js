@@ -14,7 +14,7 @@ module.exports = sendWrapper => {
     tags: ["Users"],
     summary: "Search users.",
     security: [{
-      jwtOptional: []
+      userJwtOptional: []
     }],
     parameters: _.map( usersAutocompleteSchema._inner.children, child => (
       transform( child.schema.label( child.key ) )

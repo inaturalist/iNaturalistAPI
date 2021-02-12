@@ -11,7 +11,7 @@ const app = iNaturalistAPI.server( );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
-describe( "Projects Routes", ( ) => {
+describe( "Projects", ( ) => {
   describe( "search", ( ) => {
     it( "returns json", done => {
       request( app ).get( "/v1/projects" )
@@ -19,8 +19,21 @@ describe( "Projects Routes", ( ) => {
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.per_page ).to.eq( 10 );
           expect( res.body.total_results ).to.eq( fixtures.elasticsearch.projects.project.length );
-          expect( res.body.results.length ).to.eq( Math.min( 10, fixtures.elasticsearch.projects.project.length ) );
+          expect( res.body.results.length ).to.eq(
+            Math.min( 10, fixtures.elasticsearch.projects.project.length )
+          );
         } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+    it( "paginates correctly", done => {
+      const perPage = 2;
+      expect( fixtures.elasticsearch.projects.project.length ).to.be.above( perPage );
+      request( app ).get( `/v1/projects?page=2&per_page=${perPage}` )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( fixtures.elasticsearch.projects.project.length );
+          expect( res.body.results.length ).to.be.above( 0 );
+          expect( res.body.results.length ).to.be.below( perPage + 1 );
+        } )
         .expect( 200, done );
     } );
   } );
@@ -108,6 +121,16 @@ describe( "Projects Routes", ( ) => {
             ).length
           );
         } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+    it( "per_page correctly", done => {
+      const perPage = 2;
+      expect( fixtures.elasticsearch.projects.project.length ).to.be.above( perPage );
+      request( app ).get( `/v1/projects/autocomplete?q=pr&per_page=${perPage}` )
+        .expect( res => {
+          expect( res.body.results.length ).to.be.above( 0 );
+          expect( res.body.results.length ).to.be.below( perPage + 1 );
+        } )
         .expect( 200, done );
     } );
   } );

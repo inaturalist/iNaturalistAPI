@@ -3,6 +3,7 @@ const moment = require( "moment" );
 const _ = require( "lodash" );
 const { observations } = require( "inaturalistjs" );
 const testHelper = require( "../../../lib/test_helper" );
+const util = require( "../../../lib/util" );
 const Observation = require( "../../../lib/models/observation" );
 const Project = require( "../../../lib/models/project" );
 const List = require( "../../../lib/models/list" );
@@ -667,7 +668,14 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by geoprivacy open", async ( ) => {
       const q = await Q( { geoprivacy: "open" } );
-      expect( q.inverse_filters ).to.eql( [{ exists: { field: "geoprivacy" } }] );
+      expect( q.filters ).to.eql( [{
+        bool: {
+          should: [
+            { terms: { geoprivacy: ["open"] } },
+            { bool: { must_not: { exists: { field: "geoprivacy" } } } }
+          ]
+        }
+      }] );
     } );
 
     it( "filters by geoprivacy obscured_private", async ( ) => {

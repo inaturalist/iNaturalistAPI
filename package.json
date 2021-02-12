@@ -41,7 +41,8 @@
     "graphql-fields": "*",
     "handlebars": "^4.7.6",
     "hapi-joi-to-swagger": "github:inaturalist/hapi-joi-to-swagger#0ec177ccc9f8306f6fbcc7066174313e593c0600",
-    "inaturalistjs": "github:inaturalist/inaturalistjs#bfce66c2927a756d654454362bc67fc3892ba7a3",
+    "inaturalistjs": "github:inaturalist/inaturalistjs",
+    "intl": "^1.2.5",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.15",
     "lodash.merge": "^4.6.2",
@@ -78,6 +79,7 @@
     "mocha-lcov-reporter": "^1.3.0",
     "nock": "^12.0.3",
     "sinon": "^7.1.0",
+    "sinon-chai": "^3.5.0",
     "supertest": "^3.3.0"
   }
 }

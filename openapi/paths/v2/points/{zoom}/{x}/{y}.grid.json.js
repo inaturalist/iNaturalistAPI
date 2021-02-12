@@ -24,7 +24,7 @@ module.exports = sendWrapper => {
     tags: ["UTFGrid"],
     summary: "JSON for points tiles",
     security: [{
-      jwtOptional: []
+      userJwtOptional: []
     }],
     parameters: tilePathParams.concat( transformedObsSearchParams ),
     responses: {

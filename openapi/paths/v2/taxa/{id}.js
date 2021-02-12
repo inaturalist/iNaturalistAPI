@@ -12,7 +12,7 @@ module.exports = sendWrapper => {
     tags: ["Taxa"],
     summary: "Fetch taxa.",
     security: [{
-      jwtOptional: []
+      userJwtOptional: []
     }],
     parameters: [
       transform(

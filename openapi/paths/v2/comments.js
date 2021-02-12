@@ -12,7 +12,7 @@ module.exports = sendWrapper => {
     tags: ["Comments"],
     summary: "Create a comment",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     requestBody: {
       content: {

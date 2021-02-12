@@ -14,7 +14,7 @@ module.exports = sendWrapper => {
     tags: ["Users"],
     summary: "Fetch users.",
     security: [{
-      jwtOptional: []
+      userJwtOptional: []
     }],
     parameters: [
       transform( Joi.string( ).label( "id" ).meta( { in: "path" } )
@@ -43,7 +43,7 @@ module.exports = sendWrapper => {
     tags: ["Users"],
     summary: "Update users.",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     parameters: [
       transform( Joi.string( ).label( "id" ).meta( { in: "path" } )

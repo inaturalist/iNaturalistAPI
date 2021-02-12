@@ -38,6 +38,8 @@ module.exports = {
   debug: true,
   staticImagePrefix: "http://localhost:3000/attachments/",
   userImagePrefix: "/attachments/users/icons/",
+  jwtSecret: "jwtSecret",
+  jwtApplicationSecret: "jwtApplicationSecret",
   imageProcesing: {
     // Path to a file listing the taxonomy used in the computer vision model
     taxaFilePath: "",

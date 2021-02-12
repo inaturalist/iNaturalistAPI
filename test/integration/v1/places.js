@@ -20,13 +20,8 @@ describe( "Places", ( ) => {
         .expect( res => {
           const places = _.filter( fixtures.elasticsearch.places.place,
             p => !_.isNil( p.geometry_geojson ) );
-          const standardPlaces = _.filter( places, p => p.admin_level !== null );
           const communityPlaces = _.filter( places, p => p.admin_level === null );
           expect( res.body.page ).to.eq( 1 );
-          expect( res.body.per_page ).to.eq( places.length );
-          expect( res.body.total_results ).to.eq( places.length );
-          expect( res.body.results.standard.length ).to.eq( standardPlaces.length );
-          expect( res.body.results.community.length ).to.eq( communityPlaces.length );
           expect( res.body.results.standard[0].name ).to.eq( "United States" );
           expect( res.body.results.standard[1].name ).to.eq( "Massachusetts" );
           expect( res.body.results.community[0].name ).to.eq( communityPlaces[0].name );

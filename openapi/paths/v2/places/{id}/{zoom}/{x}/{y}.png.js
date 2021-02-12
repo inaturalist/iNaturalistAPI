@@ -26,7 +26,7 @@ module.exports = sendWrapper => {
     tags: ["Polygon Tiles"],
     summary: "Place Tiles",
     security: [{
-      jwtOptional: []
+      userJwtOptional: []
     }],
     parameters: [
       transform( Joi.string( ).label( "id" ).meta( { in: "path" } ).required( ) )

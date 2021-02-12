@@ -17,7 +17,7 @@ module.exports = sendWrapper => {
       Generally only relevant when using the iNaturalist website
     `,
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     parameters: _.map( usersUpdateSessionSchema._inner.children, child => (
       transform( child.schema.label( child.key ) )

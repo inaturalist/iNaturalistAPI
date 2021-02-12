@@ -24,7 +24,7 @@ module.exports = sendWrapper => {
     tags: ["Observation Tiles"],
     summary: "Grid Tiles",
     security: [{
-      jwtOptional: []
+      userJwtOptional: []
     }],
     parameters: tilePathParams.concat( transformedObsSearchParams ),
     responses: {
