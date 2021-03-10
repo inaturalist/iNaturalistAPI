@@ -16,6 +16,11 @@ module.exports = Joi.object( ).keys( {
       will override the values of \`place_id\` and \`taxon_id\` if these values
       can be derived from the observation
     `.replace( /\s+/m, " " ) ),
+  observed_on: Joi.string( )
+    .description( `
+      Date the subject was observed (YYYY-MM-DD), used to refine suggestions to
+      those observed at a similar time of year
+    `.replace( /\s+/m, " " ) ),
   order_by: Joi.string( ).valid( "taxonomy", "default" )
     .description( `
       How the suggestions will be ordered. The default is to order by whatever default
