@@ -1,10 +1,12 @@
 const Joi = require( "@hapi/joi" );
+const j2s = require( "hapi-joi-to-swagger" );
 const transform = require( "../../../joi_to_openapi_parameter" );
-const observationsController = require( "../../../../lib/controllers/v2/observations_controller" );
+const observationsCreateSchema = require( "../../../schema/request/observations_create" );
+const ObservationsController = require( "../../../../lib/controllers/v2/observations_controller" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    const results = await observationsController.show( req );
+    const results = await ObservationsController.show( req );
     sendWrapper( req, res, null, results );
   }
 
@@ -40,8 +42,43 @@ module.exports = sendWrapper => {
     }
   };
 
+  async function PUT( req, res ) {
+    const results = await ObservationsController.update( req );
+    sendWrapper( req, res, null, results );
+  }
+
+  PUT.apiDoc = {
+    tags: ["Observations"],
+    summary: "Update an observation.",
+    security: [{
+      userJwtRequired: []
+    }],
+    requestBody: {
+      content: {
+        "multipart/form-data": {
+          schema: j2s( observationsCreateSchema ).swagger
+        },
+        "application/json": {
+          schema: j2s( observationsCreateSchema ).swagger
+        }
+      }
+    },
+    responses: {
+      200: {
+        description: "A list of observations.",
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/ResultsObservations"
+            }
+          }
+        }
+      }
+    }
+  };
+
   return {
-    GET
-    // PUT
+    GET,
+    PUT
   };
 };
