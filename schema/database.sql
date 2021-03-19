@@ -738,7 +738,8 @@ CREATE TABLE public.conservation_statuses (
     geoprivacy character varying(255) DEFAULT 'obscured'::character varying,
     iucn integer DEFAULT 20,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    updater_id integer
 );
 
 
@@ -2819,7 +2820,6 @@ CREATE TABLE public.observations (
     positional_accuracy integer,
     private_latitude numeric(15,10),
     private_longitude numeric(15,10),
-    private_positional_accuracy integer,
     geoprivacy character varying(255),
     quality_grade character varying DEFAULT 'casual'::character varying,
     user_agent character varying(255),
@@ -3454,7 +3454,8 @@ CREATE TABLE public.projects (
     end_time timestamp without time zone,
     trusted boolean DEFAULT false,
     "group" character varying(255),
-    last_aggregated_at timestamp without time zone
+    last_aggregated_at timestamp without time zone,
+    observation_requirements_updated_at timestamp without time zone
 );
 
 
@@ -4805,7 +4806,8 @@ CREATE TABLE public.user_blocks (
     user_id integer,
     blocked_user_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    override_user_id integer
 );
 
 
@@ -7350,6 +7352,13 @@ CREATE INDEX index_conservation_statuses_on_taxon_id ON public.conservation_stat
 
 
 --
+-- Name: index_conservation_statuses_on_updater_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_conservation_statuses_on_updater_id ON public.conservation_statuses USING btree (updater_id);
+
+
+--
 -- Name: index_conservation_statuses_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9233,6 +9242,13 @@ CREATE INDEX index_user_blocks_on_blocked_user_id ON public.user_blocks USING bt
 
 
 --
+-- Name: index_user_blocks_on_override_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_user_blocks_on_override_user_id ON public.user_blocks USING btree (override_user_id);
+
+
+--
 -- Name: index_user_blocks_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10365,4 +10381,18 @@ INSERT INTO schema_migrations (version) VALUES ('20200925210606');
 INSERT INTO schema_migrations (version) VALUES ('20201023174221');
 
 INSERT INTO schema_migrations (version) VALUES ('20201118012108');
+
+INSERT INTO schema_migrations (version) VALUES ('20201204005354');
+
+INSERT INTO schema_migrations (version) VALUES ('20210125233250');
+
+INSERT INTO schema_migrations (version) VALUES ('20210127005238');
+
+INSERT INTO schema_migrations (version) VALUES ('20210128211322');
+
+INSERT INTO schema_migrations (version) VALUES ('20210213020914');
+
+INSERT INTO schema_migrations (version) VALUES ('20210220195556');
+
+INSERT INTO schema_migrations (version) VALUES ('20210305235042');
 
