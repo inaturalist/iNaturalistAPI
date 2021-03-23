@@ -32,7 +32,7 @@ describe( "ESModel", ( ) => {
 
     it( "returns errors", async ( ) => {
       const o = { list_id: 1 };
-      await expect( ESModel.fetchBelongsTo( [o], List ) )
+      await expect( ESModel.fetchBelongsTo( [o], List, { searchSlug: true } ) )
         .to.be.rejectedWith( Error );
     } );
   } );
