@@ -6,8 +6,6 @@ const testHelper = require( "../../../lib/test_helper" );
 const Identification = require( "../../../lib/models/identification" );
 const IdentificationsController = require( "../../../lib/controllers/v1/identifications_controller" );
 
-let eq;
-
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 const Q = async params => {
