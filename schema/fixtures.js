@@ -1773,6 +1773,51 @@
         "taxon_id": 5,
         "user_id": 5,
         "body": "id2"
+      },
+      {
+        "id": 105,
+        "uuid": "9ea80970-afe8-4575-bd61-e9395c768b85",
+        "current": true,
+        "body": "id1",
+        "category": "leading",
+        "user_id": 1234,
+        "taxon_id": 5,
+        "observation_id": 1
+      },
+      {
+        "id": 121,
+        "uuid": "6351abcb-8ed4-4b7d-84ff-066ece491338",
+        "current": true,
+        "user_id": 121,
+        "observation_id": 12
+      },
+      {
+        "id": 122,
+        "current": true,
+        "user_id": 122,
+        "observation_id": 12
+      },
+      {
+        "id": 123,
+        "current": true,
+        "user_id": 121,
+        "observation_id": 13
+      },
+      {
+        "id": 124,
+        "current": true,
+        "created_at": "2015-12-31 00:00:00",
+        "category": "leading",
+        "user_id": 121,
+        "observation_id": 13
+      },
+      {
+        "id": 125,
+        "current": true,
+        "created_at": "2016-12-31 00:00:00",
+        "category": "leading",
+        "user_id": 122,
+        "observation_id": 13
       }
     ],
     "lists": [
