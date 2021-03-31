@@ -17,13 +17,12 @@
   "author": "Patrick Leary <patrick.r.leary@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@aws-sdk/client-s3": "*",
     "@hapi/joi": "^15.1.0",
     "@jagql/framework": "*",
     "async": "^2.6.1",
     "bluebird": "^3.5.2",
     "body-parser": "^1.18.3",
-    "cacheman": "^2.2.1",
-    "cacheman-file": "^0.2.1",
     "carto": "^1.2.0",
     "compression": "^1.7.3",
     "debug": "*",
@@ -61,6 +60,7 @@
     "squel": "^5.13.0",
     "sshpk": "^1.15.2",
     "swagger-ui-express": "^4.1.4",
+    "tar": "^4.4.13",
     "yamljs": "^0.3.0",
     "yargs": "^13.2.2"
   },
