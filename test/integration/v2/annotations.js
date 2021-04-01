@@ -5,6 +5,7 @@ const nock = require( "nock" );
 const jwt = require( "jsonwebtoken" );
 const fs = require( "fs" );
 const config = require( "../../../config.js" );
+const util = require( "../../../lib/util" );
 const app = require( "../../../app" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
@@ -39,7 +40,7 @@ describe( "Annotations", ( ) => {
   describe( "delete", ( ) => {
     it( "should not return anything if successful", done => {
       nock( "http://localhost:3000" )
-        .delete( `/annotations/${a.uuid}` )
+        .delete( `/annotations/${a.uuid}?uuid=${a.uuid}` )
         .reply( 200 );
       request( app ).delete( `/v2/annotations/${a.uuid}` )
         .set( "Authorization", token )
@@ -85,7 +86,7 @@ describe( "Annotations", ( ) => {
     describe( "DELETE vote", ( ) => {
       it( "returns 204 for success", done => {
         nock( "http://localhost:3000" )
-          .delete( `/votes/unvote/annotation/${anno.uuid}` )
+          .delete( `/votes/unvote/annotation/${anno.uuid}?uuid=${anno.uuid}` )
           .reply( 204, {} );
         request( app ).delete( `/v2/annotations/${anno.uuid}/vote` )
           .set( "Authorization", token )
