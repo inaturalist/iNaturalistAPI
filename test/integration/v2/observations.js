@@ -322,4 +322,43 @@ describe( "Observations", ( ) => {
       } );
     } );
   } );
+
+  describe( "voting", ( ) => {
+    const obs = fixtures.elasticsearch.observations.observation[0];
+    const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+    describe( "POST vote", ( ) => {
+      it( "returns 204 for success", done => {
+        // Note that it doesn't really matter what Rails returns. The API just
+        // cares about the HTTP status
+        nock( "http://localhost:3000" )
+          .post( `/votes/vote/observation/${obs.uuid}` )
+          .reply( 204, {} );
+        request( app ).post( `/v2/observations/${obs.uuid}/vote` )
+          .set( "Authorization", token )
+          .expect( 204, done );
+      } );
+      it( "accepts the vote param", done => {
+        nock( "http://localhost:3000" )
+          .post( `/votes/vote/observation/${obs.uuid}` )
+          .reply( 204, {} );
+        request( app )
+          .post( `/v2/observations/${obs.uuid}/vote` )
+          .set( "Authorization", token )
+          .set( "Content-Type", "application/json" )
+          .send( { vote: "bad" } )
+          .expect( 204, done );
+      } );
+    } );
+    describe( "DELETE vote", ( ) => {
+      it( "returns 204 for success", done => {
+        nock( "http://localhost:3000" )
+          .delete( `/votes/unvote/observation/${obs.uuid}` )
+          .reply( 204, {} );
+        request( app ).delete( `/v2/observations/${obs.uuid}/vote` )
+          .set( "Authorization", token )
+          .expect( 204, done );
+      } );
+    } );
+  } );
 } );

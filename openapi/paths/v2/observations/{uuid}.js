@@ -6,6 +6,20 @@ const ObservationsController = require( "../../../../lib/controllers/v2/observat
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
+    // Attempt to mimic v2 cache headers
+    // TODO abstract this in to an easy way for all endpoints to do this
+    const ttlString = req.query.ttl || req.body.ttl;
+    const ttl = ttlString && Number( ttlString );
+    if ( ttl === -1 ) {
+      req.query.ttl = Number( ttl );
+      res.setHeader( "Cache-Control",
+        "private, no-cache, no-store, must-revalidate" );
+      res.setHeader( "Expires", "-1" );
+      res.setHeader( "Pragma", "no-cache" );
+    } else if ( ttl ) {
+      req.query.ttl = Number( ttl );
+      res.setHeader( "Cache-Control", `public, max-age=${ttl}` );
+    }
     const results = await ObservationsController.show( req );
     sendWrapper( req, res, null, results );
   }
