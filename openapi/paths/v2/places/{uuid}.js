@@ -30,12 +30,10 @@ module.exports = sendWrapper => {
       ),
       transform(
         Joi
-          .array( )
+          .string( )
           .label( "order_by" ).meta( { in: "query" } )
           .description( "Order results by admin level and distance from a point specified in lat and lng" )
-          .items(
-            Joi.string( ).valid( "admin_and_distance" )
-          )
+          .valid( "admin_and_distance" )
       ),
       transform( Joi.string( ).label( "fields" ).meta( { in: "query" } ) ),
       transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
