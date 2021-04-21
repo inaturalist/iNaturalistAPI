@@ -3,9 +3,11 @@ const { expect } = require( "chai" );
 const fs = require( "fs" );
 const request = require( "supertest" );
 const nock = require( "nock" );
+const sinon = require( "sinon" );
 const jwt = require( "jsonwebtoken" );
 const config = require( "../../../config.js" );
 const app = require( "../../../app" );
+const ObservationsController = require( "../../../lib/controllers/v1/observations_controller" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
@@ -195,6 +197,33 @@ describe( "Observations", ( ) => {
             .eq( o.private_geojson.coordinates[1] );
           expect( resObs.private_location ).not.to.be.undefined;
           expect( resObs.private_location ).to.eq( o.private_location );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "update", ( ) => {
+    const token = jwt.sign( { user_id: fixtureObs.user.id },
+      config.jwtSecret || "secret", { algorithm: "HS512" } );
+    it( "returns json", done => {
+      const newDesc = "lskdgnlskdng";
+      // Using nock to stub the rails response is not enough here b/c the v1
+      // controller will load fresh data from the ES index, so if we want to see
+      // a change without actually changing data, we need to stub the v1
+      // controller reponse
+      sinon.stub( ObservationsController, "update" )
+        .callsFake(
+          ( ) => Object.assign( {}, fixtureObs, { description: newDesc } )
+        );
+      request( app ).put( `/v2/observations/${fixtureObs.uuid}` )
+        .set( "observation", JSON.stringify( { } ) )
+        .field( "fields", JSON.stringify( { description: true } ) )
+        .set( "Authorization", token )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results[0].uuid ).to.eq( fixtureObs.uuid );
+          expect( res.body.results[0].description ).to.eq( newDesc );
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );

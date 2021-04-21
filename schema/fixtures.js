@@ -1058,7 +1058,7 @@
           "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] }
         },
         {
-          "id": 2020120501,
+          "id": 2020120502,
           "uuid": "e6cc40bf-8de3-4b89-bc05-0e05e59ad6d7",
           "description": "Needs ID of taxon 7 in Alameda County",
           "user": {
@@ -1773,6 +1773,51 @@
         "taxon_id": 5,
         "user_id": 5,
         "body": "id2"
+      },
+      {
+        "id": 105,
+        "uuid": "9ea80970-afe8-4575-bd61-e9395c768b85",
+        "current": true,
+        "body": "id1",
+        "category": "leading",
+        "user_id": 1234,
+        "taxon_id": 5,
+        "observation_id": 1
+      },
+      {
+        "id": 121,
+        "uuid": "6351abcb-8ed4-4b7d-84ff-066ece491338",
+        "current": true,
+        "user_id": 121,
+        "observation_id": 12
+      },
+      {
+        "id": 122,
+        "current": true,
+        "user_id": 122,
+        "observation_id": 12
+      },
+      {
+        "id": 123,
+        "current": true,
+        "user_id": 121,
+        "observation_id": 13
+      },
+      {
+        "id": 124,
+        "current": true,
+        "created_at": "2015-12-31 00:00:00",
+        "category": "leading",
+        "user_id": 121,
+        "observation_id": 13
+      },
+      {
+        "id": 125,
+        "current": true,
+        "created_at": "2016-12-31 00:00:00",
+        "category": "leading",
+        "user_id": 122,
+        "observation_id": 13
       }
     ],
     "lists": [
@@ -1867,6 +1912,172 @@
         "created_at": "2020-10-20 01:54:15.314522",
         "revoked_at": "2020-10-20 03:54:15.314522",
         "scopes": "write login"
+      }
+    ],
+    "observations": [
+      {
+        "id": 1,
+        "uuid": "cabbd853-39c0-429c-86f1-b36063d3d475"
+      },
+      {
+        "id": 2,
+        "uuid": "9a4046ff-2005-4c8c-8127-48ef2c8e3ab9"
+      },
+      {
+        "id": 333,
+        "uuid": "5e26217c-5a88-421b-81fc-0ce4f07f634a"
+      },
+      {
+        "id": 4,
+        "uuid": "e29e68ca-0ecf-4c6b-8fd5-71a28603fb5d"
+      },
+      {
+        "id": 5,
+        "uuid": "e60d4116-f327-4ce1-bd46-27048fdc68a0"
+      },
+      {
+        "id": 6,
+        "uuid": "e1aabcda-0d06-4454-8959-9b000e555610"
+      },
+      {
+        "id": 7,
+        "uuid": "f88b97cf-6515-4f5b-9a94-5f484167e4a9"
+      },
+      {
+        "id": 8,
+        "uuid": "02ad4be1-9f21-41a9-82d3-444d6c1078da"
+      },
+      {
+        "id": 9,
+        "uuid": "dc223c38-8389-44cc-8d22-8a0e77a67cbf"
+      },
+      {
+        "id": 10,
+        "uuid": "b1aa0a03-3256-4913-aef4-c308ee51dd29"
+      },
+      {
+        "id": 11,
+        "uuid": "5adf654d-3aef-48ee-8fd3-48b4a1e2268d"
+      },
+      {
+        "id": 12,
+        "uuid": "95e01721-e302-4ac7-b395-f7e4384c76a3"
+      },
+      {
+        "id": 13,
+        "uuid": "97aaf567-3998-4a05-b743-a261b9e65031"
+      },
+      {
+        "id": 14,
+        "uuid": "6d59a34c-efb3-498a-9aef-eb6ef60ac0ec"
+      },
+      {
+        "id": 15,
+        "uuid": "dba1f134-f95c-45c2-8381-22b445cf73ef"
+      },
+      {
+        "id": 16,
+        "uuid": "0ae6884e-151e-4d5b-a916-889f01f95985"
+      },
+      {
+        "id": 17,
+        "uuid": "450a7b9c-19f2-43ef-9cc9-38b0d6df9bde"
+      },
+      {
+        "id": 18,
+        "uuid": "bf423b43-684a-4aed-bb0c-c8c5ded663c2"
+      },
+      {
+        "id": 19,
+        "uuid": "6e2602c7-1529-4dce-bd62-32f9d0af62f2"
+      },
+      {
+        "id": 20,
+        "uuid": "50891b33-96d9-4e46-954d-6215a9ef8147"
+      },
+      {
+        "id": 21,
+        "uuid": "048a064f-efb1-4671-afeb-a2fae902df52"
+      },
+      {
+        "id": 22,
+        "uuid": "4307798e-d8d8-4030-8e08-60de0cbb8323"
+      },
+      {
+        "id": 23,
+        "uuid": "aded9e76-ba9a-427c-8346-5530a1dd4866"
+      },
+      {
+        "id": 24,
+        "uuid": "8d863d0e-cbc8-41cc-bf99-8faa6b449541"
+      },
+      {
+        "id": 25,
+        "uuid": "b7254e49-e396-42cd-8e39-369d68c76fc2"
+      },
+      {
+        "id": 26,
+        "uuid": "bc688517-3cfa-4282-81f0-66784cb7dbdf"
+      },
+      {
+        "id": 27,
+        "uuid": "5d73bb4e-5052-4e1f-ae92-b1cc97ce5baa"
+      },
+      {
+        "id": 28,
+        "uuid": "ca81b849-a052-4b12-9755-7c5d49190fb3"
+      },
+      {
+        "id": 29,
+        "uuid": "3fef8ec3-4f4f-4b69-864e-27ebe7f1d6b7"
+      },
+      {
+        "id": 30,
+        "uuid": "7f8be603-454e-42ad-b1de-c60da018770a"
+      },
+      {
+        "id": 31,
+        "uuid": "54bdcf6f-aa5e-4316-be7a-417c6a20838a"
+      },
+      {
+        "id": 32,
+        "uuid": "d17058eb-f864-49b2-8546-b46bf99c3e68"
+      },
+      {
+        "id": 33,
+        "uuid": "3ff91940-4bda-4552-ba9e-def0570d3ac7"
+      },
+      {
+        "id": 34,
+        "uuid": "3ee2447c-8139-49c5-97d8-54f5d5719125"
+      },
+      {
+        "id": 35,
+        "uuid": "47748d0d-ddf2-45ac-8f56-7cb75282ebc1"
+      },
+      {
+        "id": 2020100101,
+        "uuid": "64d02611-a44f-4247-b213-8be23e1fbd21"
+      },
+      {
+        "id": 2020101501,
+        "uuid": "dcccb9cd-6ffb-4a1e-bbbc-28765cf13779"
+      },
+      {
+        "id": 2020101502,
+        "uuid": "dcccb9cd-6ffb-4a1e-bbbc-28765cf13779"
+      },
+      {
+        "id": 2020101601,
+        "uuid": "03db7d8f-7fe8-44a0-a0a0-9cfe52b13405"
+      },
+      {
+        "id": 2020120501,
+        "uuid": "e6cc40bf-8de3-4b89-bc05-0e05e59ad6d7"
+      },
+      {
+        "id": 2020120502,
+        "uuid": "e6cc40bf-8de3-4b89-bc05-0e05e59ad6d7"
       }
     ],
     "observation_photos": [

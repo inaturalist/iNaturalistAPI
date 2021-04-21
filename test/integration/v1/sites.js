@@ -21,4 +21,27 @@ describe( "Sites", ( ) => {
         .expect( 200, done );
     } );
   } );
+  describe( "fetch", ( ) => {
+    it( "fetches a single site", done => {
+      request( app ).get( "/v1/sites/2" )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( res.body.results[0].name ).to.eq( "NaturaLista" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+    it( "fetches multiple sites", done => {
+      request( app ).get( "/v1/sites/1,2" )
+        .expect( 200 )
+        .expect( res => {
+          const responseNames = res.body.results.map( s => s.name );
+          expect( responseNames ).to.include( "iNaturalist" );
+          expect( responseNames ).to.include( "NaturaLista" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
 } );

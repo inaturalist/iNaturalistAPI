@@ -44,7 +44,7 @@ describe( "DBModel", ( ) => {
     it( "fetches has many associations", async ( ) => {
       const o = { id: 1 };
       await DBModel.fetchHasMany( [o], Identification, "observation_id" );
-      expect( o.identifications.length ).to.eq( 2 );
+      expect( o.identifications.length ).to.eq( 3 );
     } );
 
     it( "postgresql errors", async ( ) => {

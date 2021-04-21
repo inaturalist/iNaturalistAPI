@@ -790,7 +790,7 @@ describe( "ObservationsController", ( ) => {
       const shoulds = q.filters[1].bool.should;
       expect( shoulds[0] ).to.deep.eq( {
         bool: {
-          must: [
+          filter: [
             {
               terms: {
                 "taxon.ancestor_ids": ["1"]
@@ -811,7 +811,7 @@ describe( "ObservationsController", ( ) => {
       // the "collection" project slug will be removed from project_id param
       expect( shoulds[1] ).to.deep.eq( {
         bool: {
-          must: [{
+          filter: [{
             terms: {
               project_ids: ["12"]
             }
