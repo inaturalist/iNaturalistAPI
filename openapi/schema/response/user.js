@@ -25,6 +25,7 @@ module.exports = Joi.object( ).keys( {
   roles: Joi.array( ).items( Joi.string( ) ),
   site_id: Joi.number( ).integer( ).valid( null ),
   spam: Joi.boolean( ),
+  species_count: Joi.number( ).integer( ),
   suspended: Joi.boolean( ),
   universal_search_rank: Joi.number( ).integer( )
 } ).unknown( false ).meta( { className: "User" } );
