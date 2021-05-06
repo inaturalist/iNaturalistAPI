@@ -4,13 +4,13 @@ const observationsController = require( "../../../../../lib/controllers/v2/obser
 
 module.exports = sendWrapper => {
   async function POST( req, res ) {
-    await observationsController.fave( req );
+    await observationsController.review( req );
     sendWrapper( req, res.status( 204 ) );
   }
 
   POST.apiDoc = {
     tags: ["Observations"],
-    summary: "Fave an observation",
+    summary: "Review an observation",
     security: [{
       userJwtRequired: []
     }],
@@ -26,19 +26,19 @@ module.exports = sendWrapper => {
     ],
     responses: {
       204: {
-        description: "Observation faved"
+        description: "Observation reviewed"
       }
     }
   };
 
   async function DELETE( req, res ) {
-    await observationsController.unfave( req );
+    await observationsController.unreview( req );
     sendWrapper( req, res.status( 204 ) );
   }
 
   DELETE.apiDoc = {
     tags: ["Observations"],
-    summary: "Remove a fave on an observation",
+    summary: "Remove a review from an observation",
     security: [{
       userJwtRequired: []
     }],
@@ -54,7 +54,7 @@ module.exports = sendWrapper => {
     ],
     responses: {
       204: {
-        description: "Observation fave removed"
+        description: "Observation review removed"
       }
     }
   };
