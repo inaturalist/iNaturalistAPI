@@ -1,7 +1,7 @@
 const _ = require( "lodash" );
-const placesSearchSchema = require( "../../schema/request/places_search" );
+const projectsSearchSchema = require( "../../schema/request/projects_search" );
 const transform = require( "../../joi_to_openapi_parameter" );
-const PlacesController = require( "../../../lib/controllers/v2/places_controller" );
+const ProjectsController = require( "../../../lib/controllers/v2/projects_controller" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
@@ -9,13 +9,13 @@ module.exports = sendWrapper => {
       req.originalQuery = req.query;
       req.query = _.mapValues( req.body, v => v.toString( ) );
     }
-    const results = await PlacesController.search( req );
+    const results = await ProjectsController.search( req );
     sendWrapper( req, res, null, results );
   }
 
   GET.apiDoc = {
-    tags: ["Places"],
-    summary: "Search places",
+    tags: ["Projects"],
+    summary: "Search projects",
     parameters: [
       {
         in: "header",
@@ -24,16 +24,16 @@ module.exports = sendWrapper => {
           type: "string"
         }
       }
-    ].concat( _.map( placesSearchSchema._inner.children, child => (
+    ].concat( _.map( projectsSearchSchema._inner.children, child => (
       transform( child.schema.label( child.key ) )
     ) ) ),
     responses: {
       200: {
-        description: "A list of places",
+        description: "A list of projects",
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/ResultsPlaces"
+              $ref: "#/components/schemas/ResultsProjects"
             }
           }
         }
