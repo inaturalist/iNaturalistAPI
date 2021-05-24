@@ -6,6 +6,8 @@ module.exports = Joi.object( ).keys( {
   description: Joi.string( ).valid( null ),
   geoprivacy: Joi.string( ).valid( null ),
   iucn: Joi.number( ).integer( ),
+  iucn_status: Joi.string( ),
+  iucn_status_code: Joi.string( ),
   place,
   place_id: Joi.number( ).integer( ).valid( null ),
   source_id: Joi.number( ).integer( ).valid( null ),
