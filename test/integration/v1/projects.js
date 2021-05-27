@@ -36,6 +36,23 @@ describe( "Projects", ( ) => {
         } )
         .expect( 200, done );
     } );
+    it( "filters by projects with a given ID", done => {
+      request( app ).get( "/v1/projects?id=1" )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( res.body.results[0].id ).to.eq( 1 );
+        } )
+        .expect( 200, done );
+    } );
+    it( "filters by projects without a given ID", done => {
+      request( app ).get( "/v1/projects?id=1&not_id=1" )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( 0 );
+          expect( res.body.results.length ).to.eq( 0 );
+        } )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "show", ( ) => {
