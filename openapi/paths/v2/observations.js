@@ -33,7 +33,7 @@ module.exports = sendWrapper => {
 
   GET.apiDoc = {
     tags: ["Observations"],
-    summary: "Search observations.",
+    summary: "Search observations",
     security: [{
       userJwtOptional: []
     }],
