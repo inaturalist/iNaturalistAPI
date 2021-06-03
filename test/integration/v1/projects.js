@@ -150,6 +150,21 @@ describe( "Projects", ( ) => {
         } )
         .expect( 200, done );
     } );
+    it( "filters by not_type", done => {
+      const collectionProj = _.find( fixtures.elasticsearch.projects.project,
+        p => p.project_type === "collection" );
+      request( app )
+        .get( `/v1/projects/autocomplete?not_type=umbrella,collection&q=${collectionProj.title}` )
+        .expect( res => {
+          expect(
+            _.filter(
+              res.body.results,
+              p => p.project_type === "collection" || p.project_type === "umbrella"
+            ).length
+          ).to.eq( 0 );
+        } )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "members", ( ) => {
