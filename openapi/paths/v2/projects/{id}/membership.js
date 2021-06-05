@@ -1,60 +1,58 @@
 const Joi = require( "@hapi/joi" );
 const transform = require( "../../../../joi_to_openapi_parameter" );
-const observationsController = require( "../../../../../lib/controllers/v2/observations_controller" );
+const projectsController = require( "../../../../../lib/controllers/v2/projects_controller" );
 
 module.exports = sendWrapper => {
   async function POST( req, res ) {
-    await observationsController.fave( req );
+    await projectsController.join( req );
     sendWrapper( req, res.status( 204 ) );
   }
 
   POST.apiDoc = {
-    tags: ["Observations"],
-    summary: "Fave an observation",
+    tags: ["Projects"],
+    summary: "Join a project",
     security: [{
       userJwtRequired: []
     }],
     parameters: [
       transform(
-        Joi.array( )
-          .items( Joi.string( ).guid( ) )
-          .label( "uuid" )
+        Joi.number( ).integer( )
+          .label( "id" )
           .meta( { in: "path" } )
           .required( )
-          .description( "A single UUID or a comma-separated list of them" )
+          .description( "A single project ID" )
       )
     ],
     responses: {
       204: {
-        description: "Observation faved"
+        description: "Joined project"
       }
     }
   };
 
   async function DELETE( req, res ) {
-    await observationsController.unfave( req );
+    await projectsController.leave( req );
     sendWrapper( req, res.status( 204 ) );
   }
 
   DELETE.apiDoc = {
-    tags: ["Observations"],
-    summary: "Remove a fave on an observation",
+    tags: ["Projects"],
+    summary: "Leave a project",
     security: [{
       userJwtRequired: []
     }],
     parameters: [
       transform(
-        Joi.array( )
-          .items( Joi.string( ).guid( ) )
-          .label( "uuid" )
+        Joi.number( ).integer( )
+          .label( "id" )
           .meta( { in: "path" } )
           .required( )
-          .description( "A single UUID or a comma-separated list of them" )
+          .description( "A single project ID" )
       )
     ],
     responses: {
       204: {
-        description: "Observation fave removed"
+        description: "Joined project"
       }
     }
   };

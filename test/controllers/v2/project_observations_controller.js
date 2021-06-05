@@ -16,8 +16,6 @@ describe( "ProjectObservationsController", ( ) => {
   const token = jwt.sign( { user_id: user.id }, config.jwtSecret || "secret",
     { algorithm: "HS512" } );
   describe( "create", ( ) => {
-    // const observation = _.find( fixtures.elasticsearch.observations.observation,
-    //   o => o.id === projectObservation.observation_id );
     it( "should return a ProjectObservation", done => {
       nock( "http://localhost:3000" )
         .post( "/project_observations" )
