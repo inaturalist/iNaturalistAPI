@@ -9,12 +9,13 @@ console.log( "INITIALIZING TEST ENVIRONMENT\n" );
 // test_helper, so here we're setting up the database *before* we require
 // anything that would require those modules. Naming this file _initialize.js
 // ensures mocha runs this file first when running tests.
+const testDbConnectionVar = `PGHOST=${config.database.host} PGUSER=${config.database.user} PGPASSWORD=${config.database.password}`
 console.log( "Dropping existing test database" );
-execSync( `dropdb --if-exists ${config.database.dbname}`, { stdio: [0, 1, 2] } );
+execSync( `${testDbConnectionVar} dropdb --if-exists ${config.database.dbname}`, { stdio: [0, 1, 2] } );
 console.log( "Creating test database" );
-execSync( `createdb -O ${config.database.user} ${config.database.dbname}`, { stdio: [0, 1, 2] } );
+execSync( `${testDbConnectionVar} createdb -O ${config.database.user} ${config.database.dbname}`, { stdio: [0, 1, 2] } );
 console.log( "Loading test database schema" );
-execSync( `psql -q -f schema/database.sql -U ${config.database.user} -d ${config.database.dbname}`, { stdio: [0, 1, 2] } );
+execSync( `${testDbConnectionVar} psql -q -f schema/database.sql -d ${config.database.dbname}`, { stdio: [0, 1, 2] } );
 
 /* eslint import/order: 0 */
 const testHelper = require( "../lib/test_helper" );
