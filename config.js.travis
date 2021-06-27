@@ -14,10 +14,14 @@ module.exports = {
     geometry_field: "geom",
     dbname: "inaturalist_test"
   },
+  staticImagePrefix: "http://localhost:3000/attachments/",
+  userImagePrefix: "/attachments/users/icons/",
   imageProcesing: {
     taxaFilePath: "/home/travis/build/inaturalist/iNaturalistAPI/vision-taxa.txt",
     uploadsDir: "/tmp/",
     tensorappURL: "http://localhost:6006"
   },
-  debug: true
+  debug: true,
+  jwtSecret: "jwtSecret",
+  jwtApplicationSecret: "jwtApplicationSecret"
 }

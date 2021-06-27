@@ -12,7 +12,7 @@ module.exports = sendWrapper => {
     tags: ["Controlled Terms"],
     summary: "Fetch controlled terms for a taxon",
     security: [{
-      jwtOptional: []
+      userJwtOptional: []
     }],
     parameters: [
       transform(

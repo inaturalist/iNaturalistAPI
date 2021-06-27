@@ -64,9 +64,11 @@ Authentication in the Node API is handled via JSON Web Tokens (JWT). To
 obtain one, make an [OAuth-authenticated
 request](http://www.inaturalist.org/pages/api+reference#auth) to
 <https://www.inaturalist.org/users/api_token>. Each JWT will expire after 24
-hours. Authentication required for all PUT and POST requests. Some GET
+hours. Authentication is required for all PUT and POST requests. Some GET
 requests will also include private information like hidden coordinates if
 the authenticated user has permission to view them.
+
+## Specifying Response Fields
 
 By default, all endpoints will return a very minimal response for the requested
 resources (e.g. the contents of the \`results\` array), usually just the UUID.
@@ -86,12 +88,12 @@ can specify the response fields in a JSON object, e.g.
     "${url}/observations"
 \`\`\`
 
+When making \`multipart/form-data\` POST requests, you can still specify
+\`fields\` as part of the form data, either as a commma-separated list of field
+names or a JSON string.
+
 To see all available fields, you can use \`fields=all\`, e.g.
 <${url}/observations?fields=all>
-
-iNaturalist Website: <https://www.inaturalist.org/>
-
-Open Source Software: <https://github.com/inaturalist/>
 
 ## About iNaturalist
 
@@ -102,6 +104,10 @@ creating high quality citizen science data for science and conservation.
 The iNaturalist technology infrastructure and open source software is
 administered by the [California Academy of Sciences](https://www.calacademy.org/) as
 part of their mission to explore, explain, and sustain life on Earth.
+
+iNaturalist Website: <https://www.inaturalist.org/>
+
+Open Source Software: <https://github.com/inaturalist/>
 
 ## Terms of Use
 
@@ -126,15 +132,23 @@ Privacy Policy: <https://www.inaturalist.org/privacy>`
   components: {
     schemas,
     securitySchemes: {
-      jwtOptional: {
+      userJwtRequired: {
         type: "apiKey",
         name: "Authorization",
-        in: "header"
+        in: "header",
+        description: "User-specific JSON Web Token required"
       },
-      jwtRequired: {
+      userJwtOptional: {
         type: "apiKey",
         name: "Authorization",
-        in: "header"
+        in: "header",
+        description: "User-specific JSON Web Token optional, may be used to customize responses for the authenticated user, e.g. localizing common names"
+      },
+      appOrUserJwtRequired: {
+        type: "apiKey",
+        name: "Authorization",
+        in: "header",
+        description: "User or application JSON Web Token (application tokens only available to official apps)"
       }
     },
     responses: {

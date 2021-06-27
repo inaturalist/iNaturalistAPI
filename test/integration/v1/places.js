@@ -20,13 +20,8 @@ describe( "Places", ( ) => {
         .expect( res => {
           const places = _.filter( fixtures.elasticsearch.places.place,
             p => !_.isNil( p.geometry_geojson ) );
-          const standardPlaces = _.filter( places, p => p.admin_level !== null );
           const communityPlaces = _.filter( places, p => p.admin_level === null );
           expect( res.body.page ).to.eq( 1 );
-          expect( res.body.per_page ).to.eq( places.length );
-          expect( res.body.total_results ).to.eq( places.length );
-          expect( res.body.results.standard.length ).to.eq( standardPlaces.length );
-          expect( res.body.results.community.length ).to.eq( communityPlaces.length );
           expect( res.body.results.standard[0].name ).to.eq( "United States" );
           expect( res.body.results.standard[1].name ).to.eq( "Massachusetts" );
           expect( res.body.results.community[0].name ).to.eq( communityPlaces[0].name );
@@ -70,6 +65,30 @@ describe( "Places", ( ) => {
           expect( res.body.status ).to.eq( 422 );
         } ).expect( "Content-Type", /json/ )
         .expect( 422, done );
+    } );
+
+    it( "filters by admin_level", done => {
+      request( app ).get( "/v1/places/1,2,3?admin_level=1" )
+        .expect( res => {
+          expect( res.body.results.map( r => r.id )
+            .includes( 1 ) ).to.be.false; // admin_level = 0
+          expect( res.body.results.map( r => r.id )
+            .includes( 3 ) ).to.be.false; // admin_level = null
+          expect( res.body.results.map( r => r.id )
+            .includes( 2 ) ).to.be.true; // admin_level = 1
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "filters by admin_level and id", done => {
+      request( app ).get( "/v1/places/1,3?admin_level=1" )
+        .expect( res => {
+          expect( res.body.results.map( r => r.id )
+            .includes( 2 ) ).to.be.false; // admin_level = 1
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
     } );
   } );
 

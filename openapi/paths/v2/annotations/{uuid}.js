@@ -10,7 +10,7 @@ module.exports = sendWrapper => {
     tags: ["Annotations"],
     summary: "Delete an annotation",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     responses: {
       200: {

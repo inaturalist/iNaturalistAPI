@@ -32,6 +32,6 @@ if ( require.main === module ) {
   if ( process.pid ) {
     console.log( `This process is your pid: ${process.pid}` );
   }
+} else {
+  module.exports = main( );
 }
-
-module.exports = main( );

@@ -38,6 +38,27 @@ describe( "Place", ( ) => {
     } );
   } );
 
+  describe( "findByLocaleCode", ( ) => {
+    it( "returns a place given a code", async ( ) => {
+      const p = await Place.findByLocaleCode( "LP" );
+      expect( p.id ).to.eq( 511 );
+      expect( p.name ).to.eq( "locale-place" );
+      expect( p.ancestor_place_ids.length ).to.eq( 2 );
+      expect( p.ancestor_place_ids[0] ).to.eq( 111 );
+      expect( p.ancestor_place_ids[1] ).to.eq( 511 );
+    } );
+
+    it( "returns null if admin_level is not country", async ( ) => {
+      const p = await Place.findByLocaleCode( "LPA" );
+      expect( p ).to.eq( null );
+    } );
+
+    it( "returns null given an unknown code", async ( ) => {
+      const p = await Place.findByLocaleCode( "US" );
+      expect( p ).to.eq( null );
+    } );
+  } );
+
   describe( "assignToObject", ( ) => {
     it( "assigns place instances to objects", done => {
       const o = { 1: { }, 123: { }, 432: { } };

@@ -10,9 +10,9 @@ module.exports = sendWrapper => {
 
   POST.apiDoc = {
     tags: ["Observations"],
-    summary: "Fave an observation observations",
+    summary: "Fave an observation",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     parameters: [
       transform(
@@ -40,7 +40,7 @@ module.exports = sendWrapper => {
     tags: ["Observations"],
     summary: "Remove a fave on an observation",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     parameters: [
       transform(

@@ -12,7 +12,7 @@ module.exports = sendWrapper => {
     tags: ["Identifications"],
     summary: "Update an identification",
     security: [{
-      jwtOptional: []
+      userJwtOptional: []
     }],
     requestBody: {
       content: {
@@ -47,7 +47,7 @@ module.exports = sendWrapper => {
     tags: ["Identifications"],
     summary: "Delete an identification",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     responses: {
       200: {

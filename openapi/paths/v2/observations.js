@@ -33,9 +33,9 @@ module.exports = sendWrapper => {
 
   GET.apiDoc = {
     tags: ["Observations"],
-    summary: "Search observations.",
+    summary: "Search observations",
     security: [{
-      jwtOptional: []
+      userJwtOptional: []
     }],
     parameters: getParameters,
     responses: {
@@ -61,7 +61,7 @@ module.exports = sendWrapper => {
     tags: ["Observations"],
     summary: "Create observations.",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     requestBody: {
       content: {

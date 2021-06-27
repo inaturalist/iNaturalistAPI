@@ -99,9 +99,7 @@ describe( "Users", ( ) => {
       request( app ).get( "/v1/users/1/projects" )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
-          expect( res.body.per_page ).to.eq( 2 );
-          expect( res.body.total_results ).to.eq( 2 );
-          expect( res.body.results[0].slug ).to.eq( "project-one" );
+          expect( _.find( res.body.results, p => p.slug === "project-one" ) ).not.to.be.undefined;
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
@@ -110,9 +108,7 @@ describe( "Users", ( ) => {
       request( app ).get( "/v1/users/userlogin/projects" )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
-          expect( res.body.per_page ).to.eq( 2 );
-          expect( res.body.total_results ).to.eq( 2 );
-          expect( res.body.results[0].slug ).to.eq( "project-one" );
+          expect( _.find( res.body.results, p => p.slug === "project-one" ) ).not.to.be.undefined;
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
@@ -145,6 +141,7 @@ describe( "Users", ( ) => {
           expect( res.body.results[0].site.place_id ).to.eq( 1 );
           expect( res.body.results[0].site.locale ).to.eq( "en" );
           expect( res.body.results[0].site.site_name_short ).to.eq( "iNat" );
+          expect( res.body.results[0].icon_url ).not.to.be.undefined;
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
@@ -184,18 +181,32 @@ describe( "Users", ( ) => {
       "email",
       "id",
       "login",
+      "monthly_supporter",
       "name",
       "preferred_observation_fields_by",
       "preferred_observation_license",
       "preferred_photo_license",
       "preferred_project_addition_by",
       "preferred_sound_license",
-      "prefers_automatic_taxon_changes",
+      "prefers_automatic_taxonomic_changes",
+      "prefers_comment_email_notification",
       "prefers_common_names",
       "prefers_community_taxa",
+      "prefers_identification_email_notification",
+      "prefers_mention_email_notification",
+      "prefers_message_email_notification",
       "prefers_monthly_supporter_badge",
+      "prefers_no_email",
       "prefers_no_tracking",
+      "prefers_project_added_your_observation_email_notification",
+      "prefers_project_curator_change_email_notification",
+      "prefers_project_journal_post_email_notification",
+      "prefers_receive_mentions",
+      "prefers_redundant_identification_notifications",
       "prefers_scientific_name_first",
+      "prefers_taxon_change_email_notification",
+      "prefers_taxon_or_place_observation_email_notification",
+      "prefers_user_observation_email_notification",
       "search_place_id",
       "time_zone",
       "updated_at"
@@ -237,6 +248,35 @@ describe( "Users", ( ) => {
           .reply( 200 );
         request( app )
           .delete( `/v1/users/${mutedUser.id}/mute` )
+          .set( "Authorization", token )
+          .expect( 200, done );
+      } );
+    } );
+  } );
+
+  describe( "block", ( ) => {
+    const currentUser = fixtures.elasticsearch.users.user[0];
+    const blockedUser = fixtures.elasticsearch.users.user[1];
+    const token = jwt.sign( { user_id: currentUser.id }, config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+    describe( "post", ( ) => {
+      it( "succeeds", done => {
+        nock( "http://localhost:3000" )
+          .post( `/users/${blockedUser.id}/block` )
+          .reply( 200 );
+        request( app )
+          .post( `/v1/users/${blockedUser.id}/block` )
+          .set( "Authorization", token )
+          .expect( 200, done );
+      } );
+    } );
+    describe( "delete", ( ) => {
+      it( "succeeds", done => {
+        nock( "http://localhost:3000" )
+          .delete( `/users/${blockedUser.id}/block` )
+          .reply( 200 );
+        request( app )
+          .delete( `/v1/users/${blockedUser.id}/block` )
           .set( "Authorization", token )
           .expect( 200, done );
       } );

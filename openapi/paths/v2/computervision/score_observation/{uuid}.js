@@ -12,7 +12,7 @@ module.exports = sendWrapper => {
     tags: ["Computer Vision"],
     summary: "Fetch computer vision suggestions for an observation",
     security: [{
-      jwtRequired: []
+      appOrUserJwtRequired: []
     }],
     parameters: [
       transform(

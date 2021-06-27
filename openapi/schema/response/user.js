@@ -20,11 +20,20 @@ module.exports = Joi.object( ).keys( {
   observations_count: Joi.number( ).integer( ),
   orcid: Joi.string( ).valid( null ),
   preferences: Joi.object( ).keys( {
-    prefers_community_taxa: Joi.boolean( )
+    prefers_community_taxa: Joi.boolean( ),
+    prefers_observation_fields_by: Joi.string( )
+      .description( "Allows this kind of user to add observation field values to their observations" ),
+    prefers_project_addition_by: Joi.string( )
+      .description( "Allows this kind of user to add their observations to projects" ),
+    prefers_common_names: Joi.boolean( )
+      .description( "Prefers to view common names" ),
+    prefers_scientific_name_first: Joi.boolean( )
+      .description( "Prefers to view scientific names before common names" )
   } ).unknown( false ),
   roles: Joi.array( ).items( Joi.string( ) ),
   site_id: Joi.number( ).integer( ).valid( null ),
   spam: Joi.boolean( ),
+  species_count: Joi.number( ).integer( ),
   suspended: Joi.boolean( ),
   universal_search_rank: Joi.number( ).integer( )
 } ).unknown( false ).meta( { className: "User" } );

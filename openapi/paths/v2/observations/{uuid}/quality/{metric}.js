@@ -12,7 +12,7 @@ module.exports = sendWrapper => {
     tags: ["Observations"],
     summary: "Vote on an observation quality metric",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     parameters: [
       transform(
@@ -56,7 +56,7 @@ module.exports = sendWrapper => {
     tags: ["Observations"],
     summary: "Remove the authenticated user's vote on a quality metric",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     parameters: [
       transform(

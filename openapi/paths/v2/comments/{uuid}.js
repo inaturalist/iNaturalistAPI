@@ -12,7 +12,7 @@ module.exports = sendWrapper => {
     tags: ["Comments"],
     summary: "Update a comment",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     requestBody: {
       content: {
@@ -47,7 +47,7 @@ module.exports = sendWrapper => {
     tags: ["Comments"],
     summary: "Delete a comment",
     security: [{
-      jwtRequired: []
+      userJwtRequired: []
     }],
     responses: {
       200: {

@@ -11,16 +11,46 @@ const app = iNaturalistAPI.server( );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
-describe( "Projects Routes", ( ) => {
+describe( "Projects", ( ) => {
   describe( "search", ( ) => {
     it( "returns json", done => {
       request( app ).get( "/v1/projects" )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
-          expect( res.body.per_page ).to.eq( fixtures.elasticsearch.projects.project.length );
+          expect( res.body.per_page ).to.eq( 10 );
           expect( res.body.total_results ).to.eq( fixtures.elasticsearch.projects.project.length );
-          expect( res.body.results.length ).to.eq( fixtures.elasticsearch.projects.project.length );
+          expect( res.body.results.length ).to.eq(
+            Math.min( 10, fixtures.elasticsearch.projects.project.length )
+          );
         } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+    it( "paginates correctly", done => {
+      const perPage = 2;
+      expect( fixtures.elasticsearch.projects.project.length ).to.be.above( perPage );
+      request( app ).get( `/v1/projects?page=2&per_page=${perPage}` )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( fixtures.elasticsearch.projects.project.length );
+          expect( res.body.results.length ).to.be.above( 0 );
+          expect( res.body.results.length ).to.be.below( perPage + 1 );
+        } )
+        .expect( 200, done );
+    } );
+    it( "filters by projects with a given ID", done => {
+      request( app ).get( "/v1/projects?id=1" )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( res.body.results[0].id ).to.eq( 1 );
+        } )
+        .expect( 200, done );
+    } );
+    it( "filters by projects without a given ID", done => {
+      request( app ).get( "/v1/projects?id=1&not_id=1" )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( 0 );
+          expect( res.body.results.length ).to.eq( 0 );
+        } )
         .expect( 200, done );
     } );
   } );
@@ -97,11 +127,42 @@ describe( "Projects Routes", ( ) => {
     } );
 
     it( "can filter by member_id", done => {
-      request( app ).get( "/v1/projects/autocomplete?member_id=123" )
+      const userID = 123;
+      request( app ).get( `/v1/projects/autocomplete?member_id=${userID}` )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
-          expect( res.body.results.length ).to.eq( 2 );
+          expect( res.body.results.length ).to.eq(
+            _.filter(
+              fixtures.elasticsearch.projects.project,
+              p => ( p.user_ids && p.user_ids.indexOf( userID ) >= 0 )
+            ).length
+          );
         } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+    it( "per_page correctly", done => {
+      const perPage = 2;
+      expect( fixtures.elasticsearch.projects.project.length ).to.be.above( perPage );
+      request( app ).get( `/v1/projects/autocomplete?q=pr&per_page=${perPage}` )
+        .expect( res => {
+          expect( res.body.results.length ).to.be.above( 0 );
+          expect( res.body.results.length ).to.be.below( perPage + 1 );
+        } )
+        .expect( 200, done );
+    } );
+    it( "filters by not_type", done => {
+      const collectionProj = _.find( fixtures.elasticsearch.projects.project,
+        p => p.project_type === "collection" );
+      request( app )
+        .get( `/v1/projects/autocomplete?not_type=umbrella,collection&q=${collectionProj.title}` )
+        .expect( res => {
+          expect(
+            _.filter(
+              res.body.results,
+              p => p.project_type === "collection" || p.project_type === "umbrella"
+            ).length
+          ).to.eq( 0 );
+        } )
         .expect( 200, done );
     } );
   } );
@@ -192,23 +253,83 @@ describe( "Projects Routes", ( ) => {
   } );
 
   describe( "subscriptions", ( ) => {
+    const projectSubscription = _.find( fixtures.postgresql.subscriptions,
+      s => s.resource_type === "Project" && s.resource_id === 543 );
     it( "fails for unauthenticated requests", done => {
-      request( app ).get( "/v1/projects/543/subscriptions" ).expect( res => {
+      request( app ).get( `/v1/projects/${projectSubscription.resource_id}/subscriptions` ).expect( res => {
         expect( res.error.text ).to.eq( "{\"error\":\"Unauthorized\",\"status\":401}" );
       } ).expect( "Content-Type", /json/ )
         .expect( 401, done );
     } );
 
-    it( "returns posts", done => {
+    it( "returns subscriptions", done => {
       const token = jwt.sign( { user_id: 1 }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/projects/543/subscriptions" ).set( "Authorization", token )
+      request( app ).get( `/v1/projects/${projectSubscription.resource_id}/subscriptions` ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.total_results ).to.eq( 1 );
           expect( res.body.results[0].user_id ).to.eq( 1 );
-          expect( res.body.results[0].resource_id ).to.eq( 543 );
+          expect( res.body.results[0].resource_id ).to.eq( projectSubscription.resource_id );
         } )
         .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "membership", ( ) => {
+    const projectUser = fixtures.postgresql.project_users[0];
+    const token = jwt.sign( { user_id: projectUser.user_id }, config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+
+    it( "fails for unauthenticated requests", done => {
+      request( app ).get( `/v1/projects/${projectUser.project_id}/membership` ).expect( res => {
+        expect( res.error.text ).to.eq( "{\"error\":\"Unauthorized\",\"status\":401}" );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 401, done );
+    } );
+    it( "returns prefers_curator_coordinate_access_for", done => {
+      request( app )
+        .get( `/v1/projects/${projectUser.project_id}/membership` )
+        .set( "Authorization", token )
+        .expect( 200 )
+        .expect( res => {
+          const rpu = res.body.results[0];
+          expect( rpu.project_id ).to.eq( projectUser.project_id );
+          expect( rpu.prefers_curator_coordinate_access_for ).to.eq( "taxon" );
+        } )
+        .expect( 200, done );
+    } );
+    it( "returns prefers_curator_coordinate_access_for=none if preference not expressed", done => {
+      const projectUserWithoutPreference = _.find( fixtures.postgresql.project_users,
+        pu => pu.id === 2 );
+      expect( _.find( fixtures.postgresql.preferences, p => (
+        p.owner_type === "ProjectUser"
+        && p.owner_id === projectUserWithoutPreference.id
+        && p.name === "curator_coordinate_access_for"
+      ) ) ).to.be.undefined;
+      const otherToken = jwt.sign( { user_id: projectUserWithoutPreference.user_id },
+        config.jwtSecret || "secret", { algorithm: "HS512" } );
+      request( app )
+        .get( `/v1/projects/${projectUserWithoutPreference.project_id}/membership` )
+        .set( "Authorization", otherToken )
+        .expect( 200 )
+        .expect( res => {
+          const rpu = res.body.results[0];
+          expect( rpu.project_id ).to.eq( projectUserWithoutPreference.project_id );
+          expect( rpu.prefers_curator_coordinate_access_for ).to.eq( "none" );
+        } )
+        .expect( 200, done );
+    } );
+    it( "returns nothing for projects the user has not joined", done => {
+      const otherProject = _.find( fixtures.postgresql.projects,
+        p => p.id !== projectUser.project_id );
+      request( app )
+        .get( `/v1/projects/${otherProject.id}/membership` )
+        .set( "Authorization", token )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results.length ).to.eq( 0 );
+        } )
         .expect( 200, done );
     } );
   } );

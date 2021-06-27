@@ -33,7 +33,7 @@ module.exports = sendWrapper => {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/ResultsObservations"
+              $ref: "#/components/schemas/ResultsPlaces"
             }
           }
         }
