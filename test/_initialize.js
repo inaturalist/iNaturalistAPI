@@ -9,7 +9,10 @@ console.log( "INITIALIZING TEST ENVIRONMENT\n" );
 // test_helper, so here we're setting up the database *before* we require
 // anything that would require those modules. Naming this file _initialize.js
 // ensures mocha runs this file first when running tests.
-const testDbConnectionVar = `PGHOST=${config.database.host} PGUSER=${config.database.user} PGPASSWORD=${config.database.password}`
+const testDbConnectionVar = `${config.database.host ? `PGHOST=${config.database.host}` : ""} \
+                             ${config.database.user ? `PGUSER=${config.database.user}` : ""} \
+                             ${config.database.password ? `PGPASSWORD=${config.database.password}` : ""}`;
+
 console.log( "Dropping existing test database" );
 execSync( `${testDbConnectionVar} dropdb --if-exists ${config.database.dbname}`, { stdio: [0, 1, 2] } );
 console.log( "Creating test database" );
