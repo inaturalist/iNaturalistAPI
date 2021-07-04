@@ -15,5 +15,5 @@ services:
     command: node app.js
 networks:
   default:
-    external:
-      name: inaturalist_default
+    external: true
+    name: inaturalist_default
