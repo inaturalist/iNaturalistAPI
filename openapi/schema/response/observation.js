@@ -72,7 +72,7 @@ module.exports = Joi.object( ).keys( {
   observed_on: Joi.string( ).valid( null ),
   observed_on_details: dateDetails,
   observed_on_string: Joi.string( ).valid( null ),
-  observed_time_zone: Joi.string( ),
+  observed_time_zone: Joi.string( ).valid( null ), // can be null if no date
   ofvs: Joi.array( ).items( observationFieldValue ),
   out_of_range: Joi.boolean( ).valid( null ),
   outlinks: Joi.array( ).items( Joi.object( ).keys( {

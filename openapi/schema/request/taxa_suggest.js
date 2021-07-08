@@ -21,7 +21,7 @@ module.exports = Joi.object( ).keys( {
       Date the subject was observed (YYYY-MM-DD), used to refine suggestions to
       those observed at a similar time of year
     `.replace( /\s+/m, " " ) ),
-  order_by: Joi.string( ).valid( "taxonomy", "default" )
+  order_by: Joi.string( ).valid( "taxonomy", "default", "sciname" )
     .description( `
       How the suggestions will be ordered. The default is to order by whatever default
       a source uses, e.g. the score when \`source\` is \`visual\`, or the number of

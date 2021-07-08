@@ -36,6 +36,23 @@ describe( "Projects", ( ) => {
         } )
         .expect( 200, done );
     } );
+    it( "filters by projects with a given ID", done => {
+      request( app ).get( "/v1/projects?id=1" )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( res.body.results[0].id ).to.eq( 1 );
+        } )
+        .expect( 200, done );
+    } );
+    it( "filters by projects without a given ID", done => {
+      request( app ).get( "/v1/projects?id=1&not_id=1" )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( 0 );
+          expect( res.body.results.length ).to.eq( 0 );
+        } )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "show", ( ) => {
@@ -130,6 +147,21 @@ describe( "Projects", ( ) => {
         .expect( res => {
           expect( res.body.results.length ).to.be.above( 0 );
           expect( res.body.results.length ).to.be.below( perPage + 1 );
+        } )
+        .expect( 200, done );
+    } );
+    it( "filters by not_type", done => {
+      const collectionProj = _.find( fixtures.elasticsearch.projects.project,
+        p => p.project_type === "collection" );
+      request( app )
+        .get( `/v1/projects/autocomplete?not_type=umbrella,collection&q=${collectionProj.title}` )
+        .expect( res => {
+          expect(
+            _.filter(
+              res.body.results,
+              p => p.project_type === "collection" || p.project_type === "umbrella"
+            ).length
+          ).to.eq( 0 );
         } )
         .expect( 200, done );
     } );
