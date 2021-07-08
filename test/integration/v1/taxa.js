@@ -2,7 +2,10 @@ const _ = require( "lodash" );
 const { expect } = require( "chai" );
 const request = require( "supertest" );
 const querystring = require( "querystring" );
+const sinon = require( "sinon" );
 const iNaturalistAPI = require( "../../../lib/inaturalist_api" );
+const util = require( "../../../lib/util" );
+const redisClient = require( "../../../lib/redis_client" );
 
 const app = iNaturalistAPI.server( );
 
@@ -211,6 +214,99 @@ describe( "Taxa", ( ) => {
           expect( _.keys( result )[0] ).to.eq( "id" );
           expect( result.id ).to.eq( 1 );
         } ).expect( 200, done );
+    } );
+  } );
+
+  describe.only( "nearby", ( ) => {
+    beforeEach( ( ) => {
+      const testData = [
+        { 1: { c: 1, a: "48460/1" } },
+        { 2: { c: 1, a: "48460/1/2" } },
+        { 3: { c: 1, a: "48460/1/2/3" } },
+        { 11: { c: 1, a: "48460/11" } },
+        { 22: { c: 1, a: "48460/11/22" } },
+        { 33: { c: 1, a: "48460/11/22/33" } }
+      ];
+      sinon.stub( redisClient, "getCompressed" )
+        .callsFake( ( ) => testData.shift( ) );
+    } );
+
+    afterEach( ( ) => {
+      redisClient.getCompressed.restore( );
+    } );
+
+    it( "requires fails without lat lng", done => {
+      request( app ).get( "/v1/taxa/nearby" )
+        .expect( "Content-Type", /json/ ).expect( 422, done );
+    } );
+
+    it( "returns taxa and counts", done => {
+      request( app ).get( "/v1/taxa/nearby?lat=10&lng=10" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 6 );
+          expect( res.body.results.length ).to.eq( 6 );
+          const taxon1Result = _.find( res.body.results, r => r.taxon.id === 1 );
+          expect( taxon1Result.count ).to.eq( 1 );
+          expect( taxon1Result.taxon.id ).to.eq( 1 );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "filters by taxon ID", done => {
+      request( app ).get( "/v1/taxa/nearby?lat=10&lng=10&taxon_id=2" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 2 );
+          expect( res.body.results.length ).to.eq( 2 );
+          const taxon1Result = _.find( res.body.results, r => r.taxon.id === 1 );
+          expect( taxon1Result ).to.be.undefined;
+          const taxon2Rresult = _.find( res.body.results, r => r.taxon.id === 2 );
+          expect( taxon2Rresult.taxon.id ).to.eq( 2 );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "filters by multiple taxon IDs", done => {
+      request( app ).get( "/v1/taxa/nearby?lat=10&lng=10&taxon_id=2,22" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 4 );
+          expect( res.body.results.length ).to.eq( 4 );
+          const taxon1Result = _.find( res.body.results, r => r.taxon.id === 1 );
+          expect( taxon1Result ).to.be.undefined;
+          const taxon2Rresult = _.find( res.body.results, r => r.taxon.id === 2 );
+          expect( taxon2Rresult.taxon.id ).to.eq( 2 );
+          const taxon22Rresult = _.find( res.body.results, r => r.taxon.id === 22 );
+          expect( taxon22Rresult.taxon.id ).to.eq( 22 );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "excludes taxa", done => {
+      request( app ).get( "/v1/taxa/nearby?lat=10&lng=10&without_taxon_id=3" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 5 );
+          expect( res.body.results.length ).to.eq( 5 );
+          const taxon3Result = _.find( res.body.results, r => r.taxon.id === 3 );
+          expect( taxon3Result ).to.be.undefined;
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "excludes multiple taxa", done => {
+      request( app ).get( "/v1/taxa/nearby?lat=10&lng=10&without_taxon_id=3,33" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 4 );
+          expect( res.body.results.length ).to.eq( 4 );
+          const taxon3Result = _.find( res.body.results, r => r.taxon.id === 3 );
+          expect( taxon3Result ).to.be.undefined;
+          const taxon33Result = _.find( res.body.results, r => r.taxon.id === 33 );
+          expect( taxon33Result ).to.be.undefined;
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
     } );
   } );
 } );
