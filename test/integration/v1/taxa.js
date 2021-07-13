@@ -217,7 +217,7 @@ describe( "Taxa", ( ) => {
     } );
   } );
 
-  describe.only( "nearby", ( ) => {
+  describe( "nearby", ( ) => {
     beforeEach( ( ) => {
       const testData = [
         { 1: { c: 1, a: "48460/1" } },
