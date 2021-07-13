@@ -235,7 +235,7 @@ describe( "Taxa", ( ) => {
       redisClient.getCompressed.restore( );
     } );
 
-    it( "requires fails without lat lng", done => {
+    it( "fails without lat lng", done => {
       request( app ).get( "/v1/taxa/nearby" )
         .expect( "Content-Type", /json/ ).expect( 422, done );
     } );
