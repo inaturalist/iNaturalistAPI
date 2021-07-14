@@ -15,6 +15,12 @@ describe( "User", ( ) => {
       expect( u.login ).to.eq( "a-user" );
     } );
 
+    it( "igmores case", async ( ) => {
+      const u = await User.findByLogin( "A-USER" );
+      expect( u.id ).to.eq( 123 );
+      expect( u.login ).to.eq( "a-user" );
+    } );
+
     it( "returns undefined for missing users", async ( ) => {
       const u = await User.findByLogin( "nonsense" );
       expect( u ).to.be.null;
@@ -94,6 +100,12 @@ describe( "User", ( ) => {
 
     it( "returns a user given a login", async ( ) => {
       const u = await User.findByLoginOrID( "userlogin" );
+      expect( u.id ).to.eq( 1 );
+      expect( u.login ).to.eq( "userlogin" );
+    } );
+
+    it( "returns a user given a login, regardless of case", async ( ) => {
+      const u = await User.findByLoginOrID( "UsErLoGIN" );
       expect( u.id ).to.eq( 1 );
       expect( u.login ).to.eq( "userlogin" );
     } );
