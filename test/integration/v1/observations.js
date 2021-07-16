@@ -54,6 +54,8 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
+    // TODO we really need copies of these tests for authenticated umbrella
+    // project curators... but holy crap it's so hard to make test data
     describe( "for authenticated collection project curators", ( ) => {
       const project = _.find( fixtures.elasticsearch.projects.project, p => p.id === 2005 );
       const curatorProjectUser = _.find( fixtures.postgresql.project_users, pu => pu.id === 6 );
