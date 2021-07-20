@@ -19,6 +19,8 @@ node app.js
 
 # Running Tests
 
+If [running iNaturalist services from Docker](https://github.com/inaturalist/inaturalist/blob/main/CONTRIBUTING.md#using-docker), make sure to run `make services` from the main app first (note that Elasticsearch may take a few seconds to start).
+
 Run all: `npm test`
 Filter by pattern: `NODE_ENV=test ./node_modules/mocha/bin/_mocha --recursive --fgrep observations`
 

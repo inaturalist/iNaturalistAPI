@@ -4,6 +4,7 @@
 coverage
 node_modules
 config.js
+docker-compose.override.yml
 newrelic.js
 *.log
 restart.sh

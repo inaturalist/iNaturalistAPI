@@ -1,0 +1,19 @@
+version: "2"
+services:
+  inaturalist_api:
+    container_name: inaturalist_api
+    build: .
+    environment:
+      INAT_DB_HOST: pg
+      INAT_DB_USER : 'username'
+      INAT_DB_PASS: 'password'
+      INAT_ES_HOST: es
+      INAT_REDIS_HOST: redis
+      INAT_WEB_HOST: host.docker.internal
+    ports:
+      - 4000:4000
+    command: node app.js
+networks:
+  default:
+    external: true
+    name: inaturalist_default
