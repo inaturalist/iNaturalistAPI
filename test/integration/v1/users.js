@@ -87,6 +87,17 @@ describe( "Users", ( ) => {
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "ignores case", done => {
+      request( app ).get( "/v1/users/autocomplete?q=UsErLoGIN" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results[0].login ).to.eq( "userlogin" );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "projects", ( ) => {
