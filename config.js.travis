@@ -22,6 +22,6 @@ module.exports = {
     tensorappURL: "http://localhost:6006"
   },
   debug: true,
-  jwtSecret: "jwtSecret",
-  jwtApplicationSecret: "jwtApplicationSecret"
+  jwtSecret: "secret",
+  jwtApplicationSecret: "application_secret"
 }

@@ -36,7 +36,7 @@ describe( "Computervision", ( ) => {
         .expect( 200, done );
     } );
     it( "works with an application token", done => {
-      const token = jwt.sign( { application: "whatever" }, config.jwtApplicationSecret || "appsecret",
+      const token = jwt.sign( { application: "whatever" }, config.jwtApplicationSecret || "application_secret",
         { algorithm: "HS512" } );
       request( app ).get( url )
         .set( "Authorization", token )
@@ -55,7 +55,7 @@ describe( "Computervision", ( ) => {
         .expect( 401, done );
     } );
     it( "should fail without a token that specifies a user or an application", done => {
-      const token = jwt.sign( { thisIs: "the way" }, config.jwtApplicationSecret || "secret",
+      const token = jwt.sign( { thisIs: "the way" }, config.jwtApplicationSecret || "application_secret",
         { algorithm: "HS512" } );
       request( app ).get( url )
         .set( "Authorization", token )

@@ -23,7 +23,7 @@ describe( "geoip_lookup", ( ) => {
     } );
 
     it( "returns geoip responses", done => {
-      const token = jwt.sign( { application: "whatever" }, config.jwtApplicationSecret || "appsecret",
+      const token = jwt.sign( { application: "whatever" }, config.jwtApplicationSecret || "application_secret",
         { algorithm: "HS512" } );
       request( app ).get( "/v1/geoip_lookup?ip=128.128.128.128" )
         .set( "Authorization", token )
