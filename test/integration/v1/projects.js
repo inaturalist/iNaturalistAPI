@@ -53,6 +53,26 @@ describe( "Projects", ( ) => {
         } )
         .expect( 200, done );
     } );
+    it( "filters by spam true", done => {
+      request( app ).get( "/v1/projects?spam=true" )
+        .expect( res => {
+          const expectedSpamCount = _.filter( fixtures.elasticsearch.projects.project,
+            p => p.spam ).length;
+          expect( expectedSpamCount ).to.be.above( 0 );
+          expect( res.body.total_results ).to.eq( expectedSpamCount );
+        } )
+        .expect( 200, done );
+    } );
+    it( "filters by spam false", done => {
+      request( app ).get( "/v1/projects?spam=false&per_page=30" )
+        .expect( res => {
+          const expectedSpamCount = _.filter( fixtures.elasticsearch.projects.project,
+            p => !p.spam ).length;
+          expect( expectedSpamCount ).to.be.above( 0 );
+          expect( res.body.total_results ).to.eq( expectedSpamCount );
+        } )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "show", ( ) => {
