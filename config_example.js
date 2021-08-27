@@ -55,7 +55,7 @@ module.exports = {
     // *nix systems
     uploadsDir: "/tmp/",
     // Base URL for the web app returning computer vision results
-    tensorappURL: ""
+    tensorappURL: "http://localhost:6006"
   },
   redis: {
     host: INAT_REDIS_HOST || "127.0.0.1",
