@@ -99,6 +99,30 @@ describe( "IdentificationsController", ( ) => {
       ) ) ).to.not.be.undefined;
     } );
 
+    it( "filters by exact_taxon_id", async ( ) => {
+      const q = await Q( { exact_taxon_id: 89 } );
+      expect( _.find( q.filters, f => (
+        f.terms && f.terms["taxon.id"]
+          && f.terms["taxon.id"][0] === 89
+      ) ) ).to.not.be.undefined;
+    } );
+
+    it( "filters by exact_observation_taxon_id", async ( ) => {
+      const q = await Q( { exact_observation_taxon_id: 89 } );
+      expect( _.find( q.filters, f => (
+        f.terms && f.terms["observation.taxon.id"]
+          && f.terms["observation.taxon.id"][0] === 89
+      ) ) ).to.not.be.undefined;
+    } );
+
+    it( "filters by not_in_place", async ( ) => {
+      const q = await Q( { not_in_place: 89 } );
+      expect( _.find( q.inverse_filters, f => (
+        f.terms && f.terms["observation.place_ids"]
+          && f.terms["observation.place_ids"][0] === 89
+      ) ) ).to.not.be.undefined;
+    } );
+
     it( "filters by booleans true", async ( ) => {
       const q = await Q( { is_change: "true" } );
       expect( _.find( q.filters, f => (
