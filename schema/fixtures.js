@@ -1263,7 +1263,8 @@
           "names": [{
             "name_autocomplete": "Life",
             "exact": "Life",
-            "exact_ci": "Life"
+            "exact_ci": "Life",
+            "is_valid": true
           }],
           "observations_count": 50,
           "is_active": true
@@ -1277,7 +1278,8 @@
           "names": [{
             "name_autocomplete": "Los",
             "exact": "Los",
-            "exact_ci": "Los"
+            "exact_ci": "Los",
+            "is_valid": true
           }],
           "observations_count": 50,
           "is_active": true,
@@ -1294,7 +1296,8 @@
           "names": [{
             "name_autocomplete": "Los",
             "exact": "Los",
-            "exact_ci": "Los"
+            "exact_ci": "Los",
+            "is_valid": true
           }],
           "observations_count": 50,
           "is_active": false
@@ -1309,7 +1312,8 @@
           "names": [{
             "name_autocomplete": "Los lobos",
             "exact": "Los lobos",
-            "exact_ci": "Los lobos"
+            "exact_ci": "Los lobos",
+            "is_valid": true
           }],
           "observations_count": 100,
           "is_active": true,
@@ -1322,7 +1326,8 @@
           "names": [{
             "name_autocomplete": "眼紋疏廣蠟蟬",
             "exact": "眼紋疏廣蠟蟬",
-            "exact_ci": "眼紋疏廣蠟蟬"
+            "exact_ci": "眼紋疏廣蠟蟬",
+            "is_valid": true
           }],
           "observations_count": 200,
           "is_active": true
@@ -1352,17 +1357,44 @@
           "uuid": "083ced86-f44c-4876-81c1-23dd45badb0f",
           "name": "itsname",
           "names": [
-            { "name": "BestEnglish", "locale": "en" },
-            { "name": "BestInAmerica", "locale": "en", "place_taxon_names": [
-              { "place_id": 111 }
-            ] },
-            { "name": "BestInCalifornia", "locale": "en", "place_taxon_names": [
-              { "place_id": 222 } ] },
-            { "name": "BestInAmericaES", "locale": "es", "place_taxon_names": [
-              { "place_id": 111 }
-            ] },
-            { "name": "BestInCaliforniaES", "locale": "es", "place_taxon_names": [
-              { "place_id": 222 } ] } ],
+            {
+              "name": "BestEnglish",
+              "locale": "en",
+              "is_valid": true
+            },
+            {
+              "name": "BestInAmerica",
+              "locale": "en",
+              "place_taxon_names": [
+                { "place_id": 111 }
+              ],
+              "is_valid": true
+            },
+            {
+              "name": "BestInCalifornia",
+              "locale": "en",
+              "place_taxon_names": [
+                { "place_id": 222 }
+              ],
+              "is_valid": true
+            },
+            {
+              "name": "BestInAmericaES",
+              "locale": "es",
+              "place_taxon_names": [
+                { "place_id": 111 }
+              ],
+              "is_valid": true
+            },
+            {
+              "name": "BestInCaliforniaES",
+              "locale": "es",
+              "place_taxon_names": [
+                { "place_id": 222 }
+              ],
+              "is_valid": true
+            }
+          ],
           "statuses": [
             { "place_id": null, "iucn": 20 },
             { "place_id": 111, "iucn": 30 },
@@ -1423,7 +1455,8 @@
           "names": [{
             "name_autocomplete": "Los",
             "exact": "Los",
-            "exact_ci": "Los"
+            "exact_ci": "Los",
+            "is_valid": true
           }],
           "observations_count": 50,
           "is_active": true
@@ -1439,13 +1472,15 @@
               "name_autocomplete": "Mimulus guttatus",
               "exact": "Mimulus guttatus",
               "exact_ci": "Mimulus guttatus",
-              "locale": "sci"
+              "locale": "sci",
+              "is_valid": true
             },
             {
               "name_autocomplete": "seep monkeyflower",
               "exact": "seep monkeyflower",
               "exact_ci": "seep monkeyflower",
-              "locale": "en"
+              "locale": "en",
+              "is_valid": true
             }
           ],
           "observations_count": 50,
@@ -1462,13 +1497,15 @@
               "name_autocomplete": "Ulva intestinalis",
               "exact": "Ulva intestinalis",
               "exact_ci": "Ulva intestinaliss",
-              "locale": "sci"
+              "locale": "sci",
+              "is_valid": true
             },
             {
               "name_autocomplete": "Gutweed",
               "exact": "Gutweed",
               "exact_ci": "Gutweed",
-              "locale": "en"
+              "locale": "en",
+              "is_valid": true
             }
           ],
           "observations_count": 50,
@@ -1485,19 +1522,22 @@
               "name_autocomplete": "Viola pedunculata",
               "exact": "Viola pedunculata",
               "exact_ci": "Viola pedunculata",
-              "locale": "sci"
+              "locale": "sci",
+              "is_valid": true
             },
             {
               "name_autocomplete": "California Golden Violet",
               "exact": "California Golden Violet",
               "exact_ci": "California Golden Violet",
-              "locale": "en"
+              "locale": "en",
+              "is_valid": true
             },
             {
               "name_autocomplete": "yellow pansy",
               "exact": "yellow pansy",
               "exact_ci": "yellow pansy",
-              "locale": "en"
+              "locale": "en",
+              "is_valid": true
             }
           ],
           "observations_count": 51,
@@ -1514,7 +1554,8 @@
               "name_autocomplete": "Junonia hierta",
               "exact": "Junonia hierta",
               "exact_ci": "Junonia hierta",
-              "locale": "sci"
+              "locale": "sci",
+              "is_valid": true
             },
             {
               "name_autocomplete": "Yellow Pansy",
@@ -1526,7 +1567,8 @@
                   "place_id": 433,
                   "position": 0
                 }
-              ]
+              ],
+              "is_valid": true
             }
           ],
           "observations_count": 50,
@@ -1543,7 +1585,8 @@
           "names": [{
             "name_autocomplete": "Search test taxon",
             "exact": "Search test taxon",
-            "exact_ci": "Search test taxon"
+            "exact_ci": "Search test taxon",
+            "is_valid": true
           }],
           "observations_count": 50,
           "is_active": true
