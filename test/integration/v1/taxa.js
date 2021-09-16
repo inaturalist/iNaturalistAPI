@@ -4,7 +4,6 @@ const request = require( "supertest" );
 const querystring = require( "querystring" );
 const sinon = require( "sinon" );
 const iNaturalistAPI = require( "../../../lib/inaturalist_api" );
-const util = require( "../../../lib/util" );
 const redisClient = require( "../../../lib/redis_client" );
 
 const app = iNaturalistAPI.server( );
@@ -307,6 +306,12 @@ describe( "Taxa", ( ) => {
           expect( taxon33Result ).to.be.undefined;
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
+    } );
+  } );
+
+  describe( "suggest", ( ) => {
+    it( "should succeed when source is checklist and taxon_id specified", done => {
+      request( app ).get( "/v1/taxa/suggest?source=checklist&taxon_id=1" ).expect( 200, done );
     } );
   } );
 } );
