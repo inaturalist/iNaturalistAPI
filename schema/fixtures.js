@@ -122,7 +122,7 @@
           "slug": "massachusetts",
           "display_name_autocomplete": "Massachusetts",
           "location": "42.0368995667,-71.6835021973",
-          "admin_level": 1,
+          "admin_level": 10,
           "bbox_area": 6,
           "geometry_geojson": {
             "type": "Polygon",
@@ -204,7 +204,7 @@
           "slug": "alameda-county",
           "display_name_autocomplete": "Alameda County",
           "location": "37.6505468421,-121.9178854495",
-          "admin_level": 2,
+          "admin_level": 20,
           "bbox_area": 0.408537282384,
           "geometry_geojson": {
             "type": "MultiPolygon",
@@ -2191,7 +2191,7 @@
         "id": 512,
         "name": "locale-place-admin-level-1",
         "code": "LPA",
-        "admin_level": 1
+        "admin_level": 10
       }
     ],
     "preferences": [

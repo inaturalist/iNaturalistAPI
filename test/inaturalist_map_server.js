@@ -228,11 +228,11 @@ describe( "InaturalistMapServer", ( ) => {
       let q = MapServer.taxonPlacesQuery( { params: { zoom: 1 } } );
       expect( q ).to.include( "places.admin_level = 0" );
       q = MapServer.taxonPlacesQuery( { params: { zoom: 4 } } );
-      expect( q ).to.include( "places.admin_level = 1" );
+      expect( q ).to.include( "places.admin_level = 10" );
       q = MapServer.taxonPlacesQuery( { params: { zoom: 6 } } );
-      expect( q ).to.include( "places.admin_level = 2" );
+      expect( q ).to.include( "places.admin_level = 20" );
       q = MapServer.taxonPlacesQuery( { params: { zoom: 11 } } );
-      expect( q ).to.include( "places.admin_level = 3" );
+      expect( q ).to.include( "places.admin_level = 30" );
     } );
   } );
 } );
