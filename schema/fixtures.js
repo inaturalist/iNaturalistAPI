@@ -1090,6 +1090,15 @@
           "private_location": "37.6505468421,-121.9178854495,",
           "geojson": { "type": "Point", "coordinates": [ -121.9178854495, 42.7 ] },
           "private_geojson": { "type": "Point", "coordinates": [ -121.9178854495, 37.6505468421 ] }
+        },
+        {
+          "id": 2021100801,
+          "uuid": "c7a22c2d-f4ca-4daa-8139-9bfa2f411f5d",
+          "captive": false,
+          "description": "Has photos flagged for copyright violation",
+          "user": { "id": 1 },
+          "created_at": "2021-10-08T01:00:00",
+          "photos_count": 1
         }
       ]
     },
@@ -1719,6 +1728,16 @@
         "updated_at": "2016-01-01 00:00:00"
       }
     ],
+    "flags": [
+      {
+        "flag": "copyright infringement",
+        "flaggable_id": 2021100801,
+        "flaggable_type": "Photo",
+        "uuid": "c1a05f79-4133-4a7f-8d58-fdad9d4c3806",
+        "created_at": "2021-10-08 01:00:00",
+        "updated_at": "2021-10-08 01:00:00"
+      }
+    ],
     "friendships": [
       {
         "user_id": 126,
@@ -2098,6 +2117,15 @@
         "created_at": "2020-10-15 16:50:17.98273",
         "updated_at": "2020-10-15 16:50:17.98273",
         "uuid": "79b758eb-b0c3-4879-b8c0-f642a7104802"
+      },
+      {
+        "id": 2021100801,
+        "observation_id": 2021100801,
+        "photo_id": 2021100801,
+        "position": 0,
+        "created_at": "2021-10-08 01:00:00",
+        "updated_at": "2021-10-08 01:00:00",
+        "uuid": "677e1bbb-6782-4166-aed7-ee14124d8216"
       }
     ],
     "photos": [
@@ -2146,6 +2174,27 @@
         "file_file_size": 2040108,
         "file_updated_at": "2019-12-30 19:37:51.542313",
         "uuid": "a24ccc42-fb8a-4585-972b-7cd4f5ffcbad"
+      },
+      {
+        "id": 2021100801,
+        "user_id": 1,
+        "native_photo_id": 2021100801,
+        "square_url": "https://static.inaturalist.org/photos/2021100801/square.jpeg",
+        "thumb_url": "https://static.inaturalist.org/photos/2021100801/thumb.jpeg",
+        "small_url": "https://static.inaturalist.org/photos/2021100801/small.jpeg",
+        "medium_url": "https://static.inaturalist.org/photos/2021100801/medium.jpeg",
+        "large_url": "https://static.inaturalist.org/photos/2021100801/large.jpeg",
+        "original_url": "https://static.inaturalist.org/photos/2021100801/original.jpeg",
+        "created_at": "2021-10-08 01:00:00",
+        "updated_at": "2021-10-08 01:00:00",
+        "native_page_url": "https://www.inaturalist.org/photos/2021100801",
+        "license": 0,
+        "type": "LocalPhoto",
+        "file_content_type": "image/jpeg",
+        "file_file_name": "2021100801.jpeg",
+        "file_file_size": 2040108,
+        "file_updated_at": "2021-10-08 01:00:00",
+        "uuid": "a9d9a70f-caf0-4a04-9a3a-037cb8ba842d"
       }
     ],
     "places": [

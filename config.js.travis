@@ -14,6 +14,7 @@ module.exports = {
     geometry_field: "geom",
     dbname: "inaturalist_test"
   },
+  websiteURL: "http://localhost:3000/",
   staticImagePrefix: "http://localhost:3000/attachments/",
   userImagePrefix: "/attachments/users/icons/",
   imageProcesing: {
