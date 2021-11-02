@@ -103,6 +103,7 @@ module.exports = Joi.object( ).keys( {
   without_term_value_id: Joi.array( ).items( Joi.number( ).integer( ) ),
   acc_above: Joi.number( ).integer( ),
   acc_below: Joi.number( ).integer( ),
+  acc_below_or_unknown: Joi.number( ).integer( ),
   d1: Joi.string( ),
   d2: Joi.string( ),
   created_d1: Joi.string( ),
