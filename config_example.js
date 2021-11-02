@@ -44,10 +44,11 @@ module.exports = {
   },
   tileSize: 512,
   debug: true,
+  websiteURL: "http://localhost:3000/",
   staticImagePrefix: "http://localhost:3000/attachments/",
   userImagePrefix: "/attachments/users/icons/",
-  jwtSecret: "jwtSecret",
-  jwtApplicationSecret: "jwtApplicationSecret",
+  jwtSecret: "secret",
+  jwtApplicationSecret: "application_secret",
   imageProcesing: {
     // Path to a file listing the taxonomy used in the computer vision model
     taxaFilePath: "",
@@ -55,7 +56,7 @@ module.exports = {
     // *nix systems
     uploadsDir: "/tmp/",
     // Base URL for the web app returning computer vision results
-    tensorappURL: ""
+    tensorappURL: "http://localhost:6006"
   },
   redis: {
     host: INAT_REDIS_HOST || "127.0.0.1",

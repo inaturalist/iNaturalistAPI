@@ -698,10 +698,26 @@ describe( "Observations", ( ) => {
     it( "filters by acc_below", done => {
       const obsWithPositionalAccuracy5000 = 17;
       const obsWithPositionalAccuracy5 = 18;
+      const obsWithUnknownPositionalAccuracy = 19;
       request( app ).get( "/v1/observations?acc_below=100" )
         .expect( res => {
           const ids = res.body.results.map( r => r.id );
           expect( ids ).to.contain( obsWithPositionalAccuracy5 );
+          expect( ids ).not.to.contain( obsWithPositionalAccuracy5000 );
+          expect( ids ).not.to.contain( obsWithUnknownPositionalAccuracy );
+        } ).expect( 200, done );
+    } );
+    it( "filters by acc_below_or_unknown", done => {
+      const obsWithPositionalAccuracy5000 = 17;
+      const obsWithPositionalAccuracy5 = 18;
+      const obsWithUnknownPositionalAccuracy = 19;
+      // Limiting request to observations 17, 18, and 19 to avoid returning many other
+      // observations with unknown accuracies.
+      request( app ).get( "/v1/observations?acc_below_or_unknown=100&id_above=16&id_below=20" )
+        .expect( res => {
+          const ids = res.body.results.map( r => r.id );
+          expect( ids ).to.contain( obsWithPositionalAccuracy5 );
+          expect( ids ).to.contain( obsWithUnknownPositionalAccuracy );
           expect( ids ).not.to.contain( obsWithPositionalAccuracy5000 );
         } ).expect( 200, done );
     } );

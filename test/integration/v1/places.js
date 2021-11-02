@@ -68,24 +68,24 @@ describe( "Places", ( ) => {
     } );
 
     it( "filters by admin_level", done => {
-      request( app ).get( "/v1/places/1,2,3?admin_level=1" )
+      request( app ).get( "/v1/places/1,2,3?admin_level=10" )
         .expect( res => {
           expect( res.body.results.map( r => r.id )
             .includes( 1 ) ).to.be.false; // admin_level = 0
           expect( res.body.results.map( r => r.id )
             .includes( 3 ) ).to.be.false; // admin_level = null
           expect( res.body.results.map( r => r.id )
-            .includes( 2 ) ).to.be.true; // admin_level = 1
+            .includes( 2 ) ).to.be.true; // admin_level = 10
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
 
     it( "filters by admin_level and id", done => {
-      request( app ).get( "/v1/places/1,3?admin_level=1" )
+      request( app ).get( "/v1/places/1,3?admin_level=10" )
         .expect( res => {
           expect( res.body.results.map( r => r.id )
-            .includes( 2 ) ).to.be.false; // admin_level = 1
+            .includes( 2 ) ).to.be.false; // admin_level = 10
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );

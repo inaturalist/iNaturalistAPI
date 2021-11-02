@@ -123,5 +123,9 @@ module.exports = Joi.object( ).keys( {
   uri: Joi.string( ),
   user,
   uuid: Joi.string( ).guid( { version: "uuidv4" } ).required( ),
+  viewer_trusted_by_observer: Joi.boolean( ).valid( null )
+    .description(
+      "Observer trusts the authenticated user with access to hidden coordinates"
+    ),
   votes: Joi.array( ).items( vote )
 } ).unknown( false ).meta( { className: "Observation" } );
