@@ -18,7 +18,9 @@ module.exports = sendWrapper => {
     }],
     parameters: [
       transform( Joi.string( ).label( "id" ).meta( { in: "path" } )
-        .required( ) )
+        .required( ) ),
+      transform( Joi.string( ).label( "fields" ).meta( { in: "query" } ) ),
+      transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
     ],
     responses: {
       200: {
