@@ -12,7 +12,7 @@ const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 describe( "ObservationPreload", ( ) => {
   describe( "observationPhotos", ( ) => {
-    it( "replaces copyrught flagged photo URLs", async ( ) => {
+    it( "replaces copyright flagged photo URLs", async ( ) => {
       const obsWithFlaggedPhoto = _.find( fixtures.elasticsearch.observations.observation,
         o => o.description && o.description.match( "copyright violation" ) );
       const obs = [new Observation( obsWithFlaggedPhoto )];
