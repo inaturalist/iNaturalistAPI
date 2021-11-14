@@ -1651,6 +1651,12 @@
           "login": "user2020111201",
           "name": "User 2020111201",
           "description": "User that follows user 126 and does NOT trusts them"
+        },
+        {
+          "id": 2021111401,
+          "login": "user2021111401",
+          "name": "User 2021111401",
+          "suspended": true
         }
       ]
     },
@@ -2776,6 +2782,13 @@
         "login": "user2020111201",
         "name": "User 2020111201",
         "description": "User that follows user 126 and does NOT trusts them"
+      },
+      {
+        "id": 2021111401,
+        "login": "user2021111401",
+        "name": "User 2021111401",
+        "suspended_at": "2021-11-14T00:00:00",
+        "description": "Suspended user"
       }
     ],
     "user_privileges": [

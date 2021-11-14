@@ -133,6 +133,18 @@ describe( "Users", ( ) => {
         .expect( 401, done );
     } );
 
+    it( "fails for suspended users", done => {
+      const user = _.find( fixtures.postgresql.users, u => u.description === "Suspended user" );
+      const token = jwt.sign( { user_id: user.id }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( app ).get( "/v1/users/me" ).set( "Authorization", token ).expect( res => {
+        expect( res.error.text ).to.eq( "{\"error\":\"Unauthorized\",\"status\":401}" );
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 401, done );
+    } );
+
+
     it( "returns the logged-in users object", done => {
       const token = jwt.sign( { user_id: 1 }, config.jwtSecret || "secret",
         { algorithm: "HS512" } );
