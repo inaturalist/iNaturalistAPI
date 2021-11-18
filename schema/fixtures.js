@@ -1734,6 +1734,22 @@
         "updated_at": "2016-01-01 00:00:00"
       }
     ],
+    "file_extensions": [
+      {
+        "id": 1,
+        "extension": "jpeg",
+        "created_at": "2021-07-08 00:00:00",
+        "updated_at": "2021-07-08 00:00:00"
+      }
+    ],
+    "file_prefixes": [
+      {
+        "id": 1,
+        "prefix": "https://static.inaturalist.org/photos/",
+        "created_at": "2021-07-08 00:00:00",
+        "updated_at": "2021-07-08 00:00:00"
+      }
+    ],
     "flags": [
       {
         "flag": "copyright infringement",
@@ -2139,12 +2155,6 @@
         "id": 1,
         "user_id": 5,
         "native_photo_id": 1,
-        "square_url": "https://static.inaturalist.org/photos/58769366/square.jpeg",
-        "thumb_url": "https://static.inaturalist.org/photos/58769366/thumb.jpeg",
-        "small_url": "https://static.inaturalist.org/photos/58769366/small.jpeg",
-        "medium_url": "https://static.inaturalist.org/photos/58769366/medium.jpeg",
-        "large_url": "https://static.inaturalist.org/photos/58769366/large.jpeg",
-        "original_url": "https://static.inaturalist.org/photos/58769366/original.jpeg",
         "created_at": "2019-12-30 19:37:52.986735",
         "updated_at": "2019-12-30 19:37:52.986735",
         "native_page_url": "https://www.inaturalist.org/photos/58769366",
@@ -2156,18 +2166,14 @@
         "file_file_name": "091a1e05-aecc-4b9c-b99f-81163f46191f.jpeg",
         "file_file_size": 2040108,
         "file_updated_at": "2019-12-30 19:37:51.542313",
-        "uuid": "e1a058c7-258b-4250-90a8-6902aa310312"
+        "uuid": "e1a058c7-258b-4250-90a8-6902aa310312",
+        "file_prefix_id": 1,
+        "file_extension_id": 1
       },
       {
         "id": 2020101601,
         "user_id": 123,
         "native_photo_id": 2020101601,
-        "square_url": "https://static.inaturalist.org/photos/2020101601/square.jpeg",
-        "thumb_url": "https://static.inaturalist.org/photos/2020101601/thumb.jpeg",
-        "small_url": "https://static.inaturalist.org/photos/2020101601/small.jpeg",
-        "medium_url": "https://static.inaturalist.org/photos/2020101601/medium.jpeg",
-        "large_url": "https://static.inaturalist.org/photos/2020101601/large.jpeg",
-        "original_url": "https://static.inaturalist.org/photos/2020101601/original.jpeg",
         "created_at": "2020-10-15 19:37:52.986735",
         "updated_at": "2020-10-15 19:37:52.986735",
         "native_page_url": "https://www.inaturalist.org/photos/2020101601",
@@ -2179,18 +2185,14 @@
         "file_file_name": "091a1e05-aecc-4b9c-b99f-81163f46191f.jpeg",
         "file_file_size": 2040108,
         "file_updated_at": "2019-12-30 19:37:51.542313",
-        "uuid": "a24ccc42-fb8a-4585-972b-7cd4f5ffcbad"
+        "uuid": "a24ccc42-fb8a-4585-972b-7cd4f5ffcbad",
+        "file_prefix_id": 1,
+        "file_extension_id": 1
       },
       {
         "id": 2021100801,
         "user_id": 1,
         "native_photo_id": 2021100801,
-        "square_url": "https://static.inaturalist.org/photos/2021100801/square.jpeg",
-        "thumb_url": "https://static.inaturalist.org/photos/2021100801/thumb.jpeg",
-        "small_url": "https://static.inaturalist.org/photos/2021100801/small.jpeg",
-        "medium_url": "https://static.inaturalist.org/photos/2021100801/medium.jpeg",
-        "large_url": "https://static.inaturalist.org/photos/2021100801/large.jpeg",
-        "original_url": "https://static.inaturalist.org/photos/2021100801/original.jpeg",
         "created_at": "2021-10-08 01:00:00",
         "updated_at": "2021-10-08 01:00:00",
         "native_page_url": "https://www.inaturalist.org/photos/2021100801",
@@ -2200,7 +2202,9 @@
         "file_file_name": "2021100801.jpeg",
         "file_file_size": 2040108,
         "file_updated_at": "2021-10-08 01:00:00",
-        "uuid": "a9d9a70f-caf0-4a04-9a3a-037cb8ba842d"
+        "uuid": "a9d9a70f-caf0-4a04-9a3a-037cb8ba842d",
+        "file_prefix_id": 1,
+        "file_extension_id": 1
       }
     ],
     "places": [

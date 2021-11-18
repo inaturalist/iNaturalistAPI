@@ -1295,6 +1295,70 @@ ALTER SEQUENCE public.external_taxa_id_seq OWNED BY public.external_taxa.id;
 
 
 --
+-- Name: file_extensions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.file_extensions (
+    id integer NOT NULL,
+    extension character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: file_extensions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.file_extensions_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: file_extensions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.file_extensions_id_seq OWNED BY public.file_extensions.id;
+
+
+--
+-- Name: file_prefixes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.file_prefixes (
+    id integer NOT NULL,
+    prefix character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: file_prefixes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.file_prefixes_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: file_prefixes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.file_prefixes_id_seq OWNED BY public.file_prefixes.id;
+
+
+--
 -- Name: flags; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2940,12 +3004,6 @@ CREATE TABLE public.photos (
     id integer NOT NULL,
     user_id integer,
     native_photo_id character varying(255),
-    square_url character varying(512),
-    thumb_url character varying(512),
-    small_url character varying(512),
-    medium_url character varying(512),
-    large_url character varying(512),
-    original_url character varying(512),
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     native_page_url character varying(512),
@@ -2962,7 +3020,11 @@ CREATE TABLE public.photos (
     metadata text,
     subtype character varying(255),
     native_original_image_url character varying(512),
-    uuid uuid DEFAULT public.uuid_generate_v4()
+    uuid uuid DEFAULT public.uuid_generate_v4(),
+    file_extension_id smallint,
+    file_prefix_id smallint,
+    width smallint,
+    height smallint
 );
 
 
@@ -5406,6 +5468,20 @@ ALTER TABLE ONLY public.external_taxa ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
+-- Name: file_extensions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.file_extensions ALTER COLUMN id SET DEFAULT nextval('public.file_extensions_id_seq'::regclass);
+
+
+--
+-- Name: file_prefixes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.file_prefixes ALTER COLUMN id SET DEFAULT nextval('public.file_prefixes_id_seq'::regclass);
+
+
+--
 -- Name: flags id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -6307,6 +6383,22 @@ ALTER TABLE ONLY public.exploded_atlas_places
 
 ALTER TABLE ONLY public.external_taxa
     ADD CONSTRAINT external_taxa_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: file_extensions file_extensions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.file_extensions
+    ADD CONSTRAINT file_extensions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: file_prefixes file_prefixes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.file_prefixes
+    ADD CONSTRAINT file_prefixes_pkey PRIMARY KEY (id);
 
 
 --
