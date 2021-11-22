@@ -1,4 +1,4 @@
-const j2s = require( "hapi-joi-to-swagger" );
+const j2s = require( "joi-to-swagger" );
 const ProjectObservationsController = require( "../../../lib/controllers/v2/project_observations_controller" );
 const projectObservationsCreateSchema = require( "../../schema/request/project_observations_create" );
 

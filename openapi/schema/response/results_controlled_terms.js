@@ -1,4 +1,4 @@
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 const controlledTerm = require( "./controlled_term" );
 
 module.exports = Joi.object( ).keys( {

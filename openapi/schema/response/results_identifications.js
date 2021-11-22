@@ -1,4 +1,4 @@
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 const identification = require( "./identification" );
 
 module.exports = Joi.object( ).keys( {

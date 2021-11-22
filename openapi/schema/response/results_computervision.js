@@ -1,4 +1,4 @@
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 const taxon = require( "./taxon" );
 const commonAncestor = require( "./common_ancestor" );
 

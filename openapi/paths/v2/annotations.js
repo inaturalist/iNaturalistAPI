@@ -1,4 +1,4 @@
-const j2s = require( "hapi-joi-to-swagger" );
+const j2s = require( "joi-to-swagger" );
 const AnnotationsController = require( "../../../lib/controllers/v2/annotations_controller" );
 const annotationsCreateSchema = require( "../../schema/request/annotations_create" );
 

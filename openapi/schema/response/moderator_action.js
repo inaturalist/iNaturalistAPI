@@ -1,4 +1,4 @@
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 const dateDetails = require( "./date_details" );
 const user = require( "./user" );
 

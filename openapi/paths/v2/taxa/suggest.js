@@ -1,6 +1,6 @@
 const _ = require( "lodash" );
-const j2s = require( "hapi-joi-to-swagger" );
-const Joi = require( "@hapi/joi" );
+const j2s = require( "joi-to-swagger" );
+const Joi = require( "joi" );
 // const nodeUtil = require( "util" );
 const taxaSuggestSchema = require( "../../../schema/request/taxa_suggest" );
 const transform = require( "../../../joi_to_openapi_parameter" );
@@ -11,9 +11,6 @@ module.exports = sendWrapper => {
     const results = await TaxaController.suggest( req );
     sendWrapper( req, res, null, results );
   }
-
-  // console.log( "[DEBUG] parameters: ", parameters );
-  // console.log( nodeUtil.inspect( parameters, false, null, true ) );
 
   GET.apiDoc = {
     tags: ["Taxa"],
@@ -36,7 +33,7 @@ module.exports = sendWrapper => {
           .uri( )
           .description( "URL for image to use when `source` is `visual`" )
       )
-    ].concat( _.map( taxaSuggestSchema._inner.children, child => (
+    ].concat( _.map( taxaSuggestSchema.$_terms.keys, child => (
       transform( child.schema.label( child.key ) )
     ) ) ),
     responses: {

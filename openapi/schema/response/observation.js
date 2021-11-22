@@ -1,14 +1,15 @@
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 const annotation = require( "./annotation" );
 const comment = require( "./comment" );
 const dateDetails = require( "./date_details" );
 const flag = require( "./flag" );
-const geojson = require( "./geo_json" );
+const pointGeojson = require( "./point_geo_json" );
 const identification = require( "./identification" );
 const observationFieldValue = require( "./observation_field_value" );
 const photo = require( "./photo" );
 const observationPhoto = require( "./observation_photo" );
 const project = require( "./project" );
+const projectObservation = require( "./project_observation" );
 const qualityMetric = require( "./quality_metric" );
 const sound = require( "./sound" );
 const taxon = require( "./taxon" );
@@ -42,7 +43,7 @@ module.exports = Joi.object( ).keys( {
   faves: Joi.array( ).items( vote ),
   faves_count: Joi.number( ).integer( ),
   flags: Joi.array( ).items( flag ),
-  geojson,
+  geojson: pointGeojson,
   geoprivacy: Joi.string( ).valid( null ),
   id_please: Joi.boolean( ),
   ident_taxon_ids: Joi.array( ).items( Joi.number( ).integer( ) ),
@@ -88,24 +89,13 @@ module.exports = Joi.object( ).keys( {
     auto_obscuration: Joi.boolean( ),
     prefers_community_taxon: Joi.boolean( ).valid( null )
   } ).unknown( false ),
-  private_geojson: geojson,
+  private_geojson: pointGeojson,
   private_location: Joi.string( ).valid( null ),
   private_place_guess: Joi.string( ).valid( null ),
   project_ids: Joi.array( ).items( Joi.number( ).integer( ) ),
   project_ids_with_curator_id: Joi.array( ).items( Joi.number( ).integer( ) ),
   project_ids_without_curator_id: Joi.array( ).items( Joi.number( ).integer( ) ),
-  project_observations: Joi.array( ).items( Joi.object( ).keys( {
-    current_user_is_member: Joi.boolean( ),
-    id: Joi.number( ).integer( ).description( "Unique auto-increment integer identifier." ),
-    preferences: Joi.object( ).keys( {
-      allows_curator_coordinate_access: Joi.boolean( )
-    } ).unknown( false ),
-    project,
-    project_id: Joi.number( ).integer( ),
-    user,
-    user_id: Joi.number( ).integer( ).valid( null ),
-    uuid: Joi.string( ).guid( { version: "uuidv4" } )
-  } ).unknown( false ) ),
+  project_observations: Joi.array( ).items( projectObservation ),
   public_positional_accuracy: Joi.number( ).integer( ).valid( null ),
   quality_grade: Joi.string( ),
   quality_metrics: Joi.array( ).items( qualityMetric ),

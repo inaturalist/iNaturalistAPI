@@ -1,4 +1,4 @@
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 const conservationStatus = require( "./conservation_status" );
 const list = require( "./list" );
 const photo = require( "./photo" );
@@ -79,6 +79,7 @@ module.exports = Joi.object( ).keys( {
   taxon_schemes_count: Joi.number( ).integer( ),
   threatened: Joi.boolean( ),
   universal_search_rank: Joi.number( ).integer( ),
+  vision: Joi.boolean( ),
   wikipedia_summary: Joi.string( ).valid( null ),
   wikipedia_url: Joi.string( ).valid( null )
 } ).unknown( false ).meta( { className: "Taxon" } )

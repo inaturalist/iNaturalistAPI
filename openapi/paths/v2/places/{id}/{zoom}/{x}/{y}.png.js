@@ -1,12 +1,12 @@
 const _ = require( "lodash" );
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 const transform = require( "../../../../../../joi_to_openapi_parameter" );
 const observationsSearchSchema = require( "../../../../../../schema/request/observations_search" );
 const { tilePathParams } = require( "../../../../../../common_parameters" );
 const InaturalistMapserver = require( "../../../../../../../lib/inaturalist_map_server" );
 
 const inheritdObsSearchParams = _.filter(
-  observationsSearchSchema._inner.children, p => !_.includes( ["id", "fields"], p.key )
+  observationsSearchSchema.$_terms.keys, p => !_.includes( ["id", "fields"], p.key )
 );
 const transformedObsSearchParams = _.map( inheritdObsSearchParams, p => (
   transform( p.schema.label( p.key ) )

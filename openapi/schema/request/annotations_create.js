@@ -1,6 +1,8 @@
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 
 module.exports = Joi.object( ).keys( {
-  fields: Joi.any( ),
-  annotation: Joi.object( )
+  resource_type: Joi.string( ),
+  resource_id: Joi.number( ).integer( ),
+  controlled_attribute_id: Joi.number( ).integer( ),
+  controlled_value_id: Joi.number( ).integer( )
 } );

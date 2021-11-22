@@ -24,7 +24,7 @@ module.exports = sendWrapper => {
           type: "string"
         }
       }
-    ].concat( _.map( projectsSearchSchema._inner.children, child => (
+    ].concat( _.map( projectsSearchSchema.$_terms.keys, child => (
       transform( child.schema.label( child.key ) )
     ) ) ),
     responses: {

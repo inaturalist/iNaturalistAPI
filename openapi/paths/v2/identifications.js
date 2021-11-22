@@ -1,4 +1,4 @@
-const j2s = require( "hapi-joi-to-swagger" );
+const j2s = require( "joi-to-swagger" );
 const IdentificationsController = require( "../../../lib/controllers/v2/identifications_controller" );
 const identificationsCreateSchema = require( "../../schema/request/identifications_create" );
 

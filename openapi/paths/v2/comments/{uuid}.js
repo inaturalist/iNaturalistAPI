@@ -1,4 +1,4 @@
-const j2s = require( "hapi-joi-to-swagger" );
+const j2s = require( "joi-to-swagger" );
 const CommentsController = require( "../../../../lib/controllers/v2/comments_controller" );
 const commentsCreateSchema = require( "../../../schema/request/comments_create" );
 

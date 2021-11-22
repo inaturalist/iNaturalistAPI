@@ -1,4 +1,4 @@
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 const sound = require( "./sound" );
 
 module.exports = Joi.object( ).keys( {

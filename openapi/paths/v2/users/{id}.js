@@ -1,5 +1,5 @@
-const Joi = require( "@hapi/joi" );
-const j2s = require( "hapi-joi-to-swagger" );
+const Joi = require( "joi" );
+const j2s = require( "joi-to-swagger" );
 const usersUpdateSchema = require( "../../../schema/request/users_update_multipart" );
 const transform = require( "../../../joi_to_openapi_parameter" );
 const UsersController = require( "../../../../lib/controllers/v1/users_controller" );

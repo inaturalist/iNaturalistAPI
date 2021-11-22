@@ -1,4 +1,4 @@
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 const conservationStatus = require( "./conservation_status" );
 const listedTaxon = require( "./listed_taxon" );
 

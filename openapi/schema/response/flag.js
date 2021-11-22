@@ -1,4 +1,4 @@
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 const user = require( "./user" );
 
 module.exports = Joi.object( ).keys( {
@@ -10,7 +10,7 @@ module.exports = Joi.object( ).keys( {
   flag: Joi.string( ),
   resolved: Joi.boolean( ),
   resolver_id: Joi.number( ).integer( ),
-  updated_at: Joi.string( ),
+  updated_at: Joi.string( ).valid( null ),
   user,
   user_id: Joi.number( ).integer( )
 } ).unknown( false ).meta( { className: "Flag" } );

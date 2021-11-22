@@ -1,4 +1,4 @@
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 const projectObservation = require( "./project_observation" );
 
 module.exports = Joi.object( ).keys( {

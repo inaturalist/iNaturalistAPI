@@ -1,4 +1,4 @@
-const j2s = require( "hapi-joi-to-swagger" );
+const j2s = require( "joi-to-swagger" );
 const observationSoundsCreateSchema = require( "../../schema/request/observation_sounds_create" );
 const ObservationSoundsController = require( "../../../lib/controllers/v2/observation_sounds_controller" );
 

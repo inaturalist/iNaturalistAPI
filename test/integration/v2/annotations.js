@@ -5,7 +5,6 @@ const nock = require( "nock" );
 const jwt = require( "jsonwebtoken" );
 const fs = require( "fs" );
 const config = require( "../../../config.js" );
-const util = require( "../../../lib/util" );
 const app = require( "../../../app" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
@@ -22,12 +21,11 @@ describe( "Annotations", ( ) => {
       nock( "http://localhost:3000" )
         .post( "/annotations" )
         .reply( 200, { id: a.id, uuid: a.uuid } );
+      // no need to define POST fields since we're just stubbing the
+      // Rails app to return obs 6 to load from the ES index
       request( app ).post( "/v2/annotations" )
         .set( "Authorization", token )
         .set( "Content-Type", "multipart/form-data" )
-        // it doesn't really matter what we post since we're just stubbing the
-        // Rails app to return obs 6 to load from the ES index
-        .field( "comment", JSON.stringify( { } ) )
         .expect( 200 )
         .expect( res => {
           const anno = res.body.results[0];

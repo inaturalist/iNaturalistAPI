@@ -1,4 +1,4 @@
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 const transform = require( "../../../../joi_to_openapi_parameter" );
 const observationsController = require( "../../../../../lib/controllers/v2/observations_controller" );
 

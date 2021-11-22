@@ -1,5 +1,5 @@
 const _ = require( "lodash" );
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 const transform = require( "../../../joi_to_openapi_parameter" );
 const IdentificationsController = require( "../../../../lib/controllers/v2/identifications_controller" );
 const identificationsSearchSchema = require( "../../../schema/request/identifications_search" );
@@ -11,7 +11,7 @@ module.exports = sendWrapper => {
   }
 
   const parameters = _.map(
-    identificationsSearchSchema._inner.children,
+    identificationsSearchSchema.$_terms.keys,
     child => transform( child.schema.label( child.key ) )
   );
   parameters.push(

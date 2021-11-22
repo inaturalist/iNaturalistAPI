@@ -1,6 +1,6 @@
 const _ = require( "lodash" );
 const fs = require( "fs" );
-const j2s = require( "hapi-joi-to-swagger" );
+const j2s = require( "joi-to-swagger" );
 const nodeUrl = require( "url" );
 const config = require( "../config" );
 

@@ -19,12 +19,12 @@ module.exports = sendWrapper => {
     security: [{
       userJwtRequired: []
     }],
-    parameters: _.map( usersUpdateSessionSchema._inner.children, child => (
+    parameters: _.map( usersUpdateSessionSchema.$_terms.keys, child => (
       transform( child.schema.label( child.key ) )
     ) ),
     responses: {
       204: {
-        description: "Session updatedv"
+        description: "Session updated"
       }
     }
   };

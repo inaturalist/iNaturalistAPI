@@ -16,7 +16,7 @@ module.exports = sendWrapper => {
     security: [{
       userJwtOptional: []
     }],
-    parameters: _.map( usersAutocompleteSchema._inner.children, child => (
+    parameters: _.map( usersAutocompleteSchema.$_terms.keys, child => (
       transform( child.schema.label( child.key ) )
     ) ),
     responses: {

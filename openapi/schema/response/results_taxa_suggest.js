@@ -1,8 +1,9 @@
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 const commonAncestor = require( "./common_ancestor" );
 const place = require( "./place" );
 const taxon = require( "./taxon" );
 const listedTaxon = require( "./listed_taxon" );
+const suggestRequest = require( "../request/taxa_suggest" );
 
 module.exports = Joi.object( ).keys( {
   comprehensiveness: Joi.object( )
@@ -38,7 +39,7 @@ module.exports = Joi.object( ).keys( {
     } ),
     taxon: taxon.required( )
   } ) ).required( ),
-  query: Joi.object( )
+  query: suggestRequest
     .description( `
       Query parameters used to generate these results. When \`source\` is
       \`*observations\` this may have some additional parameters used to set

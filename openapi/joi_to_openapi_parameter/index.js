@@ -3,125 +3,83 @@
  */
 
 const _ = require( "lodash" );
-const numberParser = require( "./types/number" );
-const stringParser = require( "./types/string" );
-const booleanParser = require( "./types/boolean" );
-const arrayParser = require( "./types/array" );
-const dateParser = require( "./types/date" );
-const objectParser = require( "./types/object" );
-const binaryParser = require( "./types/binary" );
-// const alternativesParser = require( "./types/alternatives" );
-
-const universalDecorator = joiSchema => {
-  const universalParams = { };
-
-  if ( joiSchema._flags.label ) {
-    universalParams.name = joiSchema._flags.label;
-  }
-
-  // Not sure what this was doing, but when you had a joi param like
-  // .valid("foo", null) it would raise an exception about nullable being an
-  // additional parameter ~~kueda 20200806
-  // if ( joiSchema._valids && joiSchema._valids.has( null ) ) {
-  //   universalParams.nullable = true;
-  // }
-
-  if ( joiSchema._description ) {
-    universalParams.description = joiSchema._description;
-  }
-
-  if ( joiSchema._flags.default ) {
-    universalParams.default = joiSchema._flags.default;
-  }
-
-  if ( joiSchema._flags.presence === "required" ) {
-    universalParams.required = true;
-  }
-
-  const metaExamples = _.find( joiSchema._meta, m => m.examples );
-  if ( metaExamples ) {
-    universalParams.examples = metaExamples.examples;
-  } else if ( joiSchema._examples && joiSchema._examples.length === 1 ) {
-    universalParams.example = joiSchema._examples[0].value;
-  }
-
-  return universalParams;
-};
+const j2s = require( "joi-to-swagger" );
 
 const arrayDecorator = joiSchema => (
-  joiSchema._type === "array" ? {
+  // force multi-valued request parameters to be comma-delmited and
+  // not with separate parameters for each array item
+  joiSchema.type === "array" ? {
     explode: false
   } : null
 );
 
+const universalDecoratorJ2s = joiSchema => {
+  const j2sDefinition = j2s( joiSchema );
+  // omit a few attributes from the schema that parameters expect to be defined outside the schema
+  const j2sCandidate = {
+    schema: _.omit( j2sDefinition.swagger, "title", "description", "example", "examples" )
+  };
+  // parameter names use the swagger title
+  if ( j2sDefinition.swagger.title ) {
+    j2sCandidate.name = j2sDefinition.swagger.title;
+  }
+  // parameter descriptions are defined *outside* the schema
+  if ( j2sDefinition.swagger.description ) {
+    j2sCandidate.description = j2sDefinition.swagger.description;
+  }
+  // examples in OpenAPI parameters are defined *outside* the schema
+  if ( j2sDefinition.swagger.example ) {
+    j2sCandidate.example = j2sDefinition.swagger.example;
+  }
+  if ( j2sDefinition.swagger.examples ) {
+    j2sCandidate.examples = j2sDefinition.swagger.examples;
+  }
+  // joi-to-swagger doesn't handle this format yet
+  if ( joiSchema.type === "string" ) {
+    if ( _.find( joiSchema._rules, { name: "uri" } ) ) {
+      j2sCandidate.schema.format = "uri";
+    }
+  }
+  // parameters can be required, defined differently than in responses
+  if ( joiSchema._flags.presence === "required" ) {
+    j2sCandidate.required = true;
+  }
+  return j2sCandidate;
+};
+
 const convert = joiSchema => {
   if ( !joiSchema ) throw new Error( "No schema was passed." );
 
-  if ( !joiSchema.isJoi ) throw new TypeError( "Passed schema does not appear to be a joi schema." );
-
-  // if ( !joiSchema._flags.label ) {
-  //   throw new Error( "Must include a label" );
-  // }
-
-  const type = joiSchema._type;
-  let schema;
-  switch ( type ) {
-    case "number":
-      schema = numberParser( joiSchema );
-      break;
-    case "string":
-      schema = stringParser( joiSchema );
-      break;
-    case "boolean":
-      schema = booleanParser( joiSchema );
-      break;
-    case "binary":
-      schema = binaryParser( joiSchema );
-      break;
-    // case "alternatives":
-    //   schema = alternativesParser( joiSchema, convert );
-    //   break;
-    case "object":
-      schema = objectParser( joiSchema, convert );
-      break;
-    case "array":
-      schema = arrayParser( joiSchema, convert );
-      break;
-    case "date":
-      schema = dateParser( joiSchema );
-      break;
-    case "any":
-      schema = { };
-      break;
-    default:
-      throw new TypeError( `${type} is not a Joi type recognized by parameterize.` );
-  }
-
-  const metaIns = _.compact( _.map( joiSchema._meta, m => m.in ) );
+  const metaIns = _.compact( _.map( _.get( joiSchema, "$_terms.metas" ), m => m.in ) );
   let metaIn = "query";
   if ( metaIns.indexOf( "path" ) >= 0 ) {
     metaIn = "path";
   } else if ( metaIns.indexOf( "header" ) >= 0 ) {
     metaIn = "header";
   }
+
   const baseDefinition = {
     in: metaIn,
-    schema,
-    ...universalDecorator( joiSchema ),
+    ...universalDecoratorJ2s( joiSchema ),
     ...arrayDecorator( joiSchema )
   };
-  if ( _.find( joiSchema._meta, m => m.in && m.deprecated ) ) {
+  if ( _.find( joiSchema.$_terms.metas, m => m.deprecated ) ) {
     baseDefinition.deprecated = true;
   }
   // Remove empty values from valids. This means that if a parameter has a set
   // of allowed values, we do not allow a blank, e.g. if param can be yes or no,
   // we allow param=no, but not param=
-  if ( joiSchema._valids && joiSchema._valids._set.size ) {
-    const validValues = Array.from( joiSchema._valids._set );
+  if ( joiSchema._valids && _.size( joiSchema._valids.values( ) ) > 0 ) {
+    const validValues = joiSchema._valids.values( );
     const notEmptyValues = validValues.filter( value => value !== null && value !== "" );
     if ( notEmptyValues.length ) {
       baseDefinition.schema.enum = notEmptyValues;
     }
+  }
+  // treat booleans as an array of strings that can be "true" or "false"
+  if ( baseDefinition.schema.type === "boolean" ) {
+    baseDefinition.schema = { enum: ["true", "false"] };
+    delete baseDefinition.schema.type;
   }
   return baseDefinition;
 };

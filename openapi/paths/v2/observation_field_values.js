@@ -1,4 +1,4 @@
-const j2s = require( "hapi-joi-to-swagger" );
+const j2s = require( "joi-to-swagger" );
 const observationFieldValuesCreateSchema = require( "../../schema/request/observation_field_values_create" );
 const ObservationFieldValuesController = require( "../../../lib/controllers/v2/observation_field_values_controller" );
 

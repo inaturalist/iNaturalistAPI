@@ -1,8 +1,8 @@
 const _ = require( "lodash" );
 // We use this to convert Joi schema definitions to swagger/openapi response
 // schemas. Joi is a slightly more concise, JS-style of expressing a schema
-const j2s = require( "hapi-joi-to-swagger" );
-const Joi = require( "@hapi/joi" );
+const j2s = require( "joi-to-swagger" );
+const Joi = require( "joi" );
 const observationsCreateSchema = require( "../../schema/request/observations_create" );
 const observationsSearchSchema = require( "../../schema/request/observations_search" );
 // This is a custom method to convert Joi schema definitions to swagger/openapi
@@ -23,7 +23,7 @@ module.exports = sendWrapper => {
   }
 
   const getParameters = _.map(
-    observationsSearchSchema._inner.children, child => (
+    observationsSearchSchema.$_terms.keys, child => (
       transform( child.schema.label( child.key ) )
     )
   );

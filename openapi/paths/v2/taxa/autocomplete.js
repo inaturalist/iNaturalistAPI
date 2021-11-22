@@ -17,7 +17,7 @@ module.exports = sendWrapper => {
         type: "string"
       }
     }
-  ].concat( _.map( taxaAutocompleteSchema._inner.children, child => (
+  ].concat( _.map( taxaAutocompleteSchema.$_terms.keys, child => (
     transform( child.schema.label( child.key ) )
   ) ) );
 

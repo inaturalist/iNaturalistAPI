@@ -1,6 +1,7 @@
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 const flag = require( "./flag" );
 const observationField = require( "./observation_field" );
+const user = require( "./user" );
 
 module.exports = Joi.object( ).keys( {
   id: Joi.number( ).integer( )
@@ -10,23 +11,27 @@ module.exports = Joi.object( ).keys( {
     id: Joi.number( ).integer( ),
     project_id: Joi.number( ).integer( ),
     role: Joi.string( ),
+    user,
     user_id: Joi.number( ).integer( )
   } ).unknown( false ) ),
   banner_color: Joi.string( ).valid( null ),
   created_at: Joi.string( ),
-  description: Joi.string( ),
+  description: Joi.string( ).valid( null ),
   flags: Joi.array( ).items( flag ),
   header_image_contain: Joi.boolean( ),
   header_image_file_name: Joi.string( ).valid( null ),
   header_image_url: Joi.string( ).valid( null ),
   hide_title: Joi.boolean( ),
+  hide_umbrella_map_flags: Joi.boolean( ),
   icon: Joi.string( ).valid( null ),
   icon_file_name: Joi.string( ).valid( null ),
   is_umbrella: Joi.boolean( ),
   latitude: Joi.string( ),
   location: Joi.string( ).valid( null ),
   longitude: Joi.string( ),
+  observation_requirements_updated_at: Joi.date( ).valid( null ),
   place_id: Joi.number( ).integer( ).valid( null ),
+  prefers_user_trust: Joi.boolean( ).valid( null ),
   project_observation_fields: Joi.array( ).items( Joi.object( ).keys( {
     id: Joi.number( ).integer( ),
     observation_field: observationField,
@@ -52,10 +57,16 @@ module.exports = Joi.object( ).keys( {
     value_keyword: Joi.any( ).description( "TODO: values can be single values or arrays" ),
     value_number: Joi.array( ).items( Joi.number( ) )
   } ).unknown( false ) ),
-  site_features: Joi.array( ).items( Joi.date( ) ).description( "TODO: fix this" ),
+  site_features: Joi.array( ).items( Joi.object( ).keys( {
+    noteworthy: Joi.boolean( ),
+    site_id: Joi.number( ).integer( ),
+    featured_at: Joi.date( )
+  } ) ).description( "TODO: fix this" ).valid( null ),
   slug: Joi.string( ),
+  terms: Joi.string( ).valid( null ),
   title: Joi.string( ),
   updated_at: Joi.string( ),
+  user,
   user_id: Joi.number( ).integer( ),
   user_ids: Joi.array( ).items( Joi.number( ).integer( ) )
 } ).unknown( false ).meta( { className: "Project" } )

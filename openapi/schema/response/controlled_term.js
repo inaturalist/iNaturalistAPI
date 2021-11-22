@@ -1,4 +1,4 @@
-const Joi = require( "@hapi/joi" );
+const Joi = require( "joi" );
 
 module.exports = Joi.object( ).keys( {
   id: Joi.number( ).integer( )
@@ -25,6 +25,7 @@ module.exports = Joi.object( ).keys( {
     Joi.number( ).integer( )
   ),
   uri: Joi.string( ),
+  uuid: Joi.string( ).guid( { version: "uuidv4" } ).valid( null ),
   valid_within_clade: Joi.number( ).integer( ).valid( null ),
   values: Joi.array( ).items(
     Joi.object( ).meta( { className: "ControlledTerm" } )

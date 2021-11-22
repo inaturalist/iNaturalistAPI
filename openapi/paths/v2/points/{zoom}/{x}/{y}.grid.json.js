@@ -5,7 +5,7 @@ const observationsSearchSchema = require( "../../../../../schema/request/observa
 const { tilePathParams } = require( "../../../../../common_parameters" );
 
 const inheritdObsSearchParams = _.filter(
-  observationsSearchSchema._inner.children, p => !_.includes( ["fields"], p.key )
+  observationsSearchSchema.$_terms.keys, p => !_.includes( ["fields"], p.key )
 );
 const transformedObsSearchParams = _.map( inheritdObsSearchParams, p => (
   transform( p.schema.label( p.key ) )
