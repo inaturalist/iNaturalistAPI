@@ -10,6 +10,7 @@ module.exports = Joi.object( ).keys( {
   lng: Joi.number( ).min( -180 ).max( 180 )
     .description( "Coordinate used when fetching nearby results `source` is `visual` or `*observations`" ),
   locale: Joi.string( ),
+  months: Joi.string( ),
   observation_id: Joi.string( ).guid( )
     .description( `
       Automatically set place and taxon filters based on this observation; this

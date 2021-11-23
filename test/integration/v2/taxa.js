@@ -11,6 +11,7 @@ const config = require( "../../../config.js" );
 const app = require( "../../../app" );
 const ComputervisionControllerV1 = require( "../../../lib/controllers/v1/computervision_controller.js" );
 const ObservationsControllerV1 = require( "../../../lib/controllers/v1/observations_controller.js" );
+const TaxaControllerV1 = require( "../../../lib/controllers/v1/taxa_controller.js" );
 
 chai.use( sinonChai );
 
@@ -139,7 +140,7 @@ describe( "Taxa", ( ) => {
           .post( "/" )
           .reply( 200, fakeVisionResults );
         const scoreImageSpy = sandbox.spy( ComputervisionControllerV1, "scoreImage" );
-        const speciesCountsSpy = sandbox.spy( ObservationsControllerV1, "speciesCounts" );
+        const taxaNearbySpy = sandbox.spy( TaxaControllerV1, "nearby" );
         request( app ).post( "/v2/taxa/suggest" )
           .set( "Content-Type", "multipart/form-data" )
           .set( "Authorization", token )
@@ -157,7 +158,7 @@ describe( "Taxa", ( ) => {
             // Ensure ComputervisionController.scoreImage gets called and not scoreImageURL
             expect( scoreImageSpy ).to.have.been.calledOnce;
             // Ensure lat/lng and observed_on trigger a call to get obs frequencies
-            expect( speciesCountsSpy ).to.have.been.calledOnce;
+            expect( taxaNearbySpy ).to.have.been.calledOnce;
             // Ensure response includes the taxon from vision
             expect( res.body.results[0].taxon.id ).to.eq(
               parseInt( _.keys( fakeVisionResults )[0], 0 )
