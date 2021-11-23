@@ -140,7 +140,6 @@ describe( "Taxa", ( ) => {
           .post( "/" )
           .reply( 200, fakeVisionResults );
         const scoreImageSpy = sandbox.spy( ComputervisionControllerV1, "scoreImage" );
-        const taxaNearbySpy = sandbox.spy( TaxaControllerV1, "nearby" );
         request( app ).post( "/v2/taxa/suggest" )
           .set( "Content-Type", "multipart/form-data" )
           .set( "Authorization", token )
@@ -157,8 +156,6 @@ describe( "Taxa", ( ) => {
           .expect( res => {
             // Ensure ComputervisionController.scoreImage gets called and not scoreImageURL
             expect( scoreImageSpy ).to.have.been.calledOnce;
-            // Ensure lat/lng and observed_on trigger a call to get obs frequencies
-            expect( taxaNearbySpy ).to.have.been.calledOnce;
             // Ensure response includes the taxon from vision
             expect( res.body.results[0].taxon.id ).to.eq(
               parseInt( _.keys( fakeVisionResults )[0], 0 )
