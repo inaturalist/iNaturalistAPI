@@ -56,7 +56,7 @@
     "scramjet": "^4.35.10",
     "squel": "^5.13.0",
     "sshpk": "^1.15.2",
-    "swagger-ui-express": "^4.1.4",
+    "swagger-ui-express": "^4.2.0",
     "tar": "^4.4.13",
     "yamljs": "^0.3.0",
     "yargs": "^13.2.2"

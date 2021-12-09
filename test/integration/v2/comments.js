@@ -19,10 +19,10 @@ describe( "Comments", ( ) => {
         .reply( 200, { id: c.id, uuid: c.uuid } );
       request( app ).post( "/v2/comments" )
         .set( "Authorization", token )
-        .set( "Content-Type", "multipart/form-data" )
+        .set( "Content-Type", "application/json" )
         // it doesn't really matter what we post since we're just stubbing the
         // Rails app to return obs 6 to load from the ES index
-        .field( "comment", JSON.stringify( { } ) )
+        .send( { comment: { } } )
         .expect( 200 )
         .expect( res => {
           const resComment = res.body.results[0];

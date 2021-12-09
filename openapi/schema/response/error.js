@@ -5,7 +5,9 @@ module.exports = Joi.object( ).keys( {
   errors: Joi.array( ).items(
     Joi.object( ).keys( {
       errorCode: Joi.string( ),
-      message: Joi.string( )
+      message: Joi.string( ),
+      from: Joi.string( ).valid( null ),
+      stack: Joi.string( ).valid( null )
     } ).unknown( false )
   )
 } ).unknown( false ).meta( { className: "Error" } );

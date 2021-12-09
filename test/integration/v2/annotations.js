@@ -25,7 +25,7 @@ describe( "Annotations", ( ) => {
       // Rails app to return obs 6 to load from the ES index
       request( app ).post( "/v2/annotations" )
         .set( "Authorization", token )
-        .set( "Content-Type", "multipart/form-data" )
+        .set( "Content-Type", "application/json" )
         .expect( 200 )
         .expect( res => {
           const anno = res.body.results[0];

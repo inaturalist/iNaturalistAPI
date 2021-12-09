@@ -16,9 +16,6 @@ module.exports = sendWrapper => {
     }],
     requestBody: {
       content: {
-        "multipart/form-data": {
-          schema: j2s( identificationsCreateSchema ).swagger
-        },
         "application/json": {
           schema: j2s( identificationsCreateSchema ).swagger
         }
