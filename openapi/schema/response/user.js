@@ -77,4 +77,6 @@ module.exports = Joi.object( ).keys( {
   time_zone: Joi.string( ).valid( null ),
   universal_search_rank: Joi.number( ).integer( ),
   updated_at: Joi.string( )
-} ).unknown( false ).meta( { className: "User" } );
+} ).unknown( false )
+  .meta( { className: "User" } )
+  .valid( null );
