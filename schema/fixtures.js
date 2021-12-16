@@ -1099,6 +1099,13 @@
           "user": { "id": 1 },
           "created_at": "2021-10-08T01:00:00",
           "photos_count": 1
+        },
+        {
+          "id": 2021121601,
+          "uuid": "b568967d-4f0e-430c-9cb9-e28db5004c37",
+          "user": { "id": 2021121602 },
+          "created_at": "2021-12-08T01:00:00",
+          "description": "Obs by a user who blocks user 2021121601"
         }
       ]
     },
@@ -1657,6 +1664,18 @@
           "login": "user2021111401",
           "name": "User 2021111401",
           "suspended": true
+        },
+        {
+          "id": 2021121601,
+          "login": "user2021121601",
+          "name": "User 2021121601",
+          "description": "User that will be blocked"
+        },
+        {
+          "id": 2021121602,
+          "login": "user2021121602",
+          "name": "User 2021121602",
+          "description": "User that blocks user2021121601"
         }
       ]
     },
@@ -2119,6 +2138,10 @@
       {
         "id": 2020120502,
         "uuid": "e6cc40bf-8de3-4b89-bc05-0e05e59ad6d7"
+      },
+      {
+        "id": 2021121601,
+        "uuid": "b568967d-4f0e-430c-9cb9-e28db5004c37"
       }
     ],
     "observation_photos": [
@@ -2793,6 +2816,27 @@
         "name": "User 2021111401",
         "suspended_at": "2021-11-14T00:00:00",
         "description": "Suspended user"
+      },
+      {
+        "id": 2021121601,
+        "login": "user2021121601",
+        "name": "User 2021121601",
+        "description": "User that will be blocked"
+      },
+      {
+        "id": 2021121602,
+        "login": "user2021121602",
+        "name": "User 2021121602",
+        "description": "User that blocks user2021121601"
+      }
+    ],
+    "user_blocks": [
+      {
+        "id": 2021121601,
+        "user_id": 2021121602,
+        "blocked_user_id": 2021121601,
+        "created_at": "2021-11-15T00:00:00",
+        "updated_at": "2021-11-15T00:00:00"
       }
     ],
     "user_privileges": [

@@ -186,6 +186,24 @@ describe( "Observations", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "shows data if the observer has blocked the viewer", done => {
+      const userBlock = fixtures.postgresql.user_blocks[0];
+      const blocker = { id: userBlock.user_id };
+      const blockee = { id: userBlock.blocked_user_id };
+      const token = jwt.sign( { user_id: blockee.id }, config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      const obs = _.find( fixtures.elasticsearch.observations.observation,
+        o => o.user.id === blocker.id );
+      request( app ).get( `/v1/observations/${obs.id}` ).set( "Authorization", token )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( res.body.results[0].uuid ).to.eq( obs.uuid );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "create", ( ) => {
@@ -439,7 +457,7 @@ describe( "Observations", ( ) => {
     } );
 
     it( "filters by captive", done => {
-      request( app ).get( "/v1/observations?captive=true" )
+      request( app ).get( "/v1/observations?captive=true&id=1,5" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.not.be.undefined; // captive
           expect( res.body.results.map( r => r.id ).indexOf( 1 ) ).to.eq( -1 ); // not-captive
@@ -447,7 +465,7 @@ describe( "Observations", ( ) => {
     } );
 
     it( "filters by not captive", done => {
-      request( app ).get( "/v1/observations?captive=false" )
+      request( app ).get( "/v1/observations?captive=false&id=1,5" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.eq( -1 ); // captive
           expect( res.body.results.map( r => r.id ).indexOf( 1 ) )
@@ -456,7 +474,7 @@ describe( "Observations", ( ) => {
     } );
 
     it( "filters by captive=any", done => {
-      request( app ).get( "/v1/observations?captive=any" )
+      request( app ).get( "/v1/observations?captive=any&id=1,5" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.not.be.undefined; // captive
           expect( res.body.results.map( r => r.id ).indexOf( 1 ) )
@@ -465,7 +483,7 @@ describe( "Observations", ( ) => {
     } );
 
     it( "filters by licensed", done => {
-      request( app ).get( "/v1/observations?licensed=true" )
+      request( app ).get( "/v1/observations?licensed=true&id=1,5" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ).includes( 1 ) ).to.be.true; // licensed
           expect( res.body.results.map( r => r.id ).includes( 5 ) ).to.be.false; // not licensed
@@ -473,7 +491,7 @@ describe( "Observations", ( ) => {
     } );
 
     it( "filters by not licensed", done => {
-      request( app ).get( "/v1/observations?licensed=false" )
+      request( app ).get( "/v1/observations?licensed=false&id=1,5" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ).includes( 1 ) ).to.be.false; // licensed
           expect( res.body.results.map( r => r.id ).includes( 5 ) ).to.be.true; // not licensed
@@ -620,7 +638,7 @@ describe( "Observations", ( ) => {
     } );
 
     it( "filters by without_term_id", done => {
-      request( app ).get( "/v1/observations?without_term_id=1" )
+      request( app ).get( "/v1/observations?without_term_id=1&id=6,7,9" )
         .expect( res => {
           // not annotated with this term
           expect( res.body.results.map( r => r.id ) ).to.contain( 6 );
@@ -635,12 +653,13 @@ describe( "Observations", ( ) => {
       const hasTerm1 = 9;
       const hasTerm2 = 20;
       const hasTerm1And2 = 21;
-      request( app ).get( "/v1/observations?term_id=2&without_term_id=1" )
-        .expect( res => {
-          expect( res.body.results.map( r => r.id ) ).to.contain( hasTerm2 );
-          expect( res.body.results.map( r => r.id ) ).not.to.contain( hasTerm1 );
-          expect( res.body.results.map( r => r.id ) ).not.to.contain( hasTerm1And2 );
-        } ).expect( 200, done );
+      request( app ).get(
+        `/v1/observations?term_id=2&without_term_id=1&id=${[hasTerm1, hasTerm2, hasTerm1And2].join( "," )}`
+      ).expect( res => {
+        expect( res.body.results.map( r => r.id ) ).to.contain( hasTerm2 );
+        expect( res.body.results.map( r => r.id ) ).not.to.contain( hasTerm1 );
+        expect( res.body.results.map( r => r.id ) ).not.to.contain( hasTerm1And2 );
+      } ).expect( 200, done );
     } );
 
     it( "filters by without_term_value_id", done => {
