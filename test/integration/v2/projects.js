@@ -1,3 +1,4 @@
+const { expect } = require( "chai" );
 const fs = require( "fs" );
 const jwt = require( "jsonwebtoken" );
 const nock = require( "nock" );
@@ -31,6 +32,17 @@ describe( "Projects", ( ) => {
           .set( "Authorization", token )
           .expect( 204, done );
       } );
+    } );
+  } );
+  describe( "show", ( ) => {
+    const project = fixtures.elasticsearch.projects.project[0];
+    it( "should retrieve a project", done => {
+      request( app ).get( `/v2/projects/${project.id}` )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results[0].id ).to.eq( project.id );
+        } )
+        .expect( 200, done );
     } );
   } );
 } );
