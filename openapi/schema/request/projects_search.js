@@ -27,5 +27,8 @@ module.exports = Joi.object( ).keys( {
     "updated",
     "distance",
     "featured"
-  )
+  ),
+  fields: Joi.any( )
+    .description( "Attribute fields to return in the response" )
+    .example( "title,description" )
 } );
