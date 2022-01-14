@@ -109,11 +109,13 @@ describe( "Observations", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
     it( "returns user when specified in the fields query param", done => {
       request( app ).get( "/v2/observations?fields=user" ).expect( res => {
         expect( res.body.results[0].user ).to.not.be.undefined;
       } ).expect( 200, done );
     } );
+
     it( "should error when you POST with X-HTTP-Method-Override set to GET and a multipart/form-data payload", done => {
       request( app )
         .post( "/v2/observations" )
@@ -125,6 +127,7 @@ describe( "Observations", ( ) => {
         } )
         .expect( 422, done );
     } );
+
     it( "should search when you POST with X-HTTP-Method-Override set to GET and a JSON payload", done => {
       request( app )
         .post( "/v2/observations" )
@@ -162,6 +165,15 @@ describe( "Observations", ( ) => {
           const obscuredObs = _.find( res.body.results, o => o.obscured );
           expect( obscuredObs.private_location ).to.be.undefined;
         } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "accepts place UUIDs", done => {
+      const usUUID = fixtures.elasticsearch.places.place[0].uuid;
+      request( app ).get( `/v2/observations?place_id=${usUUID}` ).expect( res => {
+        expect( res.body.results[0].uuid ).to.not.be.undefined;
+      } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
