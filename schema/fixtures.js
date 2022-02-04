@@ -1563,6 +1563,35 @@
           }],
           "observations_count": 50,
           "is_active": true
+        },
+        {
+          "id": 2022020301,
+          "uuid": "b35eb7a4-670a-45f5-a12b-2e71f64ec801",
+          "name": "Frendopila burgescens",
+          "names": [
+            {
+              "name": "Frendopila burgescens",
+              "name_autocomplete": "Frendopila burgescens",
+              "exact": "Frendopila burgescens",
+              "exact_ci": "Frendopila burgescens",
+              "locale": "sci"
+            },
+            {
+              "name": "franglepop",
+              "name_autocomplete": "franglepop",
+              "exact": "franglepop",
+              "exact_ci": "franglepop",
+              "locale": "en"
+            },
+            {
+              "name": "נשר",
+              "name_autocomplete": "נשר",
+              "exact": "נשר",
+              "exact_ci": "נשר",
+              "locale": "he"
+            }
+          ],
+          "is_active": true
         }
       ]
     },

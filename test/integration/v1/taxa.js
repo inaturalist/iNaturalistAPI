@@ -3,10 +3,13 @@ const { expect } = require( "chai" );
 const request = require( "supertest" );
 const querystring = require( "querystring" );
 const sinon = require( "sinon" );
+const fs = require( "fs" );
 const iNaturalistAPI = require( "../../../lib/inaturalist_api" );
 const redisClient = require( "../../../lib/redis_client" );
 
 const app = iNaturalistAPI.server( );
+
+const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 describe( "Taxa", ( ) => {
   describe( "autocomplete", ( ) => {
@@ -167,6 +170,27 @@ describe( "Taxa", ( ) => {
           expect( taxon.taxon_schemes_count ).to.eq( 1 );
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
+    } );
+
+    describe( "includes Hebrew preferred_common_name", ( ) => {
+      const taxon = _.find( fixtures.elasticsearch.taxa.taxon, t => _.find( t.names, n => n.locale === "he" ) );
+      const taxonName = _.find( taxon.names, n => n.locale === "he" );
+      it( "when locae is he", done => {
+        request( app ).get( `/v1/taxa/${taxon.id}?locale=he` )
+          .expect( res => {
+            expect( res.body.results[0].preferred_common_name ).not.to.be.undefined;
+            expect( res.body.results[0].preferred_common_name ).to.eq( taxonName.exact );
+          } )
+          .expect( 200, done );
+      } );
+      it( "when locae is iw", done => {
+        request( app ).get( `/v1/taxa/${taxon.id}?locale=iw` )
+          .expect( res => {
+            expect( res.body.results[0].preferred_common_name ).not.to.be.undefined;
+            expect( res.body.results[0].preferred_common_name ).to.eq( taxonName.exact );
+          } )
+          .expect( 200, done );
+      } );
     } );
   } );
 
