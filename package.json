@@ -35,7 +35,7 @@
     "form-data": "^4.0.0",
     "geoip-lite": "^1.4.3",
     "handlebars": "^4.7.7",
-    "inaturalistjs": "github:inaturalist/inaturalistjs",
+    "inaturalistjs": "github:inaturalist/inaturalistjs#email-confirmation",
     "intl": "^1.2.5",
     "joi": "^17.5.0",
     "joi-to-swagger": "^6.0.1",
