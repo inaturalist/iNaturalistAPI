@@ -2,7 +2,7 @@ const Joi = require( "joi" );
 
 module.exports = Joi.object( ).keys( {
   fields: Joi.any( ),
-  observation: Joi.object( )
+  observation: Joi.object( ).unknown( true )
   // observation: Joi.object( ).keys( {
   //   species_guess: Joi.string( )
   //     .description( `
