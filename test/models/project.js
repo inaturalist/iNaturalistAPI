@@ -25,8 +25,8 @@ describe( "Project", ( ) => {
       expect( p.title ).to.eq( "A Project" );
     } );
 
-    it( "throws an error if the slug cannot be queried for", async ( ) => {
-      await expect( Project.findByID( "'" ) ).to.be.rejectedWith( Error );
+    it( "returns false if the slug cannot be queried for", async ( ) => {
+      expect( await Project.findByID( "'" ) ).to.be.false;
     } );
 
     it( "returns null given an unknown ID", async ( ) => {
