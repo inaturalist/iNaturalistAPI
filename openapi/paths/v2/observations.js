@@ -11,7 +11,6 @@ const observationsSearchSchema = require( "../../schema/request/observations_sea
 const transform = require( "../../joi_to_openapi_parameter" );
 const ObservationsController = require( "../../../lib/controllers/v2/observations_controller" );
 
-
 module.exports = sendWrapper => {
   async function GET( req, res ) {
     if ( req.originalMethod === "POST" ) {
@@ -80,6 +79,9 @@ module.exports = sendWrapper => {
             }
           }
         }
+      },
+      default: {
+        $ref: "#/components/responses/Error"
       }
     }
   };

@@ -91,14 +91,14 @@ describe( "util", ( ) => {
       expect( opts.preferredPlace ).to.eq( "PPL" );
     } );
 
-    it( "sets he to iw", ( ) => {
-      const opts = util.localeOpts( { query: { locale: "he" } } );
-      expect( opts.locale ).to.eq( "iw" );
+    it( "sets iw to he", ( ) => {
+      const opts = util.localeOpts( { query: { locale: "iw" } } );
+      expect( opts.locale ).to.eq( "he" );
     } );
-    
-    it( "sets he-IL to iw-IL", ( ) => {
-      const opts = util.localeOpts( { query: { locale: "he-IL" } } );
-      expect( opts.locale ).to.eq( "iw-il" ); // not sure why it's lowercase...
+
+    it( "sets iw-IL to he-IL", ( ) => {
+      const opts = util.localeOpts( { query: { locale: "iw-IL" } } );
+      expect( opts.locale ).to.eq( "he-il" ); // not sure why it's lowercase...
     } );
   } );
 } );
