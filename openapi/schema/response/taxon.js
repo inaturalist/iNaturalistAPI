@@ -33,6 +33,7 @@ module.exports = Joi.object( ).keys( {
   ).valid( null ),
   default_photo: photo,
   endemic: Joi.boolean( ),
+  english_common_name: Joi.string( ),
   extinct: Joi.boolean( ),
   flag_counts: Joi.object( ).keys( {
     resolved: Joi.number( ).integer( ),
