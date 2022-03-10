@@ -169,11 +169,48 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "accepts place UUIDs", done => {
+    it( "accepts place UUID", done => {
       const usUUID = fixtures.elasticsearch.places.place[0].uuid;
       request( app ).get( `/v2/observations?place_id=${usUUID}` ).expect( res => {
         expect( res.body.results[0].uuid ).to.not.be.undefined;
       } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it.only( "accepts multiple place UUIDs", done => {
+      const uuids = fixtures.elasticsearch.places.place.slice( 0, 2 ).map( p => p.uuid );
+      request( app ).get( `/v2/observations?place_id=${uuids.join( "," )}` ).expect( res => {
+        expect( res.body.results[0].uuid ).to.not.be.undefined;
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "accepts place UUID with X-HTTP-Method-Override", done => {
+      const usUUID = fixtures.elasticsearch.places.place[0].uuid;
+      request( app )
+        .post( "/v2/observations" )
+        .set( "Content-Type", "application/json" )
+        .send( { place_id: usUUID } )
+        .set( "X-HTTP-Method-Override", "GET" )
+        .expect( res => {
+          expect( res.body.results[0].uuid ).to.not.be.undefined;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it.only( "accepts multiple place UUIDs with X-HTTP-Method-Override", done => {
+      const uuids = fixtures.elasticsearch.places.place.slice( 0, 2 ).map( p => p.uuid );
+      request( app )
+        .post( "/v2/observations" )
+        .set( "Content-Type", "application/json" )
+        .send( { place_id: uuids } )
+        .set( "X-HTTP-Method-Override", "GET" )
+        .expect( res => {
+          expect( res.body.results[0].uuid ).to.not.be.undefined;
+        } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
