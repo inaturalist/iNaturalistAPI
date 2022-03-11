@@ -75,6 +75,11 @@ describe( "Computervision", ( ) => {
     } );
   } );
   describe( "score_image", ( ) => {
+    const token = jwt.sign(
+      { user_id: 333 },
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" }
+    );
     beforeEach( ( ) => {
       const fakeVisionResults = { 1: 0.9, 2: 0.1 };
       nock( config.imageProcesing.tensorappURL )
@@ -82,11 +87,6 @@ describe( "Computervision", ( ) => {
         .reply( 200, fakeVisionResults );
     } );
     it( "returns JSON", done => {
-      const token = jwt.sign(
-        { user_id: 333 },
-        config.jwtSecret || "secret",
-        { algorithm: "HS512" }
-      );
       request( app ).post( "/v2/computervision/score_image" )
         .set( "Authorization", token )
         .set( "Content-Type", "multipart/form-data" )
@@ -95,6 +95,24 @@ describe( "Computervision", ( ) => {
         .expect( 200 )
         .expect( res => {
           expect( res.body.results.length ).to.be.above( 0 );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+    it( "allows client to specify fields as JSON", done => {
+      request( app ).post( "/v2/computervision/score_image" )
+        .set( "Authorization", token )
+        .set( "Content-Type", "multipart/form-data" )
+        .field( "fields", JSON.stringify( {
+          taxon: ["id", "uuid", "name"]
+        } ) )
+        .attach( "image", "test/fixtures/cuthona_abronia-tagged.jpg" )
+        .expect( 200 )
+        .expect( res => {
+          const { taxon } = res.body.results[0];
+          expect( taxon.id ).not.to.be.undefined;
+          expect( taxon.uuid ).not.to.be.undefined;
+          expect( taxon.name ).not.to.be.undefined;
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
