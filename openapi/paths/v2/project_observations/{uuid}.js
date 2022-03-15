@@ -1,6 +1,6 @@
 const j2s = require( "joi-to-swagger" );
 const ProjectObservationsController = require( "../../../../lib/controllers/v2/project_observations_controller" );
-const projectObservationsCreateSchema = require( "../../../schema/request/project_observations_create" );
+const projectObservationsUpdateSchema = require( "../../../schema/request/project_observations_update" );
 
 module.exports = sendWrapper => {
   async function PUT( req, res ) {
@@ -16,11 +16,8 @@ module.exports = sendWrapper => {
     }],
     requestBody: {
       content: {
-        "multipart/form-data": {
-          schema: j2s( projectObservationsCreateSchema ).swagger
-        },
         "application/json": {
-          schema: j2s( projectObservationsCreateSchema ).swagger
+          schema: j2s( projectObservationsUpdateSchema ).swagger
         }
       }
     },
