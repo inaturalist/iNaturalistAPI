@@ -18,6 +18,22 @@ module.exports = Joi.object( ).keys( {
   name: Joi.string( ).valid( null ),
   observations_count: Joi.number( ).integer( ),
   orcid: Joi.string( ).valid( null ),
+  preferences: Joi.object( ).keys( {
+    prefers_community_taxa: Joi.boolean( )
+      .description( `
+        Whether the user allows the Community Taxon to be the taxon their observation is associated with
+      ` ),
+    prefers_observation_fields_by: Joi.string( ).valid(
+      "anyone",
+      "curators",
+      "observer"
+    ),
+    prefers_project_addition_by: Joi.string( ).valid(
+      "any",
+      "joined",
+      "none"
+    )
+  } ),
   roles: Joi.array( ).items( Joi.string( ) ),
   site: site.valid( null ),
   site_id: Joi.number( ).integer( ).valid( null ),
