@@ -53,4 +53,88 @@ describe( "Users", ( ) => {
         .expect( 204, done );
     } );
   } );
+  describe( "index", ( ) => {
+    it( "should return JSON", done => {
+      request( app ).get( "/v2/users?fields=login" )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results ).not.to.be.empty;
+          expect( res.body.results[0].login ).not.to.be.undefined;
+        } )
+        .expect( 200, done );
+    } );
+    it( "should filter by following", done => {
+      const friendship = fixtures.postgresql.friendships[0];
+      const followingUserId = friendship.user_id;
+      const followingUserIds = _.filter(
+        fixtures.postgresql.friendships,
+        f => f.friend_id === friendship.friend_id
+      ).map( f => f.user_id );
+      const notFollowingUserId = _.find(
+        fixtures.postgresql.users,
+        u => ( followingUserIds.indexOf( u.id ) < 0 )
+      ).id;
+      request( app ).get( `/v2/users?per_page=100&following=${friendship.friend_id}` )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results ).not.to.be.empty;
+          expect(
+            _.find( res.body.results, u => u.id === followingUserId )
+          ).not.to.be.undefined;
+          expect(
+            _.find( res.body.results, u => u.id === notFollowingUserId )
+          ).to.be.undefined;
+        } )
+        .expect( 200, done );
+    } );
+    it( "should filter by followed_by", done => {
+      const friendship = fixtures.postgresql.friendships[0];
+      const friendIds = _.filter(
+        fixtures.postgresql.friendships,
+        f => f.user_id === friendship.user_id
+      );
+      const notFollowedByUserId = _.find(
+        fixtures.postgresql.users,
+        u => friendIds.indexOf( u.id ) < 0
+      ).id;
+      request( app ).get( `/v2/users?per_page=100&followed_by=${friendship.user_id}` )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results ).not.to.be.empty;
+          expect(
+            _.find( res.body.results, u => u.id === friendship.friend_id )
+          ).not.to.be.undefined;
+          expect(
+            _.find( res.body.results, u => u.id === notFollowedByUserId )
+          ).to.be.undefined;
+        } )
+        .expect( 200, done );
+    } );
+    it( "should return nothing if followed_by user is not following anyone", done => {
+      const followingUserIds = _.map( fixtures.postgresql.frienships, f => f.user_id );
+      const loner = _.find(
+        fixtures.postgresql.users,
+        u => ( followingUserIds.indexOf( u.id ) < 0 )
+      );
+      request( app ).get( `/v2/users?per_page=100&followed_by=${loner.id}` )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results ).to.be.empty;
+        } )
+        .expect( 200, done );
+    } );
+    it( "should return nothing if following user is not followed by anyone", done => {
+      const followedUserIds = _.map( fixtures.postgresql.frienships, f => f.friend_id );
+      const pariah = _.find(
+        fixtures.postgresql.users,
+        u => ( followedUserIds.indexOf( u.id ) < 0 )
+      );
+      request( app ).get( `/v2/users?per_page=100&following=${pariah.id}` )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results ).to.be.empty;
+        } )
+        .expect( 200, done );
+    } );
+  } );
 } );
