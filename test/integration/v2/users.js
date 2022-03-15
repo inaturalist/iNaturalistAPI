@@ -11,15 +11,33 @@ const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 describe( "Users", ( ) => {
   describe( "show", ( ) => {
-    it( "should include description when requested", done => {
+    it( "should include requested fields", done => {
       const user = _.find(
         fixtures.postgresql.users,
-        u => u.description && u.description.length > 0
+        u => (
+          u.description
+          && u.description.length > 0
+          && u.last_active
+          && u.site_id
+        )
       );
-      request( app ).get( `/v2/users/${user.id}?fields=description` )
+      const site = _.find( fixtures.postgresql.sites, s => s.id === user.site_id );
+      request( app ).post( `/v2/users/${user.id}` )
+        .set( "X-HTTP-Method-Override", "GET" )
+        .send( {
+          fields: {
+            description: true,
+            site: {
+              name: true
+            },
+            last_active: true
+          }
+        } )
         .expect( 200 )
         .expect( res => {
           expect( res.body.results[0].description ).to.eq( user.description );
+          expect( res.body.results[0].site.name ).to.eq( site.name );
+          expect( res.body.results[0].last_active ).not.to.be.undefined;
         } )
         .expect( 200, done );
     } );

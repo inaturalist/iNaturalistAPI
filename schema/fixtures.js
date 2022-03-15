@@ -2747,7 +2747,9 @@
         "id": 1,
         "login": "userlogin",
         "name": "username",
-        "site_id": 1
+        "site_id": 1,
+        "description": "a very original user",
+        "last_active": "2022-03-01"
       },
       {
         "id": 5,
@@ -2801,7 +2803,8 @@
         "id": 127,
         "login": "user127",
         "name": "Observer that trusts user 123",
-        "description": "Observer that trusts user 123"
+        "description": "Observer that trusts user 123",
+        "site_id": 1
       },
       {
         "id": 128,

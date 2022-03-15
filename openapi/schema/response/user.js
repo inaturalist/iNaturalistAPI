@@ -12,6 +12,7 @@ module.exports = Joi.object( ).keys( {
   icon: Joi.string( ).valid( null ),
   identifications_count: Joi.number( ).integer( ),
   journal_posts_count: Joi.number( ).integer( ),
+  last_active: Joi.date( ).iso( ),
   login: Joi.string( ),
   monthly_supporter: Joi.boolean( ).valid( null ),
   name: Joi.string( ).valid( null ),
