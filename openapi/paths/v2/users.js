@@ -28,7 +28,7 @@ module.exports = sendWrapper => {
     parameters,
     responses: {
       200: {
-        description: "A list of places",
+        description: "A list of users",
         content: {
           "application/json": {
             schema: {
