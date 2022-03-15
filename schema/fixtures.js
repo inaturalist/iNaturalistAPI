@@ -1654,15 +1654,13 @@
         },
         {
           "id": 127,
-          "login": "user124",
-          "name": "User 124",
-          "description": "Observer that trusts user 123"
+          "login": "user127",
+          "name": "Observer that trusts user 123"
         },
         {
           "id": 128,
           "login": "user125",
-          "name": "User 125",
-          "description": "Observer that does NOT trust user 123"
+          "name": "Observer that does NOT trust user 123"
         },
         {
           "id": 2,
@@ -1679,14 +1677,12 @@
         {
           "id": 2020110501,
           "login": "user2020110501",
-          "name": "User 2020110501",
-          "description": "User that follows user 126 and trusts them"
+          "name": "User that follows user 126 and trusts them"
         },
         {
           "id": 2020111201,
           "login": "user2020111201",
-          "name": "User 2020111201",
-          "description": "User that follows user 126 and does NOT trusts them"
+          "name": "User that follows user 126 and does NOT trusts them"
         },
         {
           "id": 2021111401,
@@ -1697,14 +1693,12 @@
         {
           "id": 2021121601,
           "login": "user2021121601",
-          "name": "User 2021121601",
-          "description": "User that will be blocked"
+          "name": "User that will be blocked"
         },
         {
           "id": 2021121602,
           "login": "user2021121602",
-          "name": "User 2021121602",
-          "description": "User that blocks user2021121601"
+          "name": "User that blocks user2021121601"
         }
       ]
     },
@@ -2753,7 +2747,9 @@
         "id": 1,
         "login": "userlogin",
         "name": "username",
-        "site_id": 1
+        "site_id": 1,
+        "description": "a very original user",
+        "last_active": "2022-03-01"
       },
       {
         "id": 5,
@@ -2805,14 +2801,15 @@
       },
       {
         "id": 127,
-        "login": "user124",
-        "name": "User 124",
-        "description": "Observer that trusts user 123"
+        "login": "user127",
+        "name": "Observer that trusts user 123",
+        "description": "Observer that trusts user 123",
+        "site_id": 1
       },
       {
         "id": 128,
         "login": "user125",
-        "name": "User 125",
+        "name": "Observer that does NOT trust user 123",
         "description": "Observer that does NOT trust user 123"
       },
       {
@@ -2830,13 +2827,13 @@
       {
         "id": 2020110501,
         "login": "user2020110501",
-        "name": "User 2020110501",
+        "name": "User that follows user 126 and trusts them",
         "description": "User that follows user 126 and trusts them"
       },
       {
         "id": 2020111201,
         "login": "user2020111201",
-        "name": "User 2020111201",
+        "name": "User that follows user 126 and does NOT trusts them",
         "description": "User that follows user 126 and does NOT trusts them"
       },
       {
@@ -2849,13 +2846,13 @@
       {
         "id": 2021121601,
         "login": "user2021121601",
-        "name": "User 2021121601",
+        "name": "User that will be blocked",
         "description": "User that will be blocked"
       },
       {
         "id": 2021121602,
         "login": "user2021121602",
-        "name": "User 2021121602",
+        "name": "User that blocks user2021121601",
         "description": "User that blocks user2021121601"
       }
     ],

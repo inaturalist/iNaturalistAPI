@@ -7,6 +7,6 @@ module.exports = Joi.object( ).keys( {
   locale: Joi.string( ).valid( null ),
   name: Joi.string( ),
   place_id: Joi.number( ).integer( ).valid( null ),
-  site_name_short: Joi.string( ),
+  site_name_short: Joi.string( ).valid( null ),
   url: Joi.string( )
 } ).unknown( false ).meta( { className: "Site" } );

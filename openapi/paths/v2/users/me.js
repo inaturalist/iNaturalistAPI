@@ -1,6 +1,5 @@
 const UsersController = require( "../../../../lib/controllers/v1/users_controller" );
 
-
 module.exports = sendWrapper => {
   async function GET( req, res ) {
     const results = await UsersController.me( req );
@@ -19,7 +18,7 @@ module.exports = sendWrapper => {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/ResultsUsers"
+              $ref: "#/components/schemas/ResultsUsersMe"
             }
           }
         }
