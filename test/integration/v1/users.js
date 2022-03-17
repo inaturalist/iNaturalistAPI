@@ -199,6 +199,8 @@ describe( "Users", ( ) => {
     } );
 
     _.each( [
+      "confirmation_sent_at",
+      "confirmed_at",
       "created_at",
       "description",
       "email",
@@ -232,11 +234,15 @@ describe( "Users", ( ) => {
       "prefers_user_observation_email_notification",
       "search_place_id",
       "time_zone",
+      "unconfirmed_email",
       "updated_at"
     ], a => {
       it( `returns ${a}`, done => {
-        const token = jwt.sign( { user_id: 1 }, config.jwtSecret || "secret",
-          { algorithm: "HS512" } );
+        const token = jwt.sign(
+          { user_id: 1 },
+          config.jwtSecret || "secret",
+          { algorithm: "HS512" }
+        );
         request( app ).get( "/v1/users/me" ).set( "Authorization", token )
           .expect( 200 )
           .expect( res => {
