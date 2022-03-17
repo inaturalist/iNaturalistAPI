@@ -2,7 +2,7 @@ const Joi = require( "joi" );
 const j2s = require( "joi-to-swagger" );
 const usersUpdateSchema = require( "../../../schema/request/users_update_multipart" );
 const transform = require( "../../../joi_to_openapi_parameter" );
-const UsersController = require( "../../../../lib/controllers/v1/users_controller" );
+const UsersController = require( "../../../../lib/controllers/v2/users_controller" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {

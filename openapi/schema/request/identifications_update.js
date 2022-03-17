@@ -4,7 +4,8 @@ module.exports = Joi.object( ).keys( {
   fields: Joi.any( ),
   identification: Joi.object( ).keys( {
     body: Joi.string( ),
-    observation_id: Joi.string( ).guid( ).required( ),
-    taxon_id: Joi.number( ).integer( ).required( )
+    current: Joi
+      .boolean( )
+      .description( "Setting to false means the identification is withdrawn" )
   } ).required( )
 } );

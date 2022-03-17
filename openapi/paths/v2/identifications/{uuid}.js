@@ -1,6 +1,6 @@
 const j2s = require( "joi-to-swagger" );
 const IdentificationsController = require( "../../../../lib/controllers/v2/identifications_controller" );
-const identificationsCreateSchema = require( "../../../schema/request/identifications_create" );
+const identificationsUpdateSchema = require( "../../../schema/request/identifications_update" );
 
 module.exports = sendWrapper => {
   async function PUT( req, res ) {
@@ -17,7 +17,7 @@ module.exports = sendWrapper => {
     requestBody: {
       content: {
         "application/json": {
-          schema: j2s( identificationsCreateSchema ).swagger
+          schema: j2s( identificationsUpdateSchema ).swagger
         }
       }
     },
@@ -43,6 +43,8 @@ module.exports = sendWrapper => {
   DELETE.apiDoc = {
     tags: ["Identifications"],
     summary: "Delete an identification",
+    description: "Note that unlike API v1, this completely deletes the identification. "
+      + "To withdraw the identification, update `current` to `false`.",
     security: [{
       userJwtRequired: []
     }],

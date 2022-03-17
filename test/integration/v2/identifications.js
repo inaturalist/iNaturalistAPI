@@ -1,18 +1,23 @@
+const _ = require( "lodash" );
 const { expect } = require( "chai" );
 const request = require( "supertest" );
 const jwt = require( "jsonwebtoken" );
 const nock = require( "nock" );
 const fs = require( "fs" );
 const app = require( "../../../app" );
-const config = require( "../../../config.js" );
+const config = require( "../../../config" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 describe( "Identifications", ( ) => {
   describe( "create", ( ) => {
-    const token = jwt.sign( { user_id: 333 }, config.jwtSecret || "secret",
-      { algorithm: "HS512" } );
+    const token = jwt.sign(
+      { user_id: 333 },
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" }
+    );
     const ident = fixtures.postgresql.identifications[0];
+    const obs = _.find( fixtures.postgresql.observations, o => o.id === ident.observation_id );
     it( "returns JSON", done => {
       nock( "http://localhost:3000" )
         .post( "/identifications" )
@@ -25,7 +30,7 @@ describe( "Identifications", ( ) => {
         .send( {
           identification: {
             taxon_id: ident.taxon_id,
-            observation_id: ident.observation_id
+            observation_id: obs.uuid
           }
         } )
         .expect( 200 )
@@ -51,8 +56,11 @@ describe( "Identifications", ( ) => {
   } );
 
   describe( "update", ( ) => {
-    const token = jwt.sign( { user_id: 333 }, config.jwtSecret || "secret",
-      { algorithm: "HS512" } );
+    const token = jwt.sign(
+      { user_id: 333 },
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" }
+    );
     const ident = fixtures.elasticsearch.identifications.identification[0];
     it( "returns JSON", done => {
       nock( "http://localhost:3000" )
@@ -90,12 +98,15 @@ describe( "Identifications", ( ) => {
   } );
 
   describe( "delete", ( ) => {
-    const token = jwt.sign( { user_id: 333 }, config.jwtSecret || "secret",
-      { algorithm: "HS512" } );
+    const token = jwt.sign(
+      { user_id: 333 },
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" }
+    );
     const ident = fixtures.elasticsearch.identifications.identification[0];
     it( "returns 200", done => {
       nock( "http://localhost:3000" )
-        .delete( `/identifications/${ident.uuid}` )
+        .delete( `/identifications/${ident.uuid}?delete=true` )
         .reply( 200 );
       request( app ).delete( `/v2/identifications/${ident.uuid}` )
         .set( "Authorization", token )

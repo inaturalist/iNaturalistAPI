@@ -27,7 +27,16 @@ module.exports = sendWrapper => {
         Joi.string( )
           .label( "metric" )
           .required( )
-          .description( "The metric being voted on" )
+          .description( `
+            The metric being voted on.
+
+            date: Whether or not the date seems accurate.
+            evidence: Whether the media presents evidence for the presence of the organism.
+            location: Whether the location seems accurate.
+            needs_id: Whether the observation should remain in the Needs ID category.
+            recent: Whether the evidence demonstrates that the organism was present recently.
+            wild: Whether the individual organism was where and when it was without human intervention.
+          `.replace( /\s+/m, " " ) )
           .meta( { in: "path" } )
           .valid(
             "date",
