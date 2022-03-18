@@ -8,10 +8,15 @@
       "type": "date"
     },
     "icon": {
-      "type": "keyword",
-      "index": false
+      "index": false,
+      "type": "keyword"
     },
     "id": {
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      },
       "type": "integer"
     },
     "identifications_count": {
@@ -21,25 +26,25 @@
       "type": "integer"
     },
     "login": {
-      "type": "text",
-      "analyzer": "ascii_snowball_analyzer"
+      "analyzer": "ascii_snowball_analyzer",
+      "type": "text"
     },
     "login_autocomplete": {
-      "type": "text",
       "analyzer": "autocomplete_analyzer",
-      "search_analyzer": "standard_analyzer"
+      "search_analyzer": "standard_analyzer",
+      "type": "text"
     },
     "login_exact": {
       "type": "keyword"
     },
     "name": {
-      "type": "text",
-      "analyzer": "ascii_snowball_analyzer"
+      "analyzer": "ascii_snowball_analyzer",
+      "type": "text"
     },
     "name_autocomplete": {
-      "type": "text",
       "analyzer": "autocomplete_analyzer",
-      "search_analyzer": "standard_analyzer"
+      "search_analyzer": "standard_analyzer",
+      "type": "text"
     },
     "observations_count": {
       "type": "integer"
@@ -51,16 +56,27 @@
       "type": "keyword"
     },
     "site_id": {
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      },
       "type": "short"
     },
     "spam": {
       "type": "boolean"
+    },
+    "species_count": {
+      "type": "integer"
     },
     "suspended": {
       "type": "boolean"
     },
     "universal_search_rank": {
       "type": "integer"
+    },
+    "uuid": {
+      "type": "keyword"
     }
   }
 }

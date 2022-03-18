@@ -2,8 +2,8 @@
   "dynamic": "true",
   "properties": {
     "body": {
-      "type": "text",
-      "analyzer": "ascii_snowball_analyzer"
+      "analyzer": "ascii_snowball_analyzer",
+      "type": "text"
     },
     "category": {
       "type": "keyword"
@@ -14,28 +14,28 @@
     "created_at_details": {
       "properties": {
         "date": {
-          "type": "date",
-          "index": false
+          "index": false,
+          "type": "date"
         },
         "day": {
-          "type": "byte",
-          "index": false
+          "index": false,
+          "type": "byte"
         },
         "hour": {
-          "type": "byte",
-          "index": false
+          "index": false,
+          "type": "byte"
         },
         "month": {
-          "type": "byte",
-          "index": false
+          "index": false,
+          "type": "byte"
         },
         "week": {
-          "type": "byte",
-          "index": false
+          "index": false,
+          "type": "byte"
         },
         "year": {
-          "type": "short",
-          "index": false
+          "index": false,
+          "type": "short"
         }
       }
     },
@@ -45,39 +45,42 @@
     "current_taxon": {
       "type": "boolean"
     },
+    "disagreement": {
+      "type": "boolean"
+    },
     "flags": {
       "properties": {
         "comment": {
-          "type": "keyword",
-          "index": false
+          "index": false,
+          "type": "keyword"
         },
         "created_at": {
-          "type": "date",
-          "index": false
+          "index": false,
+          "type": "date"
         },
         "flag": {
-          "type": "keyword",
-          "index": false
+          "index": false,
+          "type": "keyword"
         },
         "id": {
-          "type": "integer",
-          "index": false
+          "index": false,
+          "type": "integer"
         },
         "resolved": {
-          "type": "boolean",
-          "index": false
+          "index": false,
+          "type": "boolean"
         },
         "resolver_id": {
-          "type": "integer",
-          "index": false
+          "index": false,
+          "type": "integer"
         },
         "updated_at": {
-          "type": "date",
-          "index": false
+          "index": false,
+          "type": "date"
         },
         "user_id": {
-          "type": "integer",
-          "index": false
+          "index": false,
+          "type": "integer"
         }
       }
     },
@@ -85,7 +88,78 @@
       "type": "boolean"
     },
     "id": {
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      },
       "type": "integer"
+    },
+    "moderator_actions": {
+      "properties": {
+        "action": {
+          "index": false,
+          "type": "keyword"
+        },
+        "created_at": {
+          "type": "date"
+        },
+        "created_at_details": {
+          "properties": {
+            "date": {
+              "index": false,
+              "type": "date"
+            },
+            "day": {
+              "index": false,
+              "type": "byte"
+            },
+            "hour": {
+              "index": false,
+              "type": "byte"
+            },
+            "month": {
+              "index": false,
+              "type": "byte"
+            },
+            "week": {
+              "index": false,
+              "type": "byte"
+            },
+            "year": {
+              "index": false,
+              "type": "short"
+            }
+          }
+        },
+        "id": {
+          "type": "integer"
+        },
+        "reason": {
+          "analyzer": "ascii_snowball_analyzer",
+          "index": false,
+          "type": "text"
+        },
+        "user": {
+          "properties": {
+            "created_at": {
+              "type": "date"
+            },
+            "id": {
+              "type": "integer"
+            },
+            "login": {
+              "type": "keyword"
+            },
+            "spam": {
+              "type": "boolean"
+            },
+            "suspended": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
     },
     "observation": {
       "properties": {
@@ -95,28 +169,28 @@
         "created_at_details": {
           "properties": {
             "date": {
-              "type": "date",
-              "index": false
+              "index": false,
+              "type": "date"
             },
             "day": {
-              "type": "byte",
-              "index": false
+              "index": false,
+              "type": "byte"
             },
             "hour": {
-              "type": "byte",
-              "index": false
+              "index": false,
+              "type": "byte"
             },
             "month": {
-              "type": "byte",
-              "index": false
+              "index": false,
+              "type": "byte"
             },
             "week": {
-              "type": "byte",
-              "index": false
+              "index": false,
+              "type": "byte"
             },
             "year": {
-              "type": "short",
-              "index": false
+              "index": false,
+              "type": "short"
             }
           }
         },
@@ -124,55 +198,80 @@
           "type": "integer"
         },
         "observed_on": {
-          "type": "date",
-          "format": "date_optional_time"
+          "format": "date_optional_time",
+          "type": "date"
         },
         "observed_on_details": {
           "properties": {
             "date": {
-              "type": "date",
-              "index": false
+              "index": false,
+              "type": "date"
             },
             "day": {
-              "type": "byte",
-              "index": false
+              "index": false,
+              "type": "byte"
             },
             "hour": {
-              "type": "byte",
-              "index": false
+              "index": false,
+              "type": "byte"
             },
             "month": {
-              "type": "byte",
-              "index": false
+              "index": false,
+              "type": "byte"
             },
             "week": {
-              "type": "byte",
-              "index": false
+              "index": false,
+              "type": "byte"
             },
             "year": {
-              "type": "short",
-              "index": false
+              "index": false,
+              "type": "short"
             }
           }
         },
         "place_ids": {
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          },
           "type": "integer"
         },
         "quality_grade": {
           "type": "keyword"
         },
         "site_id": {
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          },
           "type": "integer"
         },
         "taxon": {
           "properties": {
             "ancestor_ids": {
+              "fields": {
+                "keyword": {
+                  "type": "keyword"
+                }
+              },
               "type": "integer"
             },
             "iconic_taxon_id": {
+              "fields": {
+                "keyword": {
+                  "type": "keyword"
+                }
+              },
               "type": "integer"
             },
             "id": {
+              "fields": {
+                "keyword": {
+                  "type": "keyword"
+                }
+              },
               "type": "integer"
             },
             "is_active": {
@@ -188,8 +287,8 @@
               "type": "keyword"
             },
             "rank_level": {
-              "type": "scaled_float",
-              "scaling_factor": 100.0
+              "scaling_factor": 100.0,
+              "type": "scaled_float"
             }
           }
         },
@@ -197,6 +296,11 @@
           "type": "date"
         },
         "user_id": {
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          },
           "type": "integer"
         }
       }
@@ -213,12 +317,27 @@
     "taxon": {
       "properties": {
         "ancestor_ids": {
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          },
           "type": "integer"
         },
         "iconic_taxon_id": {
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          },
           "type": "integer"
         },
         "id": {
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          },
           "type": "integer"
         },
         "is_active": {
@@ -234,8 +353,8 @@
           "type": "keyword"
         },
         "rank_level": {
-          "type": "scaled_float",
-          "scaling_factor": 100.0
+          "scaling_factor": 100.0,
+          "type": "scaled_float"
         }
       }
     },
@@ -258,6 +377,11 @@
           "type": "date"
         },
         "id": {
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          },
           "type": "integer"
         },
         "login": {

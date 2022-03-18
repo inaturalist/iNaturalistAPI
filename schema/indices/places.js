@@ -14,26 +14,63 @@
       "type": "geo_shape"
     },
     "display_name": {
-      "type": "text",
-      "analyzer": "ascii_snowball_analyzer"
+      "analyzer": "ascii_snowball_analyzer",
+      "type": "text"
     },
     "display_name_autocomplete": {
-      "type": "text",
       "analyzer": "keyword_autocomplete_analyzer",
-      "search_analyzer": "keyword_analyzer"
+      "search_analyzer": "keyword_analyzer",
+      "type": "text"
     },
     "geometry_geojson": {
       "type": "geo_shape"
     },
     "id": {
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      },
       "type": "integer"
     },
     "location": {
       "type": "geo_point"
     },
     "name": {
-      "type": "text",
-      "analyzer": "ascii_snowball_analyzer"
+      "analyzer": "ascii_snowball_analyzer",
+      "type": "text"
+    },
+    "names": {
+      "properties": {
+        "exact": {
+          "type": "keyword"
+        },
+        "exact_ci": {
+          "analyzer": "keyword_analyzer",
+          "type": "text"
+        },
+        "locale": {
+          "type": "keyword"
+        },
+        "name": {
+          "analyzer": "ascii_snowball_analyzer",
+          "type": "text"
+        },
+        "name_autocomplete": {
+          "analyzer": "autocomplete_analyzer",
+          "search_analyzer": "standard_analyzer",
+          "type": "text"
+        },
+        "name_autocomplete_ja": {
+          "analyzer": "autocomplete_analyzer_ja",
+          "type": "text"
+        },
+        "name_ja": {
+          "analyzer": "kuromoji",
+          "type": "text"
+        }
+      },
+      "type": "nested"
     },
     "observations_count": {
       "type": "integer"
@@ -68,6 +105,15 @@
           "type": "boolean"
         }
       }
+    },
+    "uuid": {
+      "fields": {
+        "keyword": {
+          "ignore_above": 256,
+          "type": "keyword"
+        }
+      },
+      "type": "text"
     },
     "without_check_list": {
       "type": "boolean"

@@ -30,7 +30,7 @@ const Taxon = require( "../lib/models/taxon" );
 // test that specifies these before and after callbacks for all tests.
 
 before( async function ( ) {
-  this.timeout( 10000 );
+  this.timeout( 20000 );
   console.log( "Creating ES indices" );
   await testHelper.createIndices( );
   console.log( "Loading ES fixtures" );

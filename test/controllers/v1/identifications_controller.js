@@ -56,8 +56,8 @@ describe( "IdentificationsController", ( ) => {
     it( "filters by taxon_id", async ( ) => {
       const q = await Q( { taxon_id: 88 } );
       expect( _.find( q.filters, f => (
-        f.terms && f.terms["taxon.ancestor_ids"]
-          && f.terms["taxon.ancestor_ids"][0] === 88
+        f.terms && f.terms["taxon.ancestor_ids.keyword"]
+          && f.terms["taxon.ancestor_ids.keyword"][0] === 88
       ) ) ).to.not.be.undefined;
     } );
 
@@ -86,40 +86,40 @@ describe( "IdentificationsController", ( ) => {
     it( "filters by without_taxon_id", async ( ) => {
       const q = await Q( { without_taxon_id: 89 } );
       expect( _.find( q.inverse_filters, f => (
-        f.terms && f.terms["taxon.ancestor_ids"]
-          && f.terms["taxon.ancestor_ids"][0] === 89
+        f.terms && f.terms["taxon.ancestor_ids.keyword"]
+          && f.terms["taxon.ancestor_ids.keyword"][0] === 89
       ) ) ).to.not.be.undefined;
     } );
 
     it( "filters by without_observation_taxon_id", async ( ) => {
       const q = await Q( { without_observation_taxon_id: 90 } );
       expect( _.find( q.inverse_filters, f => (
-        f.terms && f.terms["observation.taxon.ancestor_ids"]
-          && f.terms["observation.taxon.ancestor_ids"][0] === 90
+        f.terms && f.terms["observation.taxon.ancestor_ids.keyword"]
+          && f.terms["observation.taxon.ancestor_ids.keyword"][0] === 90
       ) ) ).to.not.be.undefined;
     } );
 
     it( "filters by exact_taxon_id", async ( ) => {
       const q = await Q( { exact_taxon_id: 89 } );
       expect( _.find( q.filters, f => (
-        f.terms && f.terms["taxon.id"]
-          && f.terms["taxon.id"][0] === 89
+        f.terms && f.terms["taxon.id.keyword"]
+          && f.terms["taxon.id.keyword"][0] === 89
       ) ) ).to.not.be.undefined;
     } );
 
     it( "filters by exact_observation_taxon_id", async ( ) => {
       const q = await Q( { exact_observation_taxon_id: 89 } );
       expect( _.find( q.filters, f => (
-        f.terms && f.terms["observation.taxon.id"]
-          && f.terms["observation.taxon.id"][0] === 89
+        f.terms && f.terms["observation.taxon.id.keyword"]
+          && f.terms["observation.taxon.id.keyword"][0] === 89
       ) ) ).to.not.be.undefined;
     } );
 
     it( "filters by not_in_place", async ( ) => {
       const q = await Q( { not_in_place: 89 } );
       expect( _.find( q.inverse_filters, f => (
-        f.terms && f.terms["observation.place_ids"]
-          && f.terms["observation.place_ids"][0] === 89
+        f.terms && f.terms["observation.place_ids.keyword"]
+          && f.terms["observation.place_ids.keyword"][0] === 89
       ) ) ).to.not.be.undefined;
     } );
 

@@ -94,9 +94,9 @@ describe( "ObservationsController", ( ) => {
     it( "can apply params from project rules", async ( ) => {
       const p = await Project.findByID( 543 );
       const q = await Q( { inat: { apply_project_rules_for: p } } );
-      expect( q.filters ).to.deep.include( { terms: { place_ids: [222, 333] } } );
+      expect( q.filters ).to.deep.include( { terms: { "place_ids.keyword": [222, 333] } } );
       expect( q.filters ).to.deep.include( {
-        terms: { "taxon.ancestor_ids": [444, 555, 876, 987] }
+        terms: { "taxon.ancestor_ids.keyword": [444, 555, 876, 987] }
       } );
       expect( q.filters ).to.deep.include( { term: { captive: false } } );
       expect( q.filters ).to.deep.include( {
@@ -114,10 +114,10 @@ describe( "ObservationsController", ( ) => {
       const p = await Project.findByID( 543 );
       const q = await Q( { inat: { not_matching_project_rules_for: p } } );
       expect( q.grouped_inverse_filters ).to.deep.include( {
-        terms: { place_ids: [222, 333] }
+        terms: { "place_ids.keyword": [222, 333] }
       } );
       expect( q.grouped_inverse_filters ).to.deep.include( {
-        terms: { "taxon.ancestor_ids": [444, 555, 876, 987] }
+        terms: { "taxon.ancestor_ids.keyword": [444, 555, 876, 987] }
       } );
       expect( q.grouped_inverse_filters ).to.deep.include( { term: { captive: false } } );
       expect( q.grouped_inverse_filters ).to.deep.include( {
@@ -134,7 +134,7 @@ describe( "ObservationsController", ( ) => {
     it( "queries a list's taxon_ids", async ( ) => {
       const l = await List.findByID( 999 );
       const q = await Q( { inat: { list: l } } );
-      expect( q.filters ).to.deep.include( { terms: { "taxon.ancestor_ids": [876, 987] } } );
+      expect( q.filters ).to.deep.include( { terms: { "taxon.ancestor_ids.keyword": [876, 987] } } );
     } );
 
     //
@@ -184,12 +184,12 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by taxon_id", async ( ) => {
       const q = await Q( { taxon_id: 88 } );
-      expect( q.filters ).to.eql( [{ terms: { "taxon.ancestor_ids": [88] } }] );
+      expect( q.filters ).to.eql( [{ terms: { "taxon.ancestor_ids.keyword": [88] } }] );
     } );
 
     it( "filters by taxon_ids", async ( ) => {
       const q = await Q( { taxon_ids: [3, 4, 5] } );
-      expect( q.filters ).to.eql( [{ terms: { "taxon.ancestor_ids": [3, 4, 5] } }] );
+      expect( q.filters ).to.eql( [{ terms: { "taxon.ancestor_ids.keyword": [3, 4, 5] } }] );
     } );
 
     it( "turns has[] into params", async ( ) => {
@@ -241,13 +241,13 @@ describe( "ObservationsController", ( ) => {
       };
       await Promise.all( _.map( [
         { http_param: "rank", es_field: "taxon.rank" },
-        { http_param: "user_id", es_field: "user.id" },
+        { http_param: "user_id", es_field: "user.id.keyword" },
         { http_param: "user_login", es_field: "user.login" },
         { http_param: "day", es_field: "observed_on_details.day" },
         { http_param: "month", es_field: "observed_on_details.month" },
         { http_param: "year", es_field: "observed_on_details.year" },
-        { http_param: "place_id", es_field: "place_ids" },
-        { http_param: "site_id", es_field: "site_id" },
+        { http_param: "place_id", es_field: "place_ids.keyword" },
+        { http_param: "site_id", es_field: "site_id.keyword" },
         { http_param: "license", es_field: "license_code" },
         { http_param: "photo_license", es_field: ["photos.license_code", "photo_licenses"] },
         { http_param: "sound_license", es_field: ["sounds.license_code", "sound_licenses"] }
@@ -356,25 +356,25 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by project_id", async ( ) => {
       const q = await Q( { project_id: 3 } );
-      expect( q.filters ).to.eql( [{ terms: { project_ids: [3] } }] );
+      expect( q.filters ).to.eql( [{ terms: { "project_ids.keyword": [3] } }] );
     } );
 
     it( "filters by project_id and ignores bad pcid values", async ( ) => {
       const q = await Q( { project_id: 3, pcid: "bad" } );
-      expect( q.filters ).to.eql( [{ terms: { project_ids: [3] } }] );
+      expect( q.filters ).to.eql( [{ terms: { "project_ids.keyword": [3] } }] );
     } );
 
     it( "filters by project_id and pcid=true", async ( ) => {
       const q = await Q( { project_id: 3, pcid: "true" } );
       expect( q.filters ).to.eql( [
-        { terms: { project_ids: [3] } },
+        { terms: { "project_ids.keyword": [3] } },
         { terms: { project_ids_with_curator_id: [3] } }] );
     } );
 
     it( "filters by project_id and pcid=false", async ( ) => {
       const q = await Q( { project_id: 3, pcid: "false" } );
       expect( q.filters ).to.eql( [
-        { terms: { project_ids: [3] } },
+        { terms: { "project_ids.keyword": [3] } },
         { terms: { project_ids_without_curator_id: [3] } }] );
     } );
 
@@ -395,7 +395,7 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by project_ids", async ( ) => {
       const q = await Q( { project_ids: [4, 5] } );
-      expect( q.filters ).to.eql( [{ terms: { project_ids: [4, 5] } }] );
+      expect( q.filters ).to.eql( [{ terms: { "project_ids.keyword": [4, 5] } }] );
     } );
 
     it( "filters by lrank", async ( ) => {
@@ -469,7 +469,7 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by iconic_taxa", async ( ) => {
       const q = await Q( { iconic_taxa: ["Animalia", "Plantae"] } );
-      expect( q.filters ).to.eql( [{ terms: { "taxon.iconic_taxon_id": [103, 111] } }] );
+      expect( q.filters ).to.eql( [{ terms: { "taxon.iconic_taxon_id.keyword": [103, 111] } }] );
     } );
 
     it( "filters by unknown iconic_taxa", async ( ) => {
@@ -477,7 +477,7 @@ describe( "ObservationsController", ( ) => {
       expect( q.filters ).to.eql( [{
         bool: {
           should: [
-            { terms: { "taxon.iconic_taxon_id": [103, 111] } },
+            { terms: { "taxon.iconic_taxon_id.keyword": [103, 111] } },
             { bool: { must_not: { exists: { field: "taxon.iconic_taxon_id" } } } }
           ]
         }
@@ -555,7 +555,7 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by not_in_project", async ( ) => {
       const q = await Q( { not_in_project: [6, 7] } );
-      expect( q.inverse_filters ).to.eql( [{ terms: { project_ids: [6, 7] } }] );
+      expect( q.inverse_filters ).to.eql( [{ terms: { "project_ids.keyword": [6, 7] } }] );
     } );
 
     it( "filters by featured observation", async ( ) => {
@@ -653,7 +653,7 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by reviewed false", async ( ) => {
       const q = await Q( { reviewed: "false", viewer_id: 21 } );
-      expect( q.inverse_filters ).to.eql( [{ term: { reviewed_by: 21 } }] );
+      expect( q.inverse_filters ).to.eql( [{ terms: { reviewed_by: [21] } }] );
     } );
 
     it( "ignored bad values for reviewed", async ( ) => {
@@ -783,7 +783,7 @@ describe( "ObservationsController", ( ) => {
       const q = await Q( req );
       expect( q.filters[0] ).to.deep.eq( {
         terms: {
-          "taxon.ancestor_ids": [1]
+          "taxon.ancestor_ids.keyword": [1]
         }
       } );
       expect( q.filters[1].bool.should ).to.not.be.undefined;
@@ -793,7 +793,7 @@ describe( "ObservationsController", ( ) => {
           filter: [
             {
               terms: {
-                "taxon.ancestor_ids": ["1"]
+                "taxon.ancestor_ids.keyword": ["1"]
               }
             },
             {
@@ -813,7 +813,7 @@ describe( "ObservationsController", ( ) => {
         bool: {
           filter: [{
             terms: {
-              project_ids: ["12"]
+              "project_ids.keyword": ["12"]
             }
           }]
         }
