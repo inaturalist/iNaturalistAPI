@@ -320,14 +320,14 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by verifiable true", async ( ) => {
       const q = await Q( { verifiable: "true" } );
-      expect( q.filters ).to.eql( [
-        { terms: { quality_grade: ["needs_id", "research"] } }] );
+      expect( q.inverse_filters ).to.eql( [
+        { terms: { quality_grade: ["casual"] } }] );
     } );
 
     it( "filters by verifiable false", async ( ) => {
       const q = await Q( { verifiable: "false" } );
-      expect( q.inverse_filters ).to.eql( [
-        { terms: { quality_grade: ["needs_id", "research"] } }] );
+      expect( q.filters ).to.eql( [
+        { terms: { quality_grade: ["casual"] } }] );
     } );
 
     it( "filters by observed_on", async ( ) => {
@@ -417,6 +417,19 @@ describe( "ObservationsController", ( ) => {
       expect( q.filters ).to.eql( [{ terms: { quality_grade: ["research"] } }] );
       q = await Q( { quality_grade: "any" } );
       expect( q.filters ).to.be.empty;
+    } );
+
+    it( "applies no filters with quality_grade=research,needs_id,casual'", async ( ) => {
+      const q = await Q( { quality_grade: "research,needs_id,casual" } );
+      expect( q.filters ).to.be.empty;
+      expect( q.inverse_filters ).to.be.empty;
+    } );
+
+    it( "applies a more efficient filter for quality_grade=research,needs_id'", async ( ) => {
+      const q = await Q( { quality_grade: "research,needs_id" } );
+      expect( q.filters ).to.be.empty;
+      expect( q.inverse_filters ).to.eql( [
+        { terms: { quality_grade: ["casual"] } }] );
     } );
 
     it( "filters by identifications most_agree", async ( ) => {
@@ -795,17 +808,17 @@ describe( "ObservationsController", ( ) => {
               terms: {
                 "taxon.ancestor_ids.keyword": ["1"]
               }
-            },
+            }
+          ],
+          must_not: [
             {
               terms: {
                 quality_grade: [
-                  "needs_id",
-                  "research"
+                  "casual"
                 ]
               }
             }
-          ],
-          must_not: []
+          ]
         }
       } );
       // the "collection" project slug will be removed from project_id param
