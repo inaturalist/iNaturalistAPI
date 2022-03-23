@@ -1227,7 +1227,7 @@
           "user_id": 1,
           "user_ids": [1, 5, 6, 123, 121],
           "prefers_user_trust": true,
-          "observation_requirements_updated_at": "2020-01-01 00:00:00"
+          "observation_requirements_updated_at": "2021-01-01T00:00:00"
         },
         {
           "id": 2006,
