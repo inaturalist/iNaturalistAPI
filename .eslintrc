@@ -20,6 +20,7 @@
     "quotes": [2, "double"],
     "space-in-parens": [2, "always"],
     "no-param-reassign": 0,
-    "prefer-const": [2, { "destructuring": "all" }]
+    "prefer-const": [2, { "destructuring": "all" }],
+    "function-paren-newline": [2, "consistent"]
   }
 }

@@ -14,25 +14,30 @@
       "type": "keyword"
     },
     "notifier_id": {
-      "type": "integer"
+      "type": "keyword"
     },
     "notifier_type": {
       "type": "keyword"
     },
     "resource_id": {
-      "type": "integer"
+      "type": "keyword"
     },
     "resource_owner_id": {
-      "type": "integer"
+      "type": "keyword"
     },
     "resource_type": {
       "type": "keyword"
     },
     "subscriber_ids": {
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      },
       "type": "integer"
     },
     "viewed_subscriber_ids": {
-      "type": "integer"
+      "type": "keyword"
     }
   }
 }

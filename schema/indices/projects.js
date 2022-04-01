@@ -4,73 +4,73 @@
     "admins": {
       "properties": {
         "id": {
-          "type": "integer",
-          "index": false
+          "index": false,
+          "type": "integer"
         },
         "project_id": {
-          "type": "integer",
-          "index": false
+          "index": false,
+          "type": "integer"
         },
         "role": {
-          "type": "keyword",
-          "index": false
+          "index": false,
+          "type": "keyword"
         },
         "user_id": {
-          "type": "integer",
-          "index": false
+          "index": false,
+          "type": "integer"
         }
       }
     },
     "ancestor_place_ids": {
-      "type": "integer"
+      "type": "keyword"
     },
     "associated_place_ids": {
-      "type": "integer"
+      "type": "keyword"
     },
     "banner_color": {
-      "type": "keyword",
-      "index": false
+      "index": false,
+      "type": "keyword"
     },
     "created_at": {
       "type": "date"
     },
     "description": {
-      "type": "text",
-      "analyzer": "ascii_snowball_analyzer"
+      "analyzer": "ascii_snowball_analyzer",
+      "type": "text"
     },
     "flags": {
       "properties": {
         "comment": {
-          "type": "keyword",
-          "index": false
+          "index": false,
+          "type": "keyword"
         },
         "created_at": {
-          "type": "date",
-          "index": false
+          "index": false,
+          "type": "date"
         },
         "flag": {
-          "type": "keyword",
-          "index": false
+          "index": false,
+          "type": "keyword"
         },
         "id": {
-          "type": "integer",
-          "index": false
+          "index": false,
+          "type": "integer"
         },
         "resolved": {
-          "type": "boolean",
-          "index": false
+          "index": false,
+          "type": "boolean"
         },
         "resolver_id": {
-          "type": "integer",
-          "index": false
+          "index": false,
+          "type": "integer"
         },
         "updated_at": {
-          "type": "date",
-          "index": false
+          "index": false,
+          "type": "date"
         },
         "user_id": {
-          "type": "integer",
-          "index": false
+          "index": false,
+          "type": "integer"
         }
       }
     },
@@ -78,33 +78,38 @@
       "type": "geo_shape"
     },
     "header_image_contain": {
-      "type": "boolean",
-      "index": false
+      "index": false,
+      "type": "boolean"
     },
     "header_image_file_name": {
-      "type": "keyword",
-      "index": false
+      "index": false,
+      "type": "keyword"
     },
     "header_image_url": {
-      "type": "keyword",
-      "index": false
+      "index": false,
+      "type": "keyword"
     },
     "hide_title": {
-      "type": "boolean",
-      "index": false
+      "index": false,
+      "type": "boolean"
     },
     "hide_umbrella_map_flags": {
       "type": "boolean"
     },
     "icon": {
-      "type": "keyword",
-      "index": false
+      "index": false,
+      "type": "keyword"
     },
     "icon_file_name": {
-      "type": "keyword",
-      "index": false
+      "index": false,
+      "type": "keyword"
     },
     "id": {
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      },
       "type": "integer"
     },
     "last_post_at": {
@@ -113,14 +118,21 @@
     "location": {
       "type": "geo_point"
     },
+    "observation_requirements_updated_at": {
+      "index": false,
+      "type": "date"
+    },
     "observations_count": {
       "type": "integer"
     },
     "place_id": {
-      "type": "integer"
+      "type": "keyword"
     },
     "place_ids": {
-      "type": "integer"
+      "type": "keyword"
+    },
+    "prefers_user_trust": {
+      "type": "boolean"
     },
     "project_observation_fields": {
       "properties": {
@@ -136,25 +148,25 @@
               "type": "keyword"
             },
             "description": {
-              "type": "text",
-              "analyzer": "ascii_snowball_analyzer"
+              "analyzer": "ascii_snowball_analyzer",
+              "type": "text"
             },
             "description_autocomplete": {
-              "type": "text",
               "analyzer": "autocomplete_analyzer",
-              "search_analyzer": "standard_analyzer"
+              "search_analyzer": "standard_analyzer",
+              "type": "text"
             },
             "id": {
               "type": "integer"
             },
             "name": {
-              "type": "text",
-              "analyzer": "ascii_snowball_analyzer"
+              "analyzer": "ascii_snowball_analyzer",
+              "type": "text"
             },
             "name_autocomplete": {
-              "type": "text",
               "analyzer": "autocomplete_analyzer",
-              "search_analyzer": "standard_analyzer"
+              "search_analyzer": "standard_analyzer",
+              "type": "text"
             },
             "users_count": {
               "type": "integer"
@@ -173,7 +185,6 @@
       }
     },
     "project_observation_rules": {
-      "type": "nested",
       "properties": {
         "id": {
           "type": "integer"
@@ -187,7 +198,8 @@
         "operator": {
           "type": "keyword"
         }
-      }
+      },
+      "type": "nested"
     },
     "project_type": {
       "type": "keyword"
@@ -196,7 +208,6 @@
       "type": "integer"
     },
     "rule_preferences": {
-      "type": "nested",
       "properties": {
         "field": {
           "type": "keyword"
@@ -204,43 +215,50 @@
         "value": {
           "type": "text"
         }
-      }
+      },
+      "type": "nested"
     },
     "search_parameter_fields": {
       "properties": {
         "d1": {
-          "type": "date",
-          "format": "date_optional_time"
+          "format": "date_optional_time",
+          "type": "date"
         },
         "d2": {
-          "type": "date",
-          "format": "date_optional_time"
+          "format": "date_optional_time",
+          "type": "date"
         },
         "d2_date": {
-          "type": "date",
-          "format": "yyyy-MM-dd"
+          "format": "yyyy-MM-dd",
+          "type": "date"
+        },
+        "introduced": {
+          "type": "boolean"
         },
         "month": {
           "type": "byte"
         },
+        "native": {
+          "type": "boolean"
+        },
         "not_in_place": {
-          "type": "long"
+          "type": "keyword"
         },
         "not_user_id": {
-          "type": "long"
+          "type": "keyword"
         },
         "observed_on": {
-          "type": "date",
-          "format": "date_optional_time"
+          "format": "date_optional_time",
+          "type": "date"
         },
         "photos": {
           "type": "boolean"
         },
         "place_id": {
-          "type": "integer"
+          "type": "keyword"
         },
         "project_id": {
-          "type": "integer"
+          "type": "keyword"
         },
         "quality_grade": {
           "type": "keyword"
@@ -249,24 +267,23 @@
           "type": "boolean"
         },
         "taxon_id": {
-          "type": "integer"
+          "type": "keyword"
         },
         "term_id": {
-          "type": "long"
+          "type": "keyword"
         },
         "term_value_id": {
-          "type": "long"
+          "type": "keyword"
         },
         "user_id": {
-          "type": "integer"
+          "type": "keyword"
         },
         "without_taxon_id": {
-          "type": "long"
+          "type": "keyword"
         }
       }
     },
     "search_parameters": {
-      "type": "nested",
       "properties": {
         "field": {
           "type": "keyword"
@@ -278,8 +295,8 @@
           "type": "boolean"
         },
         "value_date": {
-          "type": "date",
-          "format": "date_optional_time"
+          "format": "date_optional_time",
+          "type": "date"
         },
         "value_keyword": {
           "type": "keyword"
@@ -287,10 +304,10 @@
         "value_number": {
           "type": "long"
         }
-      }
+      },
+      "type": "nested"
     },
     "site_features": {
-      "type": "nested",
       "properties": {
         "featured_at": {
           "type": "date"
@@ -299,37 +316,46 @@
           "type": "boolean"
         },
         "site_id": {
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          },
           "type": "short"
         },
         "updated_at": {
           "type": "date"
         }
-      }
+      },
+      "type": "nested"
     },
     "slug": {
-      "type": "text",
-      "analyzer": "keyword_analyzer"
+      "analyzer": "keyword_analyzer",
+      "type": "text"
     },
     "spam": {
       "type": "boolean"
     },
     "subproject_ids": {
-      "type": "long"
+      "type": "integer"
     },
     "terms": {
-      "type": "text",
-      "index": false
+      "index": false,
+      "type": "text"
     },
     "title": {
-      "type": "text",
-      "analyzer": "ascii_snowball_analyzer"
+      "analyzer": "ascii_snowball_analyzer",
+      "type": "text"
     },
     "title_autocomplete": {
-      "type": "text",
       "analyzer": "autocomplete_analyzer",
-      "search_analyzer": "standard_analyzer"
+      "search_analyzer": "standard_analyzer",
+      "type": "text"
     },
     "title_exact": {
+      "type": "keyword"
+    },
+    "umbrella_project_ids": {
       "type": "keyword"
     },
     "universal_search_rank": {
@@ -339,10 +365,10 @@
       "type": "date"
     },
     "user_id": {
-      "type": "integer"
+      "type": "keyword"
     },
     "user_ids": {
-      "type": "integer"
+      "type": "keyword"
     }
   }
 }

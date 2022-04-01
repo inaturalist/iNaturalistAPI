@@ -8,25 +8,30 @@
       "type": "keyword"
     },
     "description": {
-      "type": "text",
-      "analyzer": "ascii_snowball_analyzer"
+      "analyzer": "ascii_snowball_analyzer",
+      "type": "text"
     },
     "description_autocomplete": {
-      "type": "text",
       "analyzer": "autocomplete_analyzer",
-      "search_analyzer": "standard_analyzer"
+      "search_analyzer": "standard_analyzer",
+      "type": "text"
     },
     "id": {
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      },
       "type": "integer"
     },
     "name": {
-      "type": "text",
-      "analyzer": "ascii_snowball_analyzer"
+      "analyzer": "ascii_snowball_analyzer",
+      "type": "text"
     },
     "name_autocomplete": {
-      "type": "text",
       "analyzer": "autocomplete_analyzer",
-      "search_analyzer": "standard_analyzer"
+      "search_analyzer": "standard_analyzer",
+      "type": "text"
     },
     "users_count": {
       "type": "integer"

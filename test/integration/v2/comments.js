@@ -2,12 +2,15 @@ const { expect } = require( "chai" );
 const request = require( "supertest" );
 const nock = require( "nock" );
 const jwt = require( "jsonwebtoken" );
-const config = require( "../../../config.js" );
+const config = require( "../../../config" );
 const app = require( "../../../app" );
 
 describe( "Comments", ( ) => {
-  const token = jwt.sign( { user_id: 333 }, config.jwtSecret || "secret",
-    { algorithm: "HS512" } );
+  const token = jwt.sign(
+    { user_id: 333 },
+    config.jwtSecret || "secret",
+    { algorithm: "HS512" }
+  );
   const c = {
     id: 123,
     uuid: "dcd68b65-e5ae-4581-8cea-5788cbefe53d"
@@ -20,9 +23,15 @@ describe( "Comments", ( ) => {
       request( app ).post( "/v2/comments" )
         .set( "Authorization", token )
         .set( "Content-Type", "application/json" )
-        // it doesn't really matter what we post since we're just stubbing the
-        // Rails app to return obs 6 to load from the ES index
-        .send( { comment: { } } )
+        // Actual values of what we send don't matter since we're mocking the
+        // Rails response, but we need it to pass request schema validation
+        .send( {
+          comment: {
+            parent_type: "Observation",
+            parent_id: "cabbd853-39c0-429c-86f1-b36063d3d475",
+            body: "this here's a comment"
+          }
+        } )
         .expect( 200 )
         .expect( res => {
           const resComment = res.body.results[0];

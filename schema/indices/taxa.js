@@ -13,12 +13,12 @@
     "colors": {
       "properties": {
         "id": {
-          "type": "byte",
-          "index": false
+          "index": false,
+          "type": "byte"
         },
         "value": {
-          "type": "keyword",
-          "index": false
+          "index": false,
+          "type": "keyword"
         }
       }
     },
@@ -37,42 +37,42 @@
     "default_photo": {
       "properties": {
         "attribution": {
-          "type": "keyword",
-          "index": false
+          "index": false,
+          "type": "keyword"
         },
         "flags": {
           "properties": {
             "comment": {
-              "type": "keyword",
-              "index": false
+              "index": false,
+              "type": "keyword"
             },
             "created_at": {
-              "type": "date",
-              "index": false
+              "index": false,
+              "type": "date"
             },
             "flag": {
-              "type": "keyword",
-              "index": false
+              "index": false,
+              "type": "keyword"
             },
             "id": {
-              "type": "integer",
-              "index": false
+              "index": false,
+              "type": "integer"
             },
             "resolved": {
-              "type": "boolean",
-              "index": false
+              "index": false,
+              "type": "boolean"
             },
             "resolver_id": {
-              "type": "integer",
-              "index": false
+              "index": false,
+              "type": "integer"
             },
             "updated_at": {
-              "type": "date",
-              "index": false
+              "index": false,
+              "type": "date"
             },
             "user_id": {
-              "type": "integer",
-              "index": false
+              "index": false,
+              "type": "integer"
             }
           }
         },
@@ -80,32 +80,32 @@
           "type": "integer"
         },
         "license_code": {
-          "type": "keyword",
-          "index": false
+          "index": false,
+          "type": "keyword"
         },
         "medium_url": {
-          "type": "keyword",
-          "index": false
+          "index": false,
+          "type": "keyword"
         },
         "original_dimensions": {
           "properties": {
             "height": {
-              "type": "short",
-              "index": false
+              "index": false,
+              "type": "short"
             },
             "width": {
-              "type": "short",
-              "index": false
+              "index": false,
+              "type": "short"
             }
           }
         },
         "square_url": {
-          "type": "keyword",
-          "index": false
+          "index": false,
+          "type": "keyword"
         },
         "url": {
-          "type": "keyword",
-          "index": false
+          "index": false,
+          "type": "keyword"
         }
       }
     },
@@ -115,19 +115,29 @@
     "flag_counts": {
       "properties": {
         "resolved": {
-          "type": "short",
-          "index": false
+          "index": false,
+          "type": "short"
         },
         "unresolved": {
-          "type": "short",
-          "index": false
+          "index": false,
+          "type": "short"
         }
       }
     },
     "iconic_taxon_id": {
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      },
       "type": "integer"
     },
     "id": {
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      },
       "type": "integer"
     },
     "is_active": {
@@ -136,24 +146,24 @@
     "listed_taxa": {
       "properties": {
         "establishment_means": {
-          "type": "keyword",
-          "index": false
+          "index": false,
+          "type": "keyword"
         },
         "id": {
-          "type": "integer",
-          "index": false
+          "index": false,
+          "type": "integer"
         },
         "occurrence_status_level": {
-          "type": "byte",
-          "index": false
+          "index": false,
+          "type": "byte"
         },
         "place_id": {
-          "type": "integer",
-          "index": false
+          "index": false,
+          "type": "integer"
         },
         "user_id": {
-          "type": "integer",
-          "index": false
+          "index": false,
+          "type": "integer"
         }
       }
     },
@@ -164,18 +174,17 @@
       "type": "integer"
     },
     "name": {
-      "type": "text",
-      "analyzer": "ascii_snowball_analyzer"
+      "analyzer": "ascii_snowball_analyzer",
+      "type": "text"
     },
     "names": {
-      "type": "nested",
       "properties": {
         "exact": {
           "type": "keyword"
         },
         "exact_ci": {
-          "type": "text",
-          "analyzer": "keyword_analyzer"
+          "analyzer": "keyword_analyzer",
+          "type": "text"
         },
         "is_valid": {
           "type": "boolean"
@@ -184,21 +193,21 @@
           "type": "keyword"
         },
         "name": {
-          "type": "text",
-          "analyzer": "ascii_snowball_analyzer"
+          "analyzer": "ascii_snowball_analyzer",
+          "type": "text"
         },
         "name_autocomplete": {
-          "type": "text",
           "analyzer": "autocomplete_analyzer",
-          "search_analyzer": "standard_analyzer"
+          "search_analyzer": "standard_analyzer",
+          "type": "text"
         },
         "name_autocomplete_ja": {
-          "type": "text",
-          "analyzer": "autocomplete_analyzer_ja"
+          "analyzer": "autocomplete_analyzer_ja",
+          "type": "text"
         },
         "name_ja": {
-          "type": "text",
-          "analyzer": "kuromoji"
+          "analyzer": "kuromoji",
+          "type": "text"
         },
         "place_taxon_names": {
           "properties": {
@@ -213,13 +222,23 @@
         "position": {
           "type": "short"
         }
-      }
+      },
+      "type": "nested"
     },
     "observations_count": {
       "type": "integer"
     },
     "parent_id": {
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      },
       "type": "integer"
+    },
+    "photos_locked": {
+      "index": false,
+      "type": "boolean"
     },
     "place_ids": {
       "type": "integer"
@@ -228,8 +247,8 @@
       "type": "keyword"
     },
     "rank_level": {
-      "type": "scaled_float",
-      "scaling_factor": 100.0
+      "scaling_factor": 100.0,
+      "type": "scaled_float"
     },
     "statuses": {
       "properties": {
@@ -253,6 +272,9 @@
         },
         "status_name": {
           "type": "keyword"
+        },
+        "user_id": {
+          "type": "integer"
         }
       }
     },
@@ -262,48 +284,48 @@
     "taxon_photos": {
       "properties": {
         "license_code": {
-          "type": "keyword",
-          "index": false
+          "index": false,
+          "type": "keyword"
         },
         "photo": {
           "properties": {
             "attribution": {
-              "type": "keyword",
-              "index": false
+              "index": false,
+              "type": "keyword"
             },
             "flags": {
               "properties": {
                 "comment": {
-                  "type": "keyword",
-                  "index": false
+                  "index": false,
+                  "type": "keyword"
                 },
                 "created_at": {
-                  "type": "date",
-                  "index": false
+                  "index": false,
+                  "type": "date"
                 },
                 "flag": {
-                  "type": "keyword",
-                  "index": false
+                  "index": false,
+                  "type": "keyword"
                 },
                 "id": {
-                  "type": "integer",
-                  "index": false
+                  "index": false,
+                  "type": "integer"
                 },
                 "resolved": {
-                  "type": "boolean",
-                  "index": false
+                  "index": false,
+                  "type": "boolean"
                 },
                 "resolver_id": {
-                  "type": "integer",
-                  "index": false
+                  "index": false,
+                  "type": "integer"
                 },
                 "updated_at": {
-                  "type": "date",
-                  "index": false
+                  "index": false,
+                  "type": "date"
                 },
                 "user_id": {
-                  "type": "integer",
-                  "index": false
+                  "index": false,
+                  "type": "integer"
                 }
               }
             },
@@ -311,62 +333,62 @@
               "type": "integer"
             },
             "large_url": {
-              "type": "keyword",
-              "index": false
+              "index": false,
+              "type": "keyword"
             },
             "license_code": {
-              "type": "keyword",
-              "index": false
+              "index": false,
+              "type": "keyword"
             },
             "medium_url": {
-              "type": "keyword",
-              "index": false
+              "index": false,
+              "type": "keyword"
             },
             "native_page_url": {
-              "type": "keyword",
-              "index": false
+              "index": false,
+              "type": "keyword"
             },
             "native_photo_id": {
-              "type": "keyword",
-              "index": false
+              "index": false,
+              "type": "keyword"
             },
             "original_dimensions": {
               "properties": {
                 "height": {
-                  "type": "short",
-                  "index": false
+                  "index": false,
+                  "type": "short"
                 },
                 "width": {
-                  "type": "short",
-                  "index": false
+                  "index": false,
+                  "type": "short"
                 }
               }
             },
             "original_url": {
-              "type": "keyword",
-              "index": false
+              "index": false,
+              "type": "keyword"
             },
             "small_url": {
-              "type": "keyword",
-              "index": false
+              "index": false,
+              "type": "keyword"
             },
             "square_url": {
-              "type": "keyword",
-              "index": false
+              "index": false,
+              "type": "keyword"
             },
             "type": {
-              "type": "keyword",
-              "index": false
+              "index": false,
+              "type": "keyword"
             },
             "url": {
-              "type": "keyword",
-              "index": false
+              "index": false,
+              "type": "keyword"
             }
           }
         },
         "taxon_id": {
-          "type": "integer",
-          "index": false
+          "index": false,
+          "type": "integer"
         }
       }
     },
@@ -376,9 +398,12 @@
     "universal_search_rank": {
       "type": "integer"
     },
+    "uuid": {
+      "type": "keyword"
+    },
     "wikipedia_url": {
-      "type": "keyword",
-      "index": false
+      "index": false,
+      "type": "keyword"
     }
   }
 }

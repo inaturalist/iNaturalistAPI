@@ -931,7 +931,6 @@ describe( "Observations", ( ) => {
           );
           request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", token )
-            .expect( 200 )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).to.include( obsByUserWhoTrustsCurator.id );
             } )
@@ -945,7 +944,6 @@ describe( "Observations", ( ) => {
           );
           request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", token )
-            .expect( 200 )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).not.to.include( obsByUserWhoDoesNotTrustsCurator.id );
             } )
@@ -959,7 +957,6 @@ describe( "Observations", ( ) => {
           );
           request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", token )
-            .expect( 200 )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).to.include( obsByUserWhoDoesNotTrustsCurator.id );
             } )
@@ -973,7 +970,6 @@ describe( "Observations", ( ) => {
           );
           request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", token )
-            .expect( 200 )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).not.to.include( obs.id );
             } )
@@ -987,7 +983,6 @@ describe( "Observations", ( ) => {
           );
           request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", token )
-            .expect( 200 )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).not.to.include( obs.id );
             } )
@@ -1001,7 +996,6 @@ describe( "Observations", ( ) => {
           );
           request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", token )
-            .expect( 200 )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).to.include( obs.id );
             } )
@@ -1016,7 +1010,6 @@ describe( "Observations", ( ) => {
           expect( obs.geoprivacy ).to.eq( "obscured" );
           request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", token )
-            .expect( 200 )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).not.to.include( obs.id );
             } )
@@ -1032,7 +1025,6 @@ describe( "Observations", ( ) => {
           expect( obs.geoprivacy ).to.be.undefined;
           request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", token )
-            .expect( 200 )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).to.include( obs.id );
             } )
@@ -1052,7 +1044,6 @@ describe( "Observations", ( ) => {
           );
           request( app ).get( `/v1/observations?project_id=${proj.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", tok )
-            .expect( 200 )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).not.to.include( obs.id );
             } )
