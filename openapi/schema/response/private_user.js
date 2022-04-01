@@ -6,12 +6,14 @@ module.exports = user.append( {
   blocked_user_ids: Joi.array( ).items(
     Joi.number( ).integer( )
   ).valid( null ),
+  data_transfer_consent: Joi.boolean( ).valid( true, null ),
   email: Joi.string( ).valid( null ),
   locale: Joi.string( ).valid( null ),
   login: Joi.string( ),
   muted_user_ids: Joi.array( ).items(
     Joi.number( ).integer( )
   ).valid( null ),
+  pi_consent: Joi.boolean( ).valid( true, null ),
   place_id: Joi.number( ).integer( ).valid( null ),
   preferences: Joi.object( ).keys( {
     prefers_community_taxa: Joi.boolean( ),
