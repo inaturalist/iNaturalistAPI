@@ -178,7 +178,7 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it.only( "accepts multiple place UUIDs", done => {
+    it( "accepts multiple place UUIDs", done => {
       const uuids = fixtures.elasticsearch.places.place.slice( 0, 2 ).map( p => p.uuid );
       request( app ).get( `/v2/observations?place_id=${uuids.join( "," )}` ).expect( res => {
         expect( res.body.results[0].uuid ).to.not.be.undefined;
@@ -201,7 +201,7 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it.only( "accepts multiple place UUIDs with X-HTTP-Method-Override", done => {
+    it( "accepts multiple place UUIDs with X-HTTP-Method-Override", done => {
       const uuids = fixtures.elasticsearch.places.place.slice( 0, 2 ).map( p => p.uuid );
       request( app )
         .post( "/v2/observations" )

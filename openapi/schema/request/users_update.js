@@ -9,6 +9,18 @@ module.exports = Joi.object( ).keys( {
     description: Joi.string( ),
     time_zone: Joi.string( ),
     locale: Joi.string( ),
+    pi_consent: Joi.boolean( ).valid( true, null )
+      .description( `
+        Whether the user consents to the storage of their personal
+        information. The only way to revoke this consent is to delete the
+        account.
+      ` ),
+    data_transfer_consent: Joi.boolean( ).valid( true, null )
+      .description( `
+        Whether the user consents to the transfer of their personal
+        information to the United States. The only way to revoke this consent
+        is to delete the account.
+      ` ),
     prefers_automatic_taxonomic_changes: Joi.boolean( ),
     prefers_comment_email_notification: Joi.boolean( ),
     prefers_common_names: Joi.boolean( ),

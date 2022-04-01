@@ -3,7 +3,7 @@ const fs = require( "fs" );
 const jwt = require( "jsonwebtoken" );
 const nock = require( "nock" );
 const request = require( "supertest" );
-const config = require( "../../../config.js" );
+const config = require( "../../../config" );
 const app = require( "../../../app" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );

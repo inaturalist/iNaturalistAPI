@@ -200,12 +200,14 @@ describe( "Users", ( ) => {
 
     _.each( [
       "created_at",
+      "data_transfer_consent",
       "description",
       "email",
       "id",
       "login",
       "monthly_supporter",
       "name",
+      "pi_consent",
       "preferred_observation_fields_by",
       "preferred_observation_license",
       "preferred_photo_license",
@@ -235,8 +237,11 @@ describe( "Users", ( ) => {
       "updated_at"
     ], a => {
       it( `returns ${a}`, done => {
-        const token = jwt.sign( { user_id: 1 }, config.jwtSecret || "secret",
-          { algorithm: "HS512" } );
+        const token = jwt.sign(
+          { user_id: 1 },
+          config.jwtSecret || "secret",
+          { algorithm: "HS512" }
+        );
         request( app ).get( "/v1/users/me" ).set( "Authorization", token )
           .expect( 200 )
           .expect( res => {
