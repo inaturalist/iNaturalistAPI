@@ -1804,38 +1804,56 @@
     ],
     "friendships": [
       {
+        "id": 1,
         "user_id": 126,
         "friend_id": 125,
-        "trust": true
+        "trust": true,
+        "created_at": "2021-10-08 01:00:00",
+        "updated_at": "2021-10-08 01:00:00"
       },
       {
+        "id": 2,
         "user_id": 127,
         "friend_id": 123,
-        "trust": true
+        "trust": true,
+        "created_at": "2021-10-08 01:00:00",
+        "updated_at": "2021-10-08 01:00:00"
       },
       {
+        "id": 3,
         "user_id": 126,
         "friend_id": 2020110501,
         "trust": false,
-        "following": true
+        "following": true,
+        "created_at": "2021-10-08 01:00:00",
+        "updated_at": "2021-10-08 01:00:00"
       },
       {
+        "id": 4,
         "user_id": 2020110501,
         "friend_id": 126,
         "trust": true,
-        "following": true
+        "following": true,
+        "created_at": "2021-10-08 01:00:00",
+        "updated_at": "2021-10-08 01:00:00"
       },
       {
+        "id": 5,
         "user_id": 126,
         "friend_id": 2020111201,
         "trust": true,
-        "following": true
+        "following": true,
+        "created_at": "2021-10-08 01:00:00",
+        "updated_at": "2021-10-08 01:00:00"
       },
       {
+        "id": 6,
         "user_id": 2020111201,
         "friend_id": 126,
         "trust": false,
-        "following": true
+        "following": true,
+        "created_at": "2021-10-08 01:00:00",
+        "updated_at": "2021-10-08 01:00:00"
       }
     ],
     "identifications": [
