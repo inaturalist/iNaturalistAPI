@@ -7,10 +7,6 @@ const relationshipsCreateSchema = require( "../../schema/request/relationships_c
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    // if ( req.originalMethod === "POST" ) {
-    //   req.originalQuery = req.query;
-    //   req.query = _.mapValues( req.body, v => v.toString( ) );
-    // }
     const results = await relationshipsController.index( req );
     sendWrapper( req, res, null, results );
   }
