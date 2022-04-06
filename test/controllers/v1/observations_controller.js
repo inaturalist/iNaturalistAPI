@@ -710,6 +710,16 @@ describe( "ObservationsController", ( ) => {
       expect( q.inverse_filters ).to.eql( [{ exists: { field: "photo_licenses" } }] );
     } );
 
+    it( "filters by month", async ( ) => {
+      const q = await Q( { month: [1, 2] } );
+      expect( q.filters ).to.eql( [{ terms: { "observed_on_details.month": [1, 2] } }] );
+    } );
+
+    it( "does not add a filter when all months are requested", async ( ) => {
+      const q = await Q( { month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] } );
+      expect( q.filters ).to.be.empty;
+    } );
+
     //
     // Sorting
     //
