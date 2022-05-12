@@ -6,8 +6,10 @@ const user = require( "./user" );
 
 module.exports = Joi.object( ).keys( {
   score: Joi.number( ),
-  type: Joi.string( ),
+  type: Joi.string( ).required( ),
   matches: Joi.array( ).items( Joi.string( ) ),
-  // TODO: try to use OpenAPI discriminators to get per-type validation working
-  record: Joi.any( )
+  place: place.unknown( true ),
+  project: project.unknown( true ),
+  taxon: taxon.unknown( true ),
+  user: user.unknown( true )
 } ).unknown( true );

@@ -49,7 +49,7 @@ after( async function ( ) {
 
 beforeEach( ( ) => {
   inaturalistjs.setConfig( {
-    apiURL: "http://localhost:4000/v1",
+    apiURL: "http://localhost:3000",
     writeApiURL: "http://localhost:3000"
   } );
 } );

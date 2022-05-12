@@ -16,5 +16,5 @@ module.exports = Joi.object( ).keys( {
   fields: Joi.any( )
     .description( "Attribute fields to return in the response" )
     .example( "species_guess,observed_on" )
-    .default( "record.id" )
+    .default( "place,project,taxon,user" )
 } );

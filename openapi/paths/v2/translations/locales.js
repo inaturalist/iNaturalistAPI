@@ -1,20 +1,17 @@
 const _ = require( "lodash" );
-const transform = require( "../../joi_to_openapi_parameter" );
-const SearchController = require( "../../../lib/controllers/v2/search_controller" );
-const searchSchema = require( "../../schema/request/search" );
+const TranslationsController = require( "../../../../lib/controllers/v2/translations_controller" );
+const translationsLocalesFetch = require( "../../../schema/request/translations_locales" );
+const transform = require( "../../../joi_to_openapi_parameter" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    const results = await SearchController.search( req );
+    const results = await TranslationsController.locales( req );
     sendWrapper( req, res, null, results );
   }
 
   GET.apiDoc = {
-    tags: ["Search"],
-    summary: "Given zero to many of following parameters, returns object matching the search criteria",
-    security: [{
-      userJwtOptional: []
-    }],
+    tags: ["Sites"],
+    summary: "Return site translated locales",
     parameters: [
       {
         in: "header",
@@ -23,16 +20,16 @@ module.exports = sendWrapper => {
           type: "string"
         }
       }
-    ].concat( _.map( searchSchema.$_terms.keys, child => (
+    ].concat( _.map( translationsLocalesFetch.$_terms.keys, child => (
       transform( child.schema.label( child.key ) )
     ) ) ),
     responses: {
       200: {
-        description: "A array of results",
+        description: "A list of locales",
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/ResultsSearch"
+              $ref: "#/components/schemas/ResultsTranslationsLocales"
             }
           }
         }

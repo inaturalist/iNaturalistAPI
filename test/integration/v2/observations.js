@@ -5,6 +5,7 @@ const request = require( "supertest" );
 const nock = require( "nock" );
 const sinon = require( "sinon" );
 const jwt = require( "jsonwebtoken" );
+const inaturalistjs = require( "inaturalistjs" );
 const config = require( "../../../config.js" );
 const app = require( "../../../app" );
 const ObservationsController = require( "../../../lib/controllers/v1/observations_controller" );
@@ -281,35 +282,44 @@ describe( "Observations", ( ) => {
     } );
   } );
 
-  // // This test won't work b/c for some reason nock won't stub requests made by
-  // // inatjs ~~ kueda 20200418
-  // describe.only( "taxon_summary", ( ) => {
-  //   it( "should include a relevant listed taxon", done => {
-  //     const o = fixtures.elasticsearch.observations.observation[0];
-  //     const railsResponse = {
-  //       conservation_status: {},
-  //       listed_taxon: {
-  //         establishment_means_label: "introduced"
-  //       },
-  //       wikipedia_summary: "bar"
-  //     };
-  //     nock( "http://localhost:3000" )
-  //       .get( `/observations/${o.id}/taxon_summary` )
-  //       .reply( 200, railsResponse );
-  //     request( app ).get( `/v2/observations/${o.uuid}/taxon_summary` )
-  //       .set( "Content-Type", "application/json" )
-  //       .expect( 200 )
-  //       .expect( res => {
-  //         expect( res.body.listed_taxon.establishment_means_label )
-  //           .to.eq( railsResponse.listed_taxon.establishment_means_label );
-  //       } )
-  //       .expect( 200, done );
-  //   } );
-  // } );
+  describe( "taxon_summary", ( ) => {
+    it( "should include a relevant listed taxon", done => {
+      const o = fixtures.elasticsearch.observations.observation[0];
+      const railsResponse = {
+        conservation_status: {},
+        listed_taxon: {
+          id: 1,
+          establishment_means_label: "introduced"
+        },
+        wikipedia_summary: "bar"
+      };
+      nock( "http://localhost:3000" )
+        .get( `/observations/${o.id}/taxon_summary` )
+        .reply( 200, railsResponse );
+      request( app ).get( `/v2/observations/${o.uuid}/taxon_summary` )
+        .set( "Content-Type", "application/json" )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.listed_taxon.establishment_means_label )
+            .to.eq( railsResponse.listed_taxon.establishment_means_label );
+        } )
+        .expect( 200, done );
+    } );
+  } );
 
   describe( "fave", ( ) => {
     const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
       { algorithm: "HS512" } );
+    beforeEach( ( ) => {
+      inaturalistjs.setConfig( {
+        apiURL: "http://localhost:4000/v1"
+      } );
+    } );
+    afterEach( ( ) => {
+      inaturalistjs.setConfig( {
+        apiURL: "http://localhost:3000"
+      } );
+    } );
     it( "returns an empty success on POST", done => {
       nock( "http://localhost:3000" )
         .post( `/votes/vote/observation/${fixtureObs.id}` )
