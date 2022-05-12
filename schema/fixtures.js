@@ -2232,7 +2232,9 @@
         "file_updated_at": "2019-12-30 19:37:51.542313",
         "uuid": "e1a058c7-258b-4250-90a8-6902aa310312",
         "file_prefix_id": 1,
-        "file_extension_id": 1
+        "file_extension_id": 1,
+        "width": 400,
+        "height": 300
       },
       {
         "id": 2020101601,
@@ -2251,7 +2253,9 @@
         "file_updated_at": "2019-12-30 19:37:51.542313",
         "uuid": "a24ccc42-fb8a-4585-972b-7cd4f5ffcbad",
         "file_prefix_id": 1,
-        "file_extension_id": 1
+        "file_extension_id": 1,
+        "width": 400,
+        "height": 300
       },
       {
         "id": 2021100801,
@@ -2268,7 +2272,9 @@
         "file_updated_at": "2021-10-08 01:00:00",
         "uuid": "a9d9a70f-caf0-4a04-9a3a-037cb8ba842d",
         "file_prefix_id": 1,
-        "file_extension_id": 1
+        "file_extension_id": 1,
+        "width": 400,
+        "height": 300
       }
     ],
     "places": [

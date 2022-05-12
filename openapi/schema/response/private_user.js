@@ -54,4 +54,4 @@ module.exports = user.append( {
   search_place_id: Joi.number( ).integer( ).valid( null ),
   time_zone: Joi.string( ).valid( null ),
   universal_search_rank: Joi.number( ).integer( )
-} );
+} ).meta( { className: "PrivateUser" } );

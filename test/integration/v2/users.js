@@ -155,4 +155,31 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "update", ( ) => {
+    const currentUser = fixtures.elasticsearch.users.user[0];
+    const token = jwt.sign( { user_id: currentUser.id },
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+
+    it( "should fail without auth", done => {
+      request( app ).put( "/v2/users/update" )
+        .expect( 401, done );
+    } );
+
+    it( "should return JSON", done => {
+      nock( "http://localhost:3000" )
+        .put( `/users/${currentUser.login}` )
+        .reply( 200, { id: currentUser.id, login: currentUser.login } );
+      request( app )
+        .put( `/v2/users/${currentUser.login}` )
+        .set( "Authorization", token )
+        .expect( "Content-Type", /json/ )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.login ).to.eq( currentUser.login );
+        } )
+        .expect( 200, done );
+    } );
+  } );
 } );

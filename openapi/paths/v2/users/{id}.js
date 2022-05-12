@@ -32,6 +32,9 @@ module.exports = sendWrapper => {
             }
           }
         }
+      },
+      default: {
+        $ref: "#/components/responses/Error"
       }
     }
   };
@@ -73,6 +76,9 @@ module.exports = sendWrapper => {
             }
           }
         }
+      },
+      default: {
+        $ref: "#/components/responses/Error"
       }
     }
   };

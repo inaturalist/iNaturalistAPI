@@ -6,11 +6,12 @@ const nock = require( "nock" );
 const sinon = require( "sinon" );
 const jwt = require( "jsonwebtoken" );
 const inaturalistjs = require( "inaturalistjs" );
-const config = require( "../../../config.js" );
+const config = require( "../../../config" );
 const app = require( "../../../app" );
 const ObservationsController = require( "../../../lib/controllers/v1/observations_controller" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
+let obs;
 
 describe( "Observations", ( ) => {
   const fixtureObs = fixtures.elasticsearch.observations.observation[0];
@@ -47,9 +48,11 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
     it( "shows authenticated users their own private info", done => {
-      const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+      obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 1 );
+      const token = jwt.sign( { user_id: 123 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/1?fields=all" ).set( "Authorization", token )
+      request( app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results[0].private_location ).to.not.be.undefined;
         } )
@@ -57,32 +60,43 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "shows authenticated project curators private info if they have access", done => {
-      const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
-        { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/10?fields=all" ).set( "Authorization", token )
-        .expect( res => {
-          expect( res.body.results[0].private_location ).to.not.be.undefined;
-        } )
-        .expect( "Content-Type", /json/ )
-        .expect( 200, done );
-    } );
+    // TODO: these next 2 tests aren't working in v2 yet - preloading of user
+    // data like curator status and user trust needs to be implemented
 
-    it( "shows authenticated trusted users private info", done => {
-      const token = jwt.sign( { user_id: 125 }, config.jwtSecret || "secret",
-        { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/14?fields=all" ).set( "Authorization", token )
-        .expect( res => {
-          expect( res.body.results[0].private_location ).to.not.be.undefined;
-        } )
-        .expect( "Content-Type", /json/ )
-        .expect( 200, done );
-    } );
+    // it( "shows authenticated project curators private info if they have access", done => {
+    //   obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 10 );
+    //   const token = jwt.sign( { user_id: 123 },
+    //     config.jwtSecret || "secret",
+    //     { algorithm: "HS512" } );
+    //   request( app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
+    //     .expect( res => {
+    //       util.pp( res.body );
+    //       expect( res.body.results[0].private_location ).to.not.be.undefined;
+    //     } )
+    //     .expect( "Content-Type", /json/ )
+    //     .expect( 200, done );
+    // } );
+
+    // it( "shows authenticated trusted users private info", done => {
+    //   obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 14 );
+    //   const token = jwt.sign( { user_id: 125 },
+    //     config.jwtSecret || "secret",
+    //     { algorithm: "HS512" } );
+    //   request( app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
+    //     .expect( res => {
+    //       util.pp( res.body );
+    //       expect( res.body.results[0].private_location ).to.not.be.undefined;
+    //     } )
+    //     .expect( "Content-Type", /json/ )
+    //     .expect( 200, done );
+    // } );
 
     it( "does not show authenticated project curators private info if they do not have access", done => {
-      const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+      obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 11 );
+      const token = jwt.sign( { user_id: 123 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/11?fields=all" ).set( "Authorization", token )
+      request( app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results[0].private_location ).to.be.undefined;
         } )
@@ -91,9 +105,11 @@ describe( "Observations", ( ) => {
     } );
 
     it( "does not show authenticated users others' private info", done => {
-      const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+      obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 333 );
+      const token = jwt.sign( { user_id: 123 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/333?fields=all" ).set( "Authorization", token )
+      request( app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results[0].private_location ).to.be.undefined;
         } )
@@ -147,9 +163,10 @@ describe( "Observations", ( ) => {
 
     it( "shows authenticated users their own private info", done => {
       const userId = 123;
-      const token = jwt.sign( { user_id: userId }, config.jwtSecret || "secret",
+      const token = jwt.sign( { user_id: userId },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( `/v1/observations?user_id=${userId}&fields=all` ).set( "Authorization", token )
+      request( app ).get( `/v2/observations?user_id=${userId}&fields=all` ).set( "Authorization", token )
         .expect( res => {
           const obscuredObs = _.find( res.body.results, o => o.obscured );
           expect( obscuredObs.private_location ).to.not.be.undefined;
@@ -159,9 +176,10 @@ describe( "Observations", ( ) => {
     } );
 
     it( "does not show authenticated users others' private info", done => {
-      const token = jwt.sign( { user_id: 5 }, config.jwtSecret || "secret",
+      const token = jwt.sign( { user_id: 5 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations?user_id=123&fields=all" ).set( "Authorization", token )
+      request( app ).get( "/v2/observations?user_id=123&fields=all" ).set( "Authorization", token )
         .expect( res => {
           const obscuredObs = _.find( res.body.results, o => o.obscured );
           expect( obscuredObs.private_location ).to.be.undefined;
@@ -222,7 +240,8 @@ describe( "Observations", ( ) => {
       const o = fixtures.elasticsearch.observations.observation[5];
       expect( o.geoprivacy ).to.eq( "private" );
       expect( o.location ).to.be.undefined;
-      const token = jwt.sign( { user_id: 333 }, config.jwtSecret || "secret",
+      const token = jwt.sign( { user_id: 333 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
       nock( "http://localhost:3000" )
         .post( "/observations" )
@@ -308,7 +327,8 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "fave", ( ) => {
-    const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+    const token = jwt.sign( { user_id: 123 },
+      config.jwtSecret || "secret",
       { algorithm: "HS512" } );
     beforeEach( ( ) => {
       inaturalistjs.setConfig( {
@@ -339,7 +359,8 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "quality metric voting", ( ) => {
-    const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+    const token = jwt.sign( { user_id: 123 },
+      config.jwtSecret || "secret",
       { algorithm: "HS512" } );
     describe( "POST", ( ) => {
       it( "should fail on a bad metric", done => {

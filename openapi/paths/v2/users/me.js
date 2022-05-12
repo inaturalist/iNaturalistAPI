@@ -22,6 +22,9 @@ module.exports = sendWrapper => {
             }
           }
         }
+      },
+      default: {
+        $ref: "#/components/responses/Error"
       }
     }
   };

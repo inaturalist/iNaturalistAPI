@@ -1,6 +1,5 @@
-const _ = require( "lodash" );
+const Joi = require( "joi" );
 const TranslationsController = require( "../../../../lib/controllers/v2/translations_controller" );
-const translationsLocalesFetch = require( "../../../schema/request/translations_locales" );
 const transform = require( "../../../joi_to_openapi_parameter" );
 
 module.exports = sendWrapper => {
@@ -10,19 +9,12 @@ module.exports = sendWrapper => {
   }
 
   GET.apiDoc = {
-    tags: ["Sites"],
+    tags: ["Translations"],
     summary: "Return site translated locales",
     parameters: [
-      {
-        in: "header",
-        name: "X-HTTP-Method-Override",
-        schema: {
-          type: "string"
-        }
-      }
-    ].concat( _.map( translationsLocalesFetch.$_terms.keys, child => (
-      transform( child.schema.label( child.key ) )
-    ) ) ),
+      transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) ),
+      transform( Joi.string( ).label( "fields" ).default( "locale,language_in_locale" ) )
+    ],
     responses: {
       200: {
         description: "A list of locales",
