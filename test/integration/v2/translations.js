@@ -6,7 +6,7 @@ describe( "Translations", ( ) => {
   describe( "locales", ( ) => {
     it( "returns json", done => {
       const nockScope = nock( "http://localhost:3000" )
-        .get( "/translations/locales" )
+        .get( "/translations/locales?fields=locale%2Clanguage_in_locale" )
         .reply( 200, {} );
       request( app )
         .get( "/v2/translations/locales" )
