@@ -12,7 +12,7 @@ module.exports = sendWrapper => {
 
   GET.apiDoc = {
     tags: ["ProviderAuthorizations"],
-    summary: "Return authorized provider",
+    summary: "Third-party accounts the authenticated user has authorized iNat to access on their behalf",
     security: [{
       userJwtRequired: []
     }],
@@ -22,7 +22,7 @@ module.exports = sendWrapper => {
     ],
     responses: {
       200: {
-        description: "A list of providers",
+        description: "List of third-party accounts the authenticated user has authorized iNat to access on their behalf",
         content: {
           "application/json": {
             schema: {

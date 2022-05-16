@@ -12,7 +12,7 @@ module.exports = sendWrapper => {
 
   DELETE.apiDoc = {
     tags: ["ProviderAuthorizations"],
-    summary: "Revoke provider authorization",
+    summary: "Revoke iNat's authorization to access the user's account on this provider's service",
     security: [{
       userJwtRequired: []
     }],
@@ -22,7 +22,7 @@ module.exports = sendWrapper => {
           .label( "id" )
           .meta( { in: "path" } )
           .required( )
-          .description( "A single ID" )
+          .description( "Unique identifier for the authorization" )
       )
     ],
     responses: {

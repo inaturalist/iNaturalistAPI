@@ -12,7 +12,7 @@ module.exports = sendWrapper => {
 
   GET.apiDoc = {
     tags: ["AuthorizedApplications"],
-    summary: "Return applications the authenticated user has authorized to access their account",
+    summary: "Applications the authenticated user has authorized to access their iNat account",
     security: [{
       userJwtRequired: []
     }],

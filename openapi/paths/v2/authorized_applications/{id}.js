@@ -22,7 +22,7 @@ module.exports = sendWrapper => {
           .label( "id" )
           .meta( { in: "path" } )
           .required( )
-          .description( "A single ID" )
+          .description( "Unique identifier for the authorization" )
       )
     ],
     responses: {
