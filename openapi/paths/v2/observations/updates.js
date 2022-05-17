@@ -1,6 +1,7 @@
-const Joi = require( "joi" );
+const _ = require( "lodash" );
 const transform = require( "../../../joi_to_openapi_parameter" );
-const ObservationsController = require( "../../../../lib/controllers/v1/observations_controller" );
+const ObservationsController = require( "../../../../lib/controllers/v2/observations_controller" );
+const observationsUpdatesSchema = require( "../../../schema/request/observations_updates" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
@@ -10,14 +11,13 @@ module.exports = sendWrapper => {
 
   GET.apiDoc = {
     tags: ["Observations"],
-    summary: "Fetch observations",
+    summary: "Fetch observation updates",
     security: [{
       userJwtRequired: []
     }],
-    parameters: [
-      transform( Joi.string( ).label( "fields" ).meta( { in: "query" } ) ),
-      transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
-    ],
+    parameters: _.map( observationsUpdatesSchema.$_terms.keys, child => (
+      transform( child.schema.label( child.key ) )
+    ) ),
     responses: {
       200: {
         description: "An array of updates.",
