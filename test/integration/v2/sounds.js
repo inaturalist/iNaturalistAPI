@@ -1,3 +1,4 @@
+const { expect } = require( "chai" );
 const request = require( "supertest" );
 const nock = require( "nock" );
 const jwt = require( "jsonwebtoken" );
@@ -10,15 +11,20 @@ describe( "Sounds", ( ) => {
     { algorithm: "HS512" } );
   describe( "create", ( ) => {
     it( "returns JSON", done => {
+      const stub = { id: 1234 };
       nock( "http://localhost:3000" )
         .post( "/sounds" )
-        .reply( 200 );
+        .reply( 200, stub );
       request( app ).post( "/v2/sounds" )
         .set( "Authorization", token )
         .set( "Content-Type", "multipart/form-data" )
         // It's supposed to accept a file, but since we're just stubbing the
         // rails response, it doesn't really matter what file
         .attach( "file", "test/fixtures/cuthona_abronia-tagged.jpg" )
+        .expect( res => {
+          const resObj = res.body.results[0];
+          expect( resObj.id ).to.eq( stub.id );
+        } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );

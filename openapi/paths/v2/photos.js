@@ -23,7 +23,17 @@ module.exports = sendWrapper => {
     },
     responses: {
       200: {
-        description: "Photo created"
+        description: "An array of photos.",
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/ResultsPhotos"
+            }
+          }
+        }
+      },
+      default: {
+        $ref: "#/components/responses/Error"
       }
     }
   };

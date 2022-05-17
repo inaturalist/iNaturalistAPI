@@ -8,6 +8,6 @@ module.exports = Joi.object( ).keys( {
   flags: Joi.array( ).items( flag ),
   id: Joi.number( ).integer( ).description( "Unique auto-increment integer identifier." ).required( ),
   license_code: Joi.string( ).valid( null ),
-  native_sound_id: Joi.string( )
+  native_sound_id: Joi.string( ).valid( null )
 } ).unknown( false ).meta( { className: "Sound" } )
   .valid( null );

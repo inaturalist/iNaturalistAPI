@@ -23,7 +23,17 @@ module.exports = sendWrapper => {
     },
     responses: {
       200: {
-        description: "Sound created"
+        description: "An array of sounds.",
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/ResultsSounds"
+            }
+          }
+        }
+      },
+      default: {
+        $ref: "#/components/responses/Error"
       }
     }
   };
