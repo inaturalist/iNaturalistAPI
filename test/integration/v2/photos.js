@@ -7,7 +7,7 @@ const app = require( "../../../app" );
 
 describe( "Photos", ( ) => {
   describe( "create", ( ) => {
-    it( "succeeds", done => {
+    it( "returns JSON", done => {
       const token = jwt.sign( { user_id: 333 },
         config.jwtSecret || "secret",
         { algorithm: "HS512" } );
