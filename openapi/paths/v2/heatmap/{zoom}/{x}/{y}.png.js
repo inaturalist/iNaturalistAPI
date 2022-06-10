@@ -1,5 +1,4 @@
 const _ = require( "lodash" );
-const ElasticMapper = require( "elasticmaps" );
 const transform = require( "../../../../../joi_to_openapi_parameter" );
 const observationsSearchSchema = require( "../../../../../schema/request/observations_search" );
 const { tilePathParams } = require( "../../../../../common_parameters" );
@@ -15,9 +14,7 @@ module.exports = sendWrapper => {
   async function GET( req, res ) {
     req.params.style = "heatmap";
     req.params.format = "png";
-    ElasticMapper.route( req, res, ( err, data ) => {
-      sendWrapper( req, res, err, data, "image/png" );
-    } );
+    sendWrapper( req, res );
   }
 
   GET.apiDoc = {

@@ -26,7 +26,6 @@
     "compression": "^1.7.4",
     "debug": "^4.3.3",
     "ejs": "^3.1.6",
-    "elasticmaps": "github:inaturalist/elasticmaps",
     "elasticsearch": "^16.7.2",
     "es6-promise-pool": "^2.5.0",
     "express": "^4.17.2",

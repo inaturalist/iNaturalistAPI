@@ -3,7 +3,6 @@ const Joi = require( "joi" );
 const transform = require( "../../../../../../joi_to_openapi_parameter" );
 const observationsSearchSchema = require( "../../../../../../schema/request/observations_search" );
 const { tilePathParams } = require( "../../../../../../common_parameters" );
-const InaturalistMapserver = require( "../../../../../../../lib/inaturalist_map_server" );
 
 const inheritdObsSearchParams = _.filter(
   observationsSearchSchema.$_terms.keys, p => !_.includes( ["id", "fields"], p.key )
@@ -17,9 +16,7 @@ module.exports = sendWrapper => {
     req.params.style = "places";
     req.params.format = "png";
     req.params.place_id = req.params.id;
-    InaturalistMapserver.placesRoute( req, res, ( err, data ) => {
-      sendWrapper( req, res, err, data, "image/png" );
-    } );
+    sendWrapper( req, res );
   }
 
   GET.apiDoc = {
