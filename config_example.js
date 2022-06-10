@@ -29,7 +29,7 @@ module.exports = {
     placeIndex: `${environment}_places`
   },
   database: {
-    user: INAT_DB_USER || "username",
+    user: INAT_DB_USER || "inaturalist",
     host: INAT_DB_HOST || "127.0.0.1",
     port: 5432,
     geometry_field: "geom",
@@ -39,7 +39,7 @@ module.exports = {
     dbname: environment === "test"
       ? "inaturalistapi_test"
       : `inaturalist_${environment}`,
-    password: INAT_DB_PASS || "password",
+    password: INAT_DB_PASS || "inaturalist",
     ssl: false
   },
   tileSize: 512,
