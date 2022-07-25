@@ -3,6 +3,7 @@ const Joi = require( "joi" );
 module.exports = Joi.object( ).keys( {
   fields: Joi.any( ),
   observation: Joi.object( ).keys( {
+    uuid: Joi.string( ).guid( { version: "uuidv4" } ),
     captive_flag: Joi.boolean( ),
     coordinate_system: Joi.string( ),
     description: Joi.string( ),
@@ -37,5 +38,5 @@ module.exports = Joi.object( ).keys( {
     taxon_id: Joi.number( ),
     taxon_name: Joi.number( ),
     time_zone: Joi.string( )
-  } ).unknown( false )
-} ).unknown( false );
+  } )
+} );
