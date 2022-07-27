@@ -330,16 +330,6 @@ describe( "Observations", ( ) => {
     const token = jwt.sign( { user_id: 123 },
       config.jwtSecret || "secret",
       { algorithm: "HS512" } );
-    beforeEach( ( ) => {
-      inaturalistjs.setConfig( {
-        apiURL: "http://localhost:4000/v1"
-      } );
-    } );
-    afterEach( ( ) => {
-      inaturalistjs.setConfig( {
-        apiURL: "http://localhost:3000"
-      } );
-    } );
     it( "returns an empty success on POST", done => {
       nock( "http://localhost:3000" )
         .post( `/votes/vote/observation/${fixtureObs.id}` )
@@ -404,4 +394,19 @@ describe( "Observations", ( ) => {
       } );
     } );
   } );
+
+  describe( "viewed_updates", ( ) => {
+    const token = jwt.sign( { user_id: 123 },
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+    it( "returns an empty success on PUT", done => {
+      nock( "http://localhost:3000" )
+        .put( `/observations/${fixtureObs.uuid}/viewed_updates` )
+        .reply( 200 );
+      request( app ).put( `/v2/observations/${fixtureObs.uuid}/viewed_updates` )
+        .set( "Authorization", token )
+        .expect( 204, done );
+    } );
+  } );
+
 } );
