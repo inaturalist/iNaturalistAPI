@@ -44,6 +44,7 @@ module.exports = {
   },
   tileSize: 512,
   debug: true,
+  logLevel: "info", // only "debug" does anything right now
   websiteURL: "http://localhost:3000/",
   staticImagePrefix: "http://localhost:3000/attachments/",
   userImagePrefix: "/attachments/users/icons/",
