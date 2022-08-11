@@ -51,10 +51,10 @@ describe( "Project", ( ) => {
       expect( params.d2 ).to.eq( "2016-05-05T05:55:55+00:00" );
       expect( params.identified ).to.eq( "true" );
       expect( params.captive ).to.eq( "false" );
-      expect( params.has ).to.deep.eq( ["geo", "photos", "sounds"] );
+      expect( params.has.sort( ) ).to.deep.eq( ["geo", "photos", "sounds"] );
       // some of these come from the project list
       expect( params.taxon_ids.sort( ) ).to.deep.eq( [444, 555, 876, 987] );
-      expect( params.place_id ).to.deep.eq( [222, 333] );
+      expect( params.place_id.sort( ) ).to.deep.eq( [222, 333] );
       expect( params.verifiable ).to.eq( "true" );
     } );
 

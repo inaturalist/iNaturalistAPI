@@ -2623,10 +2623,6 @@
       },
       {
         "type": "ProjectObservationRule", "ruler_type": "Project", "ruler_id": 543,
-        "operator": "captive?", "operand_id": 1
-      },
-      {
-        "type": "ProjectObservationRule", "ruler_type": "Project", "ruler_id": 543,
         "operator": "identified?", "operand_id": 1
       },
       {
