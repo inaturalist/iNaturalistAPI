@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     services:
       postgres:
         image: postgis/postgis:11-2.5
@@ -43,7 +43,7 @@ jobs:
 
     - name: Copy config
       run: |
-        cp config.js.travis config.js
+        cp config.js.ci config.js
         touch vision-taxa.txt
 
     - run: npm install

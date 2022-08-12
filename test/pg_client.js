@@ -11,7 +11,7 @@ describe( "pgClient", ( ) => {
     it( "fails if it can't connect", async ( ) => {
       pgClient.connection = null;
       await expect(
-        pgClient.connect( { database: { dbname: "foofoo" } } )
+        pgClient.connect( { database: "foofoo" } )
       ).to.be.rejectedWith( Error );
     } );
 

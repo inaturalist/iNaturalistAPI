@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-ruby "2.6.0"
+ruby "~> 2.7.6"
 
 group :development do
   gem "capistrano"

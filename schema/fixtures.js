@@ -978,7 +978,7 @@
         },
         {
           "id": 2020101501,
-          "uuid": "dcccb9cd-6ffb-4a1e-bbbc-28765cf13779",
+          "uuid": "dcccb9cd-6ffb-4a1e-bbbc-28765cf13778",
           "captive": false,
           "description": "Observation not in project 2005 (Massachusetts) b/c it is publicly outside but private inside the place boundary by user who is not in the project",
           "user": { "id": 2 },
@@ -1027,7 +1027,7 @@
         },
         {
           "id": 2020120501,
-          "uuid": "e6cc40bf-8de3-4b89-bc05-0e05e59ad6d7",
+          "uuid": "e6cc40bf-8de3-4b89-bc05-0e05e59ad6d6",
           "description": "Needs ID of taxon 6 in Massachusetts",
           "user": {
             "id": 123,
@@ -1899,12 +1899,6 @@
         "observation_id": 12
       },
       {
-        "id": 123,
-        "current": true,
-        "user_id": 121,
-        "observation_id": 13
-      },
-      {
         "id": 124,
         "current": true,
         "created_at": "2015-12-31 00:00:00",
@@ -2162,7 +2156,7 @@
       },
       {
         "id": 2020101501,
-        "uuid": "dcccb9cd-6ffb-4a1e-bbbc-28765cf13779"
+        "uuid": "dcccb9cd-6ffb-4a1e-bbbc-28765cf13778"
       },
       {
         "id": 2020101502,
@@ -2174,7 +2168,7 @@
       },
       {
         "id": 2020120501,
-        "uuid": "e6cc40bf-8de3-4b89-bc05-0e05e59ad6d7"
+        "uuid": "e6cc40bf-8de3-4b89-bc05-0e05e59ad6d6"
       },
       {
         "id": 2020120502,
@@ -2626,10 +2620,6 @@
       {
         "type": "ProjectObservationRule", "ruler_type": "Project", "ruler_id": 543,
         "operator": "has_a_sound?", "operand_id": 1
-      },
-      {
-        "type": "ProjectObservationRule", "ruler_type": "Project", "ruler_id": 543,
-        "operator": "captive?", "operand_id": 1
       },
       {
         "type": "ProjectObservationRule", "ruler_type": "Project", "ruler_id": 543,
