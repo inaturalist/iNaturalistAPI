@@ -10,6 +10,7 @@ module.exports = Joi.object( ).keys( {
   created_at: Joi.string( ).isoDate( ),
   description: Joi.string( ).valid( null ),
   icon: Joi.string( ).valid( null ),
+  icon_url: Joi.string( ).valid( null ),
   identifications_count: Joi.number( ).integer( ),
   journal_posts_count: Joi.number( ).integer( ),
   last_active: Joi.date( ).iso( ),

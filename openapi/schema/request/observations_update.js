@@ -2,6 +2,7 @@ const Joi = require( "joi" );
 
 module.exports = Joi.object( ).keys( {
   fields: Joi.any( ),
+  ignore_photos: Joi.boolean( ),
   observation: Joi.object( ).keys( {
     uuid: Joi.string( ).guid( { version: "uuidv4" } ),
     captive_flag: Joi.boolean( ),
