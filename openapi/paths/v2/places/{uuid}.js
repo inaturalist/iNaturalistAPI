@@ -1,10 +1,10 @@
 const Joi = require( "joi" );
 const transform = require( "../../../joi_to_openapi_parameter" );
-const placesController = require( "../../../../lib/controllers/v2/places_controller" );
+const PlacesController = require( "../../../../lib/controllers/v2/places_controller" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    const results = await placesController.show( req );
+    const results = await PlacesController.show( req );
     sendWrapper( req, res, null, results );
   }
 

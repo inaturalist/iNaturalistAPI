@@ -21,11 +21,17 @@ describe( "Annotations", ( ) => {
       nock( "http://localhost:3000" )
         .post( "/annotations" )
         .reply( 200, { id: a.id, uuid: a.uuid } );
-      // no need to define POST fields since we're just stubbing the
-      // Rails app to return obs 6 to load from the ES index
       request( app ).post( "/v2/annotations" )
         .set( "Authorization", token )
         .set( "Content-Type", "application/json" )
+        // Actual values of what we send don't matter since we're mocking the
+        // Rails response, but we need it to pass request schema validation
+        .send( {
+          resource_type: "Observation",
+          resource_id: a.uuid,
+          controlled_attribute_id: 1,
+          controlled_value_id: 2
+        } )
         .expect( 200 )
         .expect( res => {
           const anno = res.body.results[0];
