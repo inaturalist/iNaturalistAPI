@@ -114,4 +114,16 @@ describe( "Identifications", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "recentTaxa", ( ) => {
+    it( "return JSON", done => {
+      request( app ).get( "/v2/identifications/recent_taxa?taxon_id=1" )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results.length ).to.be.greaterThan( 0 );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
 } );

@@ -187,4 +187,17 @@ describe( "Taxa", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "wanted", ( ) => {
+    it( "returns json", done => {
+      request( app )
+        .get( `/v2/taxa/${fixtureTaxon.id}/wanted` )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results.length ).to.be.greaterThan( 0 );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
 } );

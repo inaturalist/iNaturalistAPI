@@ -409,4 +409,43 @@ describe( "Observations", ( ) => {
     } );
   } );
 
+  describe( "speciesCounts", ( ) => {
+    it( "returns json", done => {
+      request( app ).get( "/v2/observations/species_counts" ).expect( res => {
+        expect( res.body.results[0].taxon ).to.not.be.undefined;
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "observers", ( ) => {
+    it( "returns json", done => {
+      request( app ).get( "/v2/observations/observers?user_id=1" ).expect( res => {
+        expect( res.body.results[0].user ).to.not.be.undefined;
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "popularFieldValues", ( ) => {
+    it( "returns json", done => {
+      request( app ).get( "/v2/observations/popular_field_values" ).expect( res => {
+        expect( res.body.results[0] ).to.not.be.undefined;
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "histogram", ( ) => {
+    it( "returns json", done => {
+      request( app ).get( "/v2/observations/histogram" ).expect( res => {
+        expect( res.body.results ).to.not.be.undefined;
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
 } );
