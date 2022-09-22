@@ -58,36 +58,33 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    // TODO: these next 2 tests aren't working in v2 yet - preloading of user
-    // data like curator status and user trust needs to be implemented
+    it( "shows authenticated project curators private info if they have access", function ( done ) {
+      obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 10 );
+      const token = jwt.sign( { user_id: 123 },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
+        .expect( res => {
+          // util.pp( res.body );
+          expect( res.body.results[0].private_location ).to.not.be.undefined;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
 
-    // it( "shows authenticated project curators private info if they have access", function ( done ) {
-    //   obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 10 );
-    //   const token = jwt.sign( { user_id: 123 },
-    //     config.jwtSecret || "secret",
-    //     { algorithm: "HS512" } );
-    //   request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
-    //     .expect( res => {
-    //       util.pp( res.body );
-    //       expect( res.body.results[0].private_location ).to.not.be.undefined;
-    //     } )
-    //     .expect( "Content-Type", /json/ )
-    //     .expect( 200, done );
-    // } );
-
-    // it( "shows authenticated trusted users private info", function ( done ) {
-    //   obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 14 );
-    //   const token = jwt.sign( { user_id: 125 },
-    //     config.jwtSecret || "secret",
-    //     { algorithm: "HS512" } );
-    //   request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
-    //     .expect( res => {
-    //       util.pp( res.body );
-    //       expect( res.body.results[0].private_location ).to.not.be.undefined;
-    //     } )
-    //     .expect( "Content-Type", /json/ )
-    //     .expect( 200, done );
-    // } );
+    it( "shows authenticated trusted users private info", function ( done ) {
+      obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 14 );
+      const token = jwt.sign( { user_id: 125 },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
+        .expect( res => {
+          // util.pp( res.body );
+          expect( res.body.results[0].private_location ).to.not.be.undefined;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
 
     it( "does not show authenticated project curators private info if they do not have access", function ( done ) {
       obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 11 );

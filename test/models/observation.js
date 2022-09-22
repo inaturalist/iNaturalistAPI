@@ -90,9 +90,10 @@ describe( "Observation", ( ) => {
         fixtureObs.non_traditional_projects = [
           {
             project: new Project( project ),
-            project_user: Object.assign( {}, projectUserTrustingForAny, {
+            project_user: {
+              ...projectUserTrustingForAny,
               prefers_curator_coordinate_access_for: "any"
-            } )
+            }
           }
         ];
         expect( project.observation_requirements_updated_at ).to.not.be.undefined;
@@ -102,7 +103,7 @@ describe( "Observation", ( ) => {
         expect( fixtureObs.private_location ).to.not.be.undefined;
         const obs = new Observation( fixtureObs, {
           userSession: {
-            curated_project_ids: [project.id]
+            curatedProjectsIDs: [project.id]
           }
         } );
         expect( obs.private_location ).to.not.be.undefined;
@@ -112,9 +113,10 @@ describe( "Observation", ( ) => {
         fixtureObs.non_traditional_projects = [
           {
             project: new Project( project ),
-            project_user: Object.assign( {}, projectUserTrustingForAny, {
+            project_user: {
+              ...projectUserTrustingForAny,
               prefers_curator_coordinate_access_for: "any"
-            } )
+            }
           }
         ];
         expect(
@@ -123,7 +125,7 @@ describe( "Observation", ( ) => {
         expect( fixtureObs.private_location ).to.not.be.undefined;
         const obs = new Observation( fixtureObs, {
           userSession: {
-            curated_project_ids: [project.id]
+            curatedProjectsIDs: [project.id]
           }
         } );
         expect( obs.private_location ).to.be.undefined;
