@@ -5,17 +5,14 @@ const request = require( "supertest" );
 const nock = require( "nock" );
 const fs = require( "fs" );
 const jwt = require( "jsonwebtoken" );
-const iNaturalistAPI = require( "../../../lib/inaturalist_api" );
-const config = require( "../../../config.js" );
-
-const app = iNaturalistAPI.server( );
+const config = require( "../../../config" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 describe( "Observations", ( ) => {
   describe( "show", ( ) => {
-    it( "returns json", done => {
-      request( app ).get( "/v1/observations/1" ).expect( res => {
+    it( "returns json", function ( done ) {
+      request( this.app ).get( "/v1/observations/1" ).expect( res => {
         expect( res.body.results[0].identifications.length ).to.be.above( 0 );
         // unauthenticated users don't get private info
         expect( res.body.results[0].private_location ).to.be.undefined;
@@ -23,10 +20,11 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "shows authenticated users their own private info", done => {
-      const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+    it( "shows authenticated users their own private info", function ( done ) {
+      const token = jwt.sign( { user_id: 123 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/1" ).set( "Authorization", token )
+      request( this.app ).get( "/v1/observations/1" ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results[0].private_location ).to.not.be.undefined;
         } )
@@ -34,7 +32,7 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "shows authenticated traditional project curators private info if they have access", done => {
+    it( "shows authenticated traditional project curators private info if they have access", function ( done ) {
       const obsInTradProject = _.find(
         fixtures.elasticsearch.observations.observation,
         o => o.id === 10
@@ -44,9 +42,10 @@ describe( "Observations", ( ) => {
         fixtures.postgresql.project_users,
         pu => ( pu.project_id === projectID && pu.role === "curator" )
       );
-      const token = jwt.sign( { user_id: curatorProjectUser.user_id }, config.jwtSecret || "secret",
+      const token = jwt.sign( { user_id: curatorProjectUser.user_id },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( `/v1/observations/${obsInTradProject.id}` ).set( "Authorization", token )
+      request( this.app ).get( `/v1/observations/${obsInTradProject.id}` ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results[0].private_location ).to.not.be.undefined;
         } )
@@ -68,22 +67,23 @@ describe( "Observations", ( ) => {
         pu => pu.id === 8
       );
       const placeId = _.find( project.search_parameters, sp => sp.field === "place_id" ).value;
-      const token = jwt.sign( { user_id: curatorProjectUser.user_id }, config.jwtSecret || "secret",
+      const token = jwt.sign( { user_id: curatorProjectUser.user_id },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      it( "shows authenticated collection project curators private info if observer trusts them with anything", done => {
+      it( "shows authenticated collection project curators private info if observer trusts them with anything", function ( done ) {
         const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
           o.private_place_ids
           && o.private_place_ids.includes( placeId )
           && o.user.id === projectUserTrustingForAny.user_id
         ) );
-        request( app ).get( `/v1/observations/${obs.id}?include_new_projects=true` ).set( "Authorization", token )
+        request( this.app ).get( `/v1/observations/${obs.id}?include_new_projects=true` ).set( "Authorization", token )
           .expect( res => {
             expect( res.body.results[0].private_location ).to.not.be.undefined;
           } )
           .expect( "Content-Type", /json/ )
           .expect( 200, done );
       } );
-      it( "shows authenticated collection project curators private info if observer trusts them with taxon and taxon is threatened", done => {
+      it( "shows authenticated collection project curators private info if observer trusts them with taxon and taxon is threatened", function ( done ) {
         const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
           o.private_place_ids
           && o.private_place_ids.includes( placeId )
@@ -91,20 +91,20 @@ describe( "Observations", ( ) => {
           && ["obscured", "private"].includes( o.taxon_geoprivacy )
           && !["obscured", "private"].includes( o.geoprivacy )
         ) );
-        request( app ).get( `/v1/observations/${obs.id}?include_new_projects=true` ).set( "Authorization", token )
+        request( this.app ).get( `/v1/observations/${obs.id}?include_new_projects=true` ).set( "Authorization", token )
           .expect( res => {
             expect( res.body.results[0].private_location ).to.not.be.undefined;
           } )
           .expect( "Content-Type", /json/ )
           .expect( 200, done );
       } );
-      it( "does not show authenticated collection project curators private info if observer trusts them with taxon and taxon is threatened and obs has geoprivacy", done => {
+      it( "does not show authenticated collection project curators private info if observer trusts them with taxon and taxon is threatened and obs has geoprivacy", function ( done ) {
         const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
           o.id === 26
         ) );
         expect( obs.geoprivacy ).to.eq( "obscured" );
         expect( obs.taxon_geoprivacy ).to.eq( "obscured" );
-        request( app ).get( `/v1/observations/${obs.id}?include_new_projects=true` ).set( "Authorization", token )
+        request( this.app ).get( `/v1/observations/${obs.id}?include_new_projects=true` ).set( "Authorization", token )
           .expect( res => {
             expect( res.body.results[0].private_location ).to.be.undefined;
           } )
@@ -123,15 +123,16 @@ describe( "Observations", ( ) => {
         pu => pu.id === 2020100102
       );
       const placeId = _.find( project.search_parameters, sp => sp.field === "place_id" ).value;
-      const token = jwt.sign( { user_id: curatorProjectUser.user_id }, config.jwtSecret || "secret",
+      const token = jwt.sign( { user_id: curatorProjectUser.user_id },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      it( "does not show private info if observer trusts them with anything", async ( ) => {
+      it( "does not show private info if observer trusts them with anything", function ( done ) {
         const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
           o.private_place_ids
           && o.private_place_ids.includes( placeId )
           && o.user.id === projectUserTrustingForAny.user_id
         ) );
-        return request( app )
+        request( this.app )
           .get( `/v1/observations/${obs.id}?include_new_projects=true` )
           .set( "Authorization", token )
           .expect( 200 )
@@ -139,14 +140,15 @@ describe( "Observations", ( ) => {
             expect( res.body.results[0].private_location ).to.be.undefined;
           } )
           .expect( "Content-Type", /json/ )
-          .expect( 200 );
+          .expect( 200, done );
       } );
     } );
 
-    it( "shows authenticated trusted users private info", done => {
-      const token = jwt.sign( { user_id: 125 }, config.jwtSecret || "secret",
+    it( "shows authenticated trusted users private info", function ( done ) {
+      const token = jwt.sign( { user_id: 125 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/14" ).set( "Authorization", token )
+      request( this.app ).get( "/v1/observations/14" ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results[0].private_location ).to.not.be.undefined;
         } )
@@ -154,10 +156,11 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "does not show authenticated traditional project curators private info if they do not have access", done => {
-      const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+    it( "does not show authenticated traditional project curators private info if they do not have access", function ( done ) {
+      const token = jwt.sign( { user_id: 123 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/11" ).set( "Authorization", token )
+      request( this.app ).get( "/v1/observations/11" ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results[0].private_location ).to.be.undefined;
         } )
@@ -165,10 +168,11 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "does not show authenticated users others' private info", done => {
-      const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+    it( "does not show authenticated users others' private info", function ( done ) {
+      const token = jwt.sign( { user_id: 123 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/333" ).set( "Authorization", token )
+      request( this.app ).get( "/v1/observations/333" ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results[0].private_location ).to.be.undefined;
         } )
@@ -176,10 +180,11 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "localizes taxon names to authenticated users default settings", done => {
-      const token = jwt.sign( { user_id: 124 }, config.jwtSecret || "secret",
+    it( "localizes taxon names to authenticated users default settings", function ( done ) {
+      const token = jwt.sign( { user_id: 124 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/4" ).set( "Authorization", token )
+      request( this.app ).get( "/v1/observations/4" ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results[0].taxon.preferred_common_name ).to.eq( "BestInCaliforniaES" );
         } )
@@ -187,15 +192,16 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "shows data if the observer has blocked the viewer", done => {
+    it( "shows data if the observer has blocked the viewer", function ( done ) {
       const userBlock = fixtures.postgresql.user_blocks[0];
       const blocker = { id: userBlock.user_id };
       const blockee = { id: userBlock.blocked_user_id };
-      const token = jwt.sign( { user_id: blockee.id }, config.jwtSecret || "secret",
+      const token = jwt.sign( { user_id: blockee.id },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
       const obs = _.find( fixtures.elasticsearch.observations.observation,
         o => o.user.id === blocker.id );
-      request( app ).get( `/v1/observations/${obs.id}` ).set( "Authorization", token )
+      request( this.app ).get( `/v1/observations/${obs.id}` ).set( "Authorization", token )
         .expect( 200 )
         .expect( res => {
           expect( res.body.results.length ).to.eq( 1 );
@@ -207,16 +213,17 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "create", ( ) => {
-    it( "returns private coordinates when geoprivacy is private", done => {
+    it( "returns private coordinates when geoprivacy is private", function ( done ) {
       const fixtureObs = fixtures.elasticsearch.observations.observation[5];
       expect( fixtureObs.geoprivacy ).to.eq( "private" );
       expect( fixtureObs.location ).to.be.undefined;
-      const token = jwt.sign( { user_id: 333 }, config.jwtSecret || "secret",
+      const token = jwt.sign( { user_id: 333 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
       nock( "http://localhost:3000" )
         .post( "/observations" )
         .reply( 200, [{ id: fixtureObs.id }] );
-      request( app ).post( "/v1/observations", {
+      request( this.app ).post( "/v1/observations", {
         // it doesn't really matter what we post since we're just stubbing the
         // Rails app to return obs 6 to load from the ES index
       } ).set( "Authorization", token )
@@ -229,14 +236,16 @@ describe( "Observations", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
-    it( "works with the Bearer scheme", done => {
+
+    it( "works with the Bearer scheme", function ( done ) {
       const fixtureObs = fixtures.elasticsearch.observations.observation[5];
-      const token = jwt.sign( { user_id: 333 }, config.jwtSecret || "secret",
+      const token = jwt.sign( { user_id: 333 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
       nock( "http://localhost:3000" )
         .post( "/observations" )
         .reply( 200, [{ id: fixtureObs.id }] );
-      request( app ).post( "/v1/observations", {
+      request( this.app ).post( "/v1/observations", {
         // it doesn't really matter what we post since we're just stubbing the
         // Rails app to return obs 6 to load from the ES index
       } ).set( "Authorization", `Bearer ${token}` )
@@ -249,13 +258,13 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "search", ( ) => {
-    it( "returns json", done => {
-      request( app ).get( "/v1/observations" )
+    it( "returns json", function ( done ) {
+      request( this.app ).get( "/v1/observations" )
         .expect( "Content-Type", /json/ ).expect( 200, done );
     } );
 
-    it( "looks up observation users from the DB", done => {
-      request( app ).get( "/v1/observations" )
+    it( "looks up observation users from the DB", function ( done ) {
+      request( this.app ).get( "/v1/observations" )
         .expect( res => {
           const fixtureObs = _.sortBy(
             fixtures.elasticsearch.observations.observation,
@@ -276,8 +285,8 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "finds observations by user login", done => {
-      request( app ).get( "/v1/observations?user_id=a-user" )
+    it( "finds observations by user login", function ( done ) {
+      request( this.app ).get( "/v1/observations?user_id=a-user" )
         .expect( res => {
           expect( res.body.total_results ).not.to.eq( 0 );
           _.forEach( res.body.results, obs => {
@@ -286,8 +295,8 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "finds observations by user_id", done => {
-      request( app ).get( "/v1/observations?user_id=123" )
+    it( "finds observations by user_id", function ( done ) {
+      request( this.app ).get( "/v1/observations?user_id=123" )
         .expect( res => {
           expect( res.body.total_results ).not.to.eq( 0 );
           _.forEach( res.body.results, obs => {
@@ -296,7 +305,7 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "finds observations by not_user_id", done => {
+    it( "finds observations by not_user_id", function ( done ) {
       const taxonId = 1;
       const fixtureObs = _.filter(
         fixtures.elasticsearch.observations.observation,
@@ -305,7 +314,7 @@ describe( "Observations", ( ) => {
       const fixtureObsUserIds = fixtureObs.map( o => o.user.id );
       const notUserId = fixtureObsUserIds[0];
       expect( fixtureObsUserIds.length ).to.be.above( 1 );
-      request( app )
+      request( this.app )
         .get( `/v1/observations?taxon_id=${taxonId}&not_user_id=${notUserId}` )
         .expect( 200 )
         .expect( res => {
@@ -313,7 +322,8 @@ describe( "Observations", ( ) => {
         } )
         .expect( 200, done );
     } );
-    it( "finds observations when not_user_id is a login", done => {
+
+    it( "finds observations when not_user_id is a login", function ( done ) {
       const taxonId = 1;
       const fixtureObs = _.filter(
         fixtures.elasticsearch.observations.observation,
@@ -322,7 +332,7 @@ describe( "Observations", ( ) => {
       const fixtureObsUserLogins = fixtureObs.map( o => o.user.login );
       const notUserLogin = fixtureObsUserLogins[0];
       expect( fixtureObsUserLogins.length ).to.be.above( 1 );
-      request( app )
+      request( this.app )
         .get( `/v1/observations?taxon_id=${taxonId}&not_user_id=${notUserLogin}` )
         .expect( 200 )
         .expect( res => {
@@ -331,23 +341,23 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "finds observations by taxon_id", done => {
-      request( app ).get( "/v1/observations?taxon_id=4" )
+    it( "finds observations by taxon_id", function ( done ) {
+      request( this.app ).get( "/v1/observations?taxon_id=4" )
         .expect( res => {
           expect( _.map( res.body.results, "id" ) ).to.contain( 1 );
         } ).expect( 200, done );
     } );
 
-    it( "finds observations by without_taxon_id", done => {
-      request( app ).get( "/v1/observations?taxon_id=4&without_taxon_id=5" )
+    it( "finds observations by without_taxon_id", function ( done ) {
+      request( this.app ).get( "/v1/observations?taxon_id=4&without_taxon_id=5" )
         .expect( res => {
           expect( _.map( res.body.results, "id" ) ).to.contain( 2 );
           expect( _.map( res.body.results, "id" ) ).not.to.contain( 1 );
         } ).expect( 200, done );
     } );
 
-    it( "finds observations by multiple without_taxon_id", done => {
-      request( app ).get( "/v1/observations?without_taxon_id=4,5" )
+    it( "finds observations by multiple without_taxon_id", function ( done ) {
+      request( this.app ).get( "/v1/observations?without_taxon_id=4,5" )
         .expect( res => {
           expect( _.map( res.body.results, "id" ) ).to.contain( 333 );
           expect( _.map( res.body.results, "id" ) ).not.to.contain( 2 );
@@ -355,9 +365,9 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "finds observations by ident_user_id", done => {
+    it( "finds observations by ident_user_id", function ( done ) {
       const userID = 121;
-      request( app ).get( `/v1/observations?ident_user_id=${userID}` )
+      request( this.app ).get( `/v1/observations?ident_user_id=${userID}` )
         .expect( res => {
           expect( res.body.results.length ).to.be.above( 0 );
           const obsIdentifiedByUser = _.filter( res.body.results,
@@ -366,9 +376,9 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "finds observations by ident_user_id by login", done => {
+    it( "finds observations by ident_user_id by login", function ( done ) {
       const login = "user121";
-      request( app ).get( `/v1/observations?ident_user_id=${login}` )
+      request( this.app ).get( `/v1/observations?ident_user_id=${login}` )
         .expect( res => {
           expect( res.body.results.length ).to.be.above( 0 );
           const obsIdentifiedByUser = _.filter( res.body.results,
@@ -377,9 +387,9 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "finds observations by numerous ident_user_id", done => {
+    it( "finds observations by numerous ident_user_id", function ( done ) {
       const userIDs = [121, 122];
-      request( app ).get( `/v1/observations?ident_user_id=${userIDs.join( "," )}` )
+      request( this.app ).get( `/v1/observations?ident_user_id=${userIDs.join( "," )}` )
         .expect( res => {
           expect( res.body.results.length ).to.be.above( 0 );
           const obsIdentifiedByUsers = _.filter( res.body.results,
@@ -391,9 +401,9 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "finds observations by without_ident_user_id", done => {
+    it( "finds observations by without_ident_user_id", function ( done ) {
       const userID = 121;
-      request( app ).get( `/v1/observations?without_ident_user_id=${userID}` )
+      request( this.app ).get( `/v1/observations?without_ident_user_id=${userID}` )
         .expect( res => {
           expect( res.body.results.length ).to.be.above( 0 );
           const obsIdentifiedByUser = _.filter( res.body.results,
@@ -402,38 +412,38 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "looks up projects by slug", done => {
-      request( app ).get( "/v1/observations?projects=a-project" )
+    it( "looks up projects by slug", function ( done ) {
+      request( this.app ).get( "/v1/observations?projects=a-project" )
         .expect( res => {
           expect( res.body.total_results ).to.eq( 1 );
         } ).expect( 200, done );
     } );
 
-    it( "looks up not_in_project by slug", done => {
-      request( app ).get( "/v1/observations?not_in_project=a-project" )
+    it( "looks up not_in_project by slug", function ( done ) {
+      request( this.app ).get( "/v1/observations?not_in_project=a-project" )
         .expect( res => {
           expect( res.body.total_results )
             .to.eq( fixtures.elasticsearch.observations.observation.length - 1 );
         } ).expect( 200, done );
     } );
 
-    it( "looks up multiple projects", done => {
-      request( app ).get( "/v1/observations?projects[]=nonsense&projects[]=a-project" )
+    it( "looks up multiple projects", function ( done ) {
+      request( this.app ).get( "/v1/observations?projects[]=nonsense&projects[]=a-project" )
         .expect( res => {
           expect( res.body.total_results ).to.eq( 1 );
         } ).expect( 200, done );
     } );
 
-    it( "ignores missing projects", done => {
-      request( app ).get( "/v1/observations?projects=nonsense" )
+    it( "raises an error for missing projects", function ( done ) {
+      request( this.app ).get( "/v1/observations?projects=nonsense" )
         .expect( res => {
-          expect( res.body.total_results )
-            .to.eq( fixtures.elasticsearch.observations.observation.length );
-        } ).expect( 200, done );
+          expect( res.error.text ).to.eq( "{\"error\":\"Unknown project_id: [nonsense]\",\"status\":422}" );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 422, done );
     } );
 
-    it( "return iconic taxon names", done => {
-      request( app ).get( "/v1/observations?id=1" )
+    it( "return iconic taxon names", function ( done ) {
+      request( this.app ).get( "/v1/observations?id=1" )
         .expect( res => {
           expect( res.body.total_results ).to.eq( 1 );
           expect( res.body.results[0].taxon.iconic_taxon_id ).to.eq( 101 );
@@ -441,31 +451,31 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "does not strips place guess from obscured observations", done => {
-      request( app ).get( "/v1/observations?geoprivacy=obscured_private" )
+    it( "does not strips place guess from obscured observations", function ( done ) {
+      request( this.app ).get( "/v1/observations?geoprivacy=obscured_private" )
         .expect( res => {
           const o = _.find( res.body.results, r => r.id === 333 );
           expect( o.place_guess ).to.eq( "Idaho" );
         } ).expect( 200, done );
     } );
 
-    it( "filters by sounds", done => {
-      request( app ).get( "/v1/observations?sounds=true" )
+    it( "filters by sounds", function ( done ) {
+      request( this.app ).get( "/v1/observations?sounds=true" )
         .expect( res => {
           expect( res.body.results.length ).to.eq( 1 );
         } ).expect( 200, done );
     } );
 
-    it( "filters by captive", done => {
-      request( app ).get( "/v1/observations?captive=true&id=1,5" )
+    it( "filters by captive", function ( done ) {
+      request( this.app ).get( "/v1/observations?captive=true&id=1,5" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.not.be.undefined; // captive
           expect( res.body.results.map( r => r.id ).indexOf( 1 ) ).to.eq( -1 ); // not-captive
         } ).expect( 200, done );
     } );
 
-    it( "filters by not captive", done => {
-      request( app ).get( "/v1/observations?captive=false&id=1,5" )
+    it( "filters by not captive", function ( done ) {
+      request( this.app ).get( "/v1/observations?captive=false&id=1,5" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.eq( -1 ); // captive
           expect( res.body.results.map( r => r.id ).indexOf( 1 ) )
@@ -473,8 +483,8 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "filters by captive=any", done => {
-      request( app ).get( "/v1/observations?captive=any&id=1,5" )
+    it( "filters by captive=any", function ( done ) {
+      request( this.app ).get( "/v1/observations?captive=any&id=1,5" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ).indexOf( 5 ) ).to.not.be.undefined; // captive
           expect( res.body.results.map( r => r.id ).indexOf( 1 ) )
@@ -482,24 +492,24 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "filters by licensed", done => {
-      request( app ).get( "/v1/observations?licensed=true&id=1,5" )
+    it( "filters by licensed", function ( done ) {
+      request( this.app ).get( "/v1/observations?licensed=true&id=1,5" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ).includes( 1 ) ).to.be.true; // licensed
           expect( res.body.results.map( r => r.id ).includes( 5 ) ).to.be.false; // not licensed
         } ).expect( 200, done );
     } );
 
-    it( "filters by not licensed", done => {
-      request( app ).get( "/v1/observations?licensed=false&id=1,5" )
+    it( "filters by not licensed", function ( done ) {
+      request( this.app ).get( "/v1/observations?licensed=false&id=1,5" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ).includes( 1 ) ).to.be.false; // licensed
           expect( res.body.results.map( r => r.id ).includes( 5 ) ).to.be.true; // not licensed
         } ).expect( 200, done );
     } );
 
-    it( "filters by photo_licensed", done => {
-      request( app ).get( "/v1/observations?photo_licensed=true&photos=true" )
+    it( "filters by photo_licensed", function ( done ) {
+      request( this.app ).get( "/v1/observations?photo_licensed=true&photos=true" )
         .expect( res => {
           expect( res.body.results ).not.to.be.empty;
           _.forEach( res.body.results, obs => {
@@ -512,8 +522,8 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "filters by not photo_licensed", done => {
-      request( app ).get( "/v1/observations?photo_licensed=false&photos=true" )
+    it( "filters by not photo_licensed", function ( done ) {
+      request( this.app ).get( "/v1/observations?photo_licensed=false&photos=true" )
         .expect( res => {
           expect( res.body.results ).not.to.be.empty;
           // The fixtures should have at least one obs that has an unlicensed
@@ -530,22 +540,22 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "filter by photos=true", done => {
-      request( app ).get( "/v1/observations?photos=true" )
+    it( "filter by photos=true", function ( done ) {
+      request( this.app ).get( "/v1/observations?photos=true" )
         .expect( res => {
           expect( res.body.results[0].photos[0] ).to.not.be.undefined;
         } ).expect( 200, done );
     } );
 
-    it( "includes soundcloud identifiers", done => {
-      request( app ).get( "/v1/observations?sounds=true" )
+    it( "includes soundcloud identifiers", function ( done ) {
+      request( this.app ).get( "/v1/observations?sounds=true" )
         .expect( res => {
           expect( res.body.results[0].sounds[0].native_sound_id ).to.not.be.undefined;
         } ).expect( 200, done );
     } );
 
-    it( "can return full details on searches", done => {
-      request( app ).get( "/v1/observations?id=1&details=all" )
+    it( "can return full details on searches", function ( done ) {
+      request( this.app ).get( "/v1/observations?id=1&details=all" )
         .expect( res => {
           expect( res.body.results[0].identifications.length ).to.be.above( 0 );
           expect( res.body.results[0].project_observations.length ).to.be.above( 0 );
@@ -555,44 +565,44 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "returns a bounding box if you request one", done => {
-      request( app ).get( "/v1/observations?return_bounds=true" )
+    it( "returns a bounding box if you request one", function ( done ) {
+      request( this.app ).get( "/v1/observations?return_bounds=true" )
         .expect( res => {
           expect( res.body.total_bounds ).to.not.be.undefined;
           expect( res.body.total_bounds.swlng ).to.not.be.undefined;
         } ).expect( 200, done );
     } );
 
-    it( "doesn't return a bounding box if you don't request one", done => {
-      request( app ).get( "/v1/observations" )
+    it( "doesn't return a bounding box if you don't request one", function ( done ) {
+      request( this.app ).get( "/v1/observations" )
         .expect( res => {
           expect( res.body.total_bounds ).to.be.undefined;
         } ).expect( 200, done );
     } );
 
-    it( "doesn't return a bounding box if there are no observations", done => {
-      request( app ).get( "/v1/observations?user_id=9999" )
+    it( "doesn't return a bounding box if there are no observations", function ( done ) {
+      request( this.app ).get( "/v1/observations?q=thishasnoresults" )
         .expect( res => {
           expect( res.body.total_bounds ).to.be.undefined;
         } ).expect( 200, done );
     } );
 
-    it( "finds observations with fields", done => {
-      request( app ).get( "/v1/observations?field:Habitat" )
+    it( "finds observations with fields", function ( done ) {
+      request( this.app ).get( "/v1/observations?field:Habitat" )
         .expect( res => {
           expect( _.map( res.body.results, "id" ) ).to.contain( 1 );
         } ).expect( 200, done );
     } );
 
-    it( "finds observations with fields and values ", done => {
-      request( app ).get( "/v1/observations?field:Habitat=marine" )
+    it( "finds observations with fields and values ", function ( done ) {
+      request( this.app ).get( "/v1/observations?field:Habitat=marine" )
         .expect( res => {
           expect( _.map( res.body.results, "id" ) ).to.contain( 1 );
         } ).expect( 200, done );
     } );
 
-    it( "finds observations with fields and values case-insensitively", done => {
-      request( app ).get( "/v1/observations?field:hAbiTat=MaRinE" )
+    it( "finds observations with fields and values case-insensitively", function ( done ) {
+      request( this.app ).get( "/v1/observations?field:hAbiTat=MaRinE" )
         .expect( res => {
           expect( _.map( res.body.results, "id" ) ).to.contain( 1 );
         } ).expect( 200, done );
@@ -602,16 +612,16 @@ describe( "Observations", ( ) => {
       const obsWithNumericField = 22;
       const obsWithTaxonField = 23;
       const obsWithNoFields = 2;
-      it( "should filter by a single type", done => {
-        request( app ).get( "/v1/observations?ofv_datatype=taxon" )
+      it( "should filter by a single type", function ( done ) {
+        request( this.app ).get( "/v1/observations?ofv_datatype=taxon" )
           .expect( res => {
             expect( res.body.results.map( r => r.id ) ).to.contain( obsWithTaxonField );
             expect( res.body.results.map( r => r.id ) ).not.to.contain( obsWithNumericField );
             expect( res.body.results.map( r => r.id ) ).not.to.contain( obsWithNoFields );
           } ).expect( 200, done );
       } );
-      it( "should filter by multiple types", done => {
-        request( app ).get( "/v1/observations?ofv_datatype=taxon,numeric" )
+      it( "should filter by multiple types", function ( done ) {
+        request( this.app ).get( "/v1/observations?ofv_datatype=taxon,numeric" )
           .expect( res => {
             expect( res.body.results.map( r => r.id ) ).to.contain( obsWithTaxonField );
             expect( res.body.results.map( r => r.id ) ).to.contain( obsWithNumericField );
@@ -620,16 +630,16 @@ describe( "Observations", ( ) => {
       } );
     } );
 
-    it( "filters by term_id", done => {
-      request( app ).get( "/v1/observations?term_id=1" )
+    it( "filters by term_id", function ( done ) {
+      request( this.app ).get( "/v1/observations?term_id=1" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ) ).to.contain( 7 );
           expect( res.body.results.map( r => r.id ) ).not.to.contain( 6 );
         } ).expect( 200, done );
     } );
 
-    it( "filters by term_value_id", done => {
-      request( app ).get( "/v1/observations?term_id=1&term_value_id=2" )
+    it( "filters by term_value_id", function ( done ) {
+      request( this.app ).get( "/v1/observations?term_id=1&term_value_id=2" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ) ).to.contain( 8 );
           expect( res.body.results.map( r => r.id ) ).not.to.contain( 7 );
@@ -637,8 +647,8 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "filters by without_term_id", done => {
-      request( app ).get( "/v1/observations?without_term_id=1&id=6,7,9" )
+    it( "filters by without_term_id", function ( done ) {
+      request( this.app ).get( "/v1/observations?without_term_id=1&id=6,7,9" )
         .expect( res => {
           // not annotated with this term
           expect( res.body.results.map( r => r.id ) ).to.contain( 6 );
@@ -649,11 +659,11 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "filters by term_id and without_term_id", done => {
+    it( "filters by term_id and without_term_id", function ( done ) {
       const hasTerm1 = 9;
       const hasTerm2 = 20;
       const hasTerm1And2 = 21;
-      request( app ).get(
+      request( this.app ).get(
         `/v1/observations?term_id=2&without_term_id=1&id=${[hasTerm1, hasTerm2, hasTerm1And2].join( "," )}`
       ).expect( res => {
         expect( res.body.results.map( r => r.id ) ).to.contain( hasTerm2 );
@@ -662,8 +672,8 @@ describe( "Observations", ( ) => {
       } ).expect( 200, done );
     } );
 
-    it( "filters by without_term_value_id", done => {
-      request( app ).get( "/v1/observations?term_id=1&without_term_value_id=1" )
+    it( "filters by without_term_value_id", function ( done ) {
+      request( this.app ).get( "/v1/observations?term_id=1&without_term_value_id=1" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ) ).to.contain( 8 );
           expect( res.body.results.map( r => r.id ) ).not.to.contain( 7 );
@@ -671,8 +681,8 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "can return only ids", done => {
-      request( app ).get( "/v1/observations?id=2&only_id=true&per_page=1" )
+    it( "can return only ids", function ( done ) {
+      request( this.app ).get( "/v1/observations?id=2&only_id=true&per_page=1" )
         .expect( res => {
           const result = res.body.results[0];
           expect( _.keys( result ).length ).to.eq( 1 );
@@ -681,44 +691,44 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
-    it( "filters by geoprivacy", done => {
+    it( "filters by geoprivacy", function ( done ) {
       const obsWithUserGeoprivacy = 333;
       const obsWithTaxonGeoprivacy = 15;
       const obsWithUserAndTaxonGeoprivacy = 16;
-      request( app ).get( "/v1/observations?geoprivacy=obscured" )
+      request( this.app ).get( "/v1/observations?geoprivacy=obscured" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ) ).to.contain( obsWithUserGeoprivacy );
           expect( res.body.results.map( r => r.id ) ).not.to.contain( obsWithTaxonGeoprivacy );
           expect( res.body.results.map( r => r.id ) ).to.contain( obsWithUserAndTaxonGeoprivacy );
         } ).expect( 200, done );
     } );
-    it( "filters by taxon_geoprivacy", done => {
+    it( "filters by taxon_geoprivacy", function ( done ) {
       const obsWithUserGeoprivacy = 333;
       const obsWithTaxonGeoprivacy = 15;
       const obsWithUserAndTaxonGeoprivacy = 16;
-      request( app ).get( "/v1/observations?taxon_geoprivacy=obscured" )
+      request( this.app ).get( "/v1/observations?taxon_geoprivacy=obscured" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ) ).to.contain( obsWithTaxonGeoprivacy );
           expect( res.body.results.map( r => r.id ) ).not.to.contain( obsWithUserGeoprivacy );
           expect( res.body.results.map( r => r.id ) ).to.contain( obsWithUserAndTaxonGeoprivacy );
         } ).expect( 200, done );
     } );
-    it( "filters by geoprivacy and taxon_geoprivacy", done => {
+    it( "filters by geoprivacy and taxon_geoprivacy", function ( done ) {
       const obsWithUserGeoprivacy = 333;
       const obsWithTaxonGeoprivacy = 15;
       const obsWithUserAndTaxonGeoprivacy = 16;
-      request( app ).get( "/v1/observations?geoprivacy=obscured&taxon_geoprivacy=obscured" )
+      request( this.app ).get( "/v1/observations?geoprivacy=obscured&taxon_geoprivacy=obscured" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ) ).not.to.contain( obsWithTaxonGeoprivacy );
           expect( res.body.results.map( r => r.id ) ).not.to.contain( obsWithUserGeoprivacy );
           expect( res.body.results.map( r => r.id ) ).to.contain( obsWithUserAndTaxonGeoprivacy );
         } ).expect( 200, done );
     } );
-    it( "filters by acc_below", done => {
+    it( "filters by acc_below", function ( done ) {
       const obsWithPositionalAccuracy5000 = 17;
       const obsWithPositionalAccuracy5 = 18;
       const obsWithUnknownPositionalAccuracy = 19;
-      request( app ).get( "/v1/observations?acc_below=100" )
+      request( this.app ).get( "/v1/observations?acc_below=100" )
         .expect( res => {
           const ids = res.body.results.map( r => r.id );
           expect( ids ).to.contain( obsWithPositionalAccuracy5 );
@@ -726,13 +736,13 @@ describe( "Observations", ( ) => {
           expect( ids ).not.to.contain( obsWithUnknownPositionalAccuracy );
         } ).expect( 200, done );
     } );
-    it( "filters by acc_below_or_unknown", done => {
+    it( "filters by acc_below_or_unknown", function ( done ) {
       const obsWithPositionalAccuracy5000 = 17;
       const obsWithPositionalAccuracy5 = 18;
       const obsWithUnknownPositionalAccuracy = 19;
       // Limiting request to observations 17, 18, and 19 to avoid returning many other
       // observations with unknown accuracies.
-      request( app ).get( "/v1/observations?acc_below_or_unknown=100&id_above=16&id_below=20" )
+      request( this.app ).get( "/v1/observations?acc_below_or_unknown=100&id_above=16&id_below=20" )
         .expect( res => {
           const ids = res.body.results.map( r => r.id );
           expect( ids ).to.contain( obsWithPositionalAccuracy5 );
@@ -740,21 +750,21 @@ describe( "Observations", ( ) => {
           expect( ids ).not.to.contain( obsWithPositionalAccuracy5000 );
         } ).expect( 200, done );
     } );
-    it( "filters by acc_above", done => {
+    it( "filters by acc_above", function ( done ) {
       const obsWithPositionalAccuracy5000 = 17;
       const obsWithPositionalAccuracy5 = 18;
-      request( app ).get( "/v1/observations?acc_above=100" )
+      request( this.app ).get( "/v1/observations?acc_above=100" )
         .expect( res => {
           const ids = res.body.results.map( r => r.id );
           expect( ids ).not.to.contain( obsWithPositionalAccuracy5 );
           expect( ids ).to.contain( obsWithPositionalAccuracy5000 );
         } ).expect( 200, done );
     } );
-    it( "filters by acc=true", done => {
+    it( "filters by acc=true", function ( done ) {
       const obsWithPositionalAccuracy5000 = 17;
       const obsWithPositionalAccuracy5 = 18;
       const obsWithNoPositionalAccuracy = 19;
-      request( app ).get( "/v1/observations?acc=true" )
+      request( this.app ).get( "/v1/observations?acc=true" )
         .expect( res => {
           const ids = res.body.results.map( r => r.id );
           expect( ids ).to.contain( obsWithPositionalAccuracy5 );
@@ -762,7 +772,7 @@ describe( "Observations", ( ) => {
           expect( ids ).not.to.contain( obsWithNoPositionalAccuracy );
         } ).expect( 200, done );
     } );
-    it( "filters by acc=false", done => {
+    it( "filters by acc=false", function ( done ) {
       const obsWithPositionalAccuracy5000 = 17;
       const obsWithPositionalAccuracy5 = 18;
       const obsWithNoPositionalAccuracy = 19;
@@ -771,7 +781,7 @@ describe( "Observations", ( ) => {
         obsWithPositionalAccuracy5,
         obsWithNoPositionalAccuracy
       ];
-      request( app ).get( `/v1/observations?id=${requestIds.join( "," )}&acc=false` )
+      request( this.app ).get( `/v1/observations?id=${requestIds.join( "," )}&acc=false` )
         .expect( res => {
           const ids = res.body.results.map( r => r.id );
           expect( ids ).not.to.contain( obsWithPositionalAccuracy5 );
@@ -781,9 +791,10 @@ describe( "Observations", ( ) => {
     } );
     describe( "viewed by project curator", ( ) => {
       const curatorProjectUser = _.find( fixtures.postgresql.project_users, pu => pu.id === 6 );
-      const token = jwt.sign( { user_id: curatorProjectUser.user_id }, config.jwtSecret || "secret",
+      const token = jwt.sign( { user_id: curatorProjectUser.user_id },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      it( "only includes non_traditional_projects when filtered by project_id for relevant projects", done => {
+      it( "only includes non_traditional_projects when filtered by project_id for relevant projects", function ( done ) {
         const includedProject = _.find(
           fixtures.elasticsearch.projects.project, p => p.id === 2005
         );
@@ -794,7 +805,7 @@ describe( "Observations", ( ) => {
           fixtures.elasticsearch.observations.observation,
           o => o.uuid === "ca81b849-a052-4b12-9755-7c5d49190fb3"
         );
-        request( app )
+        request( this.app )
           .get(
             `/v1/observations?include_new_projects=true&project_id=${includedProject.id},${excludedProject.id}`
           )
@@ -816,7 +827,7 @@ describe( "Observations", ( ) => {
       describe( "filtering by a collection project they curate", ( ) => {
         const project = _.find( fixtures.elasticsearch.projects.project, p => p.id === 2005 );
         const placeId = _.find( project.search_parameters, sp => sp.field === "place_id" ).value;
-        it( "should include hidden coords for obs by members who trust them with obs of anything", done => {
+        it( "should include hidden coords for obs by members who trust them with obs of anything", function ( done ) {
           const projectUserTrustingForAny = _.find(
             fixtures.postgresql.project_users,
             pu => pu.id === 7
@@ -832,7 +843,7 @@ describe( "Observations", ( ) => {
             && o.user.id === projectUserTrustingForAny.user_id
           ) );
           expect( obs ).to.not.be.undefined;
-          request( app ).get( `/v1/observations?project_id=${project.id}` )
+          request( this.app ).get( `/v1/observations?project_id=${project.id}` )
             .set( "Authorization", token )
             .expect( res => {
               const resultObs = _.find( res.body.results, o => o.id === obs.id );
@@ -851,7 +862,7 @@ describe( "Observations", ( ) => {
             fixtures.postgresql.project_users,
             pu => pu.id === 8
           );
-          it( "should include hidden coords for obs obscured by threatened taxa", done => {
+          it( "should include hidden coords for obs obscured by threatened taxa", function ( done ) {
             const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
               o.private_place_ids
               && o.private_place_ids.includes( placeId )
@@ -860,7 +871,7 @@ describe( "Observations", ( ) => {
               && o.taxon_geoprivacy === "obscured"
               && !o.geoprivacy
             ) );
-            request( app ).get( `/v1/observations?project_id=${project.id}` ).set( "Authorization", token )
+            request( this.app ).get( `/v1/observations?project_id=${project.id}` ).set( "Authorization", token )
               .expect( res => {
                 const resultObs = _.find( res.body.results, o => o.id === obs.id );
                 expect( resultObs.private_location ).to.not.be.undefined;
@@ -868,7 +879,7 @@ describe( "Observations", ( ) => {
               .expect( "Content-Type", /json/ )
               .expect( 200, done );
           } );
-          it( "should not include an obs with public coords outside the place and private coords inside the place that is obscured by geoprivacy", done => {
+          it( "should not include an obs with public coords outside the place and private coords inside the place that is obscured by geoprivacy", function ( done ) {
             const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
               o.private_place_ids
               && o.private_place_ids.includes( placeId )
@@ -877,14 +888,14 @@ describe( "Observations", ( ) => {
               && !o.taxon_geoprivacy
               && o.geoprivacy
             ) );
-            request( app ).get( `/v1/observations?project_id=${project.id}` ).set( "Authorization", token )
+            request( this.app ).get( `/v1/observations?project_id=${project.id}` ).set( "Authorization", token )
               .expect( res => {
                 expect( _.map( res.body.results, o => o.id ) ).not.to.include( obs.id );
               } )
               .expect( "Content-Type", /json/ )
               .expect( 200, done );
           } );
-          it( "should not include an obs with public coords outside the place and private coords inside the place that is obscured by geoprivacy and threatened taxon", done => {
+          it( "should not include an obs with public coords outside the place and private coords inside the place that is obscured by geoprivacy and threatened taxon", function ( done ) {
             const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
               o.private_place_ids
               && o.private_place_ids.includes( placeId )
@@ -893,7 +904,7 @@ describe( "Observations", ( ) => {
               && o.taxon_geoprivacy
               && o.geoprivacy
             ) );
-            request( app ).get( `/v1/observations?project_id=${project.id}` ).set( "Authorization", token )
+            request( this.app ).get( `/v1/observations?project_id=${project.id}` ).set( "Authorization", token )
               .expect( res => {
                 expect( _.map( res.body.results, o => o.id ) ).not.to.include( obs.id );
               } )
@@ -902,7 +913,7 @@ describe( "Observations", ( ) => {
           } );
         } );
       } );
-      it( "should not include hidden coords for an obs in a collection project they do not curate", done => {
+      it( "should not include hidden coords for an obs in a collection project they do not curate", function ( done ) {
         const project = _.find( fixtures.elasticsearch.projects.project, p => p.id === 2006 );
         const placeId = _.find( project.search_parameters, sp => sp.field === "place_id" ).value;
         const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
@@ -911,7 +922,7 @@ describe( "Observations", ( ) => {
           && o.place_ids.includes( placeId )
           && o.geoprivacy === "obscured"
         ) );
-        request( app ).get( `/v1/observations?project_id=${project.id}` ).set( "Authorization", token )
+        request( this.app ).get( `/v1/observations?project_id=${project.id}` ).set( "Authorization", token )
           .expect( res => {
             const resultObs = _.find( res.body.results, o => o.id === obs.id );
             expect( resultObs.private_location ).to.be.undefined;
@@ -924,12 +935,12 @@ describe( "Observations", ( ) => {
           fixtures.elasticsearch.projects.project,
           p => p.id === curatorProjectUser.project_id
         );
-        it( "should include obscured obs by people who trust the viewer", done => {
+        it( "should include obscured obs by people who trust the viewer", function ( done ) {
           const obsByUserWhoTrustsCurator = _.find(
             fixtures.elasticsearch.observations.observation,
             o => o.id === 32
           );
-          request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
+          request( this.app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", token )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).to.include( obsByUserWhoTrustsCurator.id );
@@ -937,12 +948,12 @@ describe( "Observations", ( ) => {
             .expect( "Content-Type", /json/ )
             .expect( 200, done );
         } );
-        it( "should not include obscured obs by people who do not trust the viewer", done => {
+        it( "should not include obscured obs by people who do not trust the viewer", function ( done ) {
           const obsByUserWhoDoesNotTrustsCurator = _.find(
             fixtures.elasticsearch.observations.observation,
             o => o.id === 33
           );
-          request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
+          request( this.app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", token )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).not.to.include( obsByUserWhoDoesNotTrustsCurator.id );
@@ -950,12 +961,12 @@ describe( "Observations", ( ) => {
             .expect( "Content-Type", /json/ )
             .expect( 200, done );
         } );
-        it( "should include unobscured obs by people who do not trust the viewer", done => {
+        it( "should include unobscured obs by people who do not trust the viewer", function ( done ) {
           const obsByUserWhoDoesNotTrustsCurator = _.find(
             fixtures.elasticsearch.observations.observation,
             o => o.id === 34
           );
-          request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
+          request( this.app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", token )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).to.include( obsByUserWhoDoesNotTrustsCurator.id );
@@ -963,12 +974,12 @@ describe( "Observations", ( ) => {
             .expect( "Content-Type", /json/ )
             .expect( 200, done );
         } );
-        it( "should not include obs without open geoprivacy", done => {
+        it( "should not include obs without open geoprivacy", function ( done ) {
           const obs = _.find(
             fixtures.elasticsearch.observations.observation,
             o => o.id === 30
           );
-          request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
+          request( this.app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", token )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).not.to.include( obs.id );
@@ -976,12 +987,12 @@ describe( "Observations", ( ) => {
             .expect( "Content-Type", /json/ )
             .expect( 200, done );
         } );
-        it( "should not include obs without open taxon geoprivacy", done => {
+        it( "should not include obs without open taxon geoprivacy", function ( done ) {
           const obs = _.find(
             fixtures.elasticsearch.observations.observation,
             o => o.id === 35
           );
-          request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
+          request( this.app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", token )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).not.to.include( obs.id );
@@ -989,12 +1000,12 @@ describe( "Observations", ( ) => {
             .expect( "Content-Type", /json/ )
             .expect( 200, done );
         } );
-        it( "should include obs with geoprivacy when observer trusts a project the viewer curates with anything", done => {
+        it( "should include obs with geoprivacy when observer trusts a project the viewer curates with anything", function ( done ) {
           const obs = _.find(
             fixtures.elasticsearch.observations.observation,
             o => o.id === 28
           );
-          request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
+          request( this.app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", token )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).to.include( obs.id );
@@ -1002,13 +1013,13 @@ describe( "Observations", ( ) => {
             .expect( "Content-Type", /json/ )
             .expect( 200, done );
         } );
-        it( "should not include obs with geoprivacy when observer trusts a project the viewer curates with taxa", done => {
+        it( "should not include obs with geoprivacy when observer trusts a project the viewer curates with taxa", function ( done ) {
           const obs = _.find(
             fixtures.elasticsearch.observations.observation,
             o => o.id === 26
           );
           expect( obs.geoprivacy ).to.eq( "obscured" );
-          request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
+          request( this.app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", token )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).not.to.include( obs.id );
@@ -1016,14 +1027,14 @@ describe( "Observations", ( ) => {
             .expect( "Content-Type", /json/ )
             .expect( 200, done );
         } );
-        it( "should include obs with taxon geoprivacy when observer trusts a project the viewer curates with taxa", done => {
+        it( "should include obs with taxon geoprivacy when observer trusts a project the viewer curates with taxa", function ( done ) {
           const obs = _.find(
             fixtures.elasticsearch.observations.observation,
             o => o.id === 25
           );
           expect( obs.taxon_geoprivacy ).to.eq( "obscured" );
           expect( obs.geoprivacy ).to.be.undefined;
-          request( app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
+          request( this.app ).get( `/v1/observations?project_id=${curatedProject.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", token )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).to.include( obs.id );
@@ -1031,18 +1042,19 @@ describe( "Observations", ( ) => {
             .expect( "Content-Type", /json/ )
             .expect( 200, done );
         } );
-        it( "should not include obs with geoprivacy when observer trusts a project with trust disabled that the viewer curates", done => {
+        it( "should not include obs with geoprivacy when observer trusts a project with trust disabled that the viewer curates", function ( done ) {
           const proj = _.find(
             fixtures.elasticsearch.projects.project,
             p => p.id === 2020100101
           );
-          const tok = jwt.sign( { user_id: proj.user_id }, config.jwtSecret || "secret",
+          const tok = jwt.sign( { user_id: proj.user_id },
+            config.jwtSecret || "secret",
             { algorithm: "HS512" } );
           const obs = _.find(
             fixtures.elasticsearch.observations.observation,
             p => p.id === 2020100101
           );
-          request( app ).get( `/v1/observations?project_id=${proj.id}&coords_viewable_for_proj=true` )
+          request( this.app ).get( `/v1/observations?project_id=${proj.id}&coords_viewable_for_proj=true` )
             .set( "Authorization", tok )
             .expect( res => {
               expect( _.map( res.body.results, "id" ) ).not.to.include( obs.id );
@@ -1055,16 +1067,17 @@ describe( "Observations", ( ) => {
     describe( "viewed by project curator filtering by a collection project they curate with user trust disabled", ( ) => {
       const curatorProjectUser = _.find( fixtures.postgresql.project_users,
         pu => pu.id === 2020100101 );
-      const token = jwt.sign( { user_id: curatorProjectUser.user_id }, config.jwtSecret || "secret",
+      const token = jwt.sign( { user_id: curatorProjectUser.user_id },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
       const project = _.find( fixtures.elasticsearch.projects.project,
         p => p.id === curatorProjectUser.project_id );
-      it( "should not include hidden coords for obs by members who trust them with obs of anything", done => {
+      it( "should not include hidden coords for obs by members who trust them with obs of anything", function ( done ) {
         const projectUserTrustingForAny = _.find(
           fixtures.postgresql.project_users,
           pu => pu.id === 2020100102
         );
-        request( app ).get( `/v1/observations?project_id=${project.id}&user_id=${projectUserTrustingForAny.user_id}` )
+        request( this.app ).get( `/v1/observations?project_id=${project.id}&user_id=${projectUserTrustingForAny.user_id}` )
           .set( "Authorization", token )
           .expect( res => {
             const resultObs = _.find( res.body.results, o => o.geoprivacy === "obscured" );
@@ -1086,7 +1099,7 @@ describe( "Observations", ( ) => {
         config.jwtSecret || "secret",
         { algorithm: "HS512" }
       );
-      it( "should include an observation by the viewer that is privately inside the place but publicly outside", done => {
+      it( "should include an observation by the viewer that is privately inside the place but publicly outside", function ( done ) {
         const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
           o.private_place_ids
           && o.private_place_ids.includes( placeId )
@@ -1094,7 +1107,7 @@ describe( "Observations", ( ) => {
           && o.user.id === projectUserTrustingForAny.user_id
         ) );
         expect( obs ).to.not.be.undefined;
-        request( app ).get( `/v1/observations?project_id=${project.id}` )
+        request( this.app ).get( `/v1/observations?project_id=${project.id}` )
           .set( "Authorization", token )
           .expect( res => {
             const resultObs = _.find( res.body.results, o => o.id === obs.id );
@@ -1108,7 +1121,7 @@ describe( "Observations", ( ) => {
           .expect( "Content-Type", /json/ )
           .expect( 200, done );
       } );
-      it( "should not include an observation by someone else that is privately inside the place but publicly outside", done => {
+      it( "should not include an observation by someone else that is privately inside the place but publicly outside", function ( done ) {
         const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
           o.private_place_ids
           && o.private_place_ids.includes( placeId )
@@ -1116,7 +1129,7 @@ describe( "Observations", ( ) => {
           && o.user.id !== projectUserTrustingForAny.user_id
         ) );
         expect( obs ).to.not.be.undefined;
-        request( app ).get( `/v1/observations?project_id=${project.id}` )
+        request( this.app ).get( `/v1/observations?project_id=${project.id}` )
           .set( "Authorization", token )
           .expect( res => {
             const resultObs = _.find( res.body.results, o => o.id === obs.id );
@@ -1138,7 +1151,7 @@ describe( "Observations", ( ) => {
         config.jwtSecret || "secret",
         { algorithm: "HS512" }
       );
-      it( "should not include an observation by the viewer that is privately inside the place but publicly outside", done => {
+      it( "should not include an observation by the viewer that is privately inside the place but publicly outside", function ( done ) {
         const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
           o.private_place_ids
           && o.private_place_ids.includes( placeId )
@@ -1146,7 +1159,7 @@ describe( "Observations", ( ) => {
           && o.user.id === projectUserTrustingForNone.user_id
         ) );
         expect( obs ).to.not.be.undefined;
-        request( app ).get( `/v1/observations?project_id=${project.id}` )
+        request( this.app ).get( `/v1/observations?project_id=${project.id}` )
           .set( "Authorization", token )
           .expect( res => {
             const resultObs = _.find( res.body.results, o => o.id === obs.id );
@@ -1168,7 +1181,7 @@ describe( "Observations", ( ) => {
         config.jwtSecret || "secret",
         { algorithm: "HS512" }
       );
-      it( "should not include an observation by the viewer that is privately inside the place but publicly outside", done => {
+      it( "should not include an observation by the viewer that is privately inside the place but publicly outside", function ( done ) {
         const obs = _.find( fixtures.elasticsearch.observations.observation, o => (
           o.private_place_ids
           && o.private_place_ids.includes( placeId )
@@ -1176,7 +1189,7 @@ describe( "Observations", ( ) => {
           && o.user.id === nonMemberUser.id
         ) );
         expect( obs ).to.not.be.undefined;
-        request( app ).get( `/v1/observations?project_id=${project.id}` )
+        request( this.app ).get( `/v1/observations?project_id=${project.id}` )
           .set( "Authorization", token )
           .expect( res => {
             const resultObs = _.find( res.body.results, o => o.id === obs.id );
@@ -1186,10 +1199,11 @@ describe( "Observations", ( ) => {
           .expect( 200, done );
       } );
     } );
-    it( "shows authenticated trusted users private info", done => {
-      const trustedUserToken = jwt.sign( { user_id: 125 }, config.jwtSecret || "secret",
+    it( "shows authenticated trusted users private info", function ( done ) {
+      const trustedUserToken = jwt.sign( { user_id: 125 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations?id=14" ).set( "Authorization", trustedUserToken )
+      request( this.app ).get( "/v1/observations?id=14" ).set( "Authorization", trustedUserToken )
         .expect( res => {
           expect( res.body.results[0].private_location ).to.not.be.undefined;
         } )
@@ -1199,20 +1213,20 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "histogram", ( ) => {
-    it( "returns json", done => {
-      request( app ).get( "/v1/observations/histogram" )
+    it( "returns json", function ( done ) {
+      request( this.app ).get( "/v1/observations/histogram" )
         .expect( "Content-Type", /json/ ).expect( 200, done );
     } );
   } );
 
   describe( "identifiers", ( ) => {
-    it( "returns json", done => {
-      request( app ).get( "/v1/observations/identifiers" )
+    it( "returns json", function ( done ) {
+      request( this.app ).get( "/v1/observations/identifiers" )
         .expect( "Content-Type", /json/ ).expect( 200, done );
     } );
 
-    it( "supports pagination", done => {
-      request( app ).get( "/v1/observations/identifiers?per_page=1&page=2" ).expect( res => {
+    it( "supports pagination", function ( done ) {
+      request( this.app ).get( "/v1/observations/identifiers?per_page=1&page=2" ).expect( res => {
         expect( res.body.page ).to.eq( 2 );
         expect( res.body.per_page ).to.eq( 1 );
       } ).expect( "Content-Type", /json/ )
@@ -1221,40 +1235,41 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "observers", ( ) => {
-    it( "returns json", done => {
-      request( app ).get( "/v1/observations/observers" )
+    it( "returns json", function ( done ) {
+      request( this.app ).get( "/v1/observations/observers" )
         .expect( "Content-Type", /json/ ).expect( 200, done );
     } );
 
-    it( "accepts an order_by param", done => {
-      request( app ).get( "/v1/observations/observers?order_by=species_count" )
+    it( "accepts an order_by param", function ( done ) {
+      request( this.app ).get( "/v1/observations/observers?order_by=species_count" )
         .expect( "Content-Type", /json/ ).expect( 200, done );
     } );
 
-    it( "includes user name field", ( ) => {
-      request( app ).get( "/v1/observations/observers" ).expect( res => {
-        expect( res.results[0].user.name ).to.eq( "A User" );
-      } );
+    it( "includes user name field", function ( done ) {
+      request( this.app ).get( "/v1/observations/observers" ).expect( res => {
+        expect( res.body.results[0].user.name ).not.to.be.empty;
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
     } );
 
-    it( "supports pagination", done => {
-      request( app ).get( "/v1/observations/observers?per_page=1&page=2" ).expect( res => {
+    it( "supports pagination", function ( done ) {
+      request( this.app ).get( "/v1/observations/observers?per_page=1&page=2" ).expect( res => {
         expect( res.body.page ).to.eq( 2 );
         expect( res.body.per_page ).to.eq( 1 );
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
 
-    it( "supports pagination when ordering by species_count", done => {
-      request( app ).get( "/v1/observations/observers?per_page=1&page=2&order_by=species_count" ).expect( res => {
+    it( "supports pagination when ordering by species_count", function ( done ) {
+      request( this.app ).get( "/v1/observations/observers?per_page=1&page=2&order_by=species_count" ).expect( res => {
         expect( res.body.page ).to.eq( 2 );
         expect( res.body.per_page ).to.eq( 1 );
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
 
-    it( "should never return null total_results", done => {
-      request( app ).get( "/v1/observations/observers?place_id=123" ).expect( res => {
+    it( "should never return null total_results", function ( done ) {
+      request( this.app ).get( "/v1/observations/observers?place_id=123" ).expect( res => {
         expect( res.body.total_results ).to.eq( 0 );
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
@@ -1262,27 +1277,27 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "species_counts", ( ) => {
-    it( "returns json", done => {
-      request( app ).get( "/v1/observations/species_counts" )
+    it( "returns json", function ( done ) {
+      request( this.app ).get( "/v1/observations/species_counts" )
         .expect( "Content-Type", /json/ ).expect( 200, done );
     } );
 
-    it( "sorts by count desc by default", done => {
-      request( app ).get( "/v1/observations/species_counts" ).expect( res => {
+    it( "sorts by count desc by default", function ( done ) {
+      request( this.app ).get( "/v1/observations/species_counts" ).expect( res => {
         expect( res.body.results[0].count ).to.be.at.least( res.body.results[1].count );
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
 
-    it( "can sort by count asc", done => {
-      request( app ).get( "/v1/observations/species_counts?order=asc" ).expect( res => {
+    it( "can sort by count asc", function ( done ) {
+      request( this.app ).get( "/v1/observations/species_counts?order=asc" ).expect( res => {
         expect( res.body.results[1].count ).to.be.at.least( res.body.results[0].count );
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
 
-    it( "returns taxa unobserved by a user", done => {
-      request( app ).get( "/v1/observations/species_counts?unobserved_by_user_id=1&lat=50&lng=50" )
+    it( "returns taxa unobserved by a user", function ( done ) {
+      request( this.app ).get( "/v1/observations/species_counts?unobserved_by_user_id=1&lat=50&lng=50" )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.total_results ).to.eq( 1 );
@@ -1292,8 +1307,8 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "supports pagination", done => {
-      request( app ).get( "/v1/observations/species_counts?per_page=1&page=2" ).expect( res => {
+    it( "supports pagination", function ( done ) {
+      request( this.app ).get( "/v1/observations/species_counts?per_page=1&page=2" ).expect( res => {
         expect( res.body.page ).to.eq( 2 );
         expect( res.body.per_page ).to.eq( 1 );
       } ).expect( "Content-Type", /json/ )
@@ -1302,31 +1317,32 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "iconic_taxa_counts", ( ) => {
-    it( "returns json", done => {
-      request( app ).get( "/v1/observations/iconic_taxa_counts" )
+    it( "returns json", function ( done ) {
+      request( this.app ).get( "/v1/observations/iconic_taxa_counts" )
         .expect( "Content-Type", /json/ ).expect( 200, done );
     } );
   } );
 
   describe( "iconic_taxa_species_counts", ( ) => {
-    it( "returns json", done => {
-      request( app ).get( "/v1/observations/iconic_taxa_species_counts" )
+    it( "returns json", function ( done ) {
+      request( this.app ).get( "/v1/observations/iconic_taxa_species_counts" )
         .expect( "Content-Type", /json/ ).expect( 200, done );
     } );
   } );
 
   describe( "updates", ( ) => {
-    it( "fails for unauthenticated requests", done => {
-      request( app ).get( "/v1/observations/updates" ).expect( res => {
+    it( "fails for unauthenticated requests", function ( done ) {
+      request( this.app ).get( "/v1/observations/updates" ).expect( res => {
         expect( res.error.text ).to.eq( "{\"error\":\"Unauthorized\",\"status\":401}" );
       } ).expect( "Content-Type", /json/ )
         .expect( 401, done );
     } );
 
-    it( "allows authenticated requests", done => {
-      const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+    it( "allows authenticated requests", function ( done ) {
+      const token = jwt.sign( { user_id: 123 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/updates" ).set( "Authorization", token )
+      request( this.app ).get( "/v1/observations/updates" ).set( "Authorization", token )
         .expect( res => {
           expect( res.err ).to.be.undefined;
         } )
@@ -1334,10 +1350,10 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "shows updates on obs by viewer and not by viewer by default", done => {
+    it( "shows updates on obs by viewer and not by viewer by default", function ( done ) {
       const ownerId = 123;
       const token = jwt.sign( { user_id: ownerId }, config.jwtSecret || "secret", { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/updates" ).set( "Authorization", token )
+      request( this.app ).get( "/v1/observations/updates" ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results.find( r => r.resource_owner_id === ownerId ) ).to.exist;
           expect( res.body.results.find( r => r.resource_owner_id !== ownerId ) ).to.exist;
@@ -1345,10 +1361,10 @@ describe( "Observations", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
-    it( "filters on obs by viewer", done => {
+    it( "filters on obs by viewer", function ( done ) {
       const ownerId = 123;
       const token = jwt.sign( { user_id: ownerId }, config.jwtSecret || "secret", { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/updates?observations_by=owner" ).set( "Authorization", token )
+      request( this.app ).get( "/v1/observations/updates?observations_by=owner" ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results.find( r => r.resource_owner_id === ownerId ) ).to.exist;
           expect( res.body.results.find( r => r.resource_owner_id !== ownerId ) ).to.not.exist;
@@ -1356,10 +1372,10 @@ describe( "Observations", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
-    it( "filters on obs by following", done => {
+    it( "filters on obs by following", function ( done ) {
       const ownerId = 123;
       const token = jwt.sign( { user_id: ownerId }, config.jwtSecret || "secret", { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/updates?observations_by=following" ).set( "Authorization", token )
+      request( this.app ).get( "/v1/observations/updates?observations_by=following" ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results.find( r => r.resource_owner_id !== ownerId ) ).to.exist;
           expect( res.body.results.find( r => r.resource_owner_id === ownerId ) ).to.not.exist;
@@ -1370,18 +1386,19 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "deleted", ( ) => {
-    it( "fails for unauthenticated requests", done => {
-      request( app ).get( "/v1/observations/deleted" )
+    it( "fails for unauthenticated requests", function ( done ) {
+      request( this.app ).get( "/v1/observations/deleted" )
         .expect( res => {
           expect( res.error.text ).to.eq( "{\"error\":\"Unauthorized\",\"status\":401}" );
         } ).expect( "Content-Type", /json/ )
         .expect( 401, done );
     } );
 
-    it( "returns an empty array without a since param", done => {
-      const token = jwt.sign( { user_id: 1 }, config.jwtSecret || "secret",
+    it( "returns an empty array without a since param", function ( done ) {
+      const token = jwt.sign( { user_id: 1 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/deleted" ).set( "Authorization", token )
+      request( this.app ).get( "/v1/observations/deleted" ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.total_results ).to.eq( 0 );
           expect( res.body.page ).to.eq( 1 );
@@ -1392,10 +1409,11 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "returns observations deleted since date", done => {
-      const token = jwt.sign( { user_id: 1 }, config.jwtSecret || "secret",
+    it( "returns observations deleted since date", function ( done ) {
+      const token = jwt.sign( { user_id: 1 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/observations/deleted?since=2016-01-01" ).set( "Authorization", token )
+      request( this.app ).get( "/v1/observations/deleted?since=2016-01-01" ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.total_results ).to.eq( 3 );
           expect( res.body.results.length ).to.eq( 3 );
@@ -1406,8 +1424,8 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "quality_grades", ( ) => {
-    it( "returns quality_grade counts", done => {
-      request( app ).get( "/v1/observations/quality_grades" ).expect( res => {
+    it( "returns quality_grade counts", function ( done ) {
+      request( this.app ).get( "/v1/observations/quality_grades" ).expect( res => {
         const numRG = _.filter(
           fixtures.elasticsearch.observations.observation,
           o => o.quality_grade === "research"
@@ -1421,8 +1439,8 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "identification_categories", ( ) => {
-    it( "returns category counts", done => {
-      request( app ).get( "/v1/observations/identification_categories" ).expect( res => {
+    it( "returns category counts", function ( done ) {
+      request( this.app ).get( "/v1/observations/identification_categories" ).expect( res => {
         expect( res.body.results[0].category ).to.eq( "leading" );
         expect( res.body.results[0].count ).to.be.at.least( 1 );
       } ).expect( "Content-Type", /json/ )
@@ -1431,8 +1449,8 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "umbrella_project_stats", ( ) => {
-    it( "returns stats", done => {
-      request( app ).get( "/v1/observations/umbrella_project_stats?project_id=first-umbrella" ).expect( res => {
+    it( "returns stats", function ( done ) {
+      request( this.app ).get( "/v1/observations/umbrella_project_stats?project_id=first-umbrella" ).expect( res => {
         expect( res.body.results[0].project ).to.not.be.undefined;
         expect( res.body.results[0].observation_count ).to.not.be.undefined;
         expect( res.body.results[0].species_count ).to.not.be.undefined;
@@ -1443,8 +1461,8 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "popular_field_values", ( ) => {
-    it( "returns controlled attributes with the label field", done => {
-      request( app ).get( "/v1/observations/popular_field_values" ).expect( res => {
+    it( "returns controlled attributes with the label field", function ( done ) {
+      request( this.app ).get( "/v1/observations/popular_field_values" ).expect( res => {
         expect( res.body.results[0].controlled_attribute.label ).to.not.be.undefined;
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );

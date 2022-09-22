@@ -7,11 +7,8 @@ const sinon = require( "sinon" );
 const chai = require( "chai" );
 const sinonChai = require( "sinon-chai" );
 const jwt = require( "jsonwebtoken" );
-const config = require( "../../../config.js" );
-const app = require( "../../../app" );
-const ComputervisionControllerV1 = require( "../../../lib/controllers/v1/computervision_controller.js" );
-const ObservationsControllerV1 = require( "../../../lib/controllers/v1/observations_controller.js" );
-const TaxaControllerV1 = require( "../../../lib/controllers/v1/taxa_controller.js" );
+const config = require( "../../../config" );
+const ComputervisionControllerV1 = require( "../../../lib/controllers/v1/computervision_controller" );
 
 chai.use( sinonChai );
 
@@ -20,8 +17,8 @@ const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 describe( "Taxa", ( ) => {
   const fixtureTaxon = fixtures.elasticsearch.taxa.taxon[0];
   describe( "show", ( ) => {
-    it( "returns json", done => {
-      request( app )
+    it( "returns json", function ( done ) {
+      request( this.app )
         .get( `/v2/taxa/${fixtureTaxon.id}` )
         .expect( 200 )
         .expect( res => {
@@ -30,8 +27,8 @@ describe( "Taxa", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
-    it( "supports fields via X-HTTP-Method-Override", done => {
-      request( app )
+    it( "supports fields via X-HTTP-Method-Override", function ( done ) {
+      request( this.app )
         .post( `/v2/taxa/${fixtureTaxon.id}` )
         .set( "Content-Type", "application/json" )
         .send( {
@@ -47,15 +44,16 @@ describe( "Taxa", ( ) => {
   } );
 
   describe( "suggest", ( ) => {
-    const token = jwt.sign( { user_id: 123 }, config.jwtSecret || "secret",
+    const token = jwt.sign( { user_id: 123 },
+      config.jwtSecret || "secret",
       { algorithm: "HS512" } );
-    it( "requires auth", done => {
-      request( app )
+    it( "requires auth", function ( done ) {
+      request( this.app )
         .get( "/v2/taxa/suggest" )
         .expect( 401, done );
     } );
-    it( "returns json", done => {
-      request( app )
+    it( "returns json", function ( done ) {
+      request( this.app )
         .get( "/v2/taxa/suggest" )
         .set( "Authorization", token )
         .expect( 200 )
@@ -64,9 +62,9 @@ describe( "Taxa", ( ) => {
         } )
         .expect( 200, done );
     } );
-    it( "limit response size with the limit param", done => {
+    it( "limit response size with the limit param", function ( done ) {
       const limit = 1;
-      request( app )
+      request( this.app )
         .get( `/v2/taxa/suggest?source=observations&limit=${limit}` )
         .set( "Authorization", token )
         .expect( 200 )
@@ -75,7 +73,7 @@ describe( "Taxa", ( ) => {
         } )
         .expect( 200, done );
     } );
-    it( "sets place based on place_lat and place_lng params", done => {
+    it( "sets place based on place_lat and place_lng params", function ( done ) {
       const place = _.find( fixtures.elasticsearch.places.place, p => p.name === "Massachusetts" );
       const taxonInPlace = _.find(
         fixtures.elasticsearch.observations.observation,
@@ -93,8 +91,8 @@ describe( "Taxa", ( ) => {
           && !o.place_ids.includes( place.id )
         )
       ).taxon;
-      const [placeLat, placeLng] = place.location.split( "," ).map( c => parseInt( c, 0 ) );
-      request( app )
+      const [placeLat, placeLng] = place.location.split( "," ).map( c => parseInt( c, 10 ) );
+      request( this.app )
         .get( `/v2/taxa/suggest?source=observations&place_lat=${placeLat}&place_lng=${placeLng}` )
         .set( "Authorization", token )
         .expect( 200 )
@@ -109,9 +107,9 @@ describe( "Taxa", ( ) => {
         } )
         .expect( 200, done );
     } );
-    it( "includes queryTaxon when query has taxon_id", done => {
+    it( "includes queryTaxon when query has taxon_id", function ( done ) {
       const taxon = fixtures.elasticsearch.taxa.taxon[0];
-      request( app )
+      request( this.app )
         .get( `/v2/taxa/suggest?taxon_id=${taxon.id}` )
         .set( "Authorization", token )
         .expect( 200 )
@@ -120,9 +118,9 @@ describe( "Taxa", ( ) => {
         } )
         .expect( 200, done );
     } );
-    it( "includes queryPlace when query has place_id", done => {
+    it( "includes queryPlace when query has place_id", function ( done ) {
       const place = _.find( fixtures.elasticsearch.places.place, p => p.name === "Massachusetts" );
-      request( app )
+      request( this.app )
         .get( `/v2/taxa/suggest?place_id=${place.id}` )
         .set( "Authorization", token )
         .expect( 200 )
@@ -134,13 +132,13 @@ describe( "Taxa", ( ) => {
     describe( "with image upload", ( ) => {
       const sandbox = sinon.createSandbox( );
       afterEach( ( ) => sandbox.restore( ) );
-      it( "accepts an image and returns results", done => {
+      it( "accepts an image and returns results", function ( done ) {
         const fakeVisionResults = { 1: 0.01 };
         nock( config.imageProcesing.tensorappURL )
           .post( "/" )
           .reply( 200, fakeVisionResults );
         const scoreImageSpy = sandbox.spy( ComputervisionControllerV1, "scoreImage" );
-        request( app ).post( "/v2/taxa/suggest" )
+        request( this.app ).post( "/v2/taxa/suggest" )
           .set( "Content-Type", "multipart/form-data" )
           .set( "Authorization", token )
           .field( "source", "visual" )
@@ -158,7 +156,7 @@ describe( "Taxa", ( ) => {
             expect( scoreImageSpy ).to.have.been.calledOnce;
             // Ensure response includes the taxon from vision
             expect( res.body.results[0].taxon.id ).to.eq(
-              parseInt( _.keys( fakeVisionResults )[0], 0 )
+              parseInt( _.keys( fakeVisionResults )[0], 10 )
             );
             // Ensure fields is working on the results
             expect( res.body.results[0].taxon.name ).not.to.be.undefined;
@@ -170,9 +168,9 @@ describe( "Taxa", ( ) => {
   } );
 
   describe( "autocomplete", ( ) => {
-    it( "supports fields via X-HTTP-Method-Override", done => {
+    it( "supports fields via X-HTTP-Method-Override", function ( done ) {
       const taxon = _.find( fixtures.elasticsearch.taxa.taxon, t => t.name === "Search test taxon" );
-      request( app )
+      request( this.app )
         .post( "/v2/taxa/autocomplete" )
         .set( "Content-Type", "application/json" )
         .send( {
@@ -189,8 +187,8 @@ describe( "Taxa", ( ) => {
   } );
 
   describe( "wanted", ( ) => {
-    it( "returns json", done => {
-      request( app )
+    it( "returns json", function ( done ) {
+      request( this.app )
         .get( `/v2/taxa/${fixtureTaxon.id}/wanted` )
         .expect( 200 )
         .expect( res => {

@@ -5,9 +5,7 @@ const request = require( "supertest" );
 const nock = require( "nock" );
 const sinon = require( "sinon" );
 const jwt = require( "jsonwebtoken" );
-const inaturalistjs = require( "inaturalistjs" );
 const config = require( "../../../config" );
-const app = require( "../../../app" );
 const ObservationsController = require( "../../../lib/controllers/v1/observations_controller" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
@@ -16,25 +14,25 @@ let obs;
 describe( "Observations", ( ) => {
   const fixtureObs = fixtures.elasticsearch.observations.observation[0];
   describe( "show", ( ) => {
-    it( "returns json", done => {
-      request( app ).get( `/v2/observations/${fixtureObs.uuid}` ).expect( res => {
+    it( "returns json", function ( done ) {
+      request( this.app ).get( `/v2/observations/${fixtureObs.uuid}` ).expect( res => {
         expect( res.body.results[0].uuid ).to.eq( fixtureObs.uuid );
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
-    it( "returns the uuid when specified in the fields query param", done => {
-      request( app ).get( `/v2/observations/${fixtureObs.uuid}?fields=id,uuid` ).expect( res => {
+    it( "returns the uuid when specified in the fields query param", function ( done ) {
+      request( this.app ).get( `/v2/observations/${fixtureObs.uuid}?fields=id,uuid` ).expect( res => {
         expect( res.body.results[0].uuid ).to.eq( fixtureObs.uuid );
       } ).expect( 200, done );
     } );
-    it( "returns the uuid and quality_grade when all fields", done => {
-      request( app ).get( `/v2/observations/${fixtureObs.uuid}?fields=all` ).expect( res => {
+    it( "returns the uuid and quality_grade when all fields", function ( done ) {
+      request( this.app ).get( `/v2/observations/${fixtureObs.uuid}?fields=all` ).expect( res => {
         expect( res.body.results[0].uuid ).to.eq( fixtureObs.uuid );
         expect( res.body.results[0].quality_grade ).to.eq( fixtureObs.quality_grade );
       } ).expect( 200, done );
     } );
-    it( "returns the user name and login when requesting all user fields", done => {
-      request( app )
+    it( "returns the user name and login when requesting all user fields", function ( done ) {
+      request( this.app )
         .post( `/v2/observations/${fixtureObs.uuid}` )
         .set( "Content-Type", "application/json" )
         .send( {
@@ -47,12 +45,12 @@ describe( "Observations", ( ) => {
         } )
         .expect( 200, done );
     } );
-    it( "shows authenticated users their own private info", done => {
+    it( "shows authenticated users their own private info", function ( done ) {
       obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 1 );
       const token = jwt.sign( { user_id: 123 },
         config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
+      request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results[0].private_location ).to.not.be.undefined;
         } )
@@ -63,12 +61,12 @@ describe( "Observations", ( ) => {
     // TODO: these next 2 tests aren't working in v2 yet - preloading of user
     // data like curator status and user trust needs to be implemented
 
-    // it( "shows authenticated project curators private info if they have access", done => {
+    // it( "shows authenticated project curators private info if they have access", function ( done ) {
     //   obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 10 );
     //   const token = jwt.sign( { user_id: 123 },
     //     config.jwtSecret || "secret",
     //     { algorithm: "HS512" } );
-    //   request( app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
+    //   request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
     //     .expect( res => {
     //       util.pp( res.body );
     //       expect( res.body.results[0].private_location ).to.not.be.undefined;
@@ -77,12 +75,12 @@ describe( "Observations", ( ) => {
     //     .expect( 200, done );
     // } );
 
-    // it( "shows authenticated trusted users private info", done => {
+    // it( "shows authenticated trusted users private info", function ( done ) {
     //   obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 14 );
     //   const token = jwt.sign( { user_id: 125 },
     //     config.jwtSecret || "secret",
     //     { algorithm: "HS512" } );
-    //   request( app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
+    //   request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
     //     .expect( res => {
     //       util.pp( res.body );
     //       expect( res.body.results[0].private_location ).to.not.be.undefined;
@@ -91,12 +89,12 @@ describe( "Observations", ( ) => {
     //     .expect( 200, done );
     // } );
 
-    it( "does not show authenticated project curators private info if they do not have access", done => {
+    it( "does not show authenticated project curators private info if they do not have access", function ( done ) {
       obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 11 );
       const token = jwt.sign( { user_id: 123 },
         config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
+      request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results[0].private_location ).to.be.undefined;
         } )
@@ -104,12 +102,12 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "does not show authenticated users others' private info", done => {
+    it( "does not show authenticated users others' private info", function ( done ) {
       obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 333 );
       const token = jwt.sign( { user_id: 123 },
         config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
+      request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results[0].private_location ).to.be.undefined;
         } )
@@ -119,22 +117,22 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "search", ( ) => {
-    it( "returns json", done => {
-      request( app ).get( "/v2/observations" ).expect( res => {
+    it( "returns json", function ( done ) {
+      request( this.app ).get( "/v2/observations" ).expect( res => {
         expect( res.body.results[0].uuid ).to.not.be.undefined;
       } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
 
-    it( "returns user when specified in the fields query param", done => {
-      request( app ).get( "/v2/observations?fields=user" ).expect( res => {
+    it( "returns user when specified in the fields query param", function ( done ) {
+      request( this.app ).get( "/v2/observations?fields=user" ).expect( res => {
         expect( res.body.results[0].user ).to.not.be.undefined;
       } ).expect( 200, done );
     } );
 
-    it( "should error when you POST with X-HTTP-Method-Override set to GET and a multipart/form-data payload", done => {
-      request( app )
+    it( "should error when you POST with X-HTTP-Method-Override set to GET and a multipart/form-data payload", function ( done ) {
+      request( this.app )
         .post( "/v2/observations" )
         .send( `user_id=${fixtureObs.user.id}&fields=user` )
         .set( "Content-Type", "multipart/form-data" )
@@ -145,8 +143,8 @@ describe( "Observations", ( ) => {
         .expect( 422, done );
     } );
 
-    it( "should search when you POST with X-HTTP-Method-Override set to GET and a JSON payload", done => {
-      request( app )
+    it( "should search when you POST with X-HTTP-Method-Override set to GET and a JSON payload", function ( done ) {
+      request( this.app )
         .post( "/v2/observations" )
         .set( "Content-Type", "application/json" )
         .send( {
@@ -161,12 +159,12 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "shows authenticated users their own private info", done => {
+    it( "shows authenticated users their own private info", function ( done ) {
       const userId = 123;
       const token = jwt.sign( { user_id: userId },
         config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( `/v2/observations?user_id=${userId}&fields=all` ).set( "Authorization", token )
+      request( this.app ).get( `/v2/observations?user_id=${userId}&fields=all` ).set( "Authorization", token )
         .expect( res => {
           const obscuredObs = _.find( res.body.results, o => o.obscured );
           expect( obscuredObs.private_location ).to.not.be.undefined;
@@ -175,11 +173,11 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "does not show authenticated users others' private info", done => {
+    it( "does not show authenticated users others' private info", function ( done ) {
       const token = jwt.sign( { user_id: 5 },
         config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v2/observations?user_id=123&fields=all" ).set( "Authorization", token )
+      request( this.app ).get( "/v2/observations?user_id=123&fields=all" ).set( "Authorization", token )
         .expect( res => {
           const obscuredObs = _.find( res.body.results, o => o.obscured );
           expect( obscuredObs.private_location ).to.be.undefined;
@@ -188,27 +186,27 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "accepts place UUID", done => {
+    it( "accepts place UUID", function ( done ) {
       const usUUID = fixtures.elasticsearch.places.place[0].uuid;
-      request( app ).get( `/v2/observations?place_id=${usUUID}` ).expect( res => {
+      request( this.app ).get( `/v2/observations?place_id=${usUUID}` ).expect( res => {
         expect( res.body.results[0].uuid ).to.not.be.undefined;
       } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
 
-    it( "accepts multiple place UUIDs", done => {
+    it( "accepts multiple place UUIDs", function ( done ) {
       const uuids = fixtures.elasticsearch.places.place.slice( 0, 2 ).map( p => p.uuid );
-      request( app ).get( `/v2/observations?place_id=${uuids.join( "," )}` ).expect( res => {
+      request( this.app ).get( `/v2/observations?place_id=${uuids.join( "," )}` ).expect( res => {
         expect( res.body.results[0].uuid ).to.not.be.undefined;
       } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
 
-    it( "accepts place UUID with X-HTTP-Method-Override", done => {
+    it( "accepts place UUID with X-HTTP-Method-Override", function ( done ) {
       const usUUID = fixtures.elasticsearch.places.place[0].uuid;
-      request( app )
+      request( this.app )
         .post( "/v2/observations" )
         .set( "Content-Type", "application/json" )
         .send( { place_id: usUUID } )
@@ -220,9 +218,9 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "accepts multiple place UUIDs with X-HTTP-Method-Override", done => {
+    it( "accepts multiple place UUIDs with X-HTTP-Method-Override", function ( done ) {
       const uuids = fixtures.elasticsearch.places.place.slice( 0, 2 ).map( p => p.uuid );
-      request( app )
+      request( this.app )
         .post( "/v2/observations" )
         .set( "Content-Type", "application/json" )
         .send( { place_id: uuids } )
@@ -236,7 +234,7 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "create", ( ) => {
-    it( "returns private coordinates when geoprivacy is private", done => {
+    it( "returns private coordinates when geoprivacy is private", function ( done ) {
       const o = fixtures.elasticsearch.observations.observation[5];
       expect( o.geoprivacy ).to.eq( "private" );
       expect( o.location ).to.be.undefined;
@@ -246,7 +244,7 @@ describe( "Observations", ( ) => {
       nock( "http://localhost:3000" )
         .post( "/observations" )
         .reply( 200, [{ id: o.id, uuid: o.uuid }] );
-      request( app ).post( "/v2/observations" )
+      request( this.app ).post( "/v2/observations" )
         .set( "Authorization", token )
         .set( "Content-Type", "application/json" )
         // it doesn't really matter what we post since we're just stubbing the
@@ -276,8 +274,9 @@ describe( "Observations", ( ) => {
 
   describe( "update", ( ) => {
     const token = jwt.sign( { user_id: fixtureObs.user.id },
-      config.jwtSecret || "secret", { algorithm: "HS512" } );
-    it( "returns json", done => {
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+    it( "returns json", function ( done ) {
       const newDesc = "lskdgnlskdng";
       // Using nock to stub the rails response is not enough here b/c the v1
       // controller will load fresh data from the ES index, so if we want to see
@@ -285,9 +284,9 @@ describe( "Observations", ( ) => {
       // controller reponse
       sinon.stub( ObservationsController, "update" )
         .callsFake(
-          ( ) => Object.assign( {}, fixtureObs, { description: newDesc } )
+          ( ) => ( { ...fixtureObs, description: newDesc } )
         );
-      request( app ).put( `/v2/observations/${fixtureObs.uuid}` )
+      request( this.app ).put( `/v2/observations/${fixtureObs.uuid}` )
         .set( "observation", JSON.stringify( { } ) )
         .field( "fields", JSON.stringify( { description: true } ) )
         .set( "Authorization", token )
@@ -302,7 +301,7 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "taxon_summary", ( ) => {
-    it( "should include a relevant listed taxon", done => {
+    it( "should include a relevant listed taxon", function ( done ) {
       const o = fixtures.elasticsearch.observations.observation[0];
       const railsResponse = {
         conservation_status: {},
@@ -315,7 +314,7 @@ describe( "Observations", ( ) => {
       nock( "http://localhost:3000" )
         .get( `/observations/${o.id}/taxon_summary` )
         .reply( 200, railsResponse );
-      request( app ).get( `/v2/observations/${o.uuid}/taxon_summary` )
+      request( this.app ).get( `/v2/observations/${o.uuid}/taxon_summary` )
         .set( "Content-Type", "application/json" )
         .expect( 200 )
         .expect( res => {
@@ -330,19 +329,19 @@ describe( "Observations", ( ) => {
     const token = jwt.sign( { user_id: 123 },
       config.jwtSecret || "secret",
       { algorithm: "HS512" } );
-    it( "returns an empty success on POST", done => {
+    it( "returns an empty success on POST", function ( done ) {
       nock( "http://localhost:3000" )
         .post( `/votes/vote/observation/${fixtureObs.id}` )
         .reply( 200 );
-      request( app ).post( `/v2/observations/${fixtureObs.uuid}/fave` )
+      request( this.app ).post( `/v2/observations/${fixtureObs.uuid}/fave` )
         .set( "Authorization", token )
         .expect( 204, done );
     } );
-    it( "returns an empty success on DELETE", done => {
+    it( "returns an empty success on DELETE", function ( done ) {
       nock( "http://localhost:3000" )
         .delete( `/votes/unvote/observation/${fixtureObs.id}` )
         .reply( 204 );
-      request( app ).delete( `/v2/observations/${fixtureObs.uuid}/fave` )
+      request( this.app ).delete( `/v2/observations/${fixtureObs.uuid}/fave` )
         .set( "Authorization", token )
         .expect( 204, done );
     } );
@@ -353,16 +352,16 @@ describe( "Observations", ( ) => {
       config.jwtSecret || "secret",
       { algorithm: "HS512" } );
     describe( "POST", ( ) => {
-      it( "should fail on a bad metric", done => {
-        request( app ).delete( `/v2/observations/${fixtureObs.uuid}/quality/wyld` )
+      it( "should fail on a bad metric", function ( done ) {
+        request( this.app ).delete( `/v2/observations/${fixtureObs.uuid}/quality/wyld` )
           .set( "Authorization", token )
           .expect( 400, done );
       } );
-      it( "should accept the agree query param", done => {
+      it( "should accept the agree query param", function ( done ) {
         nock( "http://localhost:3000" )
           .post( `/observations/${fixtureObs.id}/quality/wild` )
           .reply( 204 );
-        request( app ).post( `/v2/observations/${fixtureObs.uuid}/quality/wild` )
+        request( this.app ).post( `/v2/observations/${fixtureObs.uuid}/quality/wild` )
           .set( "Authorization", token )
           .set( "Content-Type", "application/json" )
           .send( {
@@ -370,11 +369,11 @@ describe( "Observations", ( ) => {
           } )
           .expect( 204, done );
       } );
-      it( "should treat needs_id the same even though it's not a QualityMetric", done => {
+      it( "should treat needs_id the same even though it's not a QualityMetric", function ( done ) {
         nock( "http://localhost:3000" )
           .post( `/votes/vote/observation/${fixtureObs.id}` )
           .reply( 204 );
-        request( app ).post( `/v2/observations/${fixtureObs.uuid}/quality/needs_id` )
+        request( this.app ).post( `/v2/observations/${fixtureObs.uuid}/quality/needs_id` )
           .set( "Authorization", token )
           .set( "Content-Type", "application/json" )
           .send( {
@@ -384,11 +383,11 @@ describe( "Observations", ( ) => {
       } );
     } );
     describe( "DELETE", ( ) => {
-      it( "should return an empty success", done => {
+      it( "should return an empty success", function ( done ) {
         nock( "http://localhost:3000" )
           .delete( `/observations/${fixtureObs.id}/quality/wild` )
           .reply( 204 );
-        request( app ).delete( `/v2/observations/${fixtureObs.uuid}/quality/wild` )
+        request( this.app ).delete( `/v2/observations/${fixtureObs.uuid}/quality/wild` )
           .set( "Authorization", token )
           .expect( 204, done );
       } );
@@ -399,19 +398,19 @@ describe( "Observations", ( ) => {
     const token = jwt.sign( { user_id: 123 },
       config.jwtSecret || "secret",
       { algorithm: "HS512" } );
-    it( "returns an empty success on PUT", done => {
+    it( "returns an empty success on PUT", function ( done ) {
       nock( "http://localhost:3000" )
         .put( `/observations/${fixtureObs.uuid}/viewed_updates` )
         .reply( 200 );
-      request( app ).put( `/v2/observations/${fixtureObs.uuid}/viewed_updates` )
+      request( this.app ).put( `/v2/observations/${fixtureObs.uuid}/viewed_updates` )
         .set( "Authorization", token )
         .expect( 204, done );
     } );
   } );
 
   describe( "speciesCounts", ( ) => {
-    it( "returns json", done => {
-      request( app ).get( "/v2/observations/species_counts" ).expect( res => {
+    it( "returns json", function ( done ) {
+      request( this.app ).get( "/v2/observations/species_counts" ).expect( res => {
         expect( res.body.results[0].taxon ).to.not.be.undefined;
       } )
         .expect( "Content-Type", /json/ )
@@ -420,8 +419,8 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "observers", ( ) => {
-    it( "returns json", done => {
-      request( app ).get( "/v2/observations/observers?user_id=1" ).expect( res => {
+    it( "returns json", function ( done ) {
+      request( this.app ).get( "/v2/observations/observers?user_id=1" ).expect( res => {
         expect( res.body.results[0].user ).to.not.be.undefined;
       } )
         .expect( "Content-Type", /json/ )
@@ -430,8 +429,8 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "popularFieldValues", ( ) => {
-    it( "returns json", done => {
-      request( app ).get( "/v2/observations/popular_field_values" ).expect( res => {
+    it( "returns json", function ( done ) {
+      request( this.app ).get( "/v2/observations/popular_field_values" ).expect( res => {
         expect( res.body.results[0] ).to.not.be.undefined;
       } )
         .expect( "Content-Type", /json/ )
@@ -440,8 +439,8 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "histogram", ( ) => {
-    it( "returns json", done => {
-      request( app ).get( "/v2/observations/histogram" ).expect( res => {
+    it( "returns json", function ( done ) {
+      request( this.app ).get( "/v2/observations/histogram" ).expect( res => {
         expect( res.body.results ).to.not.be.undefined;
       } )
         .expect( "Content-Type", /json/ )

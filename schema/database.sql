@@ -241,31 +241,6 @@ CREATE FUNCTION public.st_aslatlontext(public.geometry) RETURNS text
     LANGUAGE sql IMMUTABLE STRICT
     AS $_$ SELECT ST_AsLatLonText($1, '') $_$;
 
-
---
--- Name: median(anyelement); Type: AGGREGATE; Schema: public; Owner: -
---
-
-CREATE AGGREGATE public.median(anyelement) (
-    SFUNC = array_append,
-    STYPE = anyarray,
-    INITCOND = '{}',
-    FINALFUNC = public._final_median
-);
-
-
---
--- Name: median(numeric); Type: AGGREGATE; Schema: public; Owner: -
---
-
-CREATE AGGREGATE public.median(numeric) (
-    SFUNC = array_append,
-    STYPE = numeric[],
-    INITCOND = '{}',
-    FINALFUNC = public._final_median
-);
-
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;

@@ -2,19 +2,19 @@
 const jwt = require( "jsonwebtoken" );
 const nock = require( "nock" );
 const request = require( "supertest" );
-const config = require( "../../../config.js" );
-const app = require( "../../../app" );
+const config = require( "../../../config" );
 
 describe( "/observation_field_values", ( ) => {
-  const token = jwt.sign( { user_id: 333 }, config.jwtSecret || "secret",
+  const token = jwt.sign( { user_id: 333 },
+    config.jwtSecret || "secret",
     { algorithm: "HS512" } );
 
   describe( "POST", ( ) => {
-    it( "should request create from Rails", done => {
+    it( "should request create from Rails", function ( done ) {
       nock( "http://localhost:3000" )
         .post( "/observation_field_values" )
         .reply( 200, { } );
-      request( app ).post( "/v2/observation_field_values" )
+      request( this.app ).post( "/v2/observation_field_values" )
         .set( "Authorization", token )
         .expect( 200, done );
     } );
@@ -22,12 +22,12 @@ describe( "/observation_field_values", ( ) => {
 
   describe( "/:uuid", ( ) => {
     describe( "DELETE", ( ) => {
-      it( "should request delete from Rails", done => {
+      it( "should request delete from Rails", function ( done ) {
         const ofv = { uuid: "48fba6f4-8627-411b-bf38-af9e280e5cfc" };
         nock( "http://localhost:3000" )
           .delete( `/observation_field_values/${ofv.uuid}` )
           .reply( 200, { } );
-        request( app ).delete( `/v2/observation_field_values/${ofv.uuid}` )
+        request( this.app ).delete( `/v2/observation_field_values/${ofv.uuid}` )
           .set( "Authorization", token )
           .expect( 204, done );
       } );

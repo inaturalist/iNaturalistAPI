@@ -3,11 +3,10 @@ const request = require( "supertest" );
 const nock = require( "nock" );
 const jwt = require( "jsonwebtoken" );
 const config = require( "../../../config" );
-const app = require( "../../../app" );
 
 describe( "Photos", ( ) => {
   describe( "create", ( ) => {
-    it( "returns JSON", done => {
+    it( "returns JSON", function ( done ) {
       const token = jwt.sign( { user_id: 333 },
         config.jwtSecret || "secret",
         { algorithm: "HS512" } );
@@ -15,7 +14,7 @@ describe( "Photos", ( ) => {
       nock( "http://localhost:3000" )
         .post( "/photos" )
         .reply( 200, stub );
-      request( app ).post( "/v2/photos" )
+      request( this.app ).post( "/v2/photos" )
         .set( "Authorization", token )
         .set( "Content-Type", "multipart/form-data" )
         .attach( "file", "test/fixtures/cuthona_abronia-tagged.jpg" )
@@ -29,7 +28,7 @@ describe( "Photos", ( ) => {
   } );
 
   describe( "update", ( ) => {
-    it( "returns JSON", done => {
+    it( "returns JSON", function ( done ) {
       const token = jwt.sign( { user_id: 333 },
         config.jwtSecret || "secret",
         { algorithm: "HS512" } );
@@ -37,7 +36,7 @@ describe( "Photos", ( ) => {
       nock( "http://localhost:3000" )
         .put( `/photos/${stub.id}` )
         .reply( 200, stub );
-      request( app ).put( `/v2/photos/${stub.id}` )
+      request( this.app ).put( `/v2/photos/${stub.id}` )
         .set( "Authorization", token )
         .set( "Content-Type", "application/json" )
         .send( { license_code: "cc-by" } )

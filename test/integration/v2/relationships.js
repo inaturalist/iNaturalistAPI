@@ -5,7 +5,6 @@ const request = require( "supertest" );
 const nock = require( "nock" );
 const jwt = require( "jsonwebtoken" );
 const config = require( "../../../config" );
-const app = require( "../../../app" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
@@ -17,8 +16,8 @@ describe( "Relationships", ( ) => {
     { algorithm: "HS512" }
   );
   describe( "index", ( ) => {
-    it( "should return JSON", done => {
-      request( app ).get( "/v2/relationships?fields=all" )
+    it( "should return JSON", function ( done ) {
+      request( this.app ).get( "/v2/relationships?fields=all" )
         .set( "Authorization", token )
         .expect( 200 )
         .expect( response => {
@@ -27,7 +26,7 @@ describe( "Relationships", ( ) => {
         } )
         .expect( 200, done );
     } );
-    it( "should return reciprocal_trust", done => {
+    it( "should return reciprocal_trust", function ( done ) {
       const trustingFollowedFriendship = _.find(
         fixtures.postgresql.friendships,
         f => f.friend_id === userId && f.trust
@@ -37,7 +36,7 @@ describe( "Relationships", ( ) => {
         f => f.friend_id === userId && !f.trust
       );
       expect( trustingFollowedFriendship ).not.to.be.undefined;
-      request( app ).get( "/v2/relationships?fields=all" )
+      request( this.app ).get( "/v2/relationships?fields=all" )
         .set( "Authorization", token )
         .expect( 200 )
         .expect( response => {
@@ -50,10 +49,10 @@ describe( "Relationships", ( ) => {
         } )
         .expect( 200, done );
     } );
-    it( "should filter by q", done => {
+    it( "should filter by q", function ( done ) {
       const friendUserId = fixtures.postgresql.friendships[0].friend_id;
       const friendUser = _.find( fixtures.postgresql.users, u => u.id === friendUserId );
-      request( app ).get( `/v2/relationships?fields=all&q=${friendUser.login}` )
+      request( this.app ).get( `/v2/relationships?fields=all&q=${friendUser.login}` )
         .set( "Authorization", token )
         .expect( 200 )
         .expect( response => {
@@ -64,12 +63,12 @@ describe( "Relationships", ( ) => {
     } );
   } );
   describe( "create", ( ) => {
-    it( "should succeed", done => {
+    it( "should succeed", function ( done ) {
       const friendship = fixtures.postgresql.friendships.find( f => f.id === 1 );
       nock( "http://localhost:3000" )
         .post( "/relationships" )
         .reply( 200, { id: friendship.id, friend_id: friendship.friend_id } );
-      request( app ).post( "/v2/relationships" )
+      request( this.app ).post( "/v2/relationships" )
         .set( "Authorization", token )
         .send( {
           fields: "all",
@@ -86,22 +85,22 @@ describe( "Relationships", ( ) => {
     } );
   } );
   describe( "update", ( ) => {
-    it( "should succeed", done => {
+    it( "should succeed", function ( done ) {
       const friendship = fixtures.postgresql.friendships.find( f => f.id === 1 );
       nock( "http://localhost:3000" )
         .put( `/relationships/${friendship.id}` )
         .reply( 200, friendship );
-      request( app ).put( `/v2/relationships/${friendship.id}` ).set( "Authorization", token )
+      request( this.app ).put( `/v2/relationships/${friendship.id}` ).set( "Authorization", token )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
   } );
   describe( "delete", ( ) => {
-    it( "should succeed", done => {
+    it( "should succeed", function ( done ) {
       nock( "http://localhost:3000" )
         .delete( "/relationships/1" )
         .reply( 200 );
-      request( app ).delete( "/v2/relationships/1" ).set( "Authorization", token )
+      request( this.app ).delete( "/v2/relationships/1" ).set( "Authorization", token )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );

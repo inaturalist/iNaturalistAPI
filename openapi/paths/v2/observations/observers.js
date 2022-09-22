@@ -2,7 +2,7 @@ const _ = require( "lodash" );
 const Joi = require( "joi" );
 const transform = require( "../../../joi_to_openapi_parameter" );
 const ObservationsController = require( "../../../../lib/controllers/v2/observations_controller" );
-const observationsSearchSchema = require( "../../../schema/request/observations_search" );
+const observationsObserversSchema = require( "../../../schema/request/observations_observers" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
@@ -11,7 +11,7 @@ module.exports = sendWrapper => {
   }
 
   const parameters = _.map(
-    observationsSearchSchema.$_terms.keys,
+    observationsObserversSchema.$_terms.keys,
     child => transform( child.schema.label( child.key ) )
   );
   parameters.push(

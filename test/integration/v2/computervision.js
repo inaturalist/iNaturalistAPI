@@ -5,7 +5,6 @@ const request = require( "supertest" );
 const nock = require( "nock" );
 const jwt = require( "jsonwebtoken" );
 const config = require( "../../../config" );
-const app = require( "../../../app" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
@@ -23,13 +22,13 @@ describe( "Computervision", ( ) => {
         .post( "/" )
         .reply( 200, fakeVisionResults );
     } );
-    it( "returns JSON", done => {
+    it( "returns JSON", function ( done ) {
       const token = jwt.sign(
         { user_id: 333 },
         config.jwtSecret || "secret",
         { algorithm: "HS512" }
       );
-      request( app ).get( url )
+      request( this.app ).get( url )
         .set( "Authorization", token )
         .expect( 200 )
         .expect( res => {
@@ -38,38 +37,38 @@ describe( "Computervision", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
-    it( "works with an application token", done => {
+    it( "works with an application token", function ( done ) {
       const token = jwt.sign(
         { application: "whatever" },
         config.jwtApplicationSecret || "application_secret",
         { algorithm: "HS512" }
       );
-      request( app ).get( url )
+      request( this.app ).get( url )
         .set( "Authorization", token )
         .expect( 200, done );
     } );
-    it( "should fail without a token", done => {
-      request( app ).get( url )
+    it( "should fail without a token", function ( done ) {
+      request( this.app ).get( url )
         .set( "Authorization", "" )
         .expect( 401, done );
     } );
-    it( "should fail without a valid token", done => {
+    it( "should fail without a valid token", function ( done ) {
       const token = jwt.sign(
         { application: "whatever" },
         "not the right secret",
         { algorithm: "HS512" }
       );
-      request( app ).get( url )
+      request( this.app ).get( url )
         .set( "Authorization", token )
         .expect( 401, done );
     } );
-    it( "should fail without a token that specifies a user or an application", done => {
+    it( "should fail without a token that specifies a user or an application", function ( done ) {
       const token = jwt.sign(
         { thisIs: "the way" },
         config.jwtApplicationSecret || "application_secret",
         { algorithm: "HS512" }
       );
-      request( app ).get( url )
+      request( this.app ).get( url )
         .set( "Authorization", token )
         .expect( 401, done );
     } );
@@ -86,8 +85,8 @@ describe( "Computervision", ( ) => {
         .post( "/" )
         .reply( 200, fakeVisionResults );
     } );
-    it( "returns JSON", done => {
-      request( app ).post( "/v2/computervision/score_image" )
+    it( "returns JSON", function ( done ) {
+      request( this.app ).post( "/v2/computervision/score_image" )
         .set( "Authorization", token )
         .set( "Content-Type", "multipart/form-data" )
         .field( "fields", "id,uuid" )
@@ -99,8 +98,8 @@ describe( "Computervision", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
-    it( "allows client to specify fields as JSON", done => {
-      request( app ).post( "/v2/computervision/score_image" )
+    it( "allows client to specify fields as JSON", function ( done ) {
+      request( this.app ).post( "/v2/computervision/score_image" )
         .set( "Authorization", token )
         .set( "Content-Type", "multipart/form-data" )
         .field( "fields", JSON.stringify( {

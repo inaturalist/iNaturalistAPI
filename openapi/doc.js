@@ -167,5 +167,4 @@ Privacy Policy: <https://www.inaturalist.org/privacy>`
   paths: { }
 };
 
-
 module.exports = apiDoc;

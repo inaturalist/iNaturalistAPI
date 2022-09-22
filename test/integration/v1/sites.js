@@ -1,13 +1,10 @@
 const { expect } = require( "chai" );
 const request = require( "supertest" );
-const iNaturalistAPI = require( "../../../lib/inaturalist_api" );
-
-const app = iNaturalistAPI.server( );
 
 describe( "Sites", ( ) => {
   describe( "index", ( ) => {
-    it( "lists sites", done => {
-      request( app ).get( "/v1/sites" )
+    it( "lists sites", function ( done ) {
+      request( this.app ).get( "/v1/sites" )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.per_page ).to.eq( 2 );
@@ -22,8 +19,8 @@ describe( "Sites", ( ) => {
     } );
   } );
   describe( "fetch", ( ) => {
-    it( "fetches a single site", done => {
-      request( app ).get( "/v1/sites/2" )
+    it( "fetches a single site", function ( done ) {
+      request( this.app ).get( "/v1/sites/2" )
         .expect( 200 )
         .expect( res => {
           expect( res.body.results.length ).to.eq( 1 );
@@ -32,8 +29,8 @@ describe( "Sites", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
-    it( "fetches multiple sites", done => {
-      request( app ).get( "/v1/sites/1,2" )
+    it( "fetches multiple sites", function ( done ) {
+      request( this.app ).get( "/v1/sites/1,2" )
         .expect( 200 )
         .expect( res => {
           const responseNames = res.body.results.map( s => s.name );

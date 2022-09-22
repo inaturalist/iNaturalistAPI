@@ -1,11 +1,10 @@
 const { expect } = require( "chai" );
 const request = require( "supertest" );
-const app = require( "../../../app" );
 
 describe( "Sites", ( ) => {
   describe( "index", ( ) => {
-    it( "should return JSON", done => {
-      request( app ).get( "/v2/sites?fields=all" )
+    it( "should return JSON", function ( done ) {
+      request( this.app ).get( "/v2/sites?fields=all" )
         .expect( 200 )
         .expect( response => {
           expect( response.body.results.length ).to.be.above( 0 );

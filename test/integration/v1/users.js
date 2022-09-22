@@ -4,17 +4,14 @@ const jwt = require( "jsonwebtoken" );
 const request = require( "supertest" );
 const nock = require( "nock" );
 const fs = require( "fs" );
-const iNaturalistAPI = require( "../../../lib/inaturalist_api" );
-const config = require( "../../../config.js" );
-
-const app = iNaturalistAPI.server( );
+const config = require( "../../../config" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 describe( "Users", ( ) => {
   describe( "show", ( ) => {
-    it( "returns json", done => {
-      request( app ).get( "/v1/users/5" )
+    it( "returns json", function ( done ) {
+      request( this.app ).get( "/v1/users/5" )
         .expect( res => {
           const user = res.body.results[0];
           expect( res.body.page ).to.eq( 1 );
@@ -28,8 +25,8 @@ describe( "Users", ( ) => {
     } );
 
     // takes an id or a login
-    it( "accepts a login in place of an ID", done => {
-      request( app ).get( "/v1/users/b-user" )
+    it( "accepts a login in place of an ID", function ( done ) {
+      request( this.app ).get( "/v1/users/b-user" )
         .expect( res => {
           const user = res.body.results[0];
           expect( user.id ).to.eq( 5 );
@@ -38,22 +35,23 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "returns a 404 for unknown users", done => {
-      request( app ).get( "/v1/users/123123" )
+    it( "returns a 404 for unknown users", function ( done ) {
+      request( this.app ).get( "/v1/users/123123" )
         .expect( "Content-Type", /json/ ).expect( 404, done );
     } );
   } );
 
   describe( "update", ( ) => {
     const currentUser = fixtures.elasticsearch.users.user[0];
-    const token = jwt.sign( { user_id: currentUser.id }, config.jwtSecret || "secret",
+    const token = jwt.sign( { user_id: currentUser.id },
+      config.jwtSecret || "secret",
       { algorithm: "HS512" } );
 
-    it( "should return JSON", done => {
+    it( "should return JSON", function ( done ) {
       nock( "http://localhost:3000" )
         .put( `/users/${currentUser.login}` )
         .reply( 200, { id: currentUser.id, login: currentUser.login } );
-      request( app )
+      request( this.app )
         .put( `/v1/users/${currentUser.login}` )
         .set( "Authorization", token )
         .expect( "Content-Type", /json/ )
@@ -66,8 +64,8 @@ describe( "Users", ( ) => {
   } );
 
   describe( "autocomplete", ( ) => {
-    it( "returns an empty response if not given a query", done => {
-      request( app ).get( "/v1/users/autocomplete" )
+    it( "returns an empty response if not given a query", function ( done ) {
+      request( this.app ).get( "/v1/users/autocomplete" )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.per_page ).to.eq( 0 );
@@ -77,8 +75,8 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "returns partial matches", done => {
-      request( app ).get( "/v1/users/autocomplete?q=userlogin" )
+    it( "returns partial matches", function ( done ) {
+      request( this.app ).get( "/v1/users/autocomplete?q=userlogin" )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.per_page ).to.eq( 1 );
@@ -88,8 +86,8 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "ignores case", done => {
-      request( app ).get( "/v1/users/autocomplete?q=UsErLoGIN" )
+    it( "ignores case", function ( done ) {
+      request( this.app ).get( "/v1/users/autocomplete?q=UsErLoGIN" )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.per_page ).to.eq( 1 );
@@ -101,13 +99,13 @@ describe( "Users", ( ) => {
   } );
 
   describe( "projects", ( ) => {
-    it( "returns a 422 for unknown users", done => {
-      request( app ).get( "/v1/users/nobody/projects" )
+    it( "returns a 422 for unknown users", function ( done ) {
+      request( this.app ).get( "/v1/users/nobody/projects" )
         .expect( "Content-Type", /json/ ).expect( 422, done );
     } );
 
-    it( "returns projects given a user ID", done => {
-      request( app ).get( "/v1/users/1/projects" )
+    it( "returns projects given a user ID", function ( done ) {
+      request( this.app ).get( "/v1/users/1/projects" )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( _.find( res.body.results, p => p.slug === "project-one" ) ).not.to.be.undefined;
@@ -115,8 +113,8 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "returns projects given a user login", done => {
-      request( app ).get( "/v1/users/userlogin/projects" )
+    it( "returns projects given a user login", function ( done ) {
+      request( this.app ).get( "/v1/users/userlogin/projects" )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( _.find( res.body.results, p => p.slug === "project-one" ) ).not.to.be.undefined;
@@ -126,27 +124,28 @@ describe( "Users", ( ) => {
   } );
 
   describe( "me", ( ) => {
-    it( "fails for unauthenticated requests", done => {
-      request( app ).get( "/v1/users/me" ).expect( res => {
+    it( "fails for unauthenticated requests", function ( done ) {
+      request( this.app ).get( "/v1/users/me" ).expect( res => {
         expect( res.error.text ).to.eq( "{\"error\":\"Unauthorized\",\"status\":401}" );
       } ).expect( "Content-Type", /json/ )
         .expect( 401, done );
     } );
 
-    it( "fails for suspended users", done => {
+    it( "fails for suspended users", function ( done ) {
       const user = _.find( fixtures.postgresql.users, u => u.description === "Suspended user" );
-      const token = jwt.sign( { user_id: user.id }, config.jwtSecret || "secret",
+      const token = jwt.sign( { user_id: user.id },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/users/me" ).set( "Authorization", token ).expect( res => {
+      request( this.app ).get( "/v1/users/me" ).set( "Authorization", token ).expect( res => {
         expect( res.error.text ).to.eq( "{\"error\":\"Unauthorized\",\"status\":401}" );
       } )
         .expect( "Content-Type", /json/ )
         .expect( 401, done );
     } );
 
-
-    it( "returns the logged-in users object", done => {
-      const token = jwt.sign( { user_id: 1 }, config.jwtSecret || "secret",
+    it( "returns the logged-in users object", function ( done ) {
+      const token = jwt.sign( { user_id: 1 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
       // The default state for most users will be to not have this preference
       // explicitly set, but the default should still be true, so I'm just
@@ -154,7 +153,7 @@ describe( "Users", ( ) => {
       const existingCommonNamesPref = _.find( fixtures.postgresql.preferences,
         p => p.name === "common_names" && p.owner_type === "User" && p.owner_id === 1 );
       expect( existingCommonNamesPref ).to.be.undefined;
-      request( app ).get( "/v1/users/me" ).set( "Authorization", token )
+      request( this.app ).get( "/v1/users/me" ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.total_results ).to.eq( 1 );
           expect( res.body.results[0].id ).to.eq( 1 );
@@ -170,14 +169,15 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "returns prefers_common_names if set to false", done => {
+    it( "returns prefers_common_names if set to false", function ( done ) {
       const user = _.find( fixtures.postgresql.users, u => u.login === "prefers-no-common-names" );
       const existingCommonNamesPref = _.find( fixtures.postgresql.preferences,
         p => p.name === "common_names" && p.owner_type === "User" && p.owner_id === user.id );
       expect( existingCommonNamesPref.value ).to.eq( "f" );
-      const token = jwt.sign( { user_id: user.id }, config.jwtSecret || "secret",
+      const token = jwt.sign( { user_id: user.id },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/users/me" ).set( "Authorization", token )
+      request( this.app ).get( "/v1/users/me" ).set( "Authorization", token )
         .expect( 200 )
         .expect( res => {
           expect( res.body.results[0].prefers_common_names ).to.eq( false );
@@ -186,10 +186,11 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "returns user privileges", done => {
-      const token = jwt.sign( { user_id: 1 }, config.jwtSecret || "secret",
+    it( "returns user privileges", function ( done ) {
+      const token = jwt.sign( { user_id: 1 },
+        config.jwtSecret || "secret",
         { algorithm: "HS512" } );
-      request( app ).get( "/v1/users/me" ).set( "Authorization", token )
+      request( this.app ).get( "/v1/users/me" ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.total_results ).to.eq( 1 );
           expect( res.body.results[0].privileges[0] ).to.eq( "speech" );
@@ -236,14 +237,13 @@ describe( "Users", ( ) => {
       "time_zone",
       "updated_at"
     ], a => {
-      it( `returns ${a}`, done => {
+      it( `returns ${a}`, function ( done ) {
         const token = jwt.sign(
           { user_id: 1 },
           config.jwtSecret || "secret",
           { algorithm: "HS512" }
         );
-        request( app ).get( "/v1/users/me" ).set( "Authorization", token )
-          .expect( 200 )
+        request( this.app ).get( "/v1/users/me" ).set( "Authorization", token )
           .expect( res => {
             expect( res.body.results[0][a] ).not.to.be.undefined;
           } )
@@ -256,25 +256,26 @@ describe( "Users", ( ) => {
   describe( "mute", ( ) => {
     const currentUser = fixtures.elasticsearch.users.user[0];
     const mutedUser = fixtures.elasticsearch.users.user[1];
-    const token = jwt.sign( { user_id: currentUser.id }, config.jwtSecret || "secret",
+    const token = jwt.sign( { user_id: currentUser.id },
+      config.jwtSecret || "secret",
       { algorithm: "HS512" } );
     describe( "post", ( ) => {
-      it( "succeeds", done => {
+      it( "succeeds", function ( done ) {
         nock( "http://localhost:3000" )
           .post( `/users/${mutedUser.id}/mute` )
           .reply( 200 );
-        request( app )
+        request( this.app )
           .post( `/v1/users/${mutedUser.id}/mute` )
           .set( "Authorization", token )
           .expect( 200, done );
       } );
     } );
     describe( "delete", ( ) => {
-      it( "succeeds", done => {
+      it( "succeeds", function ( done ) {
         nock( "http://localhost:3000" )
           .delete( `/users/${mutedUser.id}/mute` )
           .reply( 200 );
-        request( app )
+        request( this.app )
           .delete( `/v1/users/${mutedUser.id}/mute` )
           .set( "Authorization", token )
           .expect( 200, done );
@@ -285,25 +286,26 @@ describe( "Users", ( ) => {
   describe( "block", ( ) => {
     const currentUser = fixtures.elasticsearch.users.user[0];
     const blockedUser = fixtures.elasticsearch.users.user[1];
-    const token = jwt.sign( { user_id: currentUser.id }, config.jwtSecret || "secret",
+    const token = jwt.sign( { user_id: currentUser.id },
+      config.jwtSecret || "secret",
       { algorithm: "HS512" } );
     describe( "post", ( ) => {
-      it( "succeeds", done => {
+      it( "succeeds", function ( done ) {
         nock( "http://localhost:3000" )
           .post( `/users/${blockedUser.id}/block` )
           .reply( 200 );
-        request( app )
+        request( this.app )
           .post( `/v1/users/${blockedUser.id}/block` )
           .set( "Authorization", token )
           .expect( 200, done );
       } );
     } );
     describe( "delete", ( ) => {
-      it( "succeeds", done => {
+      it( "succeeds", function ( done ) {
         nock( "http://localhost:3000" )
           .delete( `/users/${blockedUser.id}/block` )
           .reply( 200 );
-        request( app )
+        request( this.app )
           .delete( `/v1/users/${blockedUser.id}/block` )
           .set( "Authorization", token )
           .expect( 200, done );

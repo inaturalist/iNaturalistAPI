@@ -5,10 +5,6 @@ const PlacesController = require( "../../../lib/controllers/v2/places_controller
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    if ( req.originalMethod === "POST" ) {
-      req.originalQuery = req.query;
-      req.query = _.mapValues( req.body, v => v.toString( ) );
-    }
     const results = await PlacesController.search( req );
     sendWrapper( req, res, null, results );
   }

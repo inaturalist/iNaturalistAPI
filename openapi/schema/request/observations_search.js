@@ -48,7 +48,10 @@ module.exports = Joi.object( ).keys( {
   photo_licensed: Joi.boolean( )
     .description( "Filter by observations where the license attribute of at least one photo is not null" ),
   place_id: Joi.array( ).items( Joi.string( ).guid( ) ),
-  project_id: Joi.array( ).items( Joi.number( ).integer( ) ),
+  project_id: Joi.array( ).items( Joi.alternatives( ).try(
+    Joi.number( ).integer( ),
+    Joi.string( )
+  ) ),
   rank: Joi.array( ).items( Joi.string( ).valid(
     "kingdom",
     "phylum",
