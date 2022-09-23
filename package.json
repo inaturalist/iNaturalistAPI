@@ -23,6 +23,7 @@
     "async": "^3.2.3",
     "bluebird": "^3.7.2",
     "body-parser": "^1.19.1",
+    "busboy": "github:veo-labs/busboy#708e43d985ef78e1274caa6f1397148a9423c82c",
     "carto": "^1.2.0",
     "chalk": "*",
     "compression": "^1.7.4",

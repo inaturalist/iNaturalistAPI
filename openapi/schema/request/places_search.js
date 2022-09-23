@@ -5,6 +5,7 @@ module.exports = Joi.object( ).keys( {
   order_by: Joi.string( ).valid(
     "area"
   ),
+  geo: Joi.boolean( ),
   per_page: Joi.number( ).integer( ),
   fields: Joi.any( )
 } );
