@@ -9,7 +9,7 @@ module.exports = sendWrapper => {
   }
 
   POST.apiDoc = {
-    tags: ["Annotation"],
+    tags: ["Annotations"],
     summary: "Create an annotation",
     security: [{
       userJwtRequired: []

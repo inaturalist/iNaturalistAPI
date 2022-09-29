@@ -66,7 +66,9 @@ module.exports = Joi.object( ).keys( {
     search_place_id: Joi.number( ).integer( )
       .description( "ID of place for default observation searches" ),
     site_id: Joi.number( ).integer( ),
-    time_zone: Joi.string( )
+    time_zone: Joi.string( ),
+    password: Joi.string( ),
+    password_confirmation: Joi.string( )
   } ),
   icon_delete: Joi.boolean( )
 } );

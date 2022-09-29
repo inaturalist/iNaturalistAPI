@@ -15,9 +15,9 @@ module.exports = Joi.object( ).keys( {
     "asc"
   ),
   order_by: Joi.string( ).valid(
-    "date",
-    "user"
-  ),
+    "friendships.id",
+    "users.login"
+  ).default( "users.login" ),
   fields: Joi.any( )
     .description( "Attribute fields to return in the response" )
     .example( "all" )

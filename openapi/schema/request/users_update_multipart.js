@@ -1,43 +1,7 @@
 const Joi = require( "joi" );
+const usersUpdate = require( "./users_update" );
+const openapiUtil = require( "../../openapi_util" );
 
-module.exports = Joi.object( ).keys( {
-  "user[data_transfer_consent]": Joi.boolean( ).valid( true, null ),
-  "user[description]": Joi.string( ),
-  "user[email]": Joi.string( ),
-  "user[icon]": Joi.binary( ),
-  "user[locale]": Joi.string( ),
-  "user[login]": Joi.string( ),
-  "user[make_observation_licenses_same]": Joi.boolean( ),
-  "user[make_photo_licenses_same]": Joi.boolean( ),
-  "user[make_sound_licenses_same]": Joi.boolean( ),
-  "user[name]": Joi.string( ),
-  "user[place_id]": Joi.number( ).integer( ),
-  "user[preferred_observation_fields_by]": Joi.string( ),
-  "user[preferred_observation_license]": Joi.string( ),
-  "user[preferred_photo_license]": Joi.string( ),
-  "user[preferred_project_addition_by]": Joi.string( ),
-  "user[preferred_sound_license]": Joi.string( ),
-  "user[prefers_automatic_taxonomic_changes]": Joi.boolean( ),
-  "user[prefers_comment_email_notification]": Joi.boolean( ),
-  "user[prefers_common_names]": Joi.boolean( ),
-  "user[prefers_community_taxa]": Joi.boolean( ),
-  "user[prefers_identification_email_notification]": Joi.boolean( ),
-  "user[prefers_mention_email_notification]": Joi.boolean( ),
-  "user[prefers_message_email_notification]": Joi.boolean( ),
-  "user[prefers_monthly_supporter_badge]": Joi.boolean( ),
-  "user[prefers_no_email]": Joi.boolean( ),
-  "user[prefers_no_tracking]": Joi.boolean( ),
-  "user[prefers_project_added_your_observation_email_notification]": Joi.boolean( ),
-  "user[prefers_project_curator_change_email_notification]": Joi.boolean( ),
-  "user[prefers_project_journal_post_email_notification]": Joi.boolean( ),
-  "user[prefers_receive_mentions]": Joi.boolean( ),
-  "user[prefers_redundant_identification_notifications]": Joi.boolean( ),
-  "user[prefers_scientific_name_first]": Joi.boolean( ),
-  "user[prefers_taxon_change_email_notification]": Joi.boolean( ),
-  "user[prefers_taxon_or_place_observation_email_notification]": Joi.boolean( ),
-  "user[prefers_user_observation_email_notification]": Joi.boolean( ),
-  "user[search_place_id]": Joi.number( ).integer( ),
-  "user[site_id]": Joi.number( ).integer( ),
-  "user[time_zone]": Joi.string( ),
-  icon_delete: Joi.boolean( ).valid( true )
+module.exports = openapiUtil.applicationJsonToMultipart( usersUpdate ).append( {
+  "user[icon]": Joi.binary( )
 } );

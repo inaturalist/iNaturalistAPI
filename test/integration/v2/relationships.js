@@ -67,7 +67,7 @@ describe( "Relationships", ( ) => {
       const friendship = fixtures.postgresql.friendships.find( f => f.id === 1 );
       nock( "http://localhost:3000" )
         .post( "/relationships" )
-        .reply( 200, { id: friendship.id, friend_id: friendship.friend_id } );
+        .reply( 200, { friendship: { id: friendship.id, friend_id: friendship.friend_id } } );
       request( this.app ).post( "/v2/relationships" )
         .set( "Authorization", token )
         .send( {
