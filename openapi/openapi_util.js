@@ -1,17 +1,7 @@
 const _ = require( "lodash" );
 const Joi = require( "joi" );
-const resultsArray = require( "./schema/response/results_array" );
 
 const openapiUtil = class openapiUtil {
-  static basicResultsArray( model ) {
-    return Joi.alternatives( ).try(
-      resultsArray,
-      Joi.object( {
-        results: Joi.array( ).items( model ).required( )
-      } )
-    ).match( "all" );
-  }
-
   static applicationJsonToMultipart( jsonJoi, parentKey = null ) {
     let multipartRequest = Joi.object( );
     _.each( jsonJoi.$_terms.keys, attr => {
