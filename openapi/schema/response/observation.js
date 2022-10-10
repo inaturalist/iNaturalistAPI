@@ -22,7 +22,7 @@ module.exports = Joi.object( ).keys( {
     .valid( null ),
   annotations: Joi.array( ).items( annotation ),
   application: Joi.object( ).keys( {
-    id: Joi.number( ).integer( ),
+    id: Joi.number( ).integer( ).required( ),
     icon: Joi.string( ).valid( null ),
     name: Joi.string( ),
     url: Joi.string( )

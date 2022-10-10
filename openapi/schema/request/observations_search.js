@@ -252,7 +252,8 @@ module.exports = Joi.object( ).keys( {
     "species_guess",
     "votes",
     "id",
-    "created_at"
+    "created_at",
+    "random"
   ),
   only_id: Joi.boolean( ),
   fields: Joi.any( )
