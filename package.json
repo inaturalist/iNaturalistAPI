@@ -56,6 +56,7 @@
     "redis": "^4.0.1",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
+    "rison-node": "^2.1.1",
     "safe-squel": "^5.12.5",
     "scramjet": "^4.36.1",
     "sshpk": "^1.17.0",
