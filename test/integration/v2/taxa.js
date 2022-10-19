@@ -198,4 +198,17 @@ describe( "Taxa", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "search", ( ) => {
+    it( "returns json", function ( done ) {
+      request( this.app )
+        .get( "/v2/taxa" )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results.length ).to.be.greaterThan( 0 );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
 } );
