@@ -5,6 +5,7 @@ const request = require( "supertest" );
 const nock = require( "nock" );
 const sinon = require( "sinon" );
 const jwt = require( "jsonwebtoken" );
+const { v4: uuidv4 } = require( "uuid" );
 const config = require( "../../../config" );
 const ObservationsController = require( "../../../lib/controllers/v1/observations_controller" );
 
@@ -20,17 +21,47 @@ describe( "Observations", ( ) => {
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "returns 422 for malformed UUID, integer", function ( done ) {
+      request( this.app ).get( "/v2/observations/12345" )
+        .expect( 422, done );
+    } );
+
+    it( "returns 422 for malformed UUID, string", function ( done ) {
+      request( this.app ).get( "/v2/observations/abcde" )
+        .expect( 422, done );
+    } );
+
+    it( "returns 404 for unknown UUID", function ( done ) {
+      request( this.app ).get( `/v2/observations/${uuidv4()}` )
+        .expect( 404, done );
+    } );
+
+    it( "returns 404 for multiple unknown UUIDs", function ( done ) {
+      request( this.app ).get( `/v2/observations/${uuidv4()},${uuidv4()}` )
+        .expect( 404, done );
+    } );
+
+    it( "returns 200 for one known and one unknown UUID", function ( done ) {
+      request( this.app ).get( `/v2/observations/${fixtureObs.uuid},${uuidv4()}` ).expect( res => {
+        expect( res.body.results[0].uuid ).to.eq( fixtureObs.uuid );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
     it( "returns the uuid when specified in the fields query param", function ( done ) {
       request( this.app ).get( `/v2/observations/${fixtureObs.uuid}?fields=id,uuid` ).expect( res => {
         expect( res.body.results[0].uuid ).to.eq( fixtureObs.uuid );
       } ).expect( 200, done );
     } );
+
     it( "returns the uuid and quality_grade when all fields", function ( done ) {
       request( this.app ).get( `/v2/observations/${fixtureObs.uuid}?fields=all` ).expect( res => {
         expect( res.body.results[0].uuid ).to.eq( fixtureObs.uuid );
         expect( res.body.results[0].quality_grade ).to.eq( fixtureObs.quality_grade );
       } ).expect( 200, done );
     } );
+
     it( "returns the user name and login when requesting all user fields", function ( done ) {
       request( this.app )
         .post( `/v2/observations/${fixtureObs.uuid}` )
@@ -120,6 +151,11 @@ describe( "Observations", ( ) => {
       } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
+    } );
+
+    it( "returns 422 for validation errors", function ( done ) {
+      request( this.app ).get( "/v2/observations?rank=nonsense" )
+        .expect( 422, done );
     } );
 
     it( "returns user when specified in the fields query param", function ( done ) {
@@ -352,7 +388,7 @@ describe( "Observations", ( ) => {
       it( "should fail on a bad metric", function ( done ) {
         request( this.app ).delete( `/v2/observations/${fixtureObs.uuid}/quality/wyld` )
           .set( "Authorization", token )
-          .expect( 400, done );
+          .expect( 422, done );
       } );
       it( "should accept the agree query param", function ( done ) {
         nock( "http://localhost:3000" )

@@ -92,7 +92,7 @@ describe( "Identifications", ( ) => {
         .send( {
           body: "this is an updated body"
         } )
-        .expect( 400, done );
+        .expect( 422, done );
     } );
   } );
 
