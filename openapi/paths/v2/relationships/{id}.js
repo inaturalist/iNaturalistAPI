@@ -1,6 +1,4 @@
-const j2s = require( "joi-to-swagger" );
 const RelationshipsController = require( "../../../../lib/controllers/v2/relationships_controller" );
-const relationshipsUpdateSchema = require( "../../../schema/request/relationships_update" );
 
 module.exports = sendWrapper => {
   async function PUT( req, res ) {
@@ -17,7 +15,9 @@ module.exports = sendWrapper => {
     requestBody: {
       content: {
         "application/json": {
-          schema: j2s( relationshipsUpdateSchema ).swagger
+          schema: {
+            $ref: "#/components/schemas/RelationshipsUpdate"
+          }
         }
       }
     },

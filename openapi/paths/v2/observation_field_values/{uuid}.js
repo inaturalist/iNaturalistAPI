@@ -1,6 +1,4 @@
-const j2s = require( "joi-to-swagger" );
 const observationFieldValuesController = require( "../../../../lib/controllers/v2/observation_field_values_controller" );
-const observationFieldValuesCreateSchema = require( "../../../schema/request/observation_field_values_create" );
 
 module.exports = sendWrapper => {
   async function PUT( req, res ) {
@@ -17,7 +15,9 @@ module.exports = sendWrapper => {
     requestBody: {
       content: {
         "application/json": {
-          schema: j2s( observationFieldValuesCreateSchema ).swagger
+          schema: {
+            $ref: "#/components/schemas/ObservationFieldValuesCreate"
+          }
         }
       }
     },

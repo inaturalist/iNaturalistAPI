@@ -1,5 +1,3 @@
-const j2s = require( "joi-to-swagger" );
-const computervisionScoreImageSchema = require( "../../../schema/request/computervision_score_image" );
 const computervisionController = require( "../../../../lib/controllers/v2/computervision_controller" );
 
 module.exports = sendWrapper => {
@@ -17,7 +15,9 @@ module.exports = sendWrapper => {
     requestBody: {
       content: {
         "multipart/form-data": {
-          schema: j2s( computervisionScoreImageSchema ).swagger
+          schema: {
+            $ref: "#/components/schemas/ComputervisionScoreImage"
+          }
         }
       }
     },

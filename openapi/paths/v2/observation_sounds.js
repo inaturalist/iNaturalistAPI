@@ -1,5 +1,3 @@
-const j2s = require( "joi-to-swagger" );
-const observationSoundsCreateSchema = require( "../../schema/request/observation_sounds_create" );
 const ObservationSoundsController = require( "../../../lib/controllers/v2/observation_sounds_controller" );
 
 module.exports = sendWrapper => {
@@ -17,7 +15,9 @@ module.exports = sendWrapper => {
     requestBody: {
       content: {
         "multipart/form-data": {
-          schema: j2s( observationSoundsCreateSchema ).swagger
+          schema: {
+            $ref: "#/components/schemas/ObservationSoundsCreate"
+          }
         }
       }
     },

@@ -249,6 +249,7 @@ module.exports = Joi.object( ).keys( {
   ),
   order_by: Joi.string( ).valid(
     "observed_on",
+    "updated_at",
     "species_guess",
     "votes",
     "id",

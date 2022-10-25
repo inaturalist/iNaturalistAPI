@@ -1,9 +1,7 @@
 const _ = require( "lodash" );
-const j2s = require( "joi-to-swagger" );
 const relationshipsSearchSchema = require( "../../schema/request/relationships_search" );
 const transform = require( "../../joi_to_openapi_parameter" );
 const relationshipsController = require( "../../../lib/controllers/v2/relationships_controller" );
-const relationshipsCreateSchema = require( "../../schema/request/relationships_create" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
@@ -59,7 +57,9 @@ module.exports = sendWrapper => {
     requestBody: {
       content: {
         "application/json": {
-          schema: j2s( relationshipsCreateSchema ).swagger
+          schema: {
+            $ref: "#/components/schemas/RelationshipsCreate"
+          }
         }
       }
     },
