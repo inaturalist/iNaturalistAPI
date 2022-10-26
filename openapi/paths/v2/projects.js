@@ -1,6 +1,4 @@
-const _ = require( "lodash" );
-const projectsSearchSchema = require( "../../schema/request/projects_search" );
-const transform = require( "../../joi_to_openapi_parameter" );
+const openapiUtil = require( "../../openapi_util" );
 const ProjectsController = require( "../../../lib/controllers/v2/projects_controller" );
 
 module.exports = sendWrapper => {
@@ -12,17 +10,7 @@ module.exports = sendWrapper => {
   GET.apiDoc = {
     tags: ["Projects"],
     summary: "Search projects",
-    parameters: [
-      {
-        in: "header",
-        name: "X-HTTP-Method-Override",
-        schema: {
-          type: "string"
-        }
-      }
-    ].concat( _.map( projectsSearchSchema.$_terms.keys, child => (
-      transform( child.schema.label( child.key ) )
-    ) ) ),
+    parameters: openapiUtil.getParameters( "projects_search" ),
     responses: {
       200: {
         description: "A list of projects",

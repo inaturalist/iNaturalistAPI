@@ -1,8 +1,5 @@
-const _ = require( "lodash" );
-const Joi = require( "joi" );
-const transform = require( "../../../joi_to_openapi_parameter" );
+const openapiUtil = require( "../../../openapi_util" );
 const ObservationsController = require( "../../../../lib/controllers/v2/observations_controller" );
-const observationsSearchSchema = require( "../../../schema/request/observations_search" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
@@ -10,21 +7,13 @@ module.exports = sendWrapper => {
     sendWrapper( req, res, null, results );
   }
 
-  const parameters = _.map(
-    observationsSearchSchema.$_terms.keys,
-    child => transform( child.schema.label( child.key ) )
-  );
-  parameters.push(
-    transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
-  );
-
   GET.apiDoc = {
     tags: ["Observations"],
     summary: "Fetch observation iconic taxon species counts",
     security: [{
       userJwtOptional: []
     }],
-    parameters,
+    parameters: openapiUtil.getParameters( "observations_search" ),
     responses: {
       200: {
         description: "An array of iconic taxon species counts.",

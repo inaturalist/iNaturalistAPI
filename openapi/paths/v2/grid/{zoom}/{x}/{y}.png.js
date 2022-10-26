@@ -1,15 +1,9 @@
-const _ = require( "lodash" );
 const ElasticMapper = require( "elasticmaps" );
-const transform = require( "../../../../../joi_to_openapi_parameter" );
-const observationsSearchSchema = require( "../../../../../schema/request/observations_search" );
-const { tilePathParams } = require( "../../../../../common_parameters" );
+const openapiUtil = require( "../../../../../openapi_util" );
 
-const inheritdObsSearchParams = _.filter(
-  observationsSearchSchema.$_terms.keys, p => !_.includes( ["fields"], p.key )
+const parameters = openapiUtil.getParameters( "tile_path", { except: ["X-HTTP-Method-Override", "fields"] } ).concat(
+  openapiUtil.getParameters( "observations_search", { except: ["fields", "X-HTTP-Method-Override"] } )
 );
-const transformedObsSearchParams = _.map( inheritdObsSearchParams, p => (
-  transform( p.schema.label( p.key ) )
-) );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
@@ -26,7 +20,7 @@ module.exports = sendWrapper => {
     security: [{
       userJwtOptional: []
     }],
-    parameters: tilePathParams.concat( transformedObsSearchParams ),
+    parameters,
     responses: {
       200: {
         description: "Returns grid tiles.",

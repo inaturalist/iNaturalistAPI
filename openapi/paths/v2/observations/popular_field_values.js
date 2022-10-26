@@ -1,8 +1,5 @@
-const _ = require( "lodash" );
-const Joi = require( "joi" );
-const transform = require( "../../../joi_to_openapi_parameter" );
+const openapiUtil = require( "../../../openapi_util" );
 const ObservationsController = require( "../../../../lib/controllers/v2/observations_controller" );
-const observationsPopularFieldValuesSchema = require( "../../../schema/request/observations_popular_field_values" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
@@ -10,21 +7,13 @@ module.exports = sendWrapper => {
     sendWrapper( req, res, null, results );
   }
 
-  const parameters = _.map(
-    observationsPopularFieldValuesSchema.$_terms.keys,
-    child => transform( child.schema.label( child.key ) )
-  );
-  parameters.push(
-    transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
-  );
-
   GET.apiDoc = {
     tags: ["Observations"],
     summary: "Fetch observation controlled terms values and a monthly histogram",
     security: [{
       userJwtOptional: []
     }],
-    parameters,
+    parameters: openapiUtil.getParameters( "observations_popular_field_values" ),
     responses: {
       200: {
         description: "An array of observation counts over time.",

@@ -5,26 +5,24 @@ const InaturalistMapserver = require( "../../../../../../../lib/inaturalist_map_
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    req.params.style = "places";
     req.params.format = "png";
-    req.params.place_id = req.params.id;
-    InaturalistMapserver.placesRoute( req, res, ( err, data ) => {
+    InaturalistMapserver.taxonPlacesRoute( req, res, ( err, data ) => {
       sendWrapper( req, res, err, data );
     } );
   }
 
   GET.apiDoc = {
     tags: ["Polygon Tiles"],
-    summary: "Place Tiles",
+    summary: "Taxon Place Tiles",
     security: [{
       userJwtOptional: []
     }],
     parameters: [
-      transform( Joi.string( ).label( "id" ).meta( { in: "path" } ).required( ) )
+      transform( Joi.string( ).label( "taxon_id" ).meta( { in: "path" } ).required( ) )
     ].concat( tilePathParams ),
     responses: {
       200: {
-        description: "Returns place tiles.",
+        description: "Returns a PNG map tile representing the boundaries of places this taxon is known to occur, following the XYZ tiling scheme.",
         content: {
           "image/png": {
             schema: {

@@ -13,4 +13,5 @@ module.exports = Joi.object( ).keys( {
   ) ).description(
     "Observation must have this quality grade"
   )
-} ).unknown( false );
+} ).unknown( false )
+  .meta( { parameters: true } );

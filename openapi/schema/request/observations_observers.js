@@ -1,9 +1,9 @@
 const Joi = require( "joi" );
-const observationsSearchSchema = require( "./observations_search" );
+const openapiUtil = require( "../../openapi_util" );
 
-module.exports = observationsSearchSchema.keys( {
+module.exports = openapiUtil.referenceGetParameters( "observations_search" ).keys( {
   order_by: Joi.string( ).valid(
     "observation_count",
     "species_count"
   ).default( "observation_count" )
-} );
+} ).meta( { parameters: true } );

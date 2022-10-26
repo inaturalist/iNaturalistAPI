@@ -1,7 +1,7 @@
 const Joi = require( "joi" );
-const observationsSearchSchema = require( "./observations_search" );
+const openapiUtil = require( "../../openapi_util" );
 
-module.exports = observationsSearchSchema.keys( {
+module.exports = openapiUtil.referenceGetParameters( "observations_search" ).keys( {
   no_histograms: Joi.boolean( ),
   unannotated: Joi.boolean( ),
   date_field: Joi.string( ).valid(
@@ -12,4 +12,4 @@ module.exports = observationsSearchSchema.keys( {
     "month_of_year",
     "week_of_year"
   ).default( "month_of_year" )
-} );
+} ).meta( { parameters: true } );

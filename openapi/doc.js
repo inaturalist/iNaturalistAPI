@@ -3,8 +3,10 @@ const fs = require( "fs" );
 const j2s = require( "joi-to-swagger" );
 const nodeUrl = require( "url" );
 const config = require( "../config" );
+const transform = require( "./joi_to_openapi_parameter" );
 
 const schemas = { };
+const parameters = { };
 fs.readdirSync( "./openapi/schema/response" ).forEach( file => {
   const modelName = _.upperFirst( _.camelCase( file.replace( /\.js$/, "" ) ) );
   /* eslint-disable-next-line import/no-dynamic-require, global-require */
@@ -20,11 +22,24 @@ fs.readdirSync( "./openapi/schema/request" ).forEach( file => {
   const modelName = _.upperFirst( _.camelCase( file.replace( /\.js$/, "" ) ) );
   /* eslint-disable-next-line import/no-dynamic-require, global-require */
   const schema = require( `./schema/request/${file}` );
-  const { swagger, components } = j2s( schema, _.values( schemas ) );
-  _.each( components.schemas, ( componentSchema, componentName ) => {
-    schemas[componentName] = schemas[componentName] || componentSchema;
-  } );
-  schemas[modelName] = schemas[modelName] || swagger;
+  const metaParameters = _.compact( _.map( _.get( schema, "$_terms.metas" ), "parameters" ) );
+  if ( _.includes( metaParameters, true ) ) {
+    // this is a schema for GET parameters, declared using .meta( { parameters: true } )
+    // Create a custom key for each parameter, format, and store in #/components/parameters/...
+    _.each( schema.$_terms.keys, child => {
+      // don't store reference parameters in #/components/parameters
+      if ( !child.schema._valids || _.isEmpty( child.schema._valids._refs ) ) {
+        const parameterName = `${modelName}_${child.key}`;
+        parameters[parameterName] = transform( child.schema.label( child.key ) );
+      }
+    } );
+  } else {
+    const { swagger, components } = j2s( schema, _.values( schemas ) );
+    _.each( components.schemas, ( componentSchema, componentName ) => {
+      schemas[componentName] = schemas[componentName] || componentSchema;
+    } );
+    schemas[modelName] = schemas[modelName] || swagger;
+  }
 } );
 
 const parsedUrl = nodeUrl.parse( config.currentVersionURL );
@@ -159,6 +174,7 @@ Terms of Service: <https://www.inaturalist.org/terms>
 Privacy Policy: <https://www.inaturalist.org/privacy>`
   },
   components: {
+    parameters,
     schemas,
     securitySchemes: {
       userJwtRequired: {

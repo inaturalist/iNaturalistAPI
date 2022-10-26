@@ -31,4 +31,4 @@ module.exports = Joi.object( ).keys( {
   fields: Joi.any( )
     .description( "Attribute fields to return in the response" )
     .example( "title,description" )
-} );
+} ).meta( { parameters: true } );
