@@ -7,6 +7,7 @@ module.exports = Joi.object( ).keys( {
   page: Joi.number( ).integer( ).required( ),
   per_page: Joi.number( ).integer( ).required( ),
   common_ancestor: commonAncestor,
+  experimental: Joi.string( ),
   results: Joi.array( ).items( Joi.object( ).keys( {
     combined_score: Joi.number( ).required( ).description( `
       Combination of the vision and frequency scores, i.e. a score that

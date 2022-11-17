@@ -21,6 +21,9 @@ describe( "Computervision", ( ) => {
       nock( config.imageProcesing.tensorappURL )
         .post( "/" )
         .reply( 200, fakeVisionResults );
+      nock( "https://static.inaturalist.org/photos/1" )
+        .get( "/medium.jpeg" )
+        .reply( 200, fs.readFileSync( "test/fixtures/cuthona_abronia-tagged.jpg" ) );
     } );
     it( "returns JSON", function ( done ) {
       const token = jwt.sign(
