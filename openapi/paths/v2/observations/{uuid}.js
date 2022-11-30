@@ -1,7 +1,5 @@
 const Joi = require( "joi" );
-const j2s = require( "joi-to-swagger" );
 const transform = require( "../../../joi_to_openapi_parameter" );
-const observationsCreateSchema = require( "../../../schema/request/observations_create" );
 const ObservationsController = require( "../../../../lib/controllers/v2/observations_controller" );
 
 module.exports = sendWrapper => {
@@ -38,6 +36,9 @@ module.exports = sendWrapper => {
             }
           }
         }
+      },
+      default: {
+        $ref: "#/components/responses/Error"
       }
     }
   };
@@ -56,10 +57,14 @@ module.exports = sendWrapper => {
     requestBody: {
       content: {
         "multipart/form-data": {
-          schema: j2s( observationsCreateSchema ).swagger
+          schema: {
+            $ref: "#/components/schemas/ObservationsUpdate"
+          }
         },
         "application/json": {
-          schema: j2s( observationsCreateSchema ).swagger
+          schema: {
+            $ref: "#/components/schemas/ObservationsUpdate"
+          }
         }
       }
     },

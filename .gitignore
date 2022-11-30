@@ -23,3 +23,5 @@ cache/**
 log/**
 openapi/uploads/**
 lib/tasks/**.csv
+env.list
+build

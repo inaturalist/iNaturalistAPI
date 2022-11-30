@@ -1,6 +1,4 @@
-const j2s = require( "joi-to-swagger" );
 const IdentificationsController = require( "../../../../lib/controllers/v2/identifications_controller" );
-const identificationsUpdateSchema = require( "../../../schema/request/identifications_update" );
 
 module.exports = sendWrapper => {
   async function PUT( req, res ) {
@@ -17,7 +15,9 @@ module.exports = sendWrapper => {
     requestBody: {
       content: {
         "application/json": {
-          schema: j2s( identificationsUpdateSchema ).swagger
+          schema: {
+            $ref: "#/components/schemas/IdentificationsUpdate"
+          }
         }
       }
     },

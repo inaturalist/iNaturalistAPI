@@ -1,5 +1,3 @@
-const j2s = require( "joi-to-swagger" );
-const observationPhotosCreateSchema = require( "../../schema/request/observation_photos_create" );
 const ObservationPhotosController = require( "../../../lib/controllers/v2/observation_photos_controller" );
 
 module.exports = sendWrapper => {
@@ -17,7 +15,9 @@ module.exports = sendWrapper => {
     requestBody: {
       content: {
         "multipart/form-data": {
-          schema: j2s( observationPhotosCreateSchema ).swagger
+          schema: {
+            $ref: "#/components/schemas/ObservationPhotosCreate"
+          }
         }
       }
     },

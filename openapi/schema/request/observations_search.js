@@ -47,8 +47,15 @@ module.exports = Joi.object( ).keys( {
     .description( "Filter by observations where the license attribute is not null, i.e. it is licensed" ),
   photo_licensed: Joi.boolean( )
     .description( "Filter by observations where the license attribute of at least one photo is not null" ),
-  place_id: Joi.array( ).items( Joi.string( ).guid( ) ),
-  project_id: Joi.array( ).items( Joi.number( ).integer( ) ),
+  place_id: Joi.array( ).items( Joi.alternatives( ).try(
+    Joi.string( ).guid( ),
+    Joi.number( ).integer( ),
+    Joi.string( )
+  ) ),
+  project_id: Joi.array( ).items( Joi.alternatives( ).try(
+    Joi.number( ).integer( ),
+    Joi.string( )
+  ) ),
   rank: Joi.array( ).items( Joi.string( ).valid(
     "kingdom",
     "phylum",
@@ -56,10 +63,15 @@ module.exports = Joi.object( ).keys( {
     "superclass",
     "class",
     "subclass",
+    "infraclass",
+    "subterclass",
     "superorder",
     "order",
     "suborder",
     "infraorder",
+    "parvorder",
+    "zoosection",
+    "zoosubsection",
     "superfamily",
     "epifamily",
     "family",
@@ -69,11 +81,16 @@ module.exports = Joi.object( ).keys( {
     "subtribe",
     "genus",
     "genushybrid",
+    "subgenus",
+    "section",
+    "subsection",
+    "complex",
     "species",
     "hybrid",
     "subspecies",
     "variety",
-    "form"
+    "form",
+    "infrahybrid"
   ) ),
   site_id: Joi.array( ).items( Joi.number( ).integer( ) ),
   sound_license: Joi.array( ).items( Joi.string( ).valid(
@@ -142,10 +159,15 @@ module.exports = Joi.object( ).keys( {
     "superclass",
     "class",
     "subclass",
+    "infraclass",
+    "subterclass",
     "superorder",
     "order",
     "suborder",
     "infraorder",
+    "parvorder",
+    "zoosection",
+    "zoosubsection",
     "superfamily",
     "epifamily",
     "family",
@@ -155,11 +177,16 @@ module.exports = Joi.object( ).keys( {
     "subtribe",
     "genus",
     "genushybrid",
+    "subgenus",
+    "section",
+    "subsection",
+    "complex",
     "species",
     "hybrid",
     "subspecies",
     "variety",
-    "form"
+    "form",
+    "infrahybrid"
   ) ),
   lrank: Joi.array( ).items( Joi.string( ).valid(
     "kingdom",
@@ -168,10 +195,15 @@ module.exports = Joi.object( ).keys( {
     "superclass",
     "class",
     "subclass",
+    "infraclass",
+    "subterclass",
     "superorder",
     "order",
     "suborder",
     "infraorder",
+    "parvorder",
+    "zoosection",
+    "zoosubsection",
     "superfamily",
     "epifamily",
     "family",
@@ -181,11 +213,16 @@ module.exports = Joi.object( ).keys( {
     "subtribe",
     "genus",
     "genushybrid",
+    "subgenus",
+    "section",
+    "subsection",
+    "complex",
     "species",
     "hybrid",
     "subspecies",
     "variety",
-    "form"
+    "form",
+    "infrahybrid"
   ) ),
   iconic_taxa: Joi.array( ).items( Joi.string( ).valid(
     "Actinopterygii",
@@ -246,10 +283,12 @@ module.exports = Joi.object( ).keys( {
   ),
   order_by: Joi.string( ).valid(
     "observed_on",
+    "updated_at",
     "species_guess",
     "votes",
     "id",
-    "created_at"
+    "created_at",
+    "random"
   ),
   only_id: Joi.boolean( ),
   fields: Joi.any( )

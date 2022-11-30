@@ -1,6 +1,4 @@
-const j2s = require( "joi-to-swagger" );
 const IdentificationsController = require( "../../../lib/controllers/v2/identifications_controller" );
-const identificationsCreateSchema = require( "../../schema/request/identifications_create" );
 
 module.exports = sendWrapper => {
   async function POST( req, res ) {
@@ -17,7 +15,9 @@ module.exports = sendWrapper => {
     requestBody: {
       content: {
         "application/json": {
-          schema: j2s( identificationsCreateSchema ).swagger
+          schema: {
+            $ref: "#/components/schemas/IdentificationsCreate"
+          }
         }
       }
     },

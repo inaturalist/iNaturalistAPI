@@ -2,13 +2,43 @@ const Joi = require( "joi" );
 
 module.exports = Joi.object( ).keys( {
   user: Joi.object( ).keys( {
-    login: Joi.string( ),
-    email: Joi.string( ),
-    name: Joi.string( ),
-    site_id: Joi.number( ).integer( ),
+    data_transfer_consent: Joi.boolean( ).valid( true, null )
+      .description( `
+        Whether the user consents to the transfer of their personal
+        information to the United States. The only way to revoke this consent
+        is to delete the account.
+      ` ),
     description: Joi.string( ),
-    time_zone: Joi.string( ),
+    email: Joi.string( ),
     locale: Joi.string( ),
+    login: Joi.string( ),
+    make_observation_licenses_same: Joi
+      .boolean( )
+      .description(
+        "Whether a change to `preferred_observation_license` should be apply to "
+        + "all the user's existing observations"
+      ),
+    make_photo_licenses_same: Joi
+      .boolean( )
+      .description(
+        "Whether a change to `preferred_photo_license` should be apply to "
+        + "all the user's existing photos"
+      ),
+    make_sound_licenses_same: Joi
+      .boolean( )
+      .description(
+        "Whether a change to `preferred_sound_license` should be apply to "
+        + "all the user's existing sounds"
+      ),
+    name: Joi.string( ),
+    pi_consent: Joi.boolean( ).valid( true, null )
+      .description( `
+        Whether the user consents to the storage of their personal
+        information. The only way to revoke this consent is to delete the
+        account.
+      ` ),
+    place_id: Joi.number( ).integer( )
+      .description( "ID of place for localizing common names" ),
     prefers_automatic_taxonomic_changes: Joi.boolean( ),
     prefers_comment_email_notification: Joi.boolean( ),
     prefers_common_names: Joi.boolean( ),
@@ -33,7 +63,12 @@ module.exports = Joi.object( ).keys( {
     preferred_photo_license: Joi.string( ),
     preferred_project_addition_by: Joi.string( ),
     preferred_sound_license: Joi.string( ),
-    monthly_supporter: Joi.boolean( )
+    search_place_id: Joi.number( ).integer( )
+      .description( "ID of place for default observation searches" ),
+    site_id: Joi.number( ).integer( ),
+    time_zone: Joi.string( ),
+    password: Joi.string( ),
+    password_confirmation: Joi.string( )
   } ),
   icon_delete: Joi.boolean( )
 } );

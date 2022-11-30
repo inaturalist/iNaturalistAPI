@@ -1,6 +1,4 @@
-const j2s = require( "joi-to-swagger" );
 const AnnotationsController = require( "../../../lib/controllers/v2/annotations_controller" );
-const annotationsCreateSchema = require( "../../schema/request/annotations_create" );
 
 module.exports = sendWrapper => {
   async function POST( req, res ) {
@@ -9,7 +7,7 @@ module.exports = sendWrapper => {
   }
 
   POST.apiDoc = {
-    tags: ["Annotation"],
+    tags: ["Annotations"],
     summary: "Create an annotation",
     security: [{
       userJwtRequired: []
@@ -17,7 +15,9 @@ module.exports = sendWrapper => {
     requestBody: {
       content: {
         "application/json": {
-          schema: j2s( annotationsCreateSchema ).swagger
+          schema: {
+            $ref: "#/components/schemas/AnnotationsCreate"
+          }
         }
       }
     },

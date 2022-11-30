@@ -1,6 +1,4 @@
-const j2s = require( "joi-to-swagger" );
 const ProjectObservationsController = require( "../../../lib/controllers/v2/project_observations_controller" );
-const projectObservationsCreateSchema = require( "../../schema/request/project_observations_create" );
 
 module.exports = sendWrapper => {
   async function POST( req, res ) {
@@ -17,7 +15,9 @@ module.exports = sendWrapper => {
     requestBody: {
       content: {
         "application/json": {
-          schema: j2s( projectObservationsCreateSchema ).swagger
+          schema: {
+            $ref: "#/components/schemas/ProjectObservationsCreate"
+          }
         }
       }
     },

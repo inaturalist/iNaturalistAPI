@@ -14,8 +14,10 @@ module.exports = Joi.object( ).keys( {
             .description( "Unique auto-increment integer identifier." )
             .required( ),
           title: Joi.string( ),
-          url: Joi.string( ).uri( ),
-          in_text: Joi.string( )
+          source: Joi.object( ).keys( {
+            url: Joi.string( ).uri( ),
+            in_text: Joi.string( )
+          } )
         } )
         .description( "Source of these comprehensive suggestions" )
     } )

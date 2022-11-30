@@ -5,13 +5,12 @@ const nock = require( "nock" );
 const request = require( "supertest" );
 const { expect } = require( "chai" );
 const config = require( "../../../config" );
-const app = require( "../../../app" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 describe( "Users", ( ) => {
   describe( "show", ( ) => {
-    it( "should include requested fields", done => {
+    it( "should include requested fields", function ( done ) {
       const user = _.find(
         fixtures.postgresql.users,
         u => (
@@ -22,7 +21,7 @@ describe( "Users", ( ) => {
         )
       );
       const site = _.find( fixtures.postgresql.sites, s => s.id === user.site_id );
-      request( app ).post( `/v2/users/${user.id}` )
+      request( this.app ).post( `/v2/users/${user.id}` )
         .set( "X-HTTP-Method-Override", "GET" )
         .send( {
           fields: {
@@ -43,8 +42,8 @@ describe( "Users", ( ) => {
     } );
   } );
   describe( "update_session", ( ) => {
-    it( "should fail without auth", done => {
-      request( app ).put( "/v2/users/update_session" )
+    it( "should fail without auth", function ( done ) {
+      request( this.app ).put( "/v2/users/update_session" )
         .expect( 401, done );
     } );
 
@@ -57,7 +56,7 @@ describe( "Users", ( ) => {
     //     .expect( 401, done );
     // } );
 
-    it( "should return JSON with auth", done => {
+    it( "should return JSON with auth", function ( done ) {
       const currentUser = fixtures.elasticsearch.users.user[0];
       const token = jwt.sign(
         { user_id: currentUser.id },
@@ -67,13 +66,13 @@ describe( "Users", ( ) => {
       nock( "http://localhost:3000" )
         .put( "/users/update_session" )
         .reply( 204 );
-      request( app ).put( "/v2/users/update_session" ).set( "Authorization", token )
+      request( this.app ).put( "/v2/users/update_session" ).set( "Authorization", token )
         .expect( 204, done );
     } );
   } );
   describe( "index", ( ) => {
-    it( "should return JSON", done => {
-      request( app ).get( "/v2/users?fields=login" )
+    it( "should return JSON", function ( done ) {
+      request( this.app ).get( "/v2/users?fields=login" )
         .expect( 200 )
         .expect( res => {
           expect( res.body.results ).not.to.be.empty;
@@ -81,7 +80,7 @@ describe( "Users", ( ) => {
         } )
         .expect( 200, done );
     } );
-    it( "should filter by following", done => {
+    it( "should filter by following", function ( done ) {
       const friendship = fixtures.postgresql.friendships[0];
       const followingUserId = friendship.user_id;
       const followingUserIds = _.filter(
@@ -92,7 +91,7 @@ describe( "Users", ( ) => {
         fixtures.postgresql.users,
         u => ( followingUserIds.indexOf( u.id ) < 0 )
       ).id;
-      request( app ).get( `/v2/users?per_page=100&following=${friendship.friend_id}` )
+      request( this.app ).get( `/v2/users?per_page=100&following=${friendship.friend_id}` )
         .expect( 200 )
         .expect( res => {
           expect( res.body.results ).not.to.be.empty;
@@ -105,7 +104,7 @@ describe( "Users", ( ) => {
         } )
         .expect( 200, done );
     } );
-    it( "should filter by followed_by", done => {
+    it( "should filter by followed_by", function ( done ) {
       const friendship = fixtures.postgresql.friendships[0];
       const friendIds = _.filter(
         fixtures.postgresql.friendships,
@@ -115,7 +114,7 @@ describe( "Users", ( ) => {
         fixtures.postgresql.users,
         u => friendIds.indexOf( u.id ) < 0
       ).id;
-      request( app ).get( `/v2/users?per_page=100&followed_by=${friendship.user_id}` )
+      request( this.app ).get( `/v2/users?per_page=100&followed_by=${friendship.user_id}` )
         .expect( 200 )
         .expect( res => {
           expect( res.body.results ).not.to.be.empty;
@@ -128,29 +127,56 @@ describe( "Users", ( ) => {
         } )
         .expect( 200, done );
     } );
-    it( "should return nothing if followed_by user is not following anyone", done => {
+    it( "should return nothing if followed_by user is not following anyone", function ( done ) {
       const followingUserIds = _.map( fixtures.postgresql.frienships, f => f.user_id );
       const loner = _.find(
         fixtures.postgresql.users,
         u => ( followingUserIds.indexOf( u.id ) < 0 )
       );
-      request( app ).get( `/v2/users?per_page=100&followed_by=${loner.id}` )
+      request( this.app ).get( `/v2/users?per_page=100&followed_by=${loner.id}` )
         .expect( 200 )
         .expect( res => {
           expect( res.body.results ).to.be.empty;
         } )
         .expect( 200, done );
     } );
-    it( "should return nothing if following user is not followed by anyone", done => {
+    it( "should return nothing if following user is not followed by anyone", function ( done ) {
       const followedUserIds = _.map( fixtures.postgresql.frienships, f => f.friend_id );
       const pariah = _.find(
         fixtures.postgresql.users,
         u => ( followedUserIds.indexOf( u.id ) < 0 )
       );
-      request( app ).get( `/v2/users?per_page=100&following=${pariah.id}` )
+      request( this.app ).get( `/v2/users?per_page=100&following=${pariah.id}` )
         .expect( 200 )
         .expect( res => {
           expect( res.body.results ).to.be.empty;
+        } )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "update", ( ) => {
+    const currentUser = fixtures.elasticsearch.users.user[0];
+    const token = jwt.sign( { user_id: currentUser.id },
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+
+    it( "should fail without auth", function ( done ) {
+      request( this.app ).put( "/v2/users/update" )
+        .expect( 401, done );
+    } );
+
+    it( "should return JSON", function ( done ) {
+      nock( "http://localhost:3000" )
+        .put( `/users/${currentUser.login}` )
+        .reply( 200, { id: currentUser.id, login: currentUser.login } );
+      request( this.app )
+        .put( `/v2/users/${currentUser.login}` )
+        .set( "Authorization", token )
+        .expect( "Content-Type", /json/ )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.login ).to.eq( currentUser.login );
         } )
         .expect( 200, done );
     } );

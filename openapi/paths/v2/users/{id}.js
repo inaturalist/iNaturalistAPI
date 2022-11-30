@@ -1,6 +1,4 @@
 const Joi = require( "joi" );
-const j2s = require( "joi-to-swagger" );
-const usersUpdateSchema = require( "../../../schema/request/users_update_multipart" );
 const transform = require( "../../../joi_to_openapi_parameter" );
 const UsersController = require( "../../../../lib/controllers/v2/users_controller" );
 
@@ -32,6 +30,9 @@ module.exports = sendWrapper => {
             }
           }
         }
+      },
+      default: {
+        $ref: "#/components/responses/Error"
       }
     }
   };
@@ -54,7 +55,9 @@ module.exports = sendWrapper => {
     requestBody: {
       content: {
         "multipart/form-data": {
-          schema: j2s( usersUpdateSchema ).swagger
+          schema: {
+            $ref: "#/components/schemas/UsersUpdateMultipart"
+          }
         },
         "application/json": {
           schema: {
@@ -73,6 +76,9 @@ module.exports = sendWrapper => {
             }
           }
         }
+      },
+      default: {
+        $ref: "#/components/responses/Error"
       }
     }
   };

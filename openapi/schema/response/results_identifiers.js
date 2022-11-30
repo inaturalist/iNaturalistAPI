@@ -7,7 +7,7 @@ module.exports = Joi.object( ).keys( {
   per_page: Joi.number( ).integer( ).required( ),
   results: Joi.array( ).items( Joi.object( ).keys( {
     user_id: Joi.number( ).integer( ),
-    count: Joi.number( ).integer( ),
-    user
+    count: Joi.number( ).integer( ).required( ),
+    user: user.required( )
   } ) ).required( )
 } ).unknown( false );

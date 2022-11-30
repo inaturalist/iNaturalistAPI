@@ -4,18 +4,18 @@ const fs = require( "fs" );
 const request = require( "supertest" );
 const nock = require( "nock" );
 const jwt = require( "jsonwebtoken" );
-const config = require( "../../../config.js" );
-const app = require( "../../../app" );
+const config = require( "../../../config" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 describe( "Relationships", ( ) => {
   const userId = fixtures.postgresql.friendships[0].user_id;
-  const token = jwt.sign( { user_id: userId }, config.jwtSecret || "secret",
+  const token = jwt.sign( { user_id: userId },
+    config.jwtSecret || "secret",
     { algorithm: "HS512" } );
   describe( "index", ( ) => {
-    it( "should return JSON", done => {
-      request( app ).get( "/v1/relationships" )
+    it( "should return JSON", function ( done ) {
+      request( this.app ).get( "/v1/relationships" )
         .set( "Authorization", token )
         .expect( 200 )
         .expect( response => {
@@ -24,7 +24,7 @@ describe( "Relationships", ( ) => {
         } )
         .expect( 200, done );
     } );
-    it( "should return reciprocal_trust", done => {
+    it( "should return reciprocal_trust", function ( done ) {
       const trustingFollowedFriendship = _.find(
         fixtures.postgresql.friendships,
         f => f.friend_id === userId && f.trust
@@ -34,7 +34,7 @@ describe( "Relationships", ( ) => {
         f => f.friend_id === userId && !f.trust
       );
       expect( trustingFollowedFriendship ).not.to.be.undefined;
-      request( app ).get( "/v1/relationships" )
+      request( this.app ).get( "/v1/relationships" )
         .set( "Authorization", token )
         .expect( 200 )
         .expect( response => {
@@ -47,10 +47,10 @@ describe( "Relationships", ( ) => {
         } )
         .expect( 200, done );
     } );
-    it( "should filter by q", done => {
+    it( "should filter by q", function ( done ) {
       const friendUserId = fixtures.postgresql.friendships[0].friend_id;
       const friendUser = _.find( fixtures.postgresql.users, u => u.id === friendUserId );
-      request( app ).get( `/v1/relationships?q=${friendUser.login}` )
+      request( this.app ).get( `/v1/relationships?q=${friendUser.login}` )
         .set( "Authorization", token )
         .expect( 200 )
         .expect( response => {
@@ -61,11 +61,11 @@ describe( "Relationships", ( ) => {
     } );
   } );
   describe( "create", ( ) => {
-    it( "should succeed", done => {
+    it( "should succeed", function ( done ) {
       nock( "http://localhost:3000" )
         .post( "/relationships" )
         .reply( 200, { id: 1 } );
-      request( app ).post( "/v1/relationships" ).set( "Authorization", token )
+      request( this.app ).post( "/v1/relationships" ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.id ).to.eq( 1 );
         } )
@@ -74,21 +74,21 @@ describe( "Relationships", ( ) => {
     } );
   } );
   describe( "update", ( ) => {
-    it( "should succeed", done => {
+    it( "should succeed", function ( done ) {
       nock( "http://localhost:3000" )
         .put( "/relationships/1" )
         .reply( 200, {} );
-      request( app ).put( "/v1/relationships/1" ).set( "Authorization", token )
+      request( this.app ).put( "/v1/relationships/1" ).set( "Authorization", token )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
   } );
   describe( "delete", ( ) => {
-    it( "should succeed", done => {
+    it( "should succeed", function ( done ) {
       nock( "http://localhost:3000" )
         .delete( "/relationships/1" )
         .reply( 200, {} );
-      request( app ).delete( "/v1/relationships/1" ).set( "Authorization", token )
+      request( this.app ).delete( "/v1/relationships/1" ).set( "Authorization", token )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );

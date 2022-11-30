@@ -30,7 +30,7 @@ const Taxon = require( "../lib/models/taxon" );
 // test that specifies these before and after callbacks for all tests.
 
 before( async function ( ) {
-  this.timeout( 10000 );
+  this.timeout( 20000 );
   console.log( "Creating ES indices" );
   await testHelper.createIndices( );
   console.log( "Loading ES fixtures" );
@@ -49,7 +49,7 @@ after( async function ( ) {
 
 beforeEach( ( ) => {
   inaturalistjs.setConfig( {
-    apiURL: "http://localhost:4000/v1",
+    apiURL: "http://localhost:3000",
     writeApiURL: "http://localhost:3000"
   } );
 } );

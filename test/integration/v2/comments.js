@@ -3,7 +3,6 @@ const request = require( "supertest" );
 const nock = require( "nock" );
 const jwt = require( "jsonwebtoken" );
 const config = require( "../../../config" );
-const app = require( "../../../app" );
 
 describe( "Comments", ( ) => {
   const token = jwt.sign(
@@ -16,11 +15,11 @@ describe( "Comments", ( ) => {
     uuid: "dcd68b65-e5ae-4581-8cea-5788cbefe53d"
   };
   describe( "create", ( ) => {
-    it( "returns JSON", done => {
+    it( "returns JSON", function ( done ) {
       nock( "http://localhost:3000" )
         .post( "/comments" )
         .reply( 200, { id: c.id, uuid: c.uuid } );
-      request( app ).post( "/v2/comments" )
+      request( this.app ).post( "/v2/comments" )
         .set( "Authorization", token )
         .set( "Content-Type", "application/json" )
         // Actual values of what we send don't matter since we're mocking the
@@ -43,12 +42,12 @@ describe( "Comments", ( ) => {
   } );
 
   describe( "update", ( ) => {
-    it( "returns updated JSON", done => {
+    it( "returns updated JSON", function ( done ) {
       const newBody = "the new body";
       nock( "http://localhost:3000" )
         .put( `/comments/${c.uuid}` )
         .reply( 200, { id: c.id, uuid: c.uuid, body: newBody } );
-      request( app ).put( `/v2/comments/${c.uuid}` )
+      request( this.app ).put( `/v2/comments/${c.uuid}` )
         .set( "Authorization", token )
         .set( "Content-Type", "application/json" )
         .send( {
@@ -70,11 +69,11 @@ describe( "Comments", ( ) => {
   } );
 
   describe( "delete", ( ) => {
-    it( "should not return anything if successful", done => {
+    it( "should not return anything if successful", function ( done ) {
       nock( "http://localhost:3000" )
         .delete( `/comments/${c.uuid}` )
         .reply( 200 );
-      request( app ).delete( `/v2/comments/${c.uuid}` )
+      request( this.app ).delete( `/v2/comments/${c.uuid}` )
         .set( "Authorization", token )
         .set( "Content-Type", "application/json" )
         .expect( 200 )

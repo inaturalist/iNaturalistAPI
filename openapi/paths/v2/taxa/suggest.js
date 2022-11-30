@@ -54,7 +54,8 @@ module.exports = sendWrapper => {
     return GET( req, res );
   }
 
-  POST.apiDoc = Object.assign( {}, GET.apiDoc, {
+  POST.apiDoc = {
+    ...GET.apiDoc,
     summary: "Suggest taxa for identifications given conditions and an image",
     description: "Just like its GET counterpart except it accepts an `image` parameter in a multipart POST request",
     parameters: [],
@@ -70,7 +71,7 @@ module.exports = sendWrapper => {
         }
       }
     }
-  } );
+  };
 
   return {
     GET,

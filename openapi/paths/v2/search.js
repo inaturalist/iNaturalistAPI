@@ -1,6 +1,6 @@
 const _ = require( "lodash" );
 const transform = require( "../../joi_to_openapi_parameter" );
-const SearchController = require( "../../../lib/controllers/v1/search_controller" );
+const SearchController = require( "../../../lib/controllers/v2/search_controller" );
 const searchSchema = require( "../../schema/request/search" );
 
 module.exports = sendWrapper => {
@@ -11,7 +11,7 @@ module.exports = sendWrapper => {
 
   GET.apiDoc = {
     tags: ["Search"],
-    summary: "Given zero to many of following parameters, returns object matching the search criteria",
+    summary: "Search for multiple kinds of records",
     security: [{
       userJwtOptional: []
     }],
@@ -28,7 +28,9 @@ module.exports = sendWrapper => {
     ) ) ),
     responses: {
       200: {
-        description: "A array of results",
+        description: "An array of search results. The actual record is keyed by its type, "
+          + "so if the `result.type` field is `project`, `result.project` will hold the "
+          + "project record.",
         content: {
           "application/json": {
             schema: {
@@ -36,6 +38,9 @@ module.exports = sendWrapper => {
             }
           }
         }
+      },
+      default: {
+        $ref: "#/components/responses/Error"
       }
     }
   };

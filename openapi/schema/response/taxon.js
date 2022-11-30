@@ -34,6 +34,17 @@ module.exports = Joi.object( ).keys( {
   default_photo: photo,
   endemic: Joi.boolean( ),
   english_common_name: Joi.string( ),
+  establishment_means: Joi.object( {
+    establishment_means: Joi.string( ),
+    id: Joi.number( ).integer( ),
+    place: Joi.object( {
+      id: Joi.number( ).integer( ),
+      name: Joi.string( ),
+      display_name: Joi.string( ),
+      ancestry: Joi.string( )
+    } )
+  } ),
+  preferred_establishment_means: Joi.string( ),
   extinct: Joi.boolean( ),
   flag_counts: Joi.object( ).keys( {
     resolved: Joi.number( ).integer( ),

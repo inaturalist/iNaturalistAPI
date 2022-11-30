@@ -29,6 +29,7 @@ fs.readdirSync( "./openapi/schema/request" ).forEach( file => {
 
 const parsedUrl = nodeUrl.parse( config.currentVersionURL );
 const url = `${parsedUrl.protocol}//${parsedUrl.host}/v2`;
+const risonUrl = `${url}/observations?fields=(species_guess:!t,user:(login:!t))`;
 
 const apiDoc = {
   openapi: "3.0.0",
@@ -73,13 +74,41 @@ the authenticated user has permission to view them.
 By default, all endpoints will return a very minimal response for the requested
 resources (e.g. the contents of the \`results\` array), usually just the UUID.
 To receive more data, include the \`fields\` parameter to specify exactly what
-you want from these reousrces. For GET requests, this can be as simple as
+you want from these resources. For GET requests, this can be as simple as
 [${url}/observations?fields=species_guess,observed_on](${url}/observations?fields=species_guess,observed_on)
 to return the \`species_guess\` and \`observed_on\` fields of the observations.
 
-For more complex responses, including nested objects, all GET endpoints also
-support POST requests with the \`X-HTTP-Method-Override: GET\` header to so you
-can specify the response fields in a JSON object, e.g.
+For more complex responses, including nested objects, you have two options:
+
+### RISON
+
+You can encode the fields parameter as [RISON](https://github.com/w33ble/rison-node),
+a URL-friendly variant of JSON. If you want to request fields like
+
+\`\`\`json
+{
+  "species_guess": true,
+  "user": {
+    "login": true
+  }
+}
+\`\`\`
+
+you can encode those fields as RISON:
+
+<a href="${risonUrl}">${risonUrl}</a>
+
+This is our preferred way to specify fields because it maintains the caching
+benefits of URLs that are unique to their responses, and it avoids the
+complexity of overriding the HTTP request method.
+
+### X-HTTP-Method-Override
+
+If specifying the fields in RISON still results in a URL that is too large or
+unwieldy, all GET endpoints also support POST requests with
+the \`X-HTTP-Method-Override: GET\` header to so you can specify the response
+fields in stringified JSON, e.g.
+
 \`\`\`
   curl -XPOST \\
     -H "X-HTTP-Method-Override: GET" \\
@@ -166,6 +195,5 @@ Privacy Policy: <https://www.inaturalist.org/privacy>`
   },
   paths: { }
 };
-
 
 module.exports = apiDoc;

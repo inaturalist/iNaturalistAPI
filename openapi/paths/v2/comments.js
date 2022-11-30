@@ -1,6 +1,4 @@
-const j2s = require( "joi-to-swagger" );
 const CommentsController = require( "../../../lib/controllers/v2/comments_controller" );
-const commentsCreateSchema = require( "../../schema/request/comments_create" );
 
 module.exports = sendWrapper => {
   async function POST( req, res ) {
@@ -17,7 +15,9 @@ module.exports = sendWrapper => {
     requestBody: {
       content: {
         "application/json": {
-          schema: j2s( commentsCreateSchema ).swagger
+          schema: {
+            $ref: "#/components/schemas/CommentsCreate"
+          }
         }
       }
     },

@@ -18,7 +18,7 @@ module.exports = sendWrapper => {
     req.params.format = "png";
     req.params.place_id = req.params.id;
     InaturalistMapserver.placesRoute( req, res, ( err, data ) => {
-      sendWrapper( req, res, err, data, "image/png" );
+      sendWrapper( req, res, err, data );
     } );
   }
 

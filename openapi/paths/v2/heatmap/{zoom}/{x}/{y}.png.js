@@ -16,7 +16,7 @@ module.exports = sendWrapper => {
     req.params.style = "heatmap";
     req.params.format = "png";
     ElasticMapper.route( req, res, ( err, data ) => {
-      sendWrapper( req, res, err, data, "image/png" );
+      sendWrapper( req, res, err, data );
     } );
   }
 

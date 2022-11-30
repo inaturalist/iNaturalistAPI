@@ -1,6 +1,4 @@
-const j2s = require( "joi-to-swagger" );
 const CommentsController = require( "../../../../lib/controllers/v2/comments_controller" );
-const commentsUpdateSchema = require( "../../../schema/request/comments_update" );
 
 module.exports = sendWrapper => {
   async function PUT( req, res ) {
@@ -17,7 +15,9 @@ module.exports = sendWrapper => {
     requestBody: {
       content: {
         "application/json": {
-          schema: j2s( commentsUpdateSchema ).swagger
+          schema: {
+            $ref: "#/components/schemas/CommentsUpdate"
+          }
         }
       }
     },

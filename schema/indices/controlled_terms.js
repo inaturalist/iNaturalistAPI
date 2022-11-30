@@ -8,6 +8,11 @@
       "type": "integer"
     },
     "id": {
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      },
       "type": "integer"
     },
     "is_value": {
@@ -16,15 +21,15 @@
     "labels": {
       "properties": {
         "definition": {
-          "type": "text",
-          "analyzer": "ascii_snowball_analyzer"
+          "analyzer": "ascii_snowball_analyzer",
+          "type": "text"
         },
         "id": {
           "type": "integer"
         },
         "label": {
-          "type": "text",
-          "analyzer": "ascii_snowball_analyzer"
+          "analyzer": "ascii_snowball_analyzer",
+          "type": "text"
         },
         "locale": {
           "type": "keyword"
@@ -34,22 +39,19 @@
         }
       }
     },
-    "multivalued": {
-      "type": "boolean"
-    },
     "multivalues": {
       "type": "boolean"
     },
     "ontology_uri": {
-      "type": "keyword",
-      "index": false
+      "index": false,
+      "type": "keyword"
     },
     "taxon_ids": {
-      "type": "integer"
+      "type": "keyword"
     },
     "uri": {
-      "type": "keyword",
-      "index": false
+      "index": false,
+      "type": "keyword"
     },
     "uuid": {
       "type": "keyword"
@@ -68,15 +70,15 @@
         "labels": {
           "properties": {
             "definition": {
-              "type": "text",
-              "analyzer": "ascii_snowball_analyzer"
+              "analyzer": "ascii_snowball_analyzer",
+              "type": "text"
             },
             "id": {
               "type": "integer"
             },
             "label": {
-              "type": "text",
-              "analyzer": "ascii_snowball_analyzer"
+              "analyzer": "ascii_snowball_analyzer",
+              "type": "text"
             },
             "locale": {
               "type": "keyword"
@@ -87,15 +89,15 @@
           }
         },
         "ontology_uri": {
-          "type": "keyword",
-          "index": false
+          "index": false,
+          "type": "keyword"
         },
         "taxon_ids": {
-          "type": "integer"
+          "type": "keyword"
         },
         "uri": {
-          "type": "keyword",
-          "index": false
+          "index": false,
+          "type": "keyword"
         },
         "uuid": {
           "type": "keyword"

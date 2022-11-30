@@ -5,7 +5,6 @@ const nock = require( "nock" );
 const jwt = require( "jsonwebtoken" );
 const fs = require( "fs" );
 const config = require( "../../../config" );
-const app = require( "../../../app" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
@@ -29,11 +28,11 @@ describe( "ProjectObservationsController", ( ) => {
     { algorithm: "HS512" }
   );
   describe( "create", ( ) => {
-    it( "should return a ProjectObservation", done => {
+    it( "should return a ProjectObservation", function ( done ) {
       nock( "http://localhost:3000" )
         .post( "/project_observations" )
         .reply( 200, projectObservation );
-      request( app ).post( "/v2/project_observations" )
+      request( this.app ).post( "/v2/project_observations" )
         .set( "Authorization", token )
         .set( "Content-Type", "application/json" )
         .send( {
@@ -52,11 +51,11 @@ describe( "ProjectObservationsController", ( ) => {
     } );
   } );
   describe( "destroy", ( ) => {
-    it( "should return empty success", done => {
+    it( "should return empty success", function ( done ) {
       nock( "http://localhost:3000" )
         .delete( `/project_observations/${projectObservation.uuid}` )
         .reply( 204, projectObservation );
-      request( app )
+      request( this.app )
         .delete( `/v2/project_observations/${projectObservation.uuid}` )
         .set( "Authorization", token )
         .expect( 200, done );
