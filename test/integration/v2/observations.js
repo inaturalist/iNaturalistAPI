@@ -333,6 +333,25 @@ describe( "Observations", ( ) => {
     } );
   } );
 
+  describe( "delete", ( ) => {
+    const token = jwt.sign( { user_id: fixtureObs.user.id },
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+    it( "should not return anything if successful", function ( done ) {
+      nock( "http://localhost:3000" )
+        .delete( `/observations/${fixtureObs.uuid}` )
+        .reply( 200 );
+      request( this.app ).delete( `/v2/observations/${fixtureObs.uuid}` )
+        .set( "Authorization", token )
+        .set( "Content-Type", "application/json" )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body ).to.eq( "" );
+        } )
+        .expect( 200, done );
+    } );
+  } );
+
   describe( "taxon_summary", ( ) => {
     it( "should include a relevant listed taxon", function ( done ) {
       const o = fixtures.elasticsearch.observations.observation[0];
