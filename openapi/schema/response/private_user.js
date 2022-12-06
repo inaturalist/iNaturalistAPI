@@ -1,5 +1,6 @@
 const Joi = require( "joi" );
 const user = require( "./user" );
+const taxonNamePreferece = require( "./taxon_name_preference" );
 
 module.exports = user.append( {
   activity_count: Joi.number( ).integer( ),
@@ -52,6 +53,7 @@ module.exports = user.append( {
   prefers_user_observation_email_notification: Joi.boolean( ).valid( null ),
   privileges: Joi.array( ).items( Joi.string( ) ).valid( null ),
   search_place_id: Joi.number( ).integer( ).valid( null ),
+  taxon_name_preferences: Joi.array( ).items( taxonNamePreferece ),
   time_zone: Joi.string( ).valid( null ),
   universal_search_rank: Joi.number( ).integer( )
 } ).meta( { className: "PrivateUser" } );
