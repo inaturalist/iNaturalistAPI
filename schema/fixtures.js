@@ -1792,7 +1792,7 @@
     "file_prefixes": [
       {
         "id": 1,
-        "prefix": "https://static.inaturalist.org/photos/",
+        "prefix": "https://static.inaturalist.org/photos",
         "created_at": "2021-07-08 00:00:00",
         "updated_at": "2021-07-08 00:00:00"
       }

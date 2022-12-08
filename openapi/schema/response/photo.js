@@ -13,8 +13,8 @@ module.exports = Joi.object( ).keys( {
   native_page_url: Joi.string( ).valid( null ),
   native_photo_id: Joi.string( ).valid( null ),
   original_dimensions: Joi.object( ).keys( {
-    height: Joi.number( ).integer( ),
-    width: Joi.number( ).integer( )
+    height: Joi.number( ).integer( ).valid( null ),
+    width: Joi.number( ).integer( ).valid( null )
   } ).unknown( false ).valid( null ),
   original_url: Joi.string( ).valid( null ),
   small_url: Joi.string( ).valid( null ),
