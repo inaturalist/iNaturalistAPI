@@ -200,6 +200,8 @@ describe( "Users", ( ) => {
     } );
 
     _.each( [
+      "confirmation_sent_at",
+      "confirmed_at",
       "created_at",
       "data_transfer_consent",
       "description",
@@ -235,6 +237,7 @@ describe( "Users", ( ) => {
       "prefers_user_observation_email_notification",
       "search_place_id",
       "time_zone",
+      "unconfirmed_email",
       "updated_at"
     ], a => {
       it( `returns ${a}`, function ( done ) {
