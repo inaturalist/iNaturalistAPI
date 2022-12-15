@@ -3,6 +3,40 @@ const transform = require( "../../../joi_to_openapi_parameter" );
 const TaxonNamePreferencesController = require( "../../../../lib/controllers/v2/taxon_name_preferences_controller" );
 
 module.exports = sendWrapper => {
+  async function PUT( req, res ) {
+    const results = await TaxonNamePreferencesController.update( req );
+    sendWrapper( req, res, null, results );
+  }
+
+  PUT.apiDoc = {
+    tags: ["TaxonNamePreferences"],
+    summary: "Update a taxon name preference",
+    security: [{
+      userJwtRequired: []
+    }],
+    requestBody: {
+      content: {
+        "application/json": {
+          schema: {
+            $ref: "#/components/schemas/TaxonNamePreferencesUpdate"
+          }
+        }
+      }
+    },
+    responses: {
+      200: {
+        description: "A list of taxon name preferences",
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/ResultsTaxonNamePreferences"
+            }
+          }
+        }
+      }
+    }
+  };
+
   async function DELETE( req, res ) {
     await TaxonNamePreferencesController.delete( req );
     sendWrapper( req, res, null, null );
@@ -32,6 +66,7 @@ module.exports = sendWrapper => {
   };
 
   return {
+    PUT,
     DELETE
   };
 };
