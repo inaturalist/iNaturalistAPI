@@ -6,6 +6,7 @@ module.exports = user.append( {
   blocked_user_ids: Joi.array( ).items(
     Joi.number( ).integer( )
   ).valid( null ),
+  confirmation_sent_at: Joi.date( ).valid( null ),
   data_transfer_consent: Joi.boolean( ).valid( true, null ),
   email: Joi.string( ).valid( null ),
   locale: Joi.string( ).valid( null ),
