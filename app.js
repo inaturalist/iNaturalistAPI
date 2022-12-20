@@ -39,6 +39,9 @@ if ( require.main === module ) {
     // eslint-disable-next-line no-console
     console.log( `This process is your pid: ${process.pid}` );
   }
+  if ( process.send ) {
+    process.send( "ready" );
+  }
 } else {
   module.exports = main;
 }
