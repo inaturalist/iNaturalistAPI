@@ -24,6 +24,7 @@ describe( "ObservationPhotos", ( ) => {
         .set( "Authorization", token )
         .set( "Content-Type", "multipart/form-data" )
         .field( "fields", "id,uuid" )
+        .field( "observation_photo[observation_id]", obsPhoto.uuid )
         .attach( "file", "test/fixtures/cuthona_abronia-tagged.jpg" )
         .expect( 200 )
         .expect( res => {
