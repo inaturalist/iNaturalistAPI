@@ -23,6 +23,7 @@ describe( "ObservationSounds", ( ) => {
         .set( "Authorization", token )
         .set( "Content-Type", "multipart/form-data" )
         .field( "fields", "id,uuid" )
+        .field( "observation_sound[observation_id]", stub.uuid )
         // It's supposed to accept a file, but since we're just stubbing the
         // rails response, it doesn't really matter what file
         .attach( "file", "test/fixtures/cuthona_abronia-tagged.jpg" )
