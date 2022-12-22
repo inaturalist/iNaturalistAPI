@@ -499,4 +499,39 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "deleted", ( ) => {
+    it( "should 401 without auth", function ( done ) {
+      request( this.app )
+        .get( "/v2/observations/deleted" )
+        .expect( 401, done );
+    } );
+
+    it( "requires a `since` param", function ( done ) {
+      const token = jwt.sign( { user_id: 123 },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( this.app )
+        .get( "/v2/observations/deleted" )
+        .set( "Authorization", token )
+        .expect( res => {
+          expect( JSON.stringify( res.body ) ).to.include( "must have required property 'since'" );
+        } )
+        .expect( 422, done );
+    } );
+
+    it( "returns json", function ( done ) {
+      const token = jwt.sign( { user_id: 123 },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      nock( "http://localhost:3000" )
+        .put( "/observations/deleted" )
+        .reply( 200 );
+      request( this.app )
+        .get( "/v2/observations/deleted?since=2022-01-01" )
+        .set( "Authorization", token )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
 } );
