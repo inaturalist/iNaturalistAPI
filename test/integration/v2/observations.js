@@ -264,6 +264,15 @@ describe( "Observations", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "can return fields not returned by v1", function ( done ) {
+      // application can only be returned by v2, if requested
+      request( this.app ).get( "/v2/observations?oauth_application_id=3&fields=application" ).expect( res => {
+        expect( res.body.results[0].application ).to.be.an( "object" );
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "create", ( ) => {
