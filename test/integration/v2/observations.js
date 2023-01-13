@@ -7,6 +7,7 @@ const sinon = require( "sinon" );
 const jwt = require( "jsonwebtoken" );
 const { v4: uuidv4 } = require( "uuid" );
 const config = require( "../../../config" );
+const ESModel = require( "../../../lib/models/es_model" );
 const ObservationsController = require( "../../../lib/controllers/v1/observations_controller" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
@@ -141,6 +142,59 @@ describe( "Observations", ( ) => {
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
+    } );
+
+    // the observations.show endpoint should use the ES mget method to fetch observations for the
+    // show endpoint, unless there are additional parameters that will filter the observations
+    // returned. This is because the mget method is not affected by the normal ES refresh cycle,
+    // whereas search is. This allows observation records to be returned immediately after they
+    // have been updated without waiting for the next refresh. This is useful for clients that may
+    // modify an observation or associated records and immediately re-fetch the observation record
+    // to get its update metadata and associations that may have been just modified.
+    describe( "show mget", ( ) => {
+      const esModelSandbox = sinon.createSandbox( );
+
+      beforeEach( ( ) => {
+        esModelSandbox.spy( ESModel, "mgetResults" );
+        esModelSandbox.spy( ESModel, "elasticResults" );
+      } );
+
+      afterEach( ( ) => {
+        esModelSandbox.restore( );
+      } );
+
+      it( "calls mget when there are no additional parameters", function ( done ) {
+        obs = fixtures.elasticsearch.observations.observation[0];
+        request( this.app ).get( `/v2/observations/${obs.uuid}` )
+          .expect( ( ) => {
+            expect( ESModel.mgetResults ).to.have.been.calledOnce;
+            expect( ESModel.elasticResults ).to.have.not.been.called;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "calls mget even when there is a fields param", function ( done ) {
+        obs = fixtures.elasticsearch.observations.observation[0];
+        request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` )
+          .expect( ( ) => {
+            expect( ESModel.mgetResults ).to.have.been.calledOnce;
+            expect( ESModel.elasticResults ).to.have.not.been.called;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "calls elsaticResults even when there are additional parameters", function ( done ) {
+        obs = fixtures.elasticsearch.observations.observation[0];
+        request( this.app ).get( `/v2/observations/${obs.uuid}?taxon_id=${obs.taxon.id}` )
+          .expect( ( ) => {
+            expect( ESModel.mgetResults ).to.have.not.been.called;
+            expect( ESModel.elasticResults ).to.have.been.calledOnce;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
     } );
   } );
 
