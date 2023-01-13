@@ -273,6 +273,38 @@ describe( "Observations", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "can set a cacheControl header with ttl param", function ( done ) {
+      request( this.app )
+        .get( "/v2/observations?ttl=123" )
+        .expect( res => {
+          expect( res.get( "Cache-Control" ) ).to.eq( "public, max-age=123" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "sets a default ttl", function ( done ) {
+      request( this.app )
+        .get( "/v2/observations" )
+        .expect( res => {
+          expect( res.get( "Cache-Control" ) ).to.eq( "public, max-age=300" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "sets no-cache headers when ttl=-1", function ( done ) {
+      request( this.app )
+        .get( "/v2/observations?ttl=-1" )
+        .expect( res => {
+          expect( res.get( "Cache-Control" ) ).to.eq( "private, no-cache, no-store, must-revalidate" );
+          expect( res.get( "Expires" ) ).to.eq( "-1" );
+          expect( res.get( "Pragma" ) ).to.eq( "no-cache" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "create", ( ) => {

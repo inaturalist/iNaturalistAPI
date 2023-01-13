@@ -14,6 +14,7 @@ module.exports = sendWrapper => {
     security: [{
       userJwtOptional: []
     }],
+    "x-default-ttl": -1,
     parameters: [
       transform(
         Joi.array( )

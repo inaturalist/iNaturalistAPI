@@ -15,7 +15,7 @@ module.exports = sendWrapper => {
   async function GET( req, res ) {
     req.params.style = "heatmap";
     req.params.format = "png";
-    ElasticMapper.route( req, res, ( err, data ) => {
+    ElasticMapper.routeWithCallback( req, res, ( err, data ) => {
       sendWrapper( req, res, err, data );
     } );
   }
