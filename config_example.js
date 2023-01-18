@@ -23,7 +23,7 @@ module.exports = {
   apiHostSSL: false,
   writeHostSSL: false,
   elasticsearch: {
-    host: INAT_ES_HOST ? `${INAT_ES_HOST}:9200` : "localhost:9200",
+    host: INAT_ES_HOST ? `http://${INAT_ES_HOST}:9200` : "http://localhost:9200",
     geoPointField: "location",
     searchIndex: `${environment}_observations`,
     placeIndex: `${environment}_places`
