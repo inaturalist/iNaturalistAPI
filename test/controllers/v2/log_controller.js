@@ -19,22 +19,34 @@ const applicationToken = jwt.sign(
 
 describe( "LogController", ( ) => {
   describe( "post", ( ) => {
-    it( "should succeed with an application token", function ( done ) {
-      request( this.app ).post( "/v2/log" )
-        .set( "Authorization", applicationToken )
-        .set( "Content-Type", "application/json" )
-        .expect( 204, done );
-    } );
-    it( "should succeed with a user token", function ( done ) {
-      request( this.app ).post( "/v2/log" )
-        .set( "Authorization", userToken )
-        .set( "Content-Type", "application/json" )
-        .expect( 204, done );
-    } );
     it( "should fail without auth", function ( done ) {
       request( this.app ).post( "/v2/log" )
         .set( "Content-Type", "application/json" )
         .expect( 401, done );
+    } );
+    it( "should fail with just an application token", function ( done ) {
+      request( this.app ).post( "/v2/log" )
+        .set( "Authorization", applicationToken )
+        .set( "Content-Type", "application/json" )
+        .expect( 401, done );
+    } );
+    it( "should fail with just a user token", function ( done ) {
+      request( this.app ).post( "/v2/log" )
+        .set( "Authorization", userToken )
+        .set( "Content-Type", "application/json" )
+        .expect( 401, done );
+    } );
+    it( "should succeed with both a user and application token", function ( done ) {
+      request( this.app ).post( "/v2/log" )
+        .set( "Authorization", [userToken, applicationToken].join( ", " ) )
+        .set( "Content-Type", "application/json" )
+        .expect( 204, done );
+    } );
+    it( "should succeed with both a user and application token in any order", function ( done ) {
+      request( this.app ).post( "/v2/log" )
+        .set( "Authorization", [applicationToken, userToken].join( ", " ) )
+        .set( "Content-Type", "application/json" )
+        .expect( 204, done );
     } );
 
     describe( "Logstasher.afterRequestPayload", ( ) => {
@@ -55,7 +67,7 @@ describe( "LogController", ( ) => {
           message: "this is a message"
         };
         request( this.app ).post( "/v2/log" )
-          .set( "Authorization", userToken )
+          .set( "Authorization", [userToken, applicationToken].join( ", " ) )
           .set( "Content-Type", "application/json" )
           .send( body )
           .expect( 204, ( ) => {
@@ -68,7 +80,7 @@ describe( "LogController", ( ) => {
             done( );
           } );
       } );
-      it( "should parse the request body for an error", function( done ) {
+      it( "should parse the request body for an error", function ( done ) {
         const body = {
           level: "error",
           context: "SomeFileName",
@@ -77,7 +89,7 @@ describe( "LogController", ( ) => {
           backtrace: "foo\nbar\nbaz"
         };
         request( this.app ).post( "/v2/log" )
-          .set( "Authorization", userToken )
+          .set( "Authorization", [userToken, applicationToken].join( ", " ) )
           .set( "Content-Type", "application/json" )
           .send( body )
           .expect( 204, ( ) => {

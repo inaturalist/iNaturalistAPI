@@ -15,7 +15,7 @@ module.exports = sendWrapper => {
       + "for events in client application, mostly for the purpose of "
       + "monitoring application health",
     security: [{
-      appOrUserJwtRequired: []
+      appAndUserJwtRequired: []
     }],
     requestBody: {
       content: {
