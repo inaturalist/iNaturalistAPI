@@ -14,6 +14,7 @@ module.exports = sendWrapper => {
     security: [{
       userJwtOptional: []
     }],
+    "x-default-ttl": -1,
     parameters: [
       transform(
         Joi.array( )
@@ -82,8 +83,27 @@ module.exports = sendWrapper => {
     }
   };
 
+  async function DELETE( req, res ) {
+    await ObservationsController.delete( req );
+    sendWrapper( req, res, null, null );
+  }
+
+  DELETE.apiDoc = {
+    tags: ["Observations"],
+    summary: "Delete an observation",
+    security: [{
+      userJwtRequired: []
+    }],
+    responses: {
+      200: {
+        description: "No response body; success implies deletion"
+      }
+    }
+  };
+
   return {
     GET,
-    PUT
+    PUT,
+    DELETE
   };
 };

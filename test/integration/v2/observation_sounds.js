@@ -11,7 +11,7 @@ describe( "ObservationSounds", ( ) => {
   const obsSound = {
     id: 123,
     uuid: "dcd68b65-e5ae-4581-8cea-5788cbefe53d",
-    position: 0
+    observation_id: "c1386ffd-1a87-40f7-b646-b9f716595567"
   };
   describe( "create", ( ) => {
     it( "returns JSON", function ( done ) {
@@ -23,6 +23,7 @@ describe( "ObservationSounds", ( ) => {
         .set( "Authorization", token )
         .set( "Content-Type", "multipart/form-data" )
         .field( "fields", "id,uuid" )
+        .field( "observation_sound[observation_id]", stub.uuid )
         // It's supposed to accept a file, but since we're just stubbing the
         // rails response, it doesn't really matter what file
         .attach( "file", "test/fixtures/cuthona_abronia-tagged.jpg" )
@@ -31,6 +32,30 @@ describe( "ObservationSounds", ( ) => {
           const resObj = res.body.results[0];
           expect( resObj.uuid ).to.eq( stub.uuid );
           expect( resObj.id ).to.eq( stub.id );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "update", ( ) => {
+    it( "returns json", function ( done ) {
+      nock( "http://localhost:3000" )
+        .put( `/observation_sounds/${obsSound.uuid}` )
+        .reply( 200, obsSound );
+      request( this.app ).put( `/v2/observation_sounds/${obsSound.uuid}` )
+        .set( "Authorization", token )
+        .set( "Content-Type", "application/json" )
+        .send( {
+          observation_sound: obsSound,
+          fields: {
+            uuid: true
+          }
+        } )
+        .expect( 200 )
+        .expect( res => {
+          const resObj = res.body.results[0];
+          expect( resObj.uuid ).to.eq( obsSound.uuid );
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );

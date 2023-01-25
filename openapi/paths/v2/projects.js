@@ -12,6 +12,7 @@ module.exports = sendWrapper => {
   GET.apiDoc = {
     tags: ["Projects"],
     summary: "Search projects",
+    "x-default-ttl": 300,
     parameters: [
       {
         in: "header",

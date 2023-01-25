@@ -16,6 +16,11 @@ module.exports = sendWrapper => {
       content: {
         "multipart/form-data": {
           schema: {
+            $ref: "#/components/schemas/ObservationPhotosCreateMultipart"
+          }
+        },
+        "application/json": {
+          schema: {
             $ref: "#/components/schemas/ObservationPhotosCreate"
           }
         }

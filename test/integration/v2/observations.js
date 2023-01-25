@@ -7,6 +7,7 @@ const sinon = require( "sinon" );
 const jwt = require( "jsonwebtoken" );
 const { v4: uuidv4 } = require( "uuid" );
 const config = require( "../../../config" );
+const ESModel = require( "../../../lib/models/es_model" );
 const ObservationsController = require( "../../../lib/controllers/v1/observations_controller" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
@@ -142,6 +143,59 @@ describe( "Observations", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    // the observations.show endpoint should use the ES mget method to fetch observations for the
+    // show endpoint, unless there are additional parameters that will filter the observations
+    // returned. This is because the mget method is not affected by the normal ES refresh cycle,
+    // whereas search is. This allows observation records to be returned immediately after they
+    // have been updated without waiting for the next refresh. This is useful for clients that may
+    // modify an observation or associated records and immediately re-fetch the observation record
+    // to get its update metadata and associations that may have been just modified.
+    describe( "show mget", ( ) => {
+      const esModelSandbox = sinon.createSandbox( );
+
+      beforeEach( ( ) => {
+        esModelSandbox.spy( ESModel, "mgetResults" );
+        esModelSandbox.spy( ESModel, "elasticResults" );
+      } );
+
+      afterEach( ( ) => {
+        esModelSandbox.restore( );
+      } );
+
+      it( "calls mget when there are no additional parameters", function ( done ) {
+        obs = fixtures.elasticsearch.observations.observation[0];
+        request( this.app ).get( `/v2/observations/${obs.uuid}` )
+          .expect( ( ) => {
+            expect( ESModel.mgetResults ).to.have.been.calledOnce;
+            expect( ESModel.elasticResults ).to.have.not.been.called;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "calls mget even when there is a fields param", function ( done ) {
+        obs = fixtures.elasticsearch.observations.observation[0];
+        request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` )
+          .expect( ( ) => {
+            expect( ESModel.mgetResults ).to.have.been.calledOnce;
+            expect( ESModel.elasticResults ).to.have.not.been.called;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "calls elsaticResults even when there are additional parameters", function ( done ) {
+        obs = fixtures.elasticsearch.observations.observation[0];
+        request( this.app ).get( `/v2/observations/${obs.uuid}?taxon_id=${obs.taxon.id}` )
+          .expect( ( ) => {
+            expect( ESModel.mgetResults ).to.have.not.been.called;
+            expect( ESModel.elasticResults ).to.have.been.calledOnce;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+    } );
   } );
 
   describe( "search", ( ) => {
@@ -264,6 +318,47 @@ describe( "Observations", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "can return fields not returned by v1", function ( done ) {
+      // application can only be returned by v2, if requested
+      request( this.app ).get( "/v2/observations?oauth_application_id=3&fields=application" ).expect( res => {
+        expect( res.body.results[0].application ).to.be.an( "object" );
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "can set a cacheControl header with ttl param", function ( done ) {
+      request( this.app )
+        .get( "/v2/observations?ttl=123" )
+        .expect( res => {
+          expect( res.get( "Cache-Control" ) ).to.eq( "public, max-age=123" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "sets a default ttl", function ( done ) {
+      request( this.app )
+        .get( "/v2/observations" )
+        .expect( res => {
+          expect( res.get( "Cache-Control" ) ).to.eq( "public, max-age=300" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "sets no-cache headers when ttl=-1", function ( done ) {
+      request( this.app )
+        .get( "/v2/observations?ttl=-1" )
+        .expect( res => {
+          expect( res.get( "Cache-Control" ) ).to.eq( "private, no-cache, no-store, must-revalidate" );
+          expect( res.get( "Expires" ) ).to.eq( "-1" );
+          expect( res.get( "Pragma" ) ).to.eq( "no-cache" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "create", ( ) => {
@@ -329,6 +424,25 @@ describe( "Observations", ( ) => {
           expect( res.body.results[0].description ).to.eq( newDesc );
         } )
         .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "delete", ( ) => {
+    const token = jwt.sign( { user_id: fixtureObs.user.id },
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+    it( "should not return anything if successful", function ( done ) {
+      nock( "http://localhost:3000" )
+        .delete( `/observations/${fixtureObs.uuid}` )
+        .reply( 200 );
+      request( this.app ).delete( `/v2/observations/${fixtureObs.uuid}` )
+        .set( "Authorization", token )
+        .set( "Content-Type", "application/json" )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body ).to.eq( "" );
+        } )
         .expect( 200, done );
     } );
   } );
@@ -476,6 +590,41 @@ describe( "Observations", ( ) => {
       request( this.app ).get( "/v2/observations/histogram" ).expect( res => {
         expect( res.body.results ).to.not.be.undefined;
       } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "deleted", ( ) => {
+    it( "should 401 without auth", function ( done ) {
+      request( this.app )
+        .get( "/v2/observations/deleted" )
+        .expect( 401, done );
+    } );
+
+    it( "requires a `since` param", function ( done ) {
+      const token = jwt.sign( { user_id: 123 },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( this.app )
+        .get( "/v2/observations/deleted" )
+        .set( "Authorization", token )
+        .expect( res => {
+          expect( JSON.stringify( res.body ) ).to.include( "must have required property 'since'" );
+        } )
+        .expect( 422, done );
+    } );
+
+    it( "returns json", function ( done ) {
+      const token = jwt.sign( { user_id: 123 },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      nock( "http://localhost:3000" )
+        .put( "/observations/deleted" )
+        .reply( 200 );
+      request( this.app )
+        .get( "/v2/observations/deleted?since=2022-01-01" )
+        .set( "Authorization", token )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );

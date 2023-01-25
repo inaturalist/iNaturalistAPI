@@ -7,6 +7,8 @@ module.exports = user.append( {
   blocked_user_ids: Joi.array( ).items(
     Joi.number( ).integer( )
   ).valid( null ),
+  confirmed_at: Joi.date( ).valid( null ),
+  confirmation_sent_at: Joi.date( ).valid( null ),
   data_transfer_consent: Joi.boolean( ).valid( true, null ),
   email: Joi.string( ).valid( null ),
   locale: Joi.string( ).valid( null ),
@@ -55,5 +57,6 @@ module.exports = user.append( {
   search_place_id: Joi.number( ).integer( ).valid( null ),
   taxon_name_preferences: Joi.array( ).items( taxonNamePreferece ),
   time_zone: Joi.string( ).valid( null ),
+  unconfirmed_email: Joi.string( ).valid( null ),
   universal_search_rank: Joi.number( ).integer( )
 } ).meta( { className: "PrivateUser" } );

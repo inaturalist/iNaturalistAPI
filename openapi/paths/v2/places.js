@@ -23,6 +23,7 @@ module.exports = sendWrapper => {
     ].concat( _.map( placesSearchSchema.$_terms.keys, child => (
       transform( child.schema.label( child.key ) )
     ) ) ),
+    "x-default-ttl": 300,
     responses: {
       200: {
         description: "A list of places",

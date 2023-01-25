@@ -22,6 +22,7 @@ module.exports = sendWrapper => {
     tags: ["Taxa"],
     summary: "Search taxa",
     parameters,
+    "x-default-ttl": 300,
     responses: {
       200: {
         description: "An array of taxa",

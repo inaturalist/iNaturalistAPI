@@ -5104,7 +5104,8 @@ CREATE TABLE public.users (
     failed_attempts integer DEFAULT 0,
     unlock_token character varying,
     oauth_application_id integer,
-    data_transfer_consent_at timestamp without time zone
+    data_transfer_consent_at timestamp without time zone,
+    unconfirmed_email character varying
 );
 
 

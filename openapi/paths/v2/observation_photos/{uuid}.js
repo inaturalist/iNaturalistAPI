@@ -1,14 +1,14 @@
-const ObservationSoundsController = require( "../../../../lib/controllers/v2/observation_sounds_controller" );
+const ObservationPhotosController = require( "../../../../lib/controllers/v2/observation_photos_controller" );
 
 module.exports = sendWrapper => {
   async function PUT( req, res ) {
-    const results = await ObservationSoundsController.update( req );
+    const results = await ObservationPhotosController.update( req );
     sendWrapper( req, res, null, results );
   }
 
   PUT.apiDoc = {
     tags: ["ObservationPhotos"],
-    summary: "Update an observation sound",
+    summary: "Update an observation photo",
     security: [{
       userJwtRequired: []
     }],
@@ -16,18 +16,18 @@ module.exports = sendWrapper => {
       content: {
         "application/json": {
           schema: {
-            $ref: "#/components/schemas/ObservationSoundsUpdate"
+            $ref: "#/components/schemas/ObservationPhotosUpdate"
           }
         }
       }
     },
     responses: {
       200: {
-        description: "A list of observation sounds",
+        description: "A list of observation photos",
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/ResultsObservationSounds"
+              $ref: "#/components/schemas/ResultsObservationPhotos"
             }
           }
         }
@@ -36,13 +36,13 @@ module.exports = sendWrapper => {
   };
 
   async function DELETE( req, res ) {
-    await ObservationSoundsController.delete( req );
+    await ObservationPhotosController.delete( req );
     sendWrapper( req, res, null, null );
   }
 
   DELETE.apiDoc = {
-    tags: ["ObservationSounds"],
-    summary: "Delete an observation sound",
+    tags: ["ObservationPhotos"],
+    summary: "Delete an observation photo",
     security: [{
       userJwtRequired: []
     }],

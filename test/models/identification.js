@@ -12,7 +12,7 @@ describe( "Identification", ( ) => {
   describe( "preloadInto", ( ) => {
     it( "adds Identification instances", async ( ) => {
       const arr = [{ identification_id: 102 }];
-      await Identification.preloadInto( arr );
+      await Identification.preloadInto( { }, arr );
       expect( arr[0].identification ).to.not.be.undefined;
     } );
   } );

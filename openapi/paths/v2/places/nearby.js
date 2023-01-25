@@ -24,6 +24,7 @@ module.exports = sendWrapper => {
     security: [{
       userJwtOptional: []
     }],
+    "x-default-ttl": 300,
     parameters,
     responses: {
       200: {

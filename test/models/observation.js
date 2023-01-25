@@ -137,7 +137,8 @@ describe( "Observation", ( ) => {
     it( "returns preload errors", async ( ) => {
       const stub = sinon.stub( Observation, "preloadAnnotationControlledTerms" )
         .callsFake( ( ) => { throw new Error( "terms-error" ); } );
-      await expect( Observation.preloadAllAssociations( [], null ) ).to.be.rejectedWith( Error );
+      await expect( Observation.preloadAllAssociations( { }, [], null ) )
+        .to.be.rejectedWith( Error );
       stub.restore( );
     } );
   } );

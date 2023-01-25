@@ -34,6 +34,9 @@ if ( require.main === module ) {
     app.listen( PORT );
     // eslint-disable-next-line no-console
     console.log( `Listening on port ${PORT}` );
+    if ( process.send ) {
+      process.send( "ready" );
+    }
   } );
   if ( process.pid ) {
     // eslint-disable-next-line no-console

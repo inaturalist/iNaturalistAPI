@@ -266,7 +266,6 @@ describe( "IdentificationsController", ( ) => {
     } );
   } );
 
-
   describe( "speciesCounts", ( ) => {
     it( "returns taxa", done => {
       IdentificationsController.speciesCounts( { query: { } } ).then( r => {
