@@ -183,7 +183,8 @@ Privacy Policy: <https://www.inaturalist.org/privacy>`
         type: "apiKey",
         name: "Authorization",
         in: "header",
-        description: "User and application JSON Web Token (application tokens only available to official apps)"
+        description: "User and application JSON Web Token (application tokens only available to "
+          + "official apps). Both tokens must be provided in a comma-separated list in any order"
       }
     },
     responses: {
