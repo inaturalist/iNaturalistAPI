@@ -13,4 +13,4 @@ module.exports = Joi.object( ).keys( {
   backtrace: Joi.string( )
 } ).description(
   "Log an event that occurred in a client application"
-);
+).meta( { unpublished: true } );

@@ -8,4 +8,5 @@ module.exports = Joi.object( ).keys( {
   //   observation_id: Joi.number( ).integer( )
   // } ).unknown( false ),
   image: Joi.binary( ).required( )
-} ).unknown( true );
+} ).unknown( true )
+  .meta( { unpublished: true } );
