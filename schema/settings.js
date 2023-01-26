@@ -3,7 +3,7 @@
     "analysis" : {
       "filter" : {
         "edge_ngram_filter" : {
-          "type" : "edge_ngram",
+          "type" : "edgeNGram",
           "min_gram" : "2",
           "max_gram" : "15"
         }

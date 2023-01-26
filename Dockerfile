@@ -1,6 +1,6 @@
-FROM node:16
+FROM node:16-bullseye
 
-RUN apt-get update -qq && apt-get install -y postgresql-client
+RUN apt-get update -qq && apt-get install -y postgresql-client-13
 
 WORKDIR /usr/src/app
 
