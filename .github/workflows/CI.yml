@@ -48,21 +48,12 @@ jobs:
 
     - run: npm install
 
-    - run: npm test
+    - run: npm run coverage
       env:
         PGHOST: 0.0.0.0
         PGUSER: postgres
         PGPASSWORD: postgres
         CI: true
-
-    - run: npm run coveralls
-      if: env.COVERALLS_REPO_TOKEN != null
-      env:
-        PGHOST: 0.0.0.0
-        PGUSER: postgres
-        PGPASSWORD: postgres
-        CI: true
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
   notify:
     name: Notify Slack
