@@ -8,6 +8,7 @@ const Observation = require( "../../../lib/models/observation" );
 const Project = require( "../../../lib/models/project" );
 const List = require( "../../../lib/models/list" );
 const ObservationsController = require( "../../../lib/controllers/v1/observations_controller" );
+const config = require( "../../../config" );
 
 let eq;
 
@@ -27,7 +28,7 @@ const Q = async params => {
 
 describe( "ObservationsController", ( ) => {
   it( "uses the test ENV", ( ) => {
-    expect( process.env.NODE_ENV ).to.eq( "test" );
+    expect( config.environment ).to.eq( "test" );
   } );
 
   it( "creates", done => {
