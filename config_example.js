@@ -11,7 +11,6 @@ const {
   INAT_DB_PASS,
   INAT_DB_NAME,
   INAT_ES_HOST,
-  INAT_ES_INDEX_PREFIX,
   INAT_REDIS_HOST,
   INAT_WEB_HOST
 } = process.env;
@@ -56,10 +55,6 @@ module.exports = {
   elasticsearch: {
     host: INAT_ES_HOST ? `http://${INAT_ES_HOST}:9200` : "http://localhost:9200",
     geoPointField: "location",
-    // Use a different elastic prefix in a test environment so our test data is
-    // isolated from the web app's test elastic index    
-    indexPrefix: environment === "test" ? "test" : 
-                 ( INAT_ES_INDEX_PREFIX || environment ),
     searchIndex: `${environment}_observations`,
     placeIndex: `${environment}_places`
   },

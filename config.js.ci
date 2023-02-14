@@ -5,7 +5,6 @@ module.exports = {
   elasticsearch: {
     host: "http://localhost:9200",
     geoPointField: "location",
-    indexPrefix: "test",
     searchIndex: "test_observations"
   },
   database: {
