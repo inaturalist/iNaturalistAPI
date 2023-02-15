@@ -2,7 +2,6 @@ const {
   INAT_DB_HOST,
   INAT_DB_USER,
   INAT_DB_PASS,
-  INAT_DB_NAME,
   INAT_ES_HOST,
   INAT_REDIS_HOST,
   INAT_WEB_HOST
@@ -22,9 +21,6 @@ module.exports = {
     port: 5432,
     geometry_field: "geom",
     srid: 4326,
-    // Use a different db name in a test environment so our test data is
-    // isolated from the web app's test database
-    dbname: process.env.NODE_ENV === "test" ? "inaturalistapi_test" : ( INAT_DB_NAME || `inaturalist_${process.env.NODE_ENV}` ),
     password: INAT_DB_PASS || "inaturalist",
     ssl: false
   },
