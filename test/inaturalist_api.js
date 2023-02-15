@@ -1,10 +1,9 @@
 const { expect } = require( "chai" );
 const InaturalistAPI = require( "../lib/inaturalist_api" );
-const config = require( "../config" );
 
 describe( "InaturalistAPI", ( ) => {
   it( "uses the test ENV", ( ) => {
-    expect( config.environment ).to.eq( "test" );
+    expect( process.env.NODE_ENV ).to.eq( "test" );
   } );
 
   describe( "validateMultiIDParam", ( ) => {

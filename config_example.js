@@ -1,10 +1,3 @@
-let environment = "development";
-if ( global && global.config && global.config.environment ) {
-  environment = global.config.environment; // eslint-disable-line prefer-destructuring
-}
-if ( process && process.env && process.env.NODE_ENV ) {
-  environment = process.env.NODE_ENV;
-}
 const {
   INAT_DB_HOST,
   INAT_DB_USER,
@@ -15,7 +8,6 @@ const {
   INAT_WEB_HOST
 } = process.env;
 module.exports = {
-  environment,
   // Base URL for the current version of *this* app
   currentVersionURL: "http://localhost:4000/v1",
   // Host running the iNaturalist Rails app
@@ -32,8 +24,7 @@ module.exports = {
     srid: 4326,
     // Use a different db name in a test environment so our test data is
     // isolated from the web app's test database
-    dbname: environment === "test" ? "inaturalistapi_test" :
-            ( INAT_DB_NAME || `inaturalist_${environment}` ),
+    dbname: process.env.NODE_ENV === "test" ? "inaturalistapi_test" : ( INAT_DB_NAME || `inaturalist_${process.env.NODE_ENV}` ),
     password: INAT_DB_PASS || "inaturalist",
     ssl: false
   },
@@ -55,8 +46,8 @@ module.exports = {
   elasticsearch: {
     host: INAT_ES_HOST ? `http://${INAT_ES_HOST}:9200` : "http://localhost:9200",
     geoPointField: "location",
-    searchIndex: `${environment}_observations`,
-    placeIndex: `${environment}_places`
+    searchIndex: `${process.env.NODE_ENV}_observations`,
+    placeIndex: `${process.env.NODE_ENV}_places`
   },
   // Whether the Rails app supports SSL requests. For local dev assume it does not
   apiHostSSL: false,
