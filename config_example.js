@@ -41,8 +41,7 @@ module.exports = {
   },
   elasticsearch: {
     host: INAT_ES_HOST ? `http://${INAT_ES_HOST}:9200` : "http://localhost:9200",
-    geoPointField: "location",
-    placeIndex: `${process.env.NODE_ENV}_places`
+    geoPointField: "location"
   },
   // Whether the Rails app supports SSL requests. For local dev assume it does not
   apiHostSSL: false,
