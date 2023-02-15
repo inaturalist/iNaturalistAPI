@@ -17,7 +17,7 @@ describe( "pgClient", ( ) => {
 
     it( "uses the test database", async ( ) => {
       const connection = await pgClient.connect( );
-      expect( connection.database ).to.eq( "iNaturalist_test" );
+      expect( connection.database ).to.eq( "inaturalist_test" );
     } );
 
     it( "returns the open connection", async ( ) => {
