@@ -31,7 +31,7 @@ module.exports = Joi.object( ).keys( {
     "variety",
     "form"
   ) ),
-  rank_level: Joi.number( ).integer( ),
+  rank_level: Joi.number( ),
   id_above: Joi.number( ).integer( ),
   id_below: Joi.number( ).integer( ),
   per_page: Joi.number( ).integer( ),
