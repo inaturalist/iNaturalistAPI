@@ -21,7 +21,7 @@ module.exports = Joi.object( ).keys( {
     .valid( "native", "endemic", "introduced" )
     .description( "How this taxon became established in this place" ),
   observations_count: Joi.number( ).integer( ),
-  manually_added: Joi.boolean( )
+  manually_added: Joi.boolean( ).valid( null )
     .description( "Whether this taxon was added to this list by a person or not" ),
   primary_listing: Joi.boolean( )
     .description( "Whether or not this is the primary listing for this taxon in this place (places can have multiple checklists that contain the same taxa)" ),
