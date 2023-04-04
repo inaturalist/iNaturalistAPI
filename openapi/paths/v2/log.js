@@ -17,6 +17,7 @@ module.exports = sendWrapper => {
     security: [{
       appOrUserJwtRequired: []
     }],
+    "x-unpublished": true,
     requestBody: {
       content: {
         "application/json": {
