@@ -23,7 +23,11 @@ module.exports = Joi.object( ).keys( {
     .description( "Filter by whether the observed taxon has a conservation status of \"threatened\" or worse" ),
   verifiable: Joi.boolean( )
     .description( "Filter by whether observations are 'verifiable' (have quality grades `research` or `needs_id`)" ),
-  id: Joi.array( ).items( Joi.string( ).guid( ) ),
+  id: Joi.array( ).items( Joi.alternatives( ).try(
+    Joi.string( ).guid( ),
+    Joi.number( ).integer( ),
+    Joi.string( )
+  ) ),
   not_id: Joi.array( ).items( Joi.string( ).guid( ) ),
   license: Joi.array( ).items( Joi.string( ).valid(
     "cc-by",

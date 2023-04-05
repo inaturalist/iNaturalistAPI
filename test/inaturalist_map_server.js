@@ -27,181 +27,144 @@ describe( "InaturalistMapServer", ( ) => {
   } );
 
   describe( "prepareQuery", ( ) => {
-    it( "adds a proper elastic_query for summaries", done => {
+    it( "adds a proper elastic_query for summaries", async ( ) => {
       stubReq.params.style = "summary";
       stubReq.params.zoom = 1;
-      MapServer.prepareQuery( stubReq, ( ) => {
-        expect( stubReq.elastic_query.size ).to.eql( 0 );
-        expect( stubReq.elastic_query.aggregations.zoom1 ).to.eql( {
-          geotile_grid: {
-            field: "location",
-            precision: 6,
-            size: 10000
-          }
-        } );
-        done( );
+      await MapServer.prepareQuery( stubReq );
+      expect( stubReq.elastic_query.size ).to.eql( 0 );
+      expect( stubReq.elastic_query.aggregations.zoom1 ).to.eql( {
+        geotile_grid: {
+          field: "location",
+          precision: 6,
+          size: 10000
+        }
       } );
     } );
 
-    it( "uses geohash aggregation for heatmaps", done => {
+    it( "uses geohash aggregation for heatmaps", async ( ) => {
       stubReq.params.style = "heatmap";
-      MapServer.prepareQuery( stubReq, ( ) => {
-        expect( stubReq.elastic_query.size ).to.eql( 0 );
-        expect( stubReq.elastic_query.aggregations.zoom1 ).to.have.key( "geotile_grid" );
-        done( );
-      } );
+      await MapServer.prepareQuery( stubReq );
+      expect( stubReq.elastic_query.size ).to.eql( 0 );
+      expect( stubReq.elastic_query.aggregations.zoom1 ).to.have.key( "geotile_grid" );
     } );
 
-    it( "returns an error when style is missing", done => {
-      MapServer.prepareQuery( stubReq, err => {
-        expect( err ).to.eql( { error: "unknown style: undefined", status: 404 } );
-        done( );
-      } );
+    it( "returns an error when style is missing", async ( ) => {
+      await expect( MapServer.prepareQuery( stubReq ) ).to.be
+        .rejectedWith( Error, "unknown style: undefined" );
     } );
 
-    it( "returns an error when style is unknown", done => {
+    it( "returns an error when style is unknown", async ( ) => {
       stubReq.params.style = "nonsense";
-      MapServer.prepareQuery( stubReq, err => {
-        expect( err ).to.eql( { error: "unknown style: nonsense", status: 404 } );
-        done( );
-      } );
+      await expect( MapServer.prepareQuery( stubReq ) ).to.be
+        .rejectedWith( Error, "unknown style: nonsense" );
     } );
 
-    it( "returns an error when style is unknown for postgis queries", done => {
+    it( "returns an error when style is unknown for postgis queries", async ( ) => {
       stubReq.params.style = "nonsense";
       stubReq.params.dataType = "postgis";
-      MapServer.prepareQuery( stubReq, err => {
-        expect( err ).to.eql( { error: "unknown style: nonsense", status: 404 } );
-        done( );
-      } );
+      await expect( MapServer.prepareQuery( stubReq ) ).to.be
+        .rejectedWith( Error, "unknown style: nonsense" );
     } );
 
-    it( "always sets mappable=true", done => {
+    it( "always sets mappable=true", async ( ) => {
       stubReq.params.style = "summary";
-      MapServer.prepareQuery( stubReq, ( ) => {
-        expect( stubReq.query.mappable ).to.eql( "true" );
-        done( );
-      } );
+      await MapServer.prepareQuery( stubReq );
+      expect( stubReq.query.mappable ).to.eql( "true" );
     } );
 
-
-    it( "allows captive=true", done => {
+    it( "allows captive=true", async ( ) => {
       stubReq.params.style = "summary";
       stubReq.query.captive = "true";
-      MapServer.prepareQuery( stubReq, ( something, newReq ) => {
-        expect( newReq.query.captive ).to.eql( "true" );
-        done( );
-      } );
+      await MapServer.prepareQuery( stubReq );
+      expect( stubReq.query.captive ).to.eql( "true" );
     } );
 
-    it( "allows captive=any", done => {
+    it( "allows captive=any", async ( ) => {
       stubReq.params.style = "summary";
       stubReq.query.captive = "any";
-      MapServer.prepareQuery( stubReq, ( ) => {
-        expect( stubReq.query.captive ).to.eq( "any" );
-        done( );
-      } );
+      await MapServer.prepareQuery( stubReq );
+      expect( stubReq.query.captive ).to.eq( "any" );
     } );
   } );
 
   describe( "prepareStyle", ( ) => {
-    it( "defaults to points markersAndCircles", done => {
-      MapServer.prepareStyle( stubReq, ( ) => {
-        expect( stubReq.style ).to.eql( MapStyles.markersAndCircles( ) );
-        done( );
-      } );
+    it( "defaults to points markersAndCircles", async ( ) => {
+      await MapServer.prepareStyle( stubReq );
+      expect( stubReq.style ).to.eql( MapStyles.markersAndCircles( ) );
     } );
 
-    it( "can specify color of default style", done => {
+    it( "can specify color of default style", async ( ) => {
       stubReq.query.color = "#123FED";
-      MapServer.prepareStyle( stubReq, ( ) => {
-        expect( stubReq.style ).to.eql(
-          MapStyles.markersAndCircles( stubReq.query.color )
-        );
-        done( );
-      } );
+      await MapServer.prepareStyle( stubReq );
+      expect( stubReq.style ).to.eql(
+        MapStyles.markersAndCircles( stubReq.query.color )
+      );
     } );
 
-    it( "infers color of points from taxon", done => {
+    it( "infers color of points from taxon", async ( ) => {
       stubReq.inat = { taxon: { iconic_taxon_id: Taxon.iconicTaxonID( "Animalia" ) } };
-      MapServer.prepareStyle( stubReq, ( ) => {
-        expect( stubReq.style ).to.eql(
-          MapStyles.markersAndCircles( "#1E90FF" )
-        );
-        done( );
-      } );
+      await MapServer.prepareStyle( stubReq );
+      expect( stubReq.style ).to.eql(
+        MapStyles.markersAndCircles( "#1E90FF" )
+      );
     } );
 
-    it( "can set the heatmap style", done => {
+    it( "can set the heatmap style", async ( ) => {
       stubReq.params.style = "heatmap";
-      MapServer.prepareStyle( stubReq, ( ) => {
-        expect( stubReq.style ).to.eql( MapStyles.geotilegridHeatmap( ) );
-        done( );
-      } );
+      await MapServer.prepareStyle( stubReq );
+      expect( stubReq.style ).to.eql( MapStyles.geotilegridHeatmap( ) );
     } );
 
-    it( "can set the summary style", done => {
+    it( "can set the summary style", async ( ) => {
       stubReq.params.style = "summary";
-      MapServer.prepareStyle( stubReq, ( ) => {
-        expect( stubReq.style ).to.eql(
-          MapStyles.geotilegrid( "#6E6E6E" )
-        );
-        done( );
-      } );
+      await MapServer.prepareStyle( stubReq );
+      expect( stubReq.style ).to.eql(
+        MapStyles.geotilegrid( "#6E6E6E" )
+      );
     } );
 
-    it( "can set the colored_heatmap style", done => {
+    it( "can set the colored_heatmap style", async ( ) => {
       stubReq.params.style = "colored_heatmap";
-      MapServer.prepareStyle( stubReq, ( ) => {
-        expect( stubReq.style ).to.eql( MapStyles.coloredHeatmap( ) );
-        done( );
-      } );
+      await MapServer.prepareStyle( stubReq );
+      expect( stubReq.style ).to.eql( MapStyles.coloredHeatmap( ) );
     } );
 
-    it( "can specify color of colored_heatmap style", done => {
+    it( "can specify color of colored_heatmap style", async ( ) => {
       stubReq.params.style = "colored_heatmap";
       stubReq.query.color = "#123FED";
-      MapServer.prepareStyle( stubReq, ( ) => {
-        expect( stubReq.style ).to.eql(
-          MapStyles.coloredHeatmap( { color: stubReq.query.color } )
-        );
-        done( );
-      } );
+      await MapServer.prepareStyle( stubReq );
+      expect( stubReq.style ).to.eql(
+        MapStyles.coloredHeatmap( { color: stubReq.query.color } )
+      );
     } );
 
-    it( "infers color of colored_heatmap from taxon", done => {
+    it( "infers color of colored_heatmap from taxon", async ( ) => {
       stubReq.params.style = "colored_heatmap";
       stubReq.inat = { taxon: { iconic_taxon_id: Taxon.iconicTaxonID( "Animalia" ) } };
-      MapServer.prepareStyle( stubReq, ( ) => {
-        expect( stubReq.style ).to.eql(
-          MapStyles.coloredHeatmap( { color: "#1E90FF" } )
-        );
-        done( );
-      } );
+      await MapServer.prepareStyle( stubReq );
+      expect( stubReq.style ).to.eql(
+        MapStyles.coloredHeatmap( { color: "#1E90FF" } )
+      );
     } );
   } );
 
   describe( "beforeSendResult", ( ) => {
-    it( "sets a Cache-Control header", done => {
+    it( "sets a Cache-Control header", async ( ) => {
       stubReq.params.style = "places";
-      MapServer.beforeSendResult( stubReq, stubRes, ( ) => {
-        expect( stubRes.headers["Cache-Control"] ).to.eq( "public, max-age=3600" );
-        done( );
-      } );
+      await MapServer.beforeSendResult( stubReq, stubRes );
+      expect( stubRes.headers["Cache-Control"] ).to.eq( "public, max-age=3600" );
     } );
 
-    it( "sets a Cache-Control header", done => {
+    it( "sets a Cache-Control header", async ( ) => {
       stubReq.query.ttl = 4;
-      MapServer.beforeSendResult( stubReq, stubRes, ( ) => {
-        expect( stubRes.headers["Cache-Control"] ).to.eq( "public, max-age=4" );
-        done( );
-      } );
+      await MapServer.beforeSendResult( stubReq, stubRes );
+      expect( stubRes.headers["Cache-Control"] ).to.eq( "public, max-age=4" );
     } );
   } );
 
   describe( "placesRoute", ( ) => {
     it( "sets a Cache-Control header", ( ) => {
-      MapServer.placesRoute( stubReq, stubRes, ( ) => { } );
+      MapServer.placesRoute( stubReq, stubRes );
       expect( stubReq.params.style ).to.eq( "places" );
       expect( stubReq.params.dataType ).to.eq( "postgis" );
     } );
@@ -209,7 +172,7 @@ describe( "InaturalistMapServer", ( ) => {
 
   describe( "taxonPlacesRoute", ( ) => {
     it( "sets a Cache-Control header", ( ) => {
-      MapServer.taxonPlacesRoute( stubReq, stubRes, ( ) => { } );
+      MapServer.taxonPlacesRoute( stubReq, stubRes );
       expect( stubReq.params.style ).to.eq( "taxon_places" );
       expect( stubReq.params.dataType ).to.eq( "postgis" );
     } );
@@ -217,7 +180,7 @@ describe( "InaturalistMapServer", ( ) => {
 
   describe( "taxonRangesRoute", ( ) => {
     it( "sets a Cache-Control header", ( ) => {
-      MapServer.taxonRangesRoute( stubReq, stubRes, ( ) => { } );
+      MapServer.taxonRangesRoute( stubReq, stubRes );
       expect( stubReq.params.style ).to.eq( "taxon_ranges" );
       expect( stubReq.params.dataType ).to.eq( "postgis" );
     } );
