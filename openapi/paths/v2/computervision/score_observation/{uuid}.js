@@ -14,6 +14,7 @@ module.exports = sendWrapper => {
     security: [{
       appOrUserJwtRequired: []
     }],
+    "x-unpublished": true,
     parameters: [
       transform(
         Joi.string( ).guid( )
