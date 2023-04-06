@@ -74,8 +74,8 @@ describe( "LogController", ( ) => {
             expect( Logstasher.afterRequestPayload ).to.have.been.called;
             const payload = Logstasher.afterRequestPayload.returnValues[0];
             expect( payload.subtype ).to.eq( "ClientMessage" );
-            expect( payload.qry.level ).to.eq( body.level );
-            expect( payload.qry.context ).to.eq( body.context );
+            expect( payload.level ).to.eq( body.level );
+            expect( payload.context ).to.eq( body.context );
             expect( payload.message ).to.eq( body.message );
             done( );
           } );
@@ -96,8 +96,8 @@ describe( "LogController", ( ) => {
             expect( Logstasher.afterRequestPayload ).to.have.been.called;
             const payload = Logstasher.afterRequestPayload.returnValues[0];
             expect( payload.subtype ).to.eq( "ClientError" );
-            expect( payload.qry.level ).to.eq( body.level );
-            expect( payload.qry.context ).to.eq( body.context );
+            expect( payload.level ).to.eq( body.level );
+            expect( payload.context ).to.eq( body.context );
             expect( payload.error_type ).to.eq( body.error_type );
             expect( payload.error_message ).to.eq( body.message );
             expect( payload.backtrace ).to.eq( body.backtrace );
