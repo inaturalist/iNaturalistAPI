@@ -76,7 +76,7 @@ describe( "LogController", ( ) => {
             expect( payload.subtype ).to.eq( "ClientMessage" );
             expect( payload.level ).to.eq( body.level );
             expect( payload.context ).to.eq( body.context );
-            expect( payload.message ).to.eq( body.message );
+            expect( payload.error_message ).to.eq( body.message );
             done( );
           } );
       } );
