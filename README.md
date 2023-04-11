@@ -1,7 +1,6 @@
 # iNaturalistAPI
 
 [![Build Status](https://github.com/inaturalist/iNaturalistAPI/workflows/iNaturalstAPI%20CI/badge.svg)](https://github.com/inaturalist/iNaturalistAPI/actions)
-[![Coverage Status](https://coveralls.io/repos/github/inaturalist/iNaturalistAPI/badge.svg?branch=main)](https://coveralls.io/github/inaturalist/iNaturalistAPI?branch=main)
 
 Our API is documented using the [Swagger](http://swagger.io/)/[OpenAPI](https://github.com/OAI/OpenAPI-Specification) 2.0 [specification](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md). Check out the [Swagger UI](https://github.com/swagger-api/swagger-ui) documentation viewer at https://api.inaturalist.org/docs.
 
