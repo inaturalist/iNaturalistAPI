@@ -1740,13 +1740,17 @@
         "id": 1,
         "parent_type": "Observation",
         "parent_id": 1,
-        "body": "I am the very model of a modern major general"
+        "body": "I am the very model of a modern major general",
+        "created_at": "2016-01-01 00:00:00",
+        "updated_at": "2016-01-01 00:00:00"
       },
       {
         "id": 2,
         "parent_type": "Observation",
         "parent_id": 2,
-        "body": "I've information animal, mineral, and vegetable'"
+        "body": "I've information animal, mineral, and vegetable'",
+        "created_at": "2016-01-01 00:00:00",
+        "updated_at": "2016-01-01 00:00:00"
       }
     ],
     "conservation_statuses": [
