@@ -6,6 +6,6 @@ module.exports = Joi.object( ).keys( {
     flaggable_id: Joi.number( ).integer( ),
     flag: Joi.string( )
   } ),
-  flag_explanation: Joi.string( ),
+  flag_explanation: Joi.string( ).valid( null ),
   fields: Joi.any( )
 } );
