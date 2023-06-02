@@ -1735,6 +1735,18 @@
     }
   },
   "postgresql": {
+    "announcements": [
+      {
+        "id": 1,
+        "body": "Active announcement",
+        "start": "2016-01-01 00:00:00",
+        "end": "2100-01-01 00:00:00",
+        "created_at": "2016-01-01 00:00:00",
+        "updated_at": "2016-01-01 00:00:00",
+        "placement": "mobile/home",
+        "dismissible": true
+      }
+    ],
     "comments": [
       {
         "id": 1,
