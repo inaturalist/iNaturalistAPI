@@ -1,16 +1,16 @@
 const Joi = require( "joi" );
 const transform = require( "../../../joi_to_openapi_parameter" );
-const TaxonNamePreferencesController = require( "../../../../lib/controllers/v2/taxon_name_preferences_controller" );
+const TaxonNamePrioritiesController = require( "../../../../lib/controllers/v2/taxon_name_priorities_controller" );
 
 module.exports = sendWrapper => {
   async function PUT( req, res ) {
-    const results = await TaxonNamePreferencesController.update( req );
+    const results = await TaxonNamePrioritiesController.update( req );
     sendWrapper( req, res, null, results );
   }
 
   PUT.apiDoc = {
-    tags: ["TaxonNamePreferences"],
-    summary: "Update a taxon name preference",
+    tags: ["TaxonNamePriorities"],
+    summary: "Update a taxon name priority",
     security: [{
       userJwtRequired: []
     }],
@@ -18,18 +18,18 @@ module.exports = sendWrapper => {
       content: {
         "application/json": {
           schema: {
-            $ref: "#/components/schemas/TaxonNamePreferencesUpdate"
+            $ref: "#/components/schemas/TaxonNamePrioritiesUpdate"
           }
         }
       }
     },
     responses: {
       200: {
-        description: "A list of taxon name preferences",
+        description: "A list of taxon name priorities",
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/ResultsTaxonNamePreferences"
+              $ref: "#/components/schemas/ResultsTaxonNamePriorities"
             }
           }
         }
@@ -38,13 +38,13 @@ module.exports = sendWrapper => {
   };
 
   async function DELETE( req, res ) {
-    await TaxonNamePreferencesController.delete( req );
+    await TaxonNamePrioritiesController.delete( req );
     sendWrapper( req, res, null, null );
   }
 
   DELETE.apiDoc = {
-    tags: ["TaxonNamePreferences"],
-    summary: "Delete a taxon name preference",
+    tags: ["TaxonNamePriorities"],
+    summary: "Delete a taxon name priority",
     security: [{
       userJwtRequired: []
     }],

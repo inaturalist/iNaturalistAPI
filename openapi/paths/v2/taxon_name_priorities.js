@@ -1,14 +1,14 @@
-const TaxonNamePreferencesController = require( "../../../lib/controllers/v2/taxon_name_preferences_controller" );
+const TaxonNamePrioritiesController = require( "../../../lib/controllers/v2/taxon_name_priorities_controller" );
 
 module.exports = sendWrapper => {
   async function POST( req, res ) {
-    const results = await TaxonNamePreferencesController.create( req );
+    const results = await TaxonNamePrioritiesController.create( req );
     sendWrapper( req, res, null, results );
   }
 
   POST.apiDoc = {
-    tags: ["TaxonNamePreferences"],
-    summary: "Create a taxon name preference",
+    tags: ["TaxonNamePriorities"],
+    summary: "Create a taxon name priority",
     security: [{
       userJwtRequired: []
     }],
@@ -16,18 +16,18 @@ module.exports = sendWrapper => {
       content: {
         "application/json": {
           schema: {
-            $ref: "#/components/schemas/TaxonNamePreferencesCreate"
+            $ref: "#/components/schemas/TaxonNamePrioritiesCreate"
           }
         }
       }
     },
     responses: {
       200: {
-        description: "The taxon name preference just created",
+        description: "The taxon name priority just created",
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/ResultsTaxonNamePreferences"
+              $ref: "#/components/schemas/ResultsTaxonNamePriorities"
             }
           }
         }

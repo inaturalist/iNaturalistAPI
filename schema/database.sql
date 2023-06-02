@@ -4570,10 +4570,10 @@ ALTER SEQUENCE public.taxon_links_id_seq OWNED BY public.taxon_links.id;
 
 
 --
--- Name: taxon_name_preferences; Type: TABLE; Schema: public; Owner: -
+-- Name: taxon_name_priorities; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.taxon_name_preferences (
+CREATE TABLE public.taxon_name_priorities (
     id integer NOT NULL,
     "position" smallint,
     user_id integer NOT NULL,
@@ -4585,10 +4585,10 @@ CREATE TABLE public.taxon_name_preferences (
 
 
 --
--- Name: taxon_name_preferences_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: taxon_name_priorities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.taxon_name_preferences_id_seq
+CREATE SEQUENCE public.taxon_name_priorities_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -6073,10 +6073,10 @@ ALTER TABLE ONLY public.taxon_links ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- Name: taxon_name_preferences id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: taxon_name_priorities id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.taxon_name_preferences ALTER COLUMN id SET DEFAULT nextval('public.taxon_name_preferences_id_seq'::regclass);
+ALTER TABLE ONLY public.taxon_name_priorities ALTER COLUMN id SET DEFAULT nextval('public.taxon_name_priorities_id_seq'::regclass);
 
 
 --
@@ -7086,11 +7086,11 @@ ALTER TABLE ONLY public.taxon_links
 
 
 --
--- Name: taxon_name_preferences taxon_name_preferences_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: taxon_name_priorities taxon_name_priorities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.taxon_name_preferences
-    ADD CONSTRAINT taxon_name_preferences_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.taxon_name_priorities
+    ADD CONSTRAINT taxon_name_priorities_pkey PRIMARY KEY (id);
 
 
 --

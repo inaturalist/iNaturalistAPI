@@ -146,9 +146,9 @@ describe( "Taxon", ( ) => {
       expect( t.preferredCommonNames( { } ) ).to.be.null;
     } );
 
-    it( "returns all taxonNames matching specified taxonNamePreferences", ( ) => {
+    it( "returns all taxonNames matching specified taxonNamePriorities", ( ) => {
       const userSession = {
-        taxonNamePreferences: [{
+        taxonNamePriorities: [{
           lexicon: "english",
           position: 0
         }, {
@@ -164,7 +164,7 @@ describe( "Taxon", ( ) => {
     it( "does not return anything if the userSession requests no common names", ( ) => {
       const userSession = {
         prefersCommonNames: false,
-        taxonNamePreferences: [{
+        taxonNamePriorities: [{
           lexicon: "english",
           position: 0
         }, {
@@ -177,7 +177,7 @@ describe( "Taxon", ( ) => {
 
     it( "returns names in the proper order", ( ) => {
       const userSession = {
-        taxonNamePreferences: [{
+        taxonNamePriorities: [{
           lexicon: "spanish",
           position: 0
         }, {
@@ -192,7 +192,7 @@ describe( "Taxon", ( ) => {
 
     it( "returns nothing for unmatched locales", ( ) => {
       const userSession = {
-        taxonNamePreferences: [{
+        taxonNamePriorities: [{
           lexicon: "german",
           position: 0
         }]
@@ -202,7 +202,7 @@ describe( "Taxon", ( ) => {
 
     it( "uses the locale when preferred name lexicon is null", ( ) => {
       const userSession = {
-        taxonNamePreferences: [{
+        taxonNamePriorities: [{
           lexicon: null,
           position: 0
         }]
@@ -213,7 +213,7 @@ describe( "Taxon", ( ) => {
 
     it( "uses returns names in the right order when inferring locale", ( ) => {
       const userSession = {
-        taxonNamePreferences: [{
+        taxonNamePriorities: [{
           lexicon: "english",
           position: 0
         }, {
@@ -234,7 +234,7 @@ describe( "Taxon", ( ) => {
 
     it( "returns the best name given a place", ( ) => {
       const userSession = {
-        taxonNamePreferences: [{
+        taxonNamePriorities: [{
           lexicon: "english",
           position: 0,
           place_id: 222
@@ -245,7 +245,7 @@ describe( "Taxon", ( ) => {
 
     it( "does not return an exact place match when locale doesn't match", ( ) => {
       const userSession = {
-        taxonNamePreferences: [{
+        taxonNamePriorities: [{
           lexicon: "german",
           position: 0,
           place_id: 222
@@ -256,7 +256,7 @@ describe( "Taxon", ( ) => {
 
     it( "return the best name from an ancestor place", ( ) => {
       const userSession = {
-        taxonNamePreferences: [{
+        taxonNamePriorities: [{
           lexicon: "english",
           position: 0,
           place_id: 333,
