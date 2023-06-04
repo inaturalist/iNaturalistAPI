@@ -1,3 +1,5 @@
+const Joi = require( "joi" );
+const transform = require( "../../../joi_to_openapi_parameter" );
 const UsersController = require( "../../../../lib/controllers/v1/users_controller" );
 
 module.exports = sendWrapper => {
@@ -12,6 +14,9 @@ module.exports = sendWrapper => {
     security: [{
       userJwtRequired: []
     }],
+    parameters: [
+      transform( Joi.string( ).label( "fields" ) )
+    ],
     responses: {
       200: {
         description: "An array of users.",
