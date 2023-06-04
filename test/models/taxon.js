@@ -329,7 +329,7 @@ describe( "Taxon", ( ) => {
     it( "defaults to strict locale check", ( ) => {
       const t2 = new Taxon( t );
       t2.prepareForResponse( { locale: "de" } );
-      expect( t2.preferred_common_name ).to.be.null;
+      expect( t2.preferred_common_name ).to.be.undefined;
     } );
   } );
 } );
