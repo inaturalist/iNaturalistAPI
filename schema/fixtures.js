@@ -1738,12 +1738,46 @@
     "announcements": [
       {
         "id": 1,
-        "body": "Active announcement",
-        "start": "2016-01-01 00:00:00",
-        "end": "2100-01-01 00:00:00",
-        "created_at": "2016-01-01 00:00:00",
-        "updated_at": "2016-01-01 00:00:00",
+        "body": "Inactive announcement with no locale",
+        "start": "2023-01-01 00:00:00",
+        "end": "2023-01-01 00:00:00",
+        "created_at": "2023-01-01 00:00:00",
+        "updated_at": "2023-01-01 00:00:00",
         "placement": "mobile/home",
+        "locales": "{}",
+        "dismissible": true
+      },
+      {
+        "id": 2,
+        "body": "Active announcement with no locale",
+        "start": "2023-01-01 00:00:00",
+        "end": "2100-01-01 00:00:00",
+        "created_at": "2023-01-01 00:00:00",
+        "updated_at": "2023-01-01 00:00:00",
+        "placement": "mobile/home",
+        "locales": "{}",
+        "dismissible": true
+      },
+      {
+        "id": 3,
+        "body": "Active announcement with multiple locales",
+        "start": "2023-01-01 00:00:00",
+        "end": "2100-01-01 00:00:00",
+        "created_at": "2023-01-01 00:00:00",
+        "updated_at": "2023-01-01 00:00:00",
+        "placement": "mobile/home",
+        "locales": "{en-US,fr}",
+        "dismissible": true
+      },
+      {
+        "id": 4,
+        "body": "Active announcement with en locale",
+        "start": "2023-01-01 00:00:00",
+        "end": "2100-01-01 00:00:00",
+        "created_at": "2023-01-01 00:00:00",
+        "updated_at": "2023-01-01 00:00:00",
+        "placement": "mobile/home",
+        "locales": "{en}",
         "dismissible": true
       }
     ],

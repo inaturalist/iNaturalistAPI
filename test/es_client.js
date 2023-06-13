@@ -71,8 +71,8 @@ describe( "esClient", ( ) => {
   describe( "envelopeFilter", ( ) => {
     it( "requires an object with valid envelope", ( ) => {
       expect( esClient.envelopeFilter( ) ).to.be.null;
-      expect( esClient.envelopeFilter( { } ) ).to.null;
-      expect( esClient.envelopeFilter( { envelope: { loc: { } } } ) ).to.null;
+      expect( esClient.envelopeFilter( { } ) ).to.be.null;
+      expect( esClient.envelopeFilter( { envelope: { loc: { } } } ) ).to.be.null;
     } );
 
     it( "sets reasonable default values", ( ) => {

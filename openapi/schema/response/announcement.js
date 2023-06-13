@@ -5,6 +5,7 @@ module.exports = Joi.object( ).keys( {
   body: Joi.string( ),
   placement: Joi.string( ),
   dismissible: Joi.boolean( ),
+  locales: Joi.array( ).items( Joi.string( ) ),
   start: Joi.date( ),
   end: Joi.date( )
 } ).unknown( false ).meta( { className: "Announcement" } );
