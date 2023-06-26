@@ -151,13 +151,13 @@ describe( "InaturalistMapServer", ( ) => {
   describe( "beforeSendResult", ( ) => {
     it( "sets a Cache-Control header", async ( ) => {
       stubReq.params.style = "places";
-      await MapServer.beforeSendResult( stubReq, stubRes );
+      await MapServer.setCacheHeaders( stubReq, stubRes );
       expect( stubRes.headers["Cache-Control"] ).to.eq( "public, max-age=3600" );
     } );
 
     it( "sets a Cache-Control header", async ( ) => {
       stubReq.query.ttl = 4;
-      await MapServer.beforeSendResult( stubReq, stubRes );
+      await MapServer.setCacheHeaders( stubReq, stubRes );
       expect( stubRes.headers["Cache-Control"] ).to.eq( "public, max-age=4" );
     } );
   } );

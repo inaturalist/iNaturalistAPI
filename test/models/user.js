@@ -1,5 +1,6 @@
 const { expect } = require( "chai" );
 const User = require( "../../lib/models/user" );
+const config = require( "../../config" );
 
 describe( "User", ( ) => {
   describe( "findByLogin", ( ) => {
@@ -73,11 +74,11 @@ describe( "User", ( ) => {
     } );
 
     it( "some exceptions", ( ) => {
-      const globalPrefix = global.config.userImagePrefix;
-      global.config.userImagePrefix = null;
+      const globalPrefix = config.userImagePrefix;
+      config.userImagePrefix = null;
       expect( User.iconUrl( { id: 50, icon_content_type: "jpeg", icon_file_name: "image.jpeg" } ) )
         .to.eq( "https://static.inaturalist.org/attachments/users/icons/50/medium.jpeg" );
-      global.config.userImagePrefix = globalPrefix;
+      config.userImagePrefix = globalPrefix;
     } );
   } );
 

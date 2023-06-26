@@ -886,7 +886,16 @@
           "private_location": "42.7,-73.4",
           "geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
           "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
-          "geoprivacy": "obscured"
+          "geoprivacy": "obscured",
+          "mappable": true,
+          "observed_on_details": {
+            "date": "2001-06-01",
+            "week": 22,
+            "month": 6,
+            "hour": 1,
+            "year": 2001,
+            "day": 1
+          }
         },
         {
           "id": 31,

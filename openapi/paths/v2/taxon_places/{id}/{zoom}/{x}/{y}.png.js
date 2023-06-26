@@ -14,16 +14,16 @@ const transformedObsSearchParams = _.map( inheritdObsSearchParams, p => (
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    req.params.style = "places";
+    req.params.style = "taxon_places";
     req.params.format = "png";
-    req.params.place_id = req.params.id;
-    await InaturalistMapserver.placesRoute( req, res );
+    req.params.taxon_id = req.params.id;
+    await InaturalistMapserver.taxonPlacesRoute( req, res );
     sendWrapper( req, res, null, null );
   }
 
   GET.apiDoc = {
     tags: ["Polygon Tiles"],
-    summary: "Place Tiles",
+    summary: "Taxon Place Tiles",
     security: [{
       userJwtOptional: []
     }],
@@ -32,7 +32,7 @@ module.exports = sendWrapper => {
     ].concat( tilePathParams ).concat( transformedObsSearchParams ),
     responses: {
       200: {
-        description: "Returns place tiles.",
+        description: "Returns taxon place tiles.",
         content: {
           "image/png": {
             schema: {

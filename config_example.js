@@ -1,7 +1,4 @@
 let environment = "development";
-if ( global && global.config && global.config.environment ) {
-  environment = global.config.environment; // eslint-disable-line prefer-destructuring
-}
 if ( process && process.env && process.env.NODE_ENV ) {
   environment = process.env.NODE_ENV;
 }
