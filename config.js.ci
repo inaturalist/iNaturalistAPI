@@ -22,6 +22,7 @@ module.exports = {
     uploadsDir: "/tmp/",
     tensorappURL: "http://localhost:6006"
   },
+  tileSize: 512,
   debug: true,
   jwtSecret: "secret",
   jwtApplicationSecret: "application_secret"
