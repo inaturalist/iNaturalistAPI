@@ -9,6 +9,7 @@ const sinonChai = require( "sinon-chai" );
 const jwt = require( "jsonwebtoken" );
 const config = require( "../../../config" );
 const ComputervisionControllerV1 = require( "../../../lib/controllers/v1/computervision_controller" );
+const Taxon = require( "../../../lib/models/taxon" );
 
 chai.use( sinonChai );
 
@@ -206,6 +207,34 @@ describe( "Taxa", ( ) => {
         .expect( 200 )
         .expect( res => {
           expect( res.body.results.length ).to.be.greaterThan( 0 );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "filters by iconic", function ( done ) {
+      request( this.app )
+        .get( "/v2/taxa?iconic=true&fields=name" )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results.length ).to.eq( Taxon.ICONIC_TAXON_NAMES.length );
+          expect( _.sortBy( _.map( res.body.results, "name" ) ) ).to.deep
+            .eq( _.sortBy( Taxon.ICONIC_TAXON_NAMES ) );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "iconic", ( ) => {
+    it( "returns iconic taxa", function ( done ) {
+      request( this.app )
+        .get( "/v2/taxa/iconic?fields=name" )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results.length ).to.eq( Taxon.ICONIC_TAXON_NAMES.length );
+          expect( _.sortBy( _.map( res.body.results, "name" ) ) ).to.deep
+            .eq( _.sortBy( Taxon.ICONIC_TAXON_NAMES ) );
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
