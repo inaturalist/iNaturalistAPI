@@ -17,10 +17,10 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Use Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: '16.x'
 
@@ -60,9 +60,9 @@ jobs:
     name: Notify Slack
     needs: build
     if: ${{ success() || failure() }}
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
-      - uses: iRoachie/slack-github-actions@v2.0.1
+      - uses: iRoachie/slack-github-actions@v2.3.2
         if: env.SLACK_WEBHOOK_URL != null
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_BUILDS_WEBHOOK_URL }}

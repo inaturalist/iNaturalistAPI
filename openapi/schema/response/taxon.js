@@ -75,6 +75,7 @@ module.exports = Joi.object( ).keys( {
   photos_locked: Joi.boolean( )
     .description( "Whether or not photos for this taxon can be edited" ),
   preferred_common_name: Joi.string( ).valid( null ),
+  preferred_common_names: Joi.array( ).valid( null ),
   rank: Joi.string( ),
   rank_level: Joi.number( ),
   statuses: Joi.array( ).items(

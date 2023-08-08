@@ -38,4 +38,5 @@ module.exports = Joi.object( ).keys( {
     before one with a vision_score of 1. None of the scores are probabilities of
     accuracy or measures of confidence.
   `.replace( /\s+/m, " " ) )
-} ).unknown( false );
+} ).unknown( false )
+  .meta( { unpublished: true } );

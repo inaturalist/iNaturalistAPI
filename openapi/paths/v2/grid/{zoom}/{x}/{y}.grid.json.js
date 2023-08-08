@@ -1,5 +1,5 @@
 const _ = require( "lodash" );
-const ElasticMapper = require( "elasticmaps" );
+const InaturalistMapserver = require( "../../../../../../lib/inaturalist_map_server" );
 const transform = require( "../../../../../joi_to_openapi_parameter" );
 const observationsSearchSchema = require( "../../../../../schema/request/observations_search" );
 const { tilePathParams } = require( "../../../../../common_parameters" );
@@ -15,7 +15,7 @@ module.exports = sendWrapper => {
   async function GET( req, res ) {
     req.params.style = "grid";
     req.params.format = "grid.json";
-    await ElasticMapper.route( req, res );
+    await InaturalistMapserver.defaultRoute( req, res );
     sendWrapper( req, res );
   }
 

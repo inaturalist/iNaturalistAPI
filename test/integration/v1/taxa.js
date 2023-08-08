@@ -169,6 +169,33 @@ describe( "Taxa", ( ) => {
         .expect( 200, done );
     } );
 
+    it( "does not set preferred_common_name to null", function ( done ) {
+      request( this.app ).get( "/v1/taxa/3?locale=zz" )
+        .expect( res => {
+          expect( res.body.results[0].preferred_common_name ).to.not.be.null;
+          expect( res.body.results[0].preferred_common_name ).to.be.undefined;
+        } )
+        .expect( 200, done );
+    } );
+
+    it( "does not set preferred_common_names to null", function ( done ) {
+      request( this.app ).get( "/v1/taxa/3?locale=zz" )
+        .expect( res => {
+          expect( res.body.results[0].preferred_common_name ).to.not.be.null;
+          expect( res.body.results[0].preferred_common_names ).to.be.undefined;
+        } )
+        .expect( 200, done );
+    } );
+
+    it( "does not set english_common_name to null", function ( done ) {
+      request( this.app ).get( "/v1/taxa/3?locale=zz" )
+        .expect( res => {
+          expect( res.body.results[0].english_common_name ).to.not.be.null;
+          expect( res.body.results[0].english_common_name ).to.be.undefined;
+        } )
+        .expect( 200, done );
+    } );
+
     describe( "includes Hebrew preferred_common_name", ( ) => {
       const taxon = _.find( fixtures.elasticsearch.taxa.taxon, t => _.find( t.names, n => n.locale === "he" ) );
       const taxonName = _.find( taxon.names, n => n.locale === "he" );

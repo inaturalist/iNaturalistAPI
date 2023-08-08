@@ -886,7 +886,16 @@
           "private_location": "42.7,-73.4",
           "geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
           "private_geojson": { "type": "Point", "coordinates": [ -73.4, 42.7 ] },
-          "geoprivacy": "obscured"
+          "geoprivacy": "obscured",
+          "mappable": true,
+          "observed_on_details": {
+            "date": "2001-06-01",
+            "week": 22,
+            "month": 6,
+            "hour": 1,
+            "year": 2001,
+            "day": 1
+          }
         },
         {
           "id": 31,
@@ -1592,6 +1601,98 @@
             }
           ],
           "is_active": true
+        },
+        {
+          "id": 101,
+          "uuid": "21441033-24f6-4d8b-9bd3-b2718292b776",
+          "name": "Actinopterygii",
+          "is_active": true,
+          "iconic_taxon_id": 101
+        },
+        {
+          "id": 102,
+          "uuid": "ffa18900-408e-4c34-bcfe-802086f0c5a8",
+          "name": "Amphibia",
+          "is_active": true,
+          "iconic_taxon_id": 102
+        },
+        {
+          "id": 103,
+          "uuid": "3037d958-0456-468b-ba6f-551adbb53105",
+          "name": "Animalia",
+          "is_active": true,
+          "iconic_taxon_id": 103
+        },
+        {
+          "id": 104,
+          "uuid": "1decf1b7-e97d-483a-b1e3-7d9424a4b3ac",
+          "name": "Arachnida",
+          "is_active": true,
+          "iconic_taxon_id": 104
+        },
+        {
+          "id": 105,
+          "uuid": "ad3adcf8-0fa5-45c4-9bde-bedd77f740c1",
+          "name": "Aves",
+          "ancestry": "1001/103",
+          "is_active": true,
+          "iconic_taxon_id": 105
+        },
+        {
+          "id": 106,
+          "uuid": "d18908c7-6cab-4a41-af72-d0e1453820cd",
+          "name": "Chromista",
+          "is_active": true,
+          "iconic_taxon_id": 106
+        },
+        {
+          "id": 107,
+          "uuid": "15d05eb3-cba7-480a-a77c-00a1961e9c25",
+          "name": "Insecta",
+          "is_active": true,
+          "iconic_taxon_id": 107
+        },
+        {
+          "id": 108,
+          "uuid": "f8eb356d-8169-4425-b6b2-b997f4a5cbc6",
+          "name": "Fungi",
+          "is_active": true,
+          "iconic_taxon_id": 108
+        },
+        {
+          "id": 109,
+          "uuid": "bd3fba7d-28cf-4bc7-995b-da3e92067fef",
+          "name": "Mammalia",
+          "is_active": true,
+          "iconic_taxon_id": 109
+        },
+        {
+          "id": 110,
+          "uuid": "c15a8a6d-769c-4931-bee3-ab7a6a36a433",
+          "name": "Mollusca",
+          "is_active": true,
+          "iconic_taxon_id": 110
+        },
+        {
+          "id": 111,
+          "uuid": "b2dccdb0-a85f-46e2-bda1-4cb904d090e9",
+          "name": "Plantae",
+          "is_active": true,
+          "iconic_taxon_id": 111
+        },
+        {
+          "id": 112,
+          "uuid": "0f5d4e84-618c-48db-8515-7c3e67b8727f",
+          "name": "Protozoa",
+          "is_active": true,
+          "iconic_taxon_id": 112
+        },
+        {
+          "id": 113,
+          "uuid": "9779a5d3-6b7c-43fe-8168-10c6744fe35c",
+          "name": "Reptilia",
+          "is_active": true,
+          "iconic_taxon_id": 113
         }
       ]
     },
@@ -1735,18 +1836,68 @@
     }
   },
   "postgresql": {
+    "announcements": [
+      {
+        "id": 1,
+        "body": "Inactive announcement with no locale",
+        "start": "2023-01-01 00:00:00",
+        "end": "2023-01-01 00:00:00",
+        "created_at": "2023-01-01 00:00:00",
+        "updated_at": "2023-01-01 00:00:00",
+        "placement": "mobile/home",
+        "locales": "{}",
+        "dismissible": true
+      },
+      {
+        "id": 2,
+        "body": "Active announcement with no locale",
+        "start": "2023-01-01 00:00:00",
+        "end": "2100-01-01 00:00:00",
+        "created_at": "2023-01-01 00:00:00",
+        "updated_at": "2023-01-01 00:00:00",
+        "placement": "mobile/home",
+        "locales": "{}",
+        "dismissible": true
+      },
+      {
+        "id": 3,
+        "body": "Active announcement with multiple locales",
+        "start": "2023-01-01 00:00:00",
+        "end": "2100-01-01 00:00:00",
+        "created_at": "2023-01-01 00:00:00",
+        "updated_at": "2023-01-01 00:00:00",
+        "placement": "mobile/home",
+        "locales": "{en-US,fr}",
+        "dismissible": true
+      },
+      {
+        "id": 4,
+        "body": "Active announcement with en locale",
+        "start": "2023-01-01 00:00:00",
+        "end": "2100-01-01 00:00:00",
+        "created_at": "2023-01-01 00:00:00",
+        "updated_at": "2023-01-01 00:00:00",
+        "placement": "mobile/home",
+        "locales": "{en}",
+        "dismissible": true
+      }
+    ],
     "comments": [
       {
         "id": 1,
         "parent_type": "Observation",
         "parent_id": 1,
-        "body": "I am the very model of a modern major general"
+        "body": "I am the very model of a modern major general",
+        "created_at": "2016-01-01 00:00:00",
+        "updated_at": "2016-01-01 00:00:00"
       },
       {
         "id": 2,
         "parent_type": "Observation",
         "parent_id": 2,
-        "body": "I've information animal, mineral, and vegetable'"
+        "body": "I've information animal, mineral, and vegetable'",
+        "created_at": "2016-01-01 00:00:00",
+        "updated_at": "2016-01-01 00:00:00"
       }
     ],
     "conservation_statuses": [
@@ -2697,68 +2848,107 @@
       {
         "id": 101,
         "uuid": "21441033-24f6-4d8b-9bd3-b2718292b776",
-        "name": "Actinopterygii"
+        "name": "Actinopterygii",
+        "is_active": true,
+        "is_iconic": true,
+        "iconic_taxon_id": 101
       },
       {
         "id": 102,
         "uuid": "ffa18900-408e-4c34-bcfe-802086f0c5a8",
-        "name": "Amphibia"
+        "name": "Amphibia",
+        "is_active": true,
+        "is_iconic": true,
+        "iconic_taxon_id": 102
       },
       {
         "id": 103,
         "uuid": "3037d958-0456-468b-ba6f-551adbb53105",
-        "name": "Animalia"
+        "name": "Animalia",
+        "is_active": true,
+        "is_iconic": true,
+        "iconic_taxon_id": 103
       },
       {
         "id": 104,
         "uuid": "1decf1b7-e97d-483a-b1e3-7d9424a4b3ac",
-        "name": "Arachnida"
+        "name": "Arachnida",
+        "is_active": true,
+        "is_iconic": true,
+        "iconic_taxon_id": 104
       },
       {
         "id": 105,
         "uuid": "ad3adcf8-0fa5-45c4-9bde-bedd77f740c1",
         "name": "Aves",
-        "ancestry": "1001/103"
+        "ancestry": "1001/103",
+        "is_active": true,
+        "is_iconic": true,
+        "iconic_taxon_id": 105
       },
       {
         "id": 106,
         "uuid": "d18908c7-6cab-4a41-af72-d0e1453820cd",
-        "name": "Chromista"
+        "name": "Chromista",
+        "is_active": true,
+        "is_iconic": true,
+        "iconic_taxon_id": 106
       },
       {
         "id": 107,
         "uuid": "15d05eb3-cba7-480a-a77c-00a1961e9c25",
-        "name": "Insecta"
+        "name": "Insecta",
+        "is_active": true,
+        "is_iconic": true,
+        "iconic_taxon_id": 107
       },
       {
         "id": 108,
         "uuid": "f8eb356d-8169-4425-b6b2-b997f4a5cbc6",
-        "name": "Fungi"
+        "name": "Fungi",
+        "is_active": true,
+        "is_iconic": true,
+        "iconic_taxon_id": 108
       },
       {
         "id": 109,
         "uuid": "bd3fba7d-28cf-4bc7-995b-da3e92067fef",
-        "name": "Mammalia"
+        "name": "Mammalia",
+        "is_active": true,
+        "is_iconic": true,
+        "iconic_taxon_id": 109
       },
       {
         "id": 110,
         "uuid": "c15a8a6d-769c-4931-bee3-ab7a6a36a433",
-        "name": "Mollusca"
+        "name": "Mollusca",
+        "is_active": true,
+        "is_iconic": true,
+        "iconic_taxon_id": 110
       },
       {
         "id": 111,
         "uuid": "b2dccdb0-a85f-46e2-bda1-4cb904d090e9",
-        "name": "Plantae"
+        "name": "Plantae",
+        "is_active": true,
+        "is_iconic": true,
+        "iconic_taxon_id": 111
       },
       {
         "id": 112,
         "uuid": "0f5d4e84-618c-48db-8515-7c3e67b8727f",
-        "name": "Protozoa"
+        "name": "Protozoa",
+        "is_active": true,
+        "is_iconic": true,
+        "iconic_taxon_id": 112
       },
       {
         "id": 113,
         "uuid": "9779a5d3-6b7c-43fe-8168-10c6744fe35c",
-        "name": "Reptilia"
+        "name": "Reptilia",
+        "is_active": true,
+        "is_iconic": true,
+        "iconic_taxon_id": 113
       }
     ],
     "users": [

@@ -130,9 +130,6 @@ To see all available fields, you can use \`fields=all\`, e.g.
 naturalists, scientists, and members of the public sharing over a million
 wildlife sightings to teach one another about the natural world while
 creating high quality citizen science data for science and conservation.
-The iNaturalist technology infrastructure and open source software is
-administered by the [California Academy of Sciences](https://www.calacademy.org/) as
-part of their mission to explore, explain, and sustain life on Earth.
 
 iNaturalist Website: <https://www.inaturalist.org/>
 
@@ -178,6 +175,13 @@ Privacy Policy: <https://www.inaturalist.org/privacy>`
         name: "Authorization",
         in: "header",
         description: "User or application JSON Web Token (application tokens only available to official apps)"
+      },
+      appAndUserJwtRequired: {
+        type: "apiKey",
+        name: "Authorization",
+        in: "header",
+        description: "User and application JSON Web Token (application tokens only available to "
+          + "official apps). Both tokens must be provided in a comma-separated list in any order"
       }
     },
     responses: {
