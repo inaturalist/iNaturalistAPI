@@ -1,6 +1,7 @@
 module.exports = {
   apiURL: "http://localhost:3000",
   currentVersionURL: "http://localhost:4000/v1",
+  environment: "test",
   elasticsearch: {
     host: "http://localhost:9200",
     geoPointField: "location",
@@ -10,7 +11,8 @@ module.exports = {
     user: "postgres",
     host: "127.0.0.1",
     port: 5432,
-    geometry_field: "geom"
+    geometry_field: "geom",
+    dbname: "inaturalist_test"
   },
   websiteURL: "http://localhost:3000/",
   staticImagePrefix: "http://localhost:3000/attachments/",
