@@ -1644,7 +1644,8 @@
         {
           "id": 123,
           "login": "a-user",
-          "name": "A User"
+          "name": "A User",
+          "orcid": "0000-0001-0002-0004"
         },
         {
           "id": 124,
