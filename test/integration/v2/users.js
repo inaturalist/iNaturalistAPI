@@ -153,6 +153,15 @@ describe( "Users", ( ) => {
         } )
         .expect( 200, done );
     } );
+    it( "should return by searched Orcid", function ( done ) {
+      request( this.app ).get( "/v2/users?orcid=0000-0001-0002-0004&fields=login" )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results ).not.to.be.empty;
+          expect( res.body.results[0].login ).to.eq("a-user");
+        } )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "update", ( ) => {
@@ -207,4 +216,5 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
   } );
+
 } );
