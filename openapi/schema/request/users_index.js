@@ -22,6 +22,7 @@ module.exports = Joi.object( ).keys( {
     .description( "Show users followed by this user, specified by sequential ID, username, or UUID" ),
   orcid: Joi
     .string()
-    .example("0000-0001-0002-0004")
-    .description("Show users with the specified orcid")
+    .example( "0000-0001-0002-0004" )
+    .description( "Show users with the specified orcid" )
+    .pattern( /^[0-9]{4}(-[0-9]{4}){3}$/ )
 } );
