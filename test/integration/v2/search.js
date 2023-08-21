@@ -34,6 +34,12 @@ describe( "Search", ( ) => {
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+    it( "returns user by orcid", function ( done ) {
+      request( this.app ).get( "/v2/search?q=0000-0001-0002-0004&fields=all" ).expect( res => {
+        expect( _.filter( res.body.results, r => r?.user?.login === 'a-user').length ).to.be.above( 0 );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
     it( "returns substring matches", function ( done ) {
       request( this.app ).get( "/v2/search?q=test+user&fields=all" ).expect( res => {
         expect( _.filter( res.body.results, r => r?.user?.login === "search_test_user" ).length ).to.be.above( 0 );
