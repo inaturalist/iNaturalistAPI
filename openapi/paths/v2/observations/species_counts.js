@@ -10,10 +10,10 @@ module.exports = sendWrapper => {
     sendWrapper( req, res, null, results );
   }
 
-  const parameters = _.map(
+  const parameters = _.filter( _.map(
     observationsSearchSchema.$_terms.keys,
     child => transform( child.schema.label( child.key ) )
-  );
+  ), p => !_.includes( ["order", "order_by", "only_id"], p.name ) );
   parameters.push(
     transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
   );
