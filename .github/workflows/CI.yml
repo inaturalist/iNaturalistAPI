@@ -50,6 +50,7 @@ jobs:
 
     - run: npm run coverage
       env:
+        NODE_ENV: test
         PGHOST: 0.0.0.0
         PGUSER: postgres
         PGPASSWORD: postgres
