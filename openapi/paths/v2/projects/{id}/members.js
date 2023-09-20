@@ -2,7 +2,7 @@ const _ = require( "lodash" );
 const Joi = require( "joi" );
 const transform = require( "../../../../joi_to_openapi_parameter" );
 const ProjectsController = require( "../../../../../lib/controllers/v2/projects_controller" );
-const observationsSearchSchema = require( "../../../../schema/request/projects_members" );
+const projectsMembersSchema = require( "../../../../schema/request/projects_members" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
@@ -10,14 +10,23 @@ module.exports = sendWrapper => {
     sendWrapper( req, res, null, results );
   }
 
-  const parameters = _.map(
-    observationsSearchSchema.$_terms.keys,
-    child => transform( child.schema.label( child.key ) )
+  const parameters = [
+    transform(
+      Joi.number( ).integer( )
+        .label( "id" )
+        .meta( { in: "path" } )
+        .required( )
+        .description( "A single ID" )
+    )
+  ].concat( 
+    _.map( projectsMembersSchema.$_terms.keys, child => 
+      ( transform( child.schema.label( child.key ) ) ) 
+    ) 
   );
   parameters.push(
     transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
   );
-
+  
   GET.apiDoc = {
     tags: ["Projects"],
     summary: "Fetch project members",
@@ -27,7 +36,7 @@ module.exports = sendWrapper => {
     parameters,
     responses: {
       200: {
-        description: "An array of project user membership information.",
+        description: "An array of project members.",
         content: {
           "application/json": {
             schema: {

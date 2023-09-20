@@ -7,5 +7,5 @@ module.exports = Joi.object( ).keys( {
   order_by: Joi.array( ).items( Joi.string( ).valid(
     "observations_count",
     "login"
-  ) ).default( "observations_count" )
+  ) ).default( [ "observations_count" ] )
 } ).unknown( false );

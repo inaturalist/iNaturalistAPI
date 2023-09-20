@@ -16,11 +16,12 @@ module.exports = sendWrapper => {
     }],
     parameters: [
       transform(
-        Joi.number( ).integer( )
+        Joi.array( )
+          .items( Joi.number( ).integer( ) )
           .label( "id" )
           .meta( { in: "path" } )
           .required( )
-          .description( "A single project ID" )
+          .description( "A single ID or a comma-separated list of them" )
       ),
       transform( Joi.string( ).label( "fields" ).meta( { in: "query" } ) ),
       transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )

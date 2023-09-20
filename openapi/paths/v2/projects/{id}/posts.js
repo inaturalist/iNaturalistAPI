@@ -10,14 +10,24 @@ module.exports = sendWrapper => {
     sendWrapper( req, res, null, results );
   }
 
-  const parameters = _.map(
-    projectsPostsSchema.$_terms.keys,
-    child => transform( child.schema.label( child.key ) )
+  const parameters = [
+    transform(
+      Joi.array( )
+        .items( Joi.number( ).integer( ) )
+        .label( "id" )
+        .meta( { in: "path" } )
+        .required( )
+        .description( "A single ID or a comma-separated list of them" )
+    )
+  ].concat( 
+    _.map( projectsPostsSchema.$_terms.keys, child => 
+      ( transform( child.schema.label( child.key ) ) ) 
+    ) 
   );
   parameters.push(
     transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
   );
-
+  
   GET.apiDoc = {
     tags: ["Projects"],
     summary: "Fetch project posts",
