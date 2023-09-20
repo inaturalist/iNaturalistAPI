@@ -1,7 +1,7 @@
 const _ = require( "lodash" );
 const Joi = require( "joi" );
 const transform = require( "../../../../joi_to_openapi_parameter" );
-const ProjectsController = require( "../../../../../lib/controllers/v2/projects_controller" );
+const ProjectsController = require( "../../../../../lib/controllers/v1/projects_controller" );
 const projectsMembersSchema = require( "../../../../schema/request/projects_members" );
 
 module.exports = sendWrapper => {
@@ -18,15 +18,15 @@ module.exports = sendWrapper => {
         .required( )
         .description( "A single ID" )
     )
-  ].concat( 
-    _.map( projectsMembersSchema.$_terms.keys, child => 
-      ( transform( child.schema.label( child.key ) ) ) 
-    ) 
+  ].concat(
+    _.map( projectsMembersSchema.$_terms.keys, child => (
+      transform( child.schema.label( child.key ) )
+    ) )
   );
   parameters.push(
     transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
   );
-  
+
   GET.apiDoc = {
     tags: ["Projects"],
     summary: "Fetch project members",
@@ -36,7 +36,7 @@ module.exports = sendWrapper => {
     parameters,
     responses: {
       200: {
-        description: "An array of project members.",
+        description: "An array of project user membership information.",
         content: {
           "application/json": {
             schema: {

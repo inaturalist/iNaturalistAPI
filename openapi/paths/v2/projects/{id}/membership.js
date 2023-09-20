@@ -1,6 +1,6 @@
 const Joi = require( "joi" );
 const transform = require( "../../../../joi_to_openapi_parameter" );
-const projectsController = require( "../../../../../lib/controllers/v2/projects_controller" );
+const projectsController = require( "../../../../../lib/controllers/v1/projects_controller" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
@@ -39,7 +39,6 @@ module.exports = sendWrapper => {
       }
     }
   };
-
 
   async function POST( req, res ) {
     await projectsController.join( req );
