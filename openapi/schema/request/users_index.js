@@ -24,5 +24,5 @@ module.exports = Joi.object( ).keys( {
     .string()
     .example( "0000-0001-0002-0004" )
     .description( "Show users with the specified orcid" )
-    .pattern( /^[0-9]{4}(-[0-9]{4}){3}$/ )
+    .pattern( /^[0-9]{4}(-[0-9]{4}){2}-[0-9]{3}[0-9X]$/ )
 } );
