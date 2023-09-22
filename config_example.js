@@ -60,4 +60,6 @@ module.exports = {
     host: INAT_REDIS_HOST || "127.0.0.1",
     port: 6379
   }
+  // Simulate maintance by returning 503 for all requests
+  // maintenanceUntil: "Sat, 23 Sep 2023 7:00:00 GMT"
 };
