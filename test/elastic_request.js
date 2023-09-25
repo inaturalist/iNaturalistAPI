@@ -16,8 +16,7 @@ describe( "ElasticRequest", ( ) => {
           location: {
             bottom_left: [-0.07, -0.07],
             top_right: [1.07, 1.07]
-          },
-          type: "indexed"
+          }
         }
       } );
     } );
@@ -28,8 +27,7 @@ describe( "ElasticRequest", ( ) => {
           location: {
             bottom_left: [0, 0],
             top_right: [1, 1]
-          },
-          type: "indexed"
+          }
         }
       } );
     } );
@@ -43,8 +41,7 @@ describe( "ElasticRequest", ( ) => {
                 location: {
                   bottom_left: [179, 1],
                   top_right: [180, 2]
-                },
-                type: "indexed"
+                }
               }
             },
             {
@@ -52,8 +49,7 @@ describe( "ElasticRequest", ( ) => {
                 location: {
                   bottom_left: [-180, 1],
                   top_right: [-179, 2]
-                },
-                type: "indexed"
+                }
               }
             }
           ]
