@@ -20,7 +20,19 @@ Params.y = Joi.number( ).integer( )
   .label( "y" )
   .meta( { in: "path" } )
   .required( );
+Params.tile_size = Joi.number( ).integer( )
+  .valid(
+    256,
+    512
+  )
+  .label( "tile_size" )
+  .meta( { in: "query" } );
 
-Params.tilePathParams = _.map( [Params.zoom, Params.x, Params.y], transform );
+Params.tilePathParams = _.map( [
+  Params.zoom,
+  Params.x,
+  Params.y,
+  Params.tile_size
+], transform );
 
 module.exports = Params;
