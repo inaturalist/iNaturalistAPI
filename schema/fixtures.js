@@ -1128,7 +1128,11 @@
           "location": "11,12",
           "slug": "project-one",
           "user_ids": [ 1, 5, 123 ],
-          "featured_at": "2018-04-20T20:57:17.137Z"
+          "site_features":[{
+            "site_id": 1,
+            "noteworthy": true,
+            "featured_at": "2018-04-20T20:57:17.137Z"
+          }]
         },
         {
           "id": 2,

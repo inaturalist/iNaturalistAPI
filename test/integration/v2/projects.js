@@ -1,3 +1,4 @@
+const _ = require( "lodash" );
 const { expect } = require( "chai" );
 const fs = require( "fs" );
 const jwt = require( "jsonwebtoken" );
@@ -34,6 +35,7 @@ describe( "Projects", ( ) => {
       } );
     } );
   } );
+
   describe( "show", ( ) => {
     const project = fixtures.elasticsearch.projects.project[0];
     it( "should retrieve a project", function ( done ) {
@@ -41,6 +43,39 @@ describe( "Projects", ( ) => {
         .expect( 200 )
         .expect( res => {
           expect( res.body.results[0].id ).to.eq( project.id );
+        } )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "search", ( ) => {
+    const projects = fixtures.elasticsearch.projects.project;
+    it( "returns projects", function ( done ) {
+      request( this.app ).get( "/v2/projects" )
+        .expect( res => {
+          expect( res.body.results.length ).to.eq( _.min( [projects.length, 10] ) );
+        } )
+        .expect( 200, done );
+    } );
+
+    it( "filters by featured", function ( done ) {
+      request( this.app ).get( "/v2/projects?featured=true" )
+        .expect( res => {
+          expect( res.body.results.length ).to.be.above( 0 );
+          expect( res.body.results.length ).to.eq(
+            _.filter( projects, p => _.has( p, "site_features" ) ).length
+          );
+        } )
+        .expect( 200, done );
+    } );
+
+    it( "orders by featured", function ( done ) {
+      request( this.app ).get( "/v2/projects?featured=true&order_by=featured&fields=site_features" )
+        .expect( res => {
+          expect( res.body.results.length ).to.be.above( 0 );
+          expect( res.body.results.length ).to.eq(
+            _.filter( projects, p => _.has( p, "site_features" ) ).length
+          );
         } )
         .expect( 200, done );
     } );
