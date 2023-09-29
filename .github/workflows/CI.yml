@@ -56,6 +56,8 @@ jobs:
         PGPASSWORD: postgres
         CI: true
 
+    - run: npm run eslint
+
   notify:
     name: Notify Slack
     needs: build

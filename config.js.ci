@@ -25,4 +25,4 @@ module.exports = {
   debug: true,
   jwtSecret: "secret",
   jwtApplicationSecret: "application_secret"
-}
+};
