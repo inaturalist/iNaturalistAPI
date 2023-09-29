@@ -359,6 +359,13 @@ describe( "Observations", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "should error with bad request as result window is too large for elastic search", function ( done ) {
+      request( this.app )
+        .get( "/v2/observations?page=350" )
+        .expect( "Content-Type", /json/ )
+        .expect( 400, done );
+    } );
   } );
 
   describe( "create", ( ) => {
