@@ -48,8 +48,6 @@ jobs:
 
     - run: npm install
 
-    - run: npm run eslint
-
     - run: npm run coverage
       env:
         NODE_ENV: test
@@ -57,6 +55,8 @@ jobs:
         PGUSER: postgres
         PGPASSWORD: postgres
         CI: true
+
+    - run: npm run eslint
 
   notify:
     name: Notify Slack
