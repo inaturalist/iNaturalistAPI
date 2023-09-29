@@ -22,4 +22,15 @@ describe( "Computervision", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "taxon_geomodel_bounds", ( ) => {
+    it( "returns JSON", function ( done ) {
+      nock( config.imageProcesing.tensorappURL )
+        .get( "/h3_04_bounds?taxon_id=1" )
+        .reply( 200, { } );
+      request( this.app ).get( "/v1/computervision/taxon_geomodel_bounds/1" )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
 } );
