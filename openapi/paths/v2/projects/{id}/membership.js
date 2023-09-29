@@ -39,7 +39,6 @@ module.exports = sendWrapper => {
     }
   };
 
-
   async function POST( req, res ) {
     await projectsController.join( req );
     sendWrapper( req, res.status( 204 ) );

@@ -158,7 +158,7 @@ describe( "Users", ( ) => {
         .expect( 200 )
         .expect( res => {
           expect( res.body.results ).not.to.be.empty;
-          expect( res.body.results[0].login ).to.eq("a-user");
+          expect( res.body.results[0].login ).to.eq( "a-user" );
         } )
         .expect( 200, done );
     } );
@@ -216,5 +216,4 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
   } );
-
 } );
