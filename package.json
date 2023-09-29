@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "NODE_ENV=test mocha --recursive --exit --require test/hooks.js",
-    "coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text-summary npm run test"
+    "coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text-summary npm run test",
+    "eslint": "./node_modules/.bin/eslint ."
   },
   "repository": {
     "type": "git",

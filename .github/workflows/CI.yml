@@ -48,6 +48,8 @@ jobs:
 
     - run: npm install
 
+    - run: npm run eslint
+
     - run: npm run coverage
       env:
         NODE_ENV: test
