@@ -12,6 +12,9 @@ describe( "DBModel", ( ) => {
     it( "fetches belongs to associations with ids", async ( ) => {
       const o = { user_id: 123 };
       await DBModel.fetchBelongsTo( [o], User );
+
+
+
       expect( o.user ).to.be.undefined;
       expect( o.user.id ).to.eq( 123 );
       expect( o.user_id ).to.eq( 123 );
