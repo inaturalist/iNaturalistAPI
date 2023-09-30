@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "NODE_ENV=test mocha --recursive --exit --require test/hooks.js",
-    "coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text-summary npm run test"
+    "coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text-summary npm run test",
+    "eslint": "./node_modules/.bin/eslint ."
   },
   "repository": {
     "type": "git",
@@ -76,10 +77,9 @@
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "eslint": "^8.6.0",
-    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-react": "^7.28.0",
     "mocha": "^10.0.0",
     "nock": "^13.2.2",
     "nyc": "^15.1.0",

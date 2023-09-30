@@ -1,7 +1,6 @@
 const chai = require( "chai" );
 const chaiAsPromised = require( "chai-as-promised" );
 const pgClient = require( "../lib/pg_client" );
-const config = require( "../config" );
 
 const { expect } = chai;
 chai.use( chaiAsPromised );

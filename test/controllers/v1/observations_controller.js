@@ -3,7 +3,6 @@ const moment = require( "moment" );
 const _ = require( "lodash" );
 const { observations } = require( "inaturalistjs" );
 const testHelper = require( "../../../lib/test_helper" );
-const util = require( "../../../lib/util" );
 const Observation = require( "../../../lib/models/observation" );
 const Project = require( "../../../lib/models/project" );
 const List = require( "../../../lib/models/list" );

@@ -25,6 +25,13 @@ Filter by pattern: `NODE_ENV=test ./node_modules/mocha/bin/_mocha --recursive --
 
 You can also add `.only` to a `describe` or `it` call to only run that test when you run `npm test`, e.g. `it.only( "should only run this test" )`.
 
+# ESLint
+
+Please run ESLint to check for syntax formatting errors. To run ESLint, run: `npm run eslint`. Please address any syntax errors before submitting pull requests. ESLint will also run automatically via Github Actions on submitted pull requests along with tests.
+
+All test failures and syntax errors must be resolved before pull requests before will be merged.
+
+
 # Updating Documentation
 
 Edit `lib/views/swagger_v*.yml.ejs`

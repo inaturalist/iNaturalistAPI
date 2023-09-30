@@ -36,7 +36,7 @@ describe( "Search", ( ) => {
     } );
     it( "returns user by orcid", function ( done ) {
       request( this.app ).get( "/v2/search?q=0000-0001-0002-0004&fields=all" ).expect( res => {
-        expect( _.filter( res.body.results, r => r?.user?.login === 'a-user').length ).to.be.above( 0 );
+        expect( _.filter( res.body.results, r => r?.user?.login === "a-user" ).length ).to.be.above( 0 );
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
