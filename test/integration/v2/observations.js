@@ -360,11 +360,16 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "should error with bad request as result window is too large for elastic search", function ( done ) {
+    it( "should error with internal server error as result window is too large for elastic search", function ( done ) {
       request( this.app )
-        .get( "/v2/observations?page=350" )
+        .get( "/v2/observations?page=700" )
         .expect( "Content-Type", /json/ )
-        .expect( 400, done );
+        .expect( res => {
+          expect( res.body.errors ).to.exist;
+          // We return a special case error message, detect if it contains part of it
+          expect( res.body.errors[0].message ).to.contains( "page + size" );
+        } )
+        .expect( 500, done );
     } );
   } );
 
