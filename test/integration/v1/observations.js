@@ -789,6 +789,19 @@ describe( "Observations", ( ) => {
           expect( ids ).to.contain( obsWithNoPositionalAccuracy );
         } ).expect( 200, done );
     } );
+
+    it( "should error with internal server error as result window is too large for elastic search", function ( done ) {
+      request( this.app )
+        .get( "/v1/observations?page=700" )
+        .expect( "Content-Type", /json/ )
+        .expect( res => {
+          expect( res.body.error ).to.exist;
+          // We return a special case error message, detect if it contains part of it
+          expect( res.body.error ).to.contains( "page x size" );
+        } )
+        .expect( 403, done );
+    } );
+
     describe( "viewed by project curator", ( ) => {
       const curatorProjectUser = _.find( fixtures.postgresql.project_users, pu => pu.id === 6 );
       const token = jwt.sign( { user_id: curatorProjectUser.user_id },
