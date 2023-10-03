@@ -367,7 +367,7 @@ describe( "Observations", ( ) => {
         .expect( res => {
           expect( res.body.errors ).to.exist;
           // We return a special case error message, detect if it contains part of it
-          expect( res.body.errors[0].message ).to.contains( "page + size" );
+          expect( res.body.errors[0].message ).to.contains( "page x size" );
         } )
         .expect( 500, done );
     } );
