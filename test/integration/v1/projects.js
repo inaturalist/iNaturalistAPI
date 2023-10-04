@@ -302,18 +302,18 @@ describe( "Projects", ( ) => {
           expect( res.body.per_page ).to.eq( 3 );
           expect( res.body.total_results ).to.eq( 3 );
           expect( res.body.results.length ).to.eq( 3 );
-          expect( res.body.results[0].user.id ).to.eq( 2023092501 );
-          expect( res.body.results[0].user ).not.to.be.undefined;
-          expect( res.body.results[0].user.email ).to.be.undefined;
-          expect( res.body.results[0].user.last_ip ).to.be.undefined;
-          expect( res.body.results[1].user.id ).to.eq( 2023092502 );
-          expect( res.body.results[1].user ).not.to.be.undefined;
-          expect( res.body.results[1].user.email ).to.be.undefined;
-          expect( res.body.results[1].user.last_ip ).to.be.undefined;
-          expect( res.body.results[2].user.id ).to.eq( 2023092503 );
-          expect( res.body.results[2].user ).not.to.be.undefined;
-          expect( res.body.results[2].user.email ).to.be.undefined;
-          expect( res.body.results[2].user.last_ip ).to.be.undefined;
+          const user1 = _.find( res.body.results, u => u.id === 2023092501 );
+          expect( user1 ).not.to.be.undefined;
+          expect( user1.email ).to.be.undefined;
+          expect( user1.last_ip ).to.be.undefined;
+          const user2 = _.find( res.body.results, u => u.id === 2023092502 );
+          expect( user2 ).not.to.be.undefined;
+          expect( user2.email ).to.be.undefined;
+          expect( user2.last_ip ).to.be.undefined;
+          const user3 = _.find( res.body.results, u => u.id === 2023092503 );
+          expect( user3 ).not.to.be.undefined;
+          expect( user3.email ).to.be.undefined;
+          expect( user3.last_ip ).to.be.undefined;
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
@@ -357,15 +357,18 @@ describe( "Projects", ( ) => {
       request( this.app ).get( "/v1/projects/2023092501/posts" )
         .expect( res => {
           expect( res.body.total_results ).to.eq( 3 );
-          expect( res.body.results[0].user ).not.to.be.undefined;
-          expect( res.body.results[0].user.email ).to.be.undefined;
-          expect( res.body.results[0].user.last_ip ).to.be.undefined;
-          expect( res.body.results[1].user ).not.to.be.undefined;
-          expect( res.body.results[1].user.email ).to.be.undefined;
-          expect( res.body.results[1].user.last_ip ).to.be.undefined;
-          expect( res.body.results[2].user ).not.to.be.undefined;
-          expect( res.body.results[2].user.email ).to.be.undefined;
-          expect( res.body.results[2].user.last_ip ).to.be.undefined;
+          const user1 = _.find( res.body.results, u => u.id === 2023092501 );
+          expect( user1 ).not.to.be.undefined;
+          expect( user1.email ).to.be.undefined;
+          expect( user1.last_ip ).to.be.undefined;
+          const user2 = _.find( res.body.results, u => u.id === 2023092502 );
+          expect( user2 ).not.to.be.undefined;
+          expect( user2.email ).to.be.undefined;
+          expect( user2.last_ip ).to.be.undefined;
+          const user3 = _.find( res.body.results, u => u.id === 2023092503 );
+          expect( user3 ).not.to.be.undefined;
+          expect( user3.email ).to.be.undefined;
+          expect( user3.last_ip ).to.be.undefined;
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
