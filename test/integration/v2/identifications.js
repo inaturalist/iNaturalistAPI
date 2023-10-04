@@ -52,6 +52,19 @@ describe( "Identifications", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+    it( "never returns email or IP for user in identification", function ( done ) {
+      request( this.app ).get( "/v2/identifications/identifiers?per_page=100&fields=all" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          const record = _.find( res.body.results, u => u.user_id === 2023092501 );
+          expect( record ).not.to.be.undefined;
+          expect( record.user ).not.to.be.undefined;
+          expect( record.user.id ).eq( 2023092501 );
+          expect( record.user.email ).to.be.undefined;
+          expect( record.user.last_ip ).to.be.undefined;
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "update", ( ) => {

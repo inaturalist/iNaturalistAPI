@@ -40,7 +40,38 @@ describe( "Users", ( ) => {
         } )
         .expect( 200, done );
     } );
+    it( "never returns email or IP for user", function ( done ) {
+      request( this.app ).get( "/v2/users/2023092501?fields=all" )
+        .expect( res => {
+          const user = res.body.results[0];
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( user.id ).to.eq( 2023092501 );
+          expect( user ).to.not.have.property( "email" );
+          expect( user ).to.not.have.property( "last_ip" );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
+
+  describe( "autocomplete", ( ) => {
+    it( "never returns email or IP for user", function ( done ) {
+      request( this.app ).get( "/v2/users/autocomplete?q=user2023092501&fields=all" )
+        .expect( res => {
+          const user = res.body.results[0];
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( user.id ).to.eq( 2023092501 );
+          expect( user ).to.not.have.property( "email" );
+          expect( user ).to.not.have.property( "last_ip" );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
   describe( "update_session", ( ) => {
     it( "should fail without auth", function ( done ) {
       request( this.app ).put( "/v2/users/update_session" )
@@ -70,6 +101,27 @@ describe( "Users", ( ) => {
         .expect( 204, done );
     } );
   } );
+
+  describe( "projects", ( ) => {
+    it( "never returns email or IP for user in project", function ( done ) {
+      request( this.app ).get( "/v2/users/2023092501/projects?fields=all" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          const project = _.find( res.body.results, p => p.slug === "project-2023092501" );
+          expect( project ).not.to.be.undefined;
+          expect( project.admins ).not.to.be.undefined;
+          expect( project.admins[0] ).not.to.be.undefined;
+          expect( project.admins[0].user ).not.to.be.undefined;
+          expect( project.admins[0].user.email ).to.be.undefined;
+          expect( project.admins[0].user.last_ip ).to.be.undefined;
+          expect( project.user ).not.to.be.undefined;
+          expect( project.user.email ).to.be.undefined;
+          expect( project.user.last_ip ).to.be.undefined;
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
   describe( "index", ( ) => {
     it( "should return JSON", function ( done ) {
       request( this.app ).get( "/v2/users?fields=login" )
@@ -160,6 +212,17 @@ describe( "Users", ( ) => {
           expect( res.body.results ).not.to.be.empty;
           expect( res.body.results[0].login ).to.eq( "a-user" );
         } )
+        .expect( 200, done );
+    } );
+    it( "never returns email or IP for user in project", function ( done ) {
+      request( this.app ).get( "/v2/users?fields=all&per_page=100" )
+        .expect( res => {
+          const user = _.find( res.body.results, u => u.id === 2023092501 );
+          expect( user ).not.to.be.undefined;
+          expect( user.id ).to.eq( 2023092501 );
+          expect( user ).to.not.have.property( "email" );
+          expect( user ).to.not.have.property( "last_ip" );
+        } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
   } );
