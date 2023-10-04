@@ -29,6 +29,12 @@ function initializeDb() {
 exports.mochaGlobalSetup = async function () {
   expect( process.env.NODE_ENV ).to.eq( "test" );
 
+  console.log( "\n\nINITIALIZING TEST ENVIRONMENT\n\n" );
+
+  if ( !process.env.DB_ALREADY_INITIALIZED ) {
+    initializeDb( );
+  }
+
   // Wait for Postgres
   console.log( "Waiting for Postgres..." );
   await testHelper.waitForPG( 100 );
@@ -36,12 +42,6 @@ exports.mochaGlobalSetup = async function () {
   // Wait for ES
   console.log( "Waiting for ElasticSearch..." );
   await testHelper.waitForES( 100 );
-
-  console.log( "\n\nINITIALIZING TEST ENVIRONMENT\n\n" );
-
-  if ( !process.env.DB_ALREADY_INITIALIZED ) {
-    initializeDb( );
-  }
 
   console.log( "Creating ES indices" );
   await testHelper.createIndices( );
