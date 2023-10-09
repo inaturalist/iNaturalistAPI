@@ -1,10 +1,14 @@
+const fs = require( "fs" );
+
 const {
   INAT_DB_HOST,
   INAT_DB_USER,
   INAT_DB_PASS,
   INAT_ES_HOST,
   INAT_REDIS_HOST,
-  INAT_WEB_HOST
+  INAT_WEB_HOST,
+  INAT_DB_SSL_KEY_PATH,
+  INAT_DB_SSL_CRT_PATH
 } = process.env;
 module.exports = {
   // Host running the iNaturalist Rails app
@@ -25,7 +29,11 @@ module.exports = {
     geometry_field: "geom",
     srid: 4326,
     password: INAT_DB_PASS || "inaturalist",
-    ssl: false
+    ssl: ( INAT_DB_SSL_KEY_PATH && INAT_DB_SSL_CRT_PATH ) ? {
+      rejectUnauthorized: false,
+      key: fs.readFileSync( INAT_DB_SSL_KEY_PATH ),
+      cert: fs.readFileSync( INAT_DB_SSL_CRT_PATH )
+    } : false
   },
   tileSize: 512,
   debug: true,
