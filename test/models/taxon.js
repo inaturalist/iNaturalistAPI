@@ -1,3 +1,4 @@
+const _ = require( "lodash" );
 const chai = require( "chai" );
 const chaiAsPromised = require( "chai-as-promised" );
 const Taxon = require( "../../lib/models/taxon" );
@@ -5,61 +6,62 @@ const Taxon = require( "../../lib/models/taxon" );
 const { expect } = chai;
 chai.use( chaiAsPromised );
 let t;
+const stubTaxon = new Taxon( {
+  id: 123,
+  names: [
+    {
+      name: "BestEnglish",
+      locale: "en",
+      lexicon: "english",
+      position: 0
+    },
+    {
+      name: "BestInAmerica",
+      locale: "en",
+      lexicon: "english",
+      position: 1,
+      place_taxon_names: [
+        { place_id: 111, position: 0 }
+      ]
+    },
+    {
+      name: "BestInCalifornia",
+      locale: "en",
+      lexicon: "english",
+      position: 3,
+      place_taxon_names: [
+        { place_id: 222, position: 0 }
+      ]
+    },
+    {
+      name: "SecondBestInCalifornia",
+      locale: "en",
+      lexicon: "english",
+      position: 2,
+      place_taxon_names: [
+        { place_id: 222, position: 1 }
+      ]
+    },
+    {
+      name: "BestSpanish",
+      locale: "es",
+      lexicon: "spanish",
+      position: 4
+    }
+  ],
+  statuses: [
+    { place_id: null, iucn: 20 },
+    { place_id: 111, iucn: 30 },
+    { place_id: 222, iucn: 50 }],
+  listed_taxa: [
+    { place_id: 111, establishment_means: "endemic" },
+    { place_id: 444 },
+    { place_id: 222, establishment_means: "introduced" }]
+} );
 
 describe( "Taxon", ( ) => {
-  before( ( ) => {
-    t = new Taxon( {
-      id: 123,
-      names: [
-        {
-          name: "BestEnglish",
-          locale: "en",
-          lexicon: "english",
-          position: 0
-        },
-        {
-          name: "BestInAmerica",
-          locale: "en",
-          lexicon: "english",
-          position: 1,
-          place_taxon_names: [
-            { place_id: 111, position: 0 }
-          ]
-        },
-        {
-          name: "BestInCalifornia",
-          locale: "en",
-          lexicon: "english",
-          position: 3,
-          place_taxon_names: [
-            { place_id: 222, position: 0 }
-          ]
-        },
-        {
-          name: "SecondBestInCalifornia",
-          locale: "en",
-          lexicon: "english",
-          position: 2,
-          place_taxon_names: [
-            { place_id: 222, position: 1 }
-          ]
-        },
-        {
-          name: "BestSpanish",
-          locale: "es",
-          lexicon: "spanish",
-          position: 4
-        }
-      ],
-      statuses: [
-        { place_id: null, iucn: 20 },
-        { place_id: 111, iucn: 30 },
-        { place_id: 222, iucn: 50 }],
-      listed_taxa: [
-        { place_id: 111, establishment_means: "endemic" },
-        { place_id: 444 },
-        { place_id: 222, establishment_means: "introduced" }]
-    } );
+  beforeEach( ( ) => {
+    t = _.cloneDeep( stubTaxon );
   } );
 
   describe( "constructor", ( ) => {
@@ -156,9 +158,10 @@ describe( "Taxon", ( ) => {
           position: 1
         }]
       };
-      const preferredCommonNames = t.preferredCommonNames( { userSession } );
-      expect( preferredCommonNames[0].name ).to.eq( "BestEnglish" );
-      expect( preferredCommonNames[1].name ).to.eq( "BestSpanish" );
+      t.prepareForResponse( { userSession } );
+      expect( t.preferred_common_name ).to.eq( "BestEnglish · BestSpanish" );
+      expect( t.preferred_common_names[0].name ).to.eq( "BestEnglish" );
+      expect( t.preferred_common_names[1].name ).to.eq( "BestSpanish" );
     } );
 
     it( "does not return anything if the userSession requests no common names", ( ) => {
@@ -172,7 +175,9 @@ describe( "Taxon", ( ) => {
           position: 1
         }]
       };
-      expect( t.preferredCommonNames( { userSession } ) ).to.be.null;
+      t.prepareForResponse( { userSession } );
+      expect( t.preferred_common_name ).to.be.undefined;
+      expect( t.preferred_common_names ).to.be.undefined;
     } );
 
     it( "returns names in the proper order", ( ) => {
@@ -185,9 +190,10 @@ describe( "Taxon", ( ) => {
           position: 1
         }]
       };
-      const preferredCommonNames = t.preferredCommonNames( { userSession } );
-      expect( preferredCommonNames[0].name ).to.eq( "BestSpanish" );
-      expect( preferredCommonNames[1].name ).to.eq( "BestEnglish" );
+      t.prepareForResponse( { userSession } );
+      expect( t.preferred_common_name ).to.eq( "BestSpanish · BestEnglish" );
+      expect( t.preferred_common_names[0].name ).to.eq( "BestSpanish" );
+      expect( t.preferred_common_names[1].name ).to.eq( "BestEnglish" );
     } );
 
     it( "returns nothing for unmatched locales", ( ) => {
@@ -197,7 +203,9 @@ describe( "Taxon", ( ) => {
           position: 0
         }]
       };
-      expect( t.preferredCommonNames( { userSession } ) ).to.be.empty;
+      t.prepareForResponse( { userSession } );
+      expect( t.preferred_common_name ).to.be.undefined;
+      expect( t.preferred_common_names ).to.be.empty;
     } );
 
     it( "uses the locale when preferred name lexicon is null", ( ) => {
@@ -207,8 +215,13 @@ describe( "Taxon", ( ) => {
           position: 0
         }]
       };
-      expect( t.preferredCommonNames( { locale: "en", userSession } )[0].name ).to.eq( "BestEnglish" );
-      expect( t.preferredCommonNames( { locale: "es", userSession } )[0].name ).to.eq( "BestSpanish" );
+      t.prepareForResponse( { locale: "en", userSession } );
+      expect( t.preferred_common_name ).to.eq( "BestEnglish" );
+      expect( t.preferred_common_names[0].name ).to.eq( "BestEnglish" );
+      t = _.cloneDeep( stubTaxon );
+      t.prepareForResponse( { locale: "es", userSession } );
+      expect( t.preferred_common_name ).to.eq( "BestSpanish" );
+      expect( t.preferred_common_names[0].name ).to.eq( "BestSpanish" );
     } );
 
     it( "uses returns names in the right order when inferring locale", ( ) => {
@@ -222,14 +235,22 @@ describe( "Taxon", ( ) => {
         }]
       };
       // en
-      expect( t.preferredCommonNames( { locale: "en", userSession } )[0].name ).to.eq( "BestEnglish" );
-      expect( t.preferredCommonNames( { locale: "en", userSession } )[1].name ).to.eq( "BestEnglish" );
+      t.prepareForResponse( { locale: "en", userSession } );
+      expect( t.preferred_common_name ).to.eq( "BestEnglish" );
+      expect( t.preferred_common_names[0].name ).to.eq( "BestEnglish" );
+      expect( t.preferred_common_names[1].name ).to.eq( "BestEnglish" );
       // es
-      expect( t.preferredCommonNames( { locale: "es", userSession } )[0].name ).to.eq( "BestEnglish" );
-      expect( t.preferredCommonNames( { locale: "es", userSession } )[1].name ).to.eq( "BestSpanish" );
+      t = _.cloneDeep( stubTaxon );
+      t.prepareForResponse( { locale: "es", userSession } );
+      expect( t.preferred_common_name ).to.eq( "BestEnglish · BestSpanish" );
+      expect( t.preferred_common_names[0].name ).to.eq( "BestEnglish" );
+      expect( t.preferred_common_names[1].name ).to.eq( "BestSpanish" );
       // es-mx
-      expect( t.preferredCommonNames( { locale: "es-mx", userSession } )[0].name ).to.eq( "BestEnglish" );
-      expect( t.preferredCommonNames( { locale: "es-mx", userSession } )[1].name ).to.eq( "BestSpanish" );
+      t = _.cloneDeep( stubTaxon );
+      t.prepareForResponse( { locale: "es-mx", userSession } );
+      expect( t.preferred_common_name ).to.eq( "BestEnglish · BestSpanish" );
+      expect( t.preferred_common_names[0].name ).to.eq( "BestEnglish" );
+      expect( t.preferred_common_names[1].name ).to.eq( "BestSpanish" );
     } );
 
     it( "returns the best name given a place", ( ) => {
@@ -240,7 +261,9 @@ describe( "Taxon", ( ) => {
           place_id: 222
         }]
       };
-      expect( t.preferredCommonNames( { locale: "en", userSession } )[0].name ).to.eq( "BestInCalifornia" );
+      t.prepareForResponse( { locale: "en", userSession } );
+      expect( t.preferred_common_name ).to.eq( "BestInCalifornia" );
+      expect( t.preferred_common_names[0].name ).to.eq( "BestInCalifornia" );
     } );
 
     it( "does not return an exact place match when locale doesn't match", ( ) => {
@@ -251,7 +274,9 @@ describe( "Taxon", ( ) => {
           place_id: 222
         }]
       };
-      expect( t.preferredCommonNames( { locale: "de", userSession } ) ).to.be.empty;
+      t.prepareForResponse( { locale: "de", userSession } );
+      expect( t.preferred_common_name ).to.be.undefined;
+      expect( t.preferred_common_names ).to.be.empty;
     } );
 
     it( "return the best name from an ancestor place", ( ) => {
@@ -263,7 +288,9 @@ describe( "Taxon", ( ) => {
           ancestor_place_ids: [111, 333]
         }]
       };
-      expect( t.preferredCommonNames( { locale: "en", userSession } )[0].name ).to.eq( "BestInAmerica" );
+      t.prepareForResponse( { locale: "en", userSession } );
+      expect( t.preferred_common_name ).to.eq( "BestInAmerica" );
+      expect( t.preferred_common_names[0].name ).to.eq( "BestInAmerica" );
     } );
   } );
 
