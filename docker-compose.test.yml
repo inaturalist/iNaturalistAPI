@@ -45,7 +45,10 @@ services:
 
   api-test:
     container_name: api-test
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: test
     environment:
       NODE_ENV: test
       INAT_DB_HOST: pg
@@ -56,11 +59,8 @@ services:
       INAT_WEB_HOST: host.docker.internal
       INAT_DB_NAME: inaturalist_test
       INAT_ES_INDEX_PREFIX: test
-      DB_ALREADY_INITIALIZED: true
     ports:
       - 4000:4000
-    command:
-      /bin/sh -c "npm install ; npm run coverage"
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
