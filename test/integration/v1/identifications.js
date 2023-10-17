@@ -36,6 +36,94 @@ describe( "Identifications", ( ) => {
           expect( result.id ).to.eq( 102 );
         } ).expect( 200, done );
     } );
+
+    it( "never returns email or IP for user in identification", function ( done ) {
+      request( this.app ).get( "/v1/identifications?id=2023092501" )
+        .expect( res => {
+          const identification = res.body.results[0];
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( identification.id ).to.eq( 2023092501 );
+          expect( identification.user ).not.to.be.undefined;
+          expect( identification.user.id ).to.eq( 2023092501 );
+          expect( identification.user.email ).to.be.undefined;
+          expect( identification.user.last_ip ).to.be.undefined;
+          expect( identification.observation ).not.to.be.undefined;
+          expect( identification.observation.user ).not.to.be.undefined;
+          expect( identification.observation.user.id ).to.eq( 2023092501 );
+          expect( identification.observation.user.email ).to.be.undefined;
+          expect( identification.observation.user.last_ip ).to.be.undefined;
+          expect( identification.observation.identifications ).not.to.be.undefined;
+          expect( identification.observation.identifications.length ).to.eq( 1 );
+          expect( identification.observation.identifications[0].user ).not.to.be.undefined;
+          expect( identification.observation.identifications[0].user.id ).to.eq( 2023092501 );
+          expect( identification.observation.identifications[0].user.email ).to.be.undefined;
+          expect( identification.observation.identifications[0].user.last_ip ).to.be.undefined;
+        } ).expect( 200, done );
+    } );
+  } );
+
+  describe( "details", ( ) => {
+    it( "never returns email or IP for user in identification", function ( done ) {
+      request( this.app ).get( "/v1/identifications/2023092501" )
+        .expect( res => {
+          const identification = res.body.results[0];
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( identification.id ).to.eq( 2023092501 );
+          expect( identification.user ).not.to.be.undefined;
+          expect( identification.user.id ).to.eq( 2023092501 );
+          expect( identification.user.email ).to.be.undefined;
+          expect( identification.user.last_ip ).to.be.undefined;
+          expect( identification.observation ).not.to.be.undefined;
+          expect( identification.observation.user ).not.to.be.undefined;
+          expect( identification.observation.user.id ).to.eq( 2023092501 );
+          expect( identification.observation.user.email ).to.be.undefined;
+          expect( identification.observation.user.last_ip ).to.be.undefined;
+          expect( identification.observation.identifications ).not.to.be.undefined;
+          expect( identification.observation.identifications.length ).to.eq( 1 );
+          expect( identification.observation.identifications[0].user ).not.to.be.undefined;
+          expect( identification.observation.identifications[0].user.id ).to.eq( 2023092501 );
+          expect( identification.observation.identifications[0].user.email ).to.be.undefined;
+          expect( identification.observation.identifications[0].user.last_ip ).to.be.undefined;
+        } ).expect( 200, done );
+    } );
+  } );
+
+  describe( "identifiers", ( ) => {
+    it( "never returns email or IP for user in identification", function ( done ) {
+      request( this.app ).get( "/v1/identifications/identifiers?id=2023092501" )
+        .expect( res => {
+          const identification = res.body.results[0];
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( identification.user_id ).to.eq( 2023092501 );
+          expect( identification.user ).not.to.be.undefined;
+          expect( identification.user.id ).to.eq( 2023092501 );
+          expect( identification.user.email ).to.be.undefined;
+          expect( identification.user.last_ip ).to.be.undefined;
+        } ).expect( 200, done );
+    } );
+  } );
+
+  describe( "observers", ( ) => {
+    it( "never returns email or IP for user in identification", function ( done ) {
+      request( this.app ).get( "/v1/identifications/observers?id=2023092501" )
+        .expect( res => {
+          const identification = res.body.results[0];
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( identification.user_id ).to.eq( 2023092501 );
+          expect( identification.user ).not.to.be.undefined;
+          expect( identification.user.id ).to.eq( 2023092501 );
+          expect( identification.user.email ).to.be.undefined;
+          expect( identification.user.last_ip ).to.be.undefined;
+        } ).expect( 200, done );
+    } );
   } );
 
   describe( "species_counts", ( ) => {

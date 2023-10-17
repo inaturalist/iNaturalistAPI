@@ -144,6 +144,27 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
+    it( "never returns email or IP for user in observation", function ( done ) {
+      request( this.app ).get( "/v2/observations/78e0b6e4-61fa-11ee-8c99-0242ac120002?fields=all" ).expect( res => {
+        const observation = res.body.results[0];
+        expect( res.body.page ).to.eq( 1 );
+        expect( res.body.total_results ).to.eq( 1 );
+        expect( res.body.results.length ).to.eq( 1 );
+        expect( observation.id ).to.eq( 2023092501 );
+        expect( observation.user ).not.to.be.undefined;
+        expect( observation.user.id ).to.eq( 2023092501 );
+        expect( observation.user.email ).to.be.undefined;
+        expect( observation.user.last_ip ).to.be.undefined;
+        expect( observation.identifications ).not.to.be.undefined;
+        expect( observation.identifications.length ).to.eq( 1 );
+        expect( observation.identifications[0].user ).not.to.be.undefined;
+        expect( observation.identifications[0].user.id ).to.eq( 2023092501 );
+        expect( observation.identifications[0].user.email ).to.be.undefined;
+        expect( observation.identifications[0].user.last_ip ).to.be.undefined;
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
     // the observations.show endpoint should use the ES mget method to fetch observations for the
     // show endpoint, unless there are additional parameters that will filter the observations
     // returned. This is because the mget method is not affected by the normal ES refresh cycle,
@@ -371,6 +392,27 @@ describe( "Observations", ( ) => {
         } )
         .expect( 500, done );
     } );
+
+    it( "never returns email or IP for user in observation", function ( done ) {
+      request( this.app ).get( "/v2/observations?id=2023092501&fields=all" ).expect( res => {
+        const observation = res.body.results[0];
+        expect( res.body.page ).to.eq( 1 );
+        expect( res.body.total_results ).to.eq( 1 );
+        expect( res.body.results.length ).to.eq( 1 );
+        expect( observation.id ).to.eq( 2023092501 );
+        expect( observation.user ).not.to.be.undefined;
+        expect( observation.user.id ).to.eq( 2023092501 );
+        expect( observation.user.email ).to.be.undefined;
+        expect( observation.user.last_ip ).to.be.undefined;
+        expect( observation.identifications ).not.to.be.undefined;
+        expect( observation.identifications.length ).to.eq( 1 );
+        expect( observation.identifications[0].user ).not.to.be.undefined;
+        expect( observation.identifications[0].user.id ).to.eq( 2023092501 );
+        expect( observation.identifications[0].user.email ).to.be.undefined;
+        expect( observation.identifications[0].user.last_ip ).to.be.undefined;
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "create", ( ) => {
@@ -583,6 +625,20 @@ describe( "Observations", ( ) => {
         expect( res.body.results[0].user ).to.not.be.undefined;
       } )
         .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "never returns email or IP for user in observation", function ( done ) {
+      request( this.app ).get( "/v2/observations/observers?user_id=2023092501&fields=all" ).expect( res => {
+        const observation = res.body.results[0];
+        expect( res.body.page ).to.eq( 1 );
+        expect( res.body.total_results ).to.eq( 1 );
+        expect( res.body.results.length ).to.eq( 1 );
+        expect( observation.user ).not.to.be.undefined;
+        expect( observation.user.id ).to.eq( 2023092501 );
+        expect( observation.user.email ).to.be.undefined;
+        expect( observation.user.last_ip ).to.be.undefined;
+      } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
   } );
