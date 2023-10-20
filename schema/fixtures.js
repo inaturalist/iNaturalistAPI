@@ -1852,7 +1852,7 @@
         "placement": "mobile/home",
         "locales": "{}",
         "dismissible": true,
-        "platforms": "{}"
+        "clients": "{}"
       },
       {
         "id": 2,
@@ -1864,7 +1864,7 @@
         "placement": "mobile/home",
         "locales": "{}",
         "dismissible": true,
-        "platforms": "{}"
+        "clients": "{}"
       },
       {
         "id": 3,
@@ -1876,7 +1876,7 @@
         "placement": "mobile/home",
         "locales": "{en-US,fr}",
         "dismissible": true,
-        "platforms": "{}"
+        "clients": "{}"
       },
       {
         "id": 4,
@@ -1888,7 +1888,7 @@
         "placement": "mobile/home",
         "locales": "{en}",
         "dismissible": true,
-        "platforms": "{}"
+        "clients": "{}"
       },
       {
         "id": 5,
@@ -1900,7 +1900,7 @@
         "placement": "mobile/home",
         "locales": "{}",
         "dismissible": true,
-        "platforms": "{inat-ios,inat-android}"
+        "clients": "{inat-ios,inat-android}"
       }
     ],
     "comments": [

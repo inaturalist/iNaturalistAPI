@@ -8,7 +8,7 @@ module.exports = Joi.object( ).keys( {
     "mobile/home",
     "mobile"
   ),
-  platform: Joi.string( ).valid(
+  client: Joi.string( ).valid(
     "inat-ios",
     "inat-android",
     "seek",
