@@ -1953,7 +1953,8 @@
         "updated_at": "2023-01-01 00:00:00",
         "placement": "mobile/home",
         "locales": "{}",
-        "dismissible": true
+        "dismissible": true,
+        "clients": "{}"
       },
       {
         "id": 2,
@@ -1964,7 +1965,8 @@
         "updated_at": "2023-01-01 00:00:00",
         "placement": "mobile/home",
         "locales": "{}",
-        "dismissible": true
+        "dismissible": true,
+        "clients": "{}"
       },
       {
         "id": 3,
@@ -1975,7 +1977,8 @@
         "updated_at": "2023-01-01 00:00:00",
         "placement": "mobile/home",
         "locales": "{en-US,fr}",
-        "dismissible": true
+        "dismissible": true,
+        "clients": "{}"
       },
       {
         "id": 4,
@@ -1986,7 +1989,20 @@
         "updated_at": "2023-01-01 00:00:00",
         "placement": "mobile/home",
         "locales": "{en}",
-        "dismissible": true
+        "dismissible": true,
+        "clients": "{}"
+      },
+      {
+        "id": 5,
+        "body": "Active announcement for inat-ios and inat-android",
+        "start": "2023-01-01 00:00:00",
+        "end": "2100-01-01 00:00:00",
+        "created_at": "2023-01-01 00:00:00",
+        "updated_at": "2023-01-01 00:00:00",
+        "placement": "mobile/home",
+        "locales": "{}",
+        "dismissible": true,
+        "clients": "{inat-ios,inat-android}"
       }
     ],
     "comments": [

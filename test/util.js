@@ -101,4 +101,58 @@ describe( "util", ( ) => {
       expect( opts.locale ).to.eq( "he-il" ); // not sure why it's lowercase...
     } );
   } );
+
+  describe( "userAgentClient", ( ) => {
+    it( "returns nil when request user agent is empty", ( ) => {
+      expect( util.userAgentClient( { headers: { } } ) ).to.be.null;
+      expect( util.userAgentClient( { headers: { "user-agent": null } } ) ).to.be.null;
+      expect( util.userAgentClient( { headers: { "user-agent": "" } } ) ).to.be.null;
+    } );
+
+    it( "returns nil when request user agent is unrecognized", ( ) => {
+      expect( util.userAgentClient( { headers: { "user-agent": "nonsense" } } ) ).to.be.null;
+    } );
+
+    it( "recognizes inatrn client user agents", ( ) => {
+      expect( util.userAgentClient( {
+        headers: {
+          "user-agent": "iNaturalistReactNative/60 CFNetwork/1474 Darwin/23.0.0"
+        }
+      } ) ).to.eq( "inatrn" );
+      expect( util.userAgentClient( {
+        headers: {
+          "user-agent": "iNaturalistRN/0.14.0 Handset (Build 60) iOS/17.0.3"
+        }
+      } ) ).to.eq( "inatrn" );
+    } );
+
+    it( "recognizes seek client user agents", ( ) => {
+      expect( util.userAgentClient( {
+        headers: {
+          "user-agent": "Seek/2.15.3 Handset (Build 316) iOS/17.0.3"
+        }
+      } ) ).to.eq( "seek" );
+      expect( util.userAgentClient( {
+        headers: {
+          "user-agent": "Seek/2.15.3 Handset (Build 316) Android/13"
+        }
+      } ) ).to.eq( "seek" );
+    } );
+
+    it( "recognizes inat-ios client user agents", ( ) => {
+      expect( util.userAgentClient( {
+        headers: {
+          "user-agent": "iNaturalist/708 CFNetwork/1410.0.3 Darwin/22.6.0"
+        }
+      } ) ).to.eq( "inat-ios" );
+    } );
+
+    it( "recognizes inat-android client user agents", ( ) => {
+      expect( util.userAgentClient( {
+        headers: {
+          "user-agent": "iNaturalist/1.29.18 (Build 592; Android 5.10.157-android13-4-00001-g5c7ff5dc7aac-ab10381520 10754064; SDK 34; bluejay Pixel 6a bluejay; OS Version 14)"
+        }
+      } ) ).to.eq( "inat-android" );
+    } );
+  } );
 } );

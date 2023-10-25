@@ -69,6 +69,58 @@ describe( "Announcements", ( ) => {
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "returns announcements based on client", function ( done ) {
+      const inatiOSAnnouncement = _.find(
+        fixtures.postgresql.announcements, a => a.clients.match( /inat-ios/ )
+      );
+      request( this.app ).get( "/v2/announcements?fields=all&client=inat-ios" ).expect( res => {
+        expect( res.body.results ).to.not.be.empty;
+        expect( _.every( res.body.results, r => (
+          r.clients.includes( "inat-ios" ) || _.isEmpty( r.clients )
+        ) ) ).to.be.true;
+        expect( _.map( res.body.results, "id" ) ).to.include( inatiOSAnnouncement.id );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns announcements based on user agent", function ( done ) {
+      const inatiOSAnnouncement = _.find(
+        fixtures.postgresql.announcements, a => a.clients.match( /inat-ios/ )
+      );
+      request( this.app )
+        .get( "/v2/announcements?fields=all" )
+        .set( "User-Agent", "iNaturalist/708 CFNetwork/1410.0.3 Darwin/22.6.0" )
+        .expect( res => {
+          expect( res.body.results ).to.not.be.empty;
+          expect( _.every( res.body.results, r => (
+            r.clients.includes( "inat-ios" ) || _.isEmpty( r.clients )
+          ) ) ).to.be.true;
+          expect( _.map( res.body.results, "id" ) ).to.include( inatiOSAnnouncement.id );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "does not return announcements with a client not matching parameter", function ( done ) {
+      request( this.app ).get( "/v2/announcements?fields=all&client=seek" ).expect( res => {
+        expect( res.body.results ).to.not.be.empty;
+        expect( _.every( res.body.results, r => _.isEmpty( r.clients ) ) ).to.be.true;
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "does not return announcements with a client not matching parameter", function ( done ) {
+      request( this.app )
+        .get( "/v2/announcements?fields=all" )
+        .set( "User-Agent", "Seek/2.15.3 Handset (Build 316) Android/13" )
+        .expect( res => {
+          expect( res.body.results ).to.not.be.empty;
+          expect( _.every( res.body.results, r => _.isEmpty( r.clients ) ) ).to.be.true;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "dismiss", ( ) => {
