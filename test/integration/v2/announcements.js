@@ -110,7 +110,7 @@ describe( "Announcements", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "does not return announcements with a client not matching parameter", function ( done ) {
+    it( "does not return announcements with a client not matching user agent", function ( done ) {
       request( this.app )
         .get( "/v2/announcements?fields=all" )
         .set( "User-Agent", "Seek/2.15.3 Handset (Build 316) Android/13" )

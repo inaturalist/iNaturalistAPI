@@ -154,5 +154,13 @@ describe( "util", ( ) => {
         }
       } ) ).to.eq( "inat-android" );
     } );
+
+    it( "returns nil for unrecognized user agents", ( ) => {
+      expect( util.userAgentClient( {
+        headers: {
+          "user-agent": "nonsense"
+        }
+      } ) ).to.be.null;
+    } );
   } );
 } );
