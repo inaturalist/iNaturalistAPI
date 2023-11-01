@@ -224,7 +224,7 @@ describe( "Taxon", ( ) => {
       expect( t.preferred_common_names[0].name ).to.eq( "BestSpanish" );
     } );
 
-    it( "uses returns names in the right order when inferring locale", ( ) => {
+    it( "returns names in the right order when inferring locale", ( ) => {
       const userSession = {
         taxonNamePriorities: [{
           lexicon: "english",
@@ -291,6 +291,18 @@ describe( "Taxon", ( ) => {
       t.prepareForResponse( { locale: "en", userSession } );
       expect( t.preferred_common_name ).to.eq( "BestInAmerica" );
       expect( t.preferred_common_names[0].name ).to.eq( "BestInAmerica" );
+    } );
+
+    it( "does not fall back to returning a common name in the user locale when there are taxonNamePriorities", ( ) => {
+      const userSession = {
+        taxonNamePriorities: [{
+          lexicon: "nonsense",
+          position: 0
+        }]
+      };
+      t.prepareForResponse( { locale: "en", userSession } );
+      expect( t.preferred_common_name ).to.be.undefined;
+      expect( t.preferred_common_names ).to.be.empty;
     } );
   } );
 
