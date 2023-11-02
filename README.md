@@ -12,8 +12,9 @@ Our API is documented using the [Swagger](http://swagger.io/)/[OpenAPI](https://
 npm install
 # Fill in vals to connect to Rails, Postgres, and elasticsearch
 cp config_example.js config.js
-# Run the node app on port 4000
-node app.js
+# Run the node app on port 4000. NODE_ENV is required, so you'll need to set
+# it here or elsewhere in your environment
+NODE_ENV=development node app.js
 ```
 
 # Running Tests

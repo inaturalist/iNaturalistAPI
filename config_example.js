@@ -18,6 +18,9 @@ module.exports = {
     host: INAT_ES_HOST ? `http://${INAT_ES_HOST}:9200` : "http://localhost:9200",
     geoPointField: "location"
   },
+  // Note that the database name will be inferred from the NODE_ENV
+  // environment variable, e.g. `inaturalist_${process.env.NODE_ENV}`, or it
+  // be set explicitly with process.env.INAT_DB_NAME
   database: {
     user: INAT_DB_USER || "inaturalist",
     host: INAT_DB_HOST || "127.0.0.1",
