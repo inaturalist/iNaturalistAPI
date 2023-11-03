@@ -22,6 +22,7 @@ module.exports = sendWrapper => {
           .meta( { in: "path" } )
           .required( )
       ),
+      transform( Joi.array( ).items( Joi.number( ) ).label( "rank_level" ).meta( { in: "query" } ) ),
       transform( Joi.string( ).label( "fields" ).meta( { in: "query" } ) ),
       transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
     ],

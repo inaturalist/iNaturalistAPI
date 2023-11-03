@@ -1329,6 +1329,13 @@ describe( "Observations", ( ) => {
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "can filter on id alone", function ( done ) {
+      request( this.app ).get( "/v1/observations/observers?id=1" ).expect( res => {
+        expect( res.body.total_results ).to.eq( 1 );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "species_counts", ( ) => {
