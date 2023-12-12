@@ -2242,6 +2242,16 @@
         "establishment_means": "endemic"
       }
     ],
+    "messages": [
+      {
+        "id": 1,
+        "from_user_id": 1,
+        "to_user_id": 123,
+        "user_id": 123,
+        "created_at": "2023-12-12 00:00:00",
+        "updated_at": "2023-12-12 00:00:00"
+      }
+    ],
     "oauth_applications": [
       {
         "id": 3,

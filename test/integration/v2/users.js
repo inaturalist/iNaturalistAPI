@@ -279,4 +279,44 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "notification_counts", ( ) => {
+    const currentUserID = fixtures.elasticsearch.update_actions.update_action[0].subscriber_ids[0];
+    const token = jwt.sign( { user_id: currentUserID },
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+
+    it( "should 401 without auth", function ( done ) {
+      request( this.app )
+        .get( "/v2/users/notification_counts" )
+        .expect( 401, done );
+    } );
+
+    it( "should return JSON with notification counts", function ( done ) {
+      const unreadUpdatesCount = _.size(
+        _.filter( fixtures.elasticsearch.update_actions.update_action, updateAction => (
+          _.includes( updateAction.subscriber_ids, currentUserID )
+          && !_.includes( updateAction.viewed_subscriber_ids, currentUserID )
+        ) )
+      );
+      const unreadMessagesCount = _.size(
+        _.filter( fixtures.postgresql.messages, message => (
+          message.user_id === currentUserID
+          && message.to_user_id === currentUserID
+          && !message.read_at
+        ) )
+      );
+      request( this.app )
+        .get( "/v2/users/notification_counts" )
+        .set( "Authorization", token )
+        .expect( "Content-Type", /json/ )
+        .expect( res => {
+          expect( _.has( res.body, "updates_count" ) ).to.eq( true );
+          expect( _.has( res.body, "messages_count" ) ).to.eq( true );
+          expect( res.body.updates_count ).to.eq( unreadUpdatesCount );
+          expect( res.body.messages_count ).to.eq( unreadMessagesCount );
+        } )
+        .expect( 200, done );
+    } );
+  } );
 } );
