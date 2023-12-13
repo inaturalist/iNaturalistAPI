@@ -65,6 +65,7 @@
     "rison-node": "^2.1.1",
     "safe-squel": "^5.12.5",
     "scramjet": "^4.36.1",
+    "shape2geohash": "1.2.6",
     "sshpk": "^1.17.0",
     "swagger-ui-express": "^4.5.0",
     "tar": "^6.1.11",
