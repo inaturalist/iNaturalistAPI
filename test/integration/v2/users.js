@@ -319,4 +319,48 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "reset_password", ( ) => {
+    const currentUser = fixtures.elasticsearch.users.user[0];
+    const userToken = jwt.sign( { user_id: currentUser.id },
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+    const applicationToken = jwt.sign(
+      { application: "whatever" },
+      config.jwtApplicationSecret || "application_secret",
+      { algorithm: "HS512" }
+    );
+
+    it( "should 401 without auth", function ( done ) {
+      request( this.app )
+        .post( "/v2/users/reset_password" )
+        .expect( 401, done );
+    } );
+
+    it( "should 401 with a user token", function ( done ) {
+      request( this.app )
+        .post( "/v2/users/reset_password" )
+        .set( "Authorization", userToken )
+        .expect( 401, done );
+    } );
+
+    it( "should hit the Rails equivalent and return 200", function ( done ) {
+      const nockScope = nock( "http://localhost:3000" )
+        .post( "/users/password" )
+        .reply( 200 );
+      request( this.app )
+        .post( "/v2/users/reset_password" )
+        .set( "Authorization", applicationToken )
+        .send( {
+          user: {
+            email: "email@domain.com"
+          }
+        } )
+        .expect( ( ) => {
+          // Raise an exception if the nocked endpoint doesn't get called
+          nockScope.done( );
+        } )
+        .expect( 204, done );
+    } );
+  } );
 } );
