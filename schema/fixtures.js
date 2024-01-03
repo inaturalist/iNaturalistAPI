@@ -2581,17 +2581,17 @@
       {
         "id": 111,
         "name": "United States",
-        "ancestry": "111"
+        "ancestry": ""
       },
       {
         "id": 222,
         "name": "California",
-        "ancestry": "111/222"
+        "ancestry": "111"
       },
       {
         "id": 333,
         "name": "Nevada",
-        "ancestry": "111/333"
+        "ancestry": "111"
       },
       {
         "id": 432,
@@ -2602,7 +2602,7 @@
         "id": 433,
         "name": "a-place-in-a-place",
         "display_name": "A Place In A Place",
-        "ancestry": "432/433"
+        "ancestry": "432"
       },
       {
         "id": 511,
