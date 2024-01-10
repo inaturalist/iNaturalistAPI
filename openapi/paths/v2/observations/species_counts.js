@@ -13,7 +13,7 @@ module.exports = sendWrapper => {
   const parameters = _.filter( _.map(
     observationsSearchSchema.$_terms.keys,
     child => transform( child.schema.label( child.key ) )
-  ), p => !_.includes( ["order", "order_by", "only_id"], p.name ) );
+  ), p => !_.includes( ["order_by", "only_id"], p.name ) );
   parameters.push(
     transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
   );
