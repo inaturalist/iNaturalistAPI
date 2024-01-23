@@ -19,4 +19,4 @@ module.exports = Joi.object( ).keys( {
   resource_id: Joi.number( ).integer( ),
   resource_uuid: Joi.string( ).guid( { version: "uuidv4" } ),
   viewed: Joi.boolean( )
-} ).unknown( false );
+} ).unknown( false ).meta( { className: "Update" } );

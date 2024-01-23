@@ -6,4 +6,4 @@ module.exports = Joi.object( ).keys( {
   sound,
   position: Joi.number( ).integer( ),
   uuid: Joi.string( ).guid( { version: "uuidv4" } )
-} ).unknown( false );
+} ).unknown( false ).meta( { className: "ObservationSound" } );

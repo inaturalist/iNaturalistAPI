@@ -14,4 +14,4 @@ module.exports = Joi.object( ).keys( {
   created_at_utc: Joi.date( ),
   updated_at: Joi.string( ).isoDate( ),
   updated_at_utc: Joi.date( )
-} ).unknown( false );
+} ).unknown( false ).meta( { className: "ProjectUser" } );
