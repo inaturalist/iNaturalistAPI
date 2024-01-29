@@ -8,10 +8,11 @@ on:
 
 jobs:
   build-and-test:
+    name: Build/Test
     uses: ./.github/workflows/CI-test.yml
 
   build-and-push-dev-docker-image:
-    name: Build/Push Staging Docker Image 
+    name: Build/Push Staging Docker Image
     runs-on: ubuntu-20.04
     steps:    
     - uses: actions/checkout@v4
