@@ -1,11 +1,10 @@
-name: API Test
+name: API Notify Slack
 
 on:
   workflow_call:
 
 jobs:
   notify-slack:
-    name: Notify Slack
     if: ${{ success() || failure() }}
     runs-on: ubuntu-20.04
     steps:
