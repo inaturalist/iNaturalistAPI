@@ -1,10 +1,10 @@
-name: API Test
+name: API Build and Test
 
 on:
   workflow_call:
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-20.04
     services:
       postgres:
