@@ -5,5 +5,4 @@ on:
 
 jobs:
   build-and-test:
-    name: Build/Test
     uses: ./.github/workflows/CI-build-test.yml
