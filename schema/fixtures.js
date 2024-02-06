@@ -2306,6 +2306,28 @@
         "scopes": "write login"
       }
     ],
+    "observation_fields": [
+      {
+        "id": 1,
+        "name": "fieldname",
+        "description": "fieldname description",
+        "datatype": "text",
+        "allowed_values": "one|two|three",
+        "values_count": 1
+      }
+    ],
+    "observation_field_values": [
+      {
+        "id": 1,
+        "observation_id": 1,
+        "observation_field_id": 1,
+        "value": "one",
+        "created_at": "2024-02-01T00:00:00",
+        "updated_at": "2024-02-01T00:00:00",
+        "user_id": 1,
+        "uuid": "b027f2ff-c913-470e-a1da-a3e2f3ec2359"
+      }
+    ],
     "observations": [
       {
         "id": 1,

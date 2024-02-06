@@ -363,4 +363,35 @@ describe( "Users", ( ) => {
         .expect( 204, done );
     } );
   } );
+
+  describe( "recentObservationFields", ( ) => {
+    it( "fails for unauthenticated requests", function ( done ) {
+      request( this.app )
+        .get( "/v2/users/recent_observation_fields" )
+        .expect( 401, done );
+    } );
+
+    it( "returns observation fields", function ( done ) {
+      const token = jwt.sign( { user_id: 1 },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      const fixtureObservationField = fixtures.postgresql.observation_fields[0];
+      request( this.app ).get( "/v2/users/recent_observation_fields?fields=all" )
+        .set( "Authorization", token )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( res.body.results[0].id ).to.eq( fixtureObservationField.id );
+          expect( res.body.results[0].name ).to.eq( fixtureObservationField.name );
+          expect( res.body.results[0].description ).to.eq( fixtureObservationField.description );
+          expect( res.body.results[0].datatype ).to.eq( fixtureObservationField.datatype );
+          expect( res.body.results[0].allowed_values ).to
+            .eq( fixtureObservationField.allowed_values );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
 } );
