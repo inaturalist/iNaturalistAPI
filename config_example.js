@@ -10,18 +10,21 @@ const {
   INAT_RAILS_URL,
   INAT_VISION_URL,
   INAT_DB_SSL_KEY_PATH,
-  INAT_DB_SSL_CRT_PATH
+  INAT_DB_SSL_CRT_PATH,
+  INAT_STATIC_IMAGE_URL,
+  INAT_JWT_SECRET,
+  INAT_JWT_APPLICATION_SECRET
 } = process.env;
 module.exports = {
   // Host running the iNaturalist Rails app
-  apiURL: INAT_RAILS_URL ? "${INAT_RAILS_URL}" : "http://localhost:3000",
+  apiURL: INAT_RAILS_URL ? `${INAT_RAILS_URL}` : "http://localhost:3000",
   // Base URL for the current version of *this* app
-  currentVersionURL: INAT_API_URL ? "${INAT_API_URL}" : "http://localhost:4000/v1",
+  currentVersionURL: INAT_API_URL ? `${INAT_API_URL}` : "http://localhost:4000/v1",
   // Whether the Rails app supports SSL requests. For local dev assume it does not
   apiHostSSL: false,
   writeHostSSL: false,
   elasticsearch: {
-    host: INAT_ES_HOST ? "http://${INAT_ES_HOST}:9200" : "http://localhost:9200",
+    host: INAT_ES_HOST ? `http://${INAT_ES_HOST}:9200` : "http://localhost:9200",
     geoPointField: "location"
   },
   database: {
@@ -40,11 +43,11 @@ module.exports = {
   tileSize: 512,
   debug: true,
   logLevel: "info", // only "debug" does anything right now
-  websiteURL: "http://localhost:3000/",
-  staticImagePrefix: "http://localhost:3000/attachments/",
+  websiteURL: INAT_RAILS_URL ? `${INAT_RAILS_URL}` : "http://localhost:3000/",
+  staticImagePrefix: INAT_STATIC_IMAGE_URL ? `${INAT_STATIC_IMAGE_URL}` : "http://localhost:3000/attachments/",
   userImagePrefix: "/attachments/users/icons/",
-  jwtSecret: INAT_JWT_SECRET ? "${INAT_VISION_URL}" : "secret",
-  jwtApplicationSecret: INAT_JWT_APPLICATION_SECRET ? "${INAT_VISION_URL}" : "application_secret",
+  jwtSecret: INAT_JWT_SECRET ? `${INAT_VISION_URL}` : "secret",
+  jwtApplicationSecret: INAT_JWT_APPLICATION_SECRET ? `${INAT_VISION_URL}` : "application_secret",
   imageProcesing: {
     // Path to a file listing the taxonomy used in the computer vision model
     taxaFilePath: "",
@@ -52,7 +55,7 @@ module.exports = {
     // *nix systems
     uploadsDir: "/tmp/",
     // Base URL for the web app returning computer vision results
-    tensorappURL: INAT_VISION_URL ? "${INAT_VISION_URL}" : "http://localhost:6006"
+    tensorappURL: INAT_VISION_URL ? `${INAT_VISION_URL}` : "http://localhost:6006"
   },
   redis: {
     host: INAT_REDIS_HOST || "127.0.0.1",
