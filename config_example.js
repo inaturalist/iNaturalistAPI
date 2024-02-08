@@ -46,8 +46,8 @@ module.exports = {
   websiteURL: INAT_RAILS_URL ? `${INAT_RAILS_URL}` : "http://localhost:3000/",
   staticImagePrefix: INAT_STATIC_IMAGE_URL ? `${INAT_STATIC_IMAGE_URL}` : "http://localhost:3000/attachments/",
   userImagePrefix: "/attachments/users/icons/",
-  jwtSecret: INAT_JWT_SECRET ? `${INAT_VISION_URL}` : "secret",
-  jwtApplicationSecret: INAT_JWT_APPLICATION_SECRET ? `${INAT_VISION_URL}` : "application_secret",
+  jwtSecret: INAT_JWT_SECRET ? `${INAT_JWT_SECRET}` : "secret",
+  jwtApplicationSecret: INAT_JWT_APPLICATION_SECRET ? `${INAT_JWT_APPLICATION_SECRET}` : "application_secret",
   imageProcesing: {
     // Path to a file listing the taxonomy used in the computer vision model
     taxaFilePath: "",
