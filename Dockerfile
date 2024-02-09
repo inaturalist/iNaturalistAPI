@@ -2,15 +2,31 @@ FROM node:16
 
 ENV NODE_ENV=development
 
-WORKDIR /usr/src/app
+RUN useradd -ms /bin/bash inaturalist
+USER inaturalist
 
-COPY package*.json ./
+# Set the working directory in the container
+WORKDIR /home/inaturalist/api
 
-COPY config_example.js config.js
+# Copy the dependencies file to the working directory
+COPY --chown=inaturalist:inaturalist package*.json .
+COPY --chown=inaturalist:inaturalist config.docker.js config.js
 
+# Install dependencies
 RUN npm install
 
-COPY . .
+# Copy app and libs
+COPY --chown=inaturalist:inaturalist lib lib
+COPY --chown=inaturalist:inaturalist openapi openapi
+COPY --chown=inaturalist:inaturalist public public
+COPY --chown=inaturalist:inaturalist schema schema
+COPY --chown=inaturalist:inaturalist swagger-ui swagger-ui
+COPY --chown=inaturalist:inaturalist app.js .
+
+# Create directories for the log and static content
+RUN mkdir /home/inaturalist/api/log
+RUN mkdir /home/inaturalist/api/cache
+RUN mkdir -p /home/inaturalist/api/public/uploads
 
 EXPOSE 4000
 
