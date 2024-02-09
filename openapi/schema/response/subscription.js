@@ -10,4 +10,4 @@ module.exports = Joi.object( ).keys( {
   created_at: Joi.string( ),
   updated_at: Joi.string( ),
   taxon_id: Joi.number( ).integer( )
-} );
+} ).meta( { className: "Subscription" } );

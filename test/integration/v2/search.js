@@ -58,5 +58,31 @@ describe( "Search", ( ) => {
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "never returns email or IP for user", function ( done ) {
+      request( this.app ).get( "/v2/search?q=User2023092501&fields=all" ).expect( res => {
+        const record = res.body.results[0];
+        expect( record.type ).to.eq( "user" );
+        expect( record.user ).not.to.be.undefined;
+        expect( record.user.id ).to.eq( 2023092501 );
+        expect( record.user.email ).to.be.undefined;
+        expect( record.user.last_ip ).to.be.undefined;
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "never returns email or IP for user in project", function ( done ) {
+      request( this.app ).get( "/v2/search?q=project-2023092501&fields=all" ).expect( res => {
+        const record = res.body.results[0];
+        expect( record.type ).to.eq( "project" );
+        expect( record.project ).not.to.be.undefined;
+        expect( record.project.id ).to.eq( 2023092501 );
+        expect( record.project.admins ).not.to.be.undefined;
+        expect( record.project.admins[0] ).not.to.be.undefined;
+        expect( record.project.admins[0].email ).to.be.undefined;
+        expect( record.project.admins[0].last_ip ).to.be.undefined;
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 } );

@@ -9,6 +9,7 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+
 --
 -- Name: postgis; Type: EXTENSION; Schema: -; Owner: -
 --
@@ -241,6 +242,31 @@ CREATE FUNCTION public.st_aslatlontext(public.geometry) RETURNS text
     LANGUAGE sql IMMUTABLE STRICT
     AS $_$ SELECT ST_AsLatLonText($1, '') $_$;
 
+
+--
+-- Name: median(anyelement); Type: AGGREGATE; Schema: public; Owner: -
+--
+
+CREATE AGGREGATE public.median(anyelement) (
+    SFUNC = array_append,
+    STYPE = anyarray,
+    INITCOND = '{}',
+    FINALFUNC = public._final_median
+);
+
+
+--
+-- Name: median(numeric); Type: AGGREGATE; Schema: public; Owner: -
+--
+
+CREATE AGGREGATE public.median(numeric) (
+    SFUNC = array_append,
+    STYPE = numeric[],
+    INITCOND = '{}',
+    FINALFUNC = public._final_median
+);
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -296,7 +322,8 @@ CREATE TABLE public.announcements (
     updated_at timestamp without time zone,
     locales text[] DEFAULT '{}'::text[],
     dismiss_user_ids integer[] DEFAULT '{}'::integer[],
-    dismissible boolean DEFAULT false
+    dismissible boolean DEFAULT false,
+    clients text[] DEFAULT '{}'::text[]
 );
 
 
@@ -1113,7 +1140,8 @@ CREATE TABLE public.deleted_observations (
     user_id integer,
     observation_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    observation_created_at timestamp without time zone
 );
 
 
@@ -1423,7 +1451,9 @@ CREATE TABLE public.flags (
     resolved_at timestamp without time zone,
     flaggable_user_id integer,
     flaggable_content text,
-    uuid uuid DEFAULT public.uuid_generate_v4()
+    uuid uuid DEFAULT public.uuid_generate_v4(),
+    flaggable_parent_type character varying,
+    flaggable_parent_id bigint
 );
 
 
@@ -1673,6 +1703,42 @@ CREATE SEQUENCE public.friendships_id_seq
 --
 
 ALTER SEQUENCE public.friendships_id_seq OWNED BY public.friendships.id;
+
+
+--
+-- Name: geo_model_taxa; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.geo_model_taxa (
+    id bigint NOT NULL,
+    taxon_id integer,
+    prauc double precision,
+    "precision" double precision,
+    recall double precision,
+    f1 double precision,
+    threshold double precision,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: geo_model_taxa_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.geo_model_taxa_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: geo_model_taxa_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.geo_model_taxa_id_seq OWNED BY public.geo_model_taxa.id;
 
 
 --
@@ -3802,31 +3868,11 @@ CREATE TABLE public.schema_migrations (
 --
 
 CREATE TABLE public.sessions (
-    id integer NOT NULL,
     session_id character varying NOT NULL,
     data text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
-
-
---
--- Name: sessions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.sessions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: sessions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
 
 
 --
@@ -4578,7 +4624,7 @@ CREATE TABLE public.taxon_name_priorities (
     "position" smallint,
     user_id integer NOT NULL,
     place_id integer,
-    lexicon character varying NOT NULL,
+    lexicon character varying,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -4595,6 +4641,13 @@ CREATE SEQUENCE public.taxon_name_priorities_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
+
+
+--
+-- Name: taxon_name_priorities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.taxon_name_priorities_id_seq OWNED BY public.taxon_name_priorities.id;
 
 
 --
@@ -4791,9 +4844,30 @@ ALTER SEQUENCE public.taxon_schemes_id_seq OWNED BY public.taxon_schemes.id;
 --
 
 CREATE TABLE public.time_zone_geometries (
-    tzid character varying,
+    ogc_fid integer NOT NULL,
+    tzid character varying(80),
     geom public.geometry(MultiPolygon)
 );
+
+
+--
+-- Name: time_zone_geometries_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.time_zone_geometries_ogc_fid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: time_zone_geometries_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.time_zone_geometries_ogc_fid_seq OWNED BY public.time_zone_geometries.ogc_fid;
 
 
 --
@@ -5583,6 +5657,13 @@ ALTER TABLE ONLY public.friendships ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: geo_model_taxa id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.geo_model_taxa ALTER COLUMN id SET DEFAULT nextval('public.geo_model_taxa_id_seq'::regclass);
+
+
+--
 -- Name: goal_contributions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -5926,13 +6007,6 @@ ALTER TABLE ONLY public.saved_locations ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
--- Name: sessions id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sessions ALTER COLUMN id SET DEFAULT nextval('public.sessions_id_seq'::regclass);
-
-
---
 -- Name: simplified_tree_milestone_taxa id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -6112,6 +6186,13 @@ ALTER TABLE ONLY public.taxon_scheme_taxa ALTER COLUMN id SET DEFAULT nextval('p
 --
 
 ALTER TABLE ONLY public.taxon_schemes ALTER COLUMN id SET DEFAULT nextval('public.taxon_schemes_id_seq'::regclass);
+
+
+--
+-- Name: time_zone_geometries ogc_fid; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.time_zone_geometries ALTER COLUMN ogc_fid SET DEFAULT nextval('public.time_zone_geometries_ogc_fid_seq'::regclass);
 
 
 --
@@ -6526,6 +6607,14 @@ ALTER TABLE ONLY public.friendships
 
 
 --
+-- Name: geo_model_taxa geo_model_taxa_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.geo_model_taxa
+    ADD CONSTRAINT geo_model_taxa_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: goal_contributions goal_contributions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6922,7 +7011,7 @@ ALTER TABLE ONLY public.saved_locations
 --
 
 ALTER TABLE ONLY public.sessions
-    ADD CONSTRAINT sessions_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT sessions_pkey PRIMARY KEY (session_id);
 
 
 --
@@ -7134,6 +7223,14 @@ ALTER TABLE ONLY public.taxon_schemes
 
 
 --
+-- Name: time_zone_geometries time_zone_geometries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.time_zone_geometries
+    ADD CONSTRAINT time_zone_geometries_pkey PRIMARY KEY (ogc_fid);
+
+
+--
 -- Name: trip_purposes trip_purposes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7270,6 +7367,13 @@ CREATE INDEX index_annotations_on_controlled_attribute_id ON public.annotations 
 --
 
 CREATE INDEX index_annotations_on_controlled_value_id ON public.annotations USING btree (controlled_value_id);
+
+
+--
+-- Name: index_annotations_on_observation_field_value_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_annotations_on_observation_field_value_id ON public.annotations USING btree (observation_field_value_id);
 
 
 --
@@ -7434,10 +7538,17 @@ CREATE INDEX index_colors_taxa_on_taxon_id_and_color_id ON public.colors_taxa US
 
 
 --
--- Name: index_comments_on_parent_type_and_parent_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_comments_on_parent_id_and_parent_type; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_comments_on_parent_type_and_parent_id ON public.comments USING btree (parent_type, parent_id);
+CREATE INDEX index_comments_on_parent_id_and_parent_type ON public.comments USING btree (parent_id, parent_type);
+
+
+--
+-- Name: index_comments_on_parent_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_comments_on_parent_type ON public.comments USING btree (parent_type);
 
 
 --
@@ -7693,6 +7804,13 @@ CREATE INDEX index_flags_on_flaggable_id_and_flaggable_type ON public.flags USIN
 
 
 --
+-- Name: index_flags_on_flaggable_parent_type_and_flaggable_parent_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_flags_on_flaggable_parent_type_and_flaggable_parent_id ON public.flags USING btree (flaggable_parent_type, flaggable_parent_id);
+
+
+--
 -- Name: index_flags_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7774,6 +7892,13 @@ CREATE INDEX index_friendships_on_trust ON public.friendships USING btree (trust
 --
 
 CREATE UNIQUE INDEX index_friendships_on_user_id_and_friend_id ON public.friendships USING btree (user_id, friend_id);
+
+
+--
+-- Name: index_geo_model_taxa_on_taxon_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_geo_model_taxa_on_taxon_id ON public.geo_model_taxa USING btree (taxon_id);
 
 
 --
@@ -8103,6 +8228,13 @@ CREATE INDEX index_lists_on_user_id ON public.lists USING btree (user_id);
 --
 
 CREATE INDEX index_messages_on_user_id_and_from_user_id ON public.messages USING btree (user_id, from_user_id);
+
+
+--
+-- Name: index_messages_on_user_id_and_thread_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_messages_on_user_id_and_thread_id ON public.messages USING btree (user_id, thread_id);
 
 
 --
@@ -9009,13 +9141,6 @@ CREATE INDEX index_saved_locations_on_user_id ON public.saved_locations USING bt
 
 
 --
--- Name: index_sessions_on_session_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_sessions_on_session_id ON public.sessions USING btree (session_id);
-
-
---
 -- Name: index_sessions_on_updated_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9139,6 +9264,13 @@ CREATE INDEX index_subscriptions_on_taxon_id ON public.subscriptions USING btree
 --
 
 CREATE INDEX index_subscriptions_on_user_id ON public.subscriptions USING btree (user_id);
+
+
+--
+-- Name: index_subscriptions_on_user_id_and_resource_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_subscriptions_on_user_id_and_resource_type ON public.subscriptions USING btree (user_id, resource_type);
 
 
 --
@@ -9314,6 +9446,13 @@ CREATE INDEX index_taxon_links_on_taxon_id_and_show_for_descendent_taxa ON publi
 --
 
 CREATE INDEX index_taxon_links_on_user_id ON public.taxon_links USING btree (user_id);
+
+
+--
+-- Name: index_taxon_name_priorities_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_taxon_name_priorities_on_user_id ON public.taxon_name_priorities USING btree (user_id);
 
 
 --
@@ -9506,6 +9645,13 @@ CREATE INDEX index_user_privileges_on_user_id ON public.user_privileges USING bt
 
 
 --
+-- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_confirmation_token ON public.users USING btree (confirmation_token);
+
+
+--
 -- Name: index_users_on_curator_sponsor_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9590,6 +9736,13 @@ CREATE INDEX index_users_on_place_id ON public.users USING btree (place_id);
 
 
 --
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_reset_password_token ON public.users USING btree (reset_password_token);
+
+
+--
 -- Name: index_users_on_site_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9608,6 +9761,13 @@ CREATE INDEX index_users_on_spammer ON public.users USING btree (spammer);
 --
 
 CREATE INDEX index_users_on_state ON public.users USING btree (state);
+
+
+--
+-- Name: index_users_on_unconfirmed_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_unconfirmed_email ON public.users USING btree (unconfirmed_email);
 
 
 --
@@ -9734,6 +9894,13 @@ CREATE UNIQUE INDEX taggings_idx ON public.taggings USING btree (tag_id, taggabl
 --
 
 CREATE INDEX taxon_names_lower_name_index ON public.taxon_names USING btree (lower((name)::text));
+
+
+--
+-- Name: time_zone_geometries_geom_geom_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX time_zone_geometries_geom_geom_idx ON public.time_zone_geometries USING gist (geom);
 
 
 --
@@ -10196,14 +10363,28 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211001151300'),
 ('20211109220615'),
 ('20211216171216'),
+('20220105014844'),
+('20220127195113'),
 ('20220209191328'),
 ('20220217224804'),
 ('20220224012321'),
 ('20220225054243'),
+('20220305012626'),
 ('20220308015748'),
 ('20220310001916'),
 ('20220317205240'),
 ('20220317210522'),
-('20220407173712');
-
+('20220407173712'),
+('20221129175508'),
+('20221214192739'),
+('20221219015021'),
+('20230224230316'),
+('20230407150700'),
+('20230504154134'),
+('20230504154207'),
+('20230504154224'),
+('20230504154236'),
+('20230504154248'),
+('20230504154302'),
+('20230907210748');
 

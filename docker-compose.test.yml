@@ -1,0 +1,70 @@
+version: "2"
+services:
+
+  redis:
+    container_name: redis
+    image: redis:6.0.3
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data_test:/data
+
+  memcached:
+    container_name: memcached
+    image: memcached:1.6.6
+    ports:
+      - 11211:11211
+
+  pg:
+    container_name: pg
+    image: postgis/postgis:12-3.0
+    environment:
+      POSTGRES_USER: 'inaturalist'
+      POSTGRES_PASSWORD: 'inaturalist'
+      POSTGRES_DB: inaturalist_test
+    ports:
+      - 5432:5432
+    volumes:
+      - pg_data_test:/var/lib/postgresql/data
+      - ./schema/database.sql:/docker-entrypoint-initdb.d/database.sql
+
+  es:
+    container_name: es
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.9.1
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - 9200:9200
+    volumes:
+      - es_data_test:/usr/share/elasticsearch/data
+    command: >
+      /bin/sh -c "bin/elasticsearch-plugin list | grep -q analysis-kuromoji
+      || bin/elasticsearch-plugin install analysis-kuromoji;
+      /usr/local/bin/docker-entrypoint.sh"
+
+  api-test:
+    container_name: api-test
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: test
+    environment:
+      NODE_ENV: test
+      INAT_DB_HOST: pg
+      INAT_DB_USER : 'inaturalist'
+      INAT_DB_PASS: 'inaturalist'
+      INAT_ES_HOST: es
+      INAT_REDIS_HOST: redis
+      INAT_WEB_HOST: host.docker.internal
+      INAT_DB_NAME: inaturalist_test
+      INAT_ES_INDEX_PREFIX: test
+    ports:
+      - 4000:4000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  redis_data_test:
+  pg_data_test:
+  es_data_test:

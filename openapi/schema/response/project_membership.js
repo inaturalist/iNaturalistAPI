@@ -8,5 +8,5 @@ module.exports = Joi.object( ).keys( {
   created_at: Joi.date( ),
   updated_at: Joi.date( ),
   prefers_curator_coordinate_access_for: Joi.string( ).valid( null ),
-  prefers_updates: Joi.string( ).valid( null )
+  prefers_updates: Joi.boolean( ).valid( null )
 } ).unknown( false ).meta( { className: "ProjectMembership" } );

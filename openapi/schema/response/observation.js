@@ -8,6 +8,7 @@ const identification = require( "./identification" );
 const observationFieldValue = require( "./observation_field_value" );
 const photo = require( "./photo" );
 const observationPhoto = require( "./observation_photo" );
+const observationSound = require( "./observation_sound" );
 const project = require( "./project" );
 const projectObservation = require( "./project_observation" );
 const qualityMetric = require( "./quality_metric" );
@@ -70,6 +71,7 @@ module.exports = Joi.object( ).keys( {
   oauth_application_id: Joi.number( ).integer( ).valid( null ),
   obscured: Joi.boolean( ),
   observation_photos: Joi.array( ).items( observationPhoto ),
+  observation_sounds: Joi.array( ).items( observationSound ),
   observed_on: Joi.string( ).valid( null ),
   observed_on_details: dateDetails,
   observed_on_string: Joi.string( ).valid( null ),

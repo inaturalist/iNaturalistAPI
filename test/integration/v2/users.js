@@ -40,7 +40,38 @@ describe( "Users", ( ) => {
         } )
         .expect( 200, done );
     } );
+    it( "never returns email or IP for user", function ( done ) {
+      request( this.app ).get( "/v2/users/2023092501?fields=all" )
+        .expect( res => {
+          const user = res.body.results[0];
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( user.id ).to.eq( 2023092501 );
+          expect( user ).to.not.have.property( "email" );
+          expect( user ).to.not.have.property( "last_ip" );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
+
+  describe( "autocomplete", ( ) => {
+    it( "never returns email or IP for user", function ( done ) {
+      request( this.app ).get( "/v2/users/autocomplete?q=user2023092501&fields=all" )
+        .expect( res => {
+          const user = res.body.results[0];
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( user.id ).to.eq( 2023092501 );
+          expect( user ).to.not.have.property( "email" );
+          expect( user ).to.not.have.property( "last_ip" );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
   describe( "update_session", ( ) => {
     it( "should fail without auth", function ( done ) {
       request( this.app ).put( "/v2/users/update_session" )
@@ -70,6 +101,27 @@ describe( "Users", ( ) => {
         .expect( 204, done );
     } );
   } );
+
+  describe( "projects", ( ) => {
+    it( "never returns email or IP for user in project", function ( done ) {
+      request( this.app ).get( "/v2/users/2023092501/projects?fields=all" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          const project = _.find( res.body.results, p => p.slug === "project-2023092501" );
+          expect( project ).not.to.be.undefined;
+          expect( project.admins ).not.to.be.undefined;
+          expect( project.admins[0] ).not.to.be.undefined;
+          expect( project.admins[0].user ).not.to.be.undefined;
+          expect( project.admins[0].user.email ).to.be.undefined;
+          expect( project.admins[0].user.last_ip ).to.be.undefined;
+          expect( project.user ).not.to.be.undefined;
+          expect( project.user.email ).to.be.undefined;
+          expect( project.user.last_ip ).to.be.undefined;
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
   describe( "index", ( ) => {
     it( "should return JSON", function ( done ) {
       request( this.app ).get( "/v2/users?fields=login" )
@@ -162,6 +214,17 @@ describe( "Users", ( ) => {
         } )
         .expect( 200, done );
     } );
+    it( "never returns email or IP for user in project", function ( done ) {
+      request( this.app ).get( "/v2/users?fields=all&per_page=100" )
+        .expect( res => {
+          const user = _.find( res.body.results, u => u.id === 2023092501 );
+          expect( user ).not.to.be.undefined;
+          expect( user.id ).to.eq( 2023092501 );
+          expect( user ).to.not.have.property( "email" );
+          expect( user ).to.not.have.property( "last_ip" );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "update", ( ) => {
@@ -213,6 +276,121 @@ describe( "Users", ( ) => {
           // Raise an exception if the nocked endpoint doesn't get called
           nockScope.done( );
         } )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "notification_counts", ( ) => {
+    const currentUserID = fixtures.elasticsearch.update_actions.update_action[0].subscriber_ids[0];
+    const token = jwt.sign( { user_id: currentUserID },
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+
+    it( "should 401 without auth", function ( done ) {
+      request( this.app )
+        .get( "/v2/users/notification_counts" )
+        .expect( 401, done );
+    } );
+
+    it( "should return JSON with notification counts", function ( done ) {
+      const unreadUpdatesCount = _.size(
+        _.filter( fixtures.elasticsearch.update_actions.update_action, updateAction => (
+          _.includes( updateAction.subscriber_ids, currentUserID )
+          && !_.includes( updateAction.viewed_subscriber_ids, currentUserID )
+        ) )
+      );
+      const unreadMessagesCount = _.size(
+        _.filter( fixtures.postgresql.messages, message => (
+          message.user_id === currentUserID
+          && message.to_user_id === currentUserID
+          && !message.read_at
+        ) )
+      );
+      request( this.app )
+        .get( "/v2/users/notification_counts" )
+        .set( "Authorization", token )
+        .expect( "Content-Type", /json/ )
+        .expect( res => {
+          expect( _.has( res.body, "updates_count" ) ).to.eq( true );
+          expect( _.has( res.body, "messages_count" ) ).to.eq( true );
+          expect( res.body.updates_count ).to.eq( unreadUpdatesCount );
+          expect( res.body.messages_count ).to.eq( unreadMessagesCount );
+        } )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "reset_password", ( ) => {
+    const currentUser = fixtures.elasticsearch.users.user[0];
+    const userToken = jwt.sign( { user_id: currentUser.id },
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+    const applicationToken = jwt.sign(
+      { application: "whatever" },
+      config.jwtApplicationSecret || "application_secret",
+      { algorithm: "HS512" }
+    );
+
+    it( "should 401 without auth", function ( done ) {
+      request( this.app )
+        .post( "/v2/users/reset_password" )
+        .expect( 401, done );
+    } );
+
+    it( "should 401 with a user token", function ( done ) {
+      request( this.app )
+        .post( "/v2/users/reset_password" )
+        .set( "Authorization", userToken )
+        .expect( 401, done );
+    } );
+
+    it( "should hit the Rails equivalent and return 200", function ( done ) {
+      const nockScope = nock( "http://localhost:3000" )
+        .post( "/users/password" )
+        .reply( 200 );
+      request( this.app )
+        .post( "/v2/users/reset_password" )
+        .set( "Authorization", applicationToken )
+        .send( {
+          user: {
+            email: "email@domain.com"
+          }
+        } )
+        .expect( ( ) => {
+          // Raise an exception if the nocked endpoint doesn't get called
+          nockScope.done( );
+        } )
+        .expect( 204, done );
+    } );
+  } );
+
+  describe( "recentObservationFields", ( ) => {
+    it( "fails for unauthenticated requests", function ( done ) {
+      request( this.app )
+        .get( "/v2/users/recent_observation_fields" )
+        .expect( 401, done );
+    } );
+
+    it( "returns observation fields", function ( done ) {
+      const token = jwt.sign( { user_id: 1 },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      const fixtureObservationField = fixtures.postgresql.observation_fields[0];
+      request( this.app ).get( "/v2/users/recent_observation_fields?fields=all" )
+        .set( "Authorization", token )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( res.body.results[0].id ).to.eq( fixtureObservationField.id );
+          expect( res.body.results[0].name ).to.eq( fixtureObservationField.name );
+          expect( res.body.results[0].description ).to.eq( fixtureObservationField.description );
+          expect( res.body.results[0].datatype ).to.eq( fixtureObservationField.datatype );
+          expect( res.body.results[0].allowed_values ).to
+            .eq( fixtureObservationField.allowed_values );
+        } )
+        .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
   } );

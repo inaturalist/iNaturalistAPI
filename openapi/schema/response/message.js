@@ -15,4 +15,4 @@ module.exports = Joi.object( ).keys( {
   comments_count: Joi.number( ).integer( ),
   from_user: user.valid( null ),
   to_user: user.valid( null )
-} ).unknown( false );
+} ).unknown( false ).meta( { className: "Message" } );
