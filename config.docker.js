@@ -1,25 +1,26 @@
-var fs = require( "fs" );
+const fs = require( "fs" );
 
 const {
-    INAT_DB_HOST,
-    INAT_DB_USER,
-    INAT_DB_PASS,
-    INAT_ES_HOST,
-    INAT_REDIS_HOST,
-    INAT_API_URL,
-    INAT_RAILS_URL,
-    INAT_VISION_URL,
-    INAT_DB_SSL_KEY_PATH,
-    INAT_DB_SSL_CRT_PATH,
-    INAT_STATIC_IMAGE_URL,
-    INAT_JWT_SECRET,
-    INAT_JWT_APPLICATION_SECRET,
-    INAT_AWS_OPENDATA_BUCKET,
-    INAT_AWS_OPENDATA_DOMAIN,
-    INAT_AWS_OPENDATA_REGION,
-    INAT_AWS_OPENDATA_ACL,
-    INAT_TAXA_FILE_PATH
-  } = process.env;
+  NODE_ENV,
+  INAT_DB_HOST,
+  INAT_DB_USER,
+  INAT_DB_PASS,
+  INAT_ES_HOST,
+  INAT_REDIS_HOST,
+  INAT_API_URL,
+  INAT_RAILS_URL,
+  INAT_VISION_URL,
+  INAT_DB_SSL_KEY_PATH,
+  INAT_DB_SSL_CRT_PATH,
+  INAT_STATIC_IMAGE_URL,
+  INAT_JWT_SECRET,
+  INAT_JWT_APPLICATION_SECRET,
+  INAT_AWS_OPENDATA_BUCKET,
+  INAT_AWS_OPENDATA_DOMAIN,
+  INAT_AWS_OPENDATA_REGION,
+  INAT_AWS_OPENDATA_ACL,
+  INAT_TAXA_FILE_PATH
+} = process.env;
 
 module.exports = {
   environment: NODE_ENV || "development",
@@ -60,11 +61,11 @@ module.exports = {
     openDataBucket: INAT_AWS_OPENDATA_BUCKET || "staticdev-public",
     openDataDomain: INAT_AWS_OPENDATA_DOMAIN || "staticdev-public.s3.amazonaws.com",
     openDataRegion: INAT_AWS_OPENDATA_REGION || "us-east-1",
-    openDataACL: INAT_AWS_OPENDATA_ACL ||"",
+    openDataACL: INAT_AWS_OPENDATA_ACL || ""
   },
   elasticsearch: {
     host: INAT_ES_HOST ? `http://${INAT_ES_HOST}:9200` : "http://localhost:9200"
   },
   cacheDir: "/home/inaturalist/api/cache",
   seekExceptionListID: 945029
-}
+};
