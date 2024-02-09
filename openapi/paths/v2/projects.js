@@ -1,7 +1,7 @@
 const _ = require( "lodash" );
 const projectsSearchSchema = require( "../../schema/request/projects_search" );
 const transform = require( "../../joi_to_openapi_parameter" );
-const ProjectsController = require( "../../../lib/controllers/v2/projects_controller" );
+const ProjectsController = require( "../../../lib/controllers/v1/projects_controller" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {

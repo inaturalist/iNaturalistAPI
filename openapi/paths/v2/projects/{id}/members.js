@@ -1,8 +1,8 @@
 const _ = require( "lodash" );
 const Joi = require( "joi" );
 const transform = require( "../../../../joi_to_openapi_parameter" );
-const ProjectsController = require( "../../../../../lib/controllers/v2/projects_controller" );
-const observationsSearchSchema = require( "../../../../schema/request/projects_members" );
+const ProjectsController = require( "../../../../../lib/controllers/v1/projects_controller" );
+const projectsMembersSchema = require( "../../../../schema/request/projects_members" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
@@ -10,9 +10,18 @@ module.exports = sendWrapper => {
     sendWrapper( req, res, null, results );
   }
 
-  const parameters = _.map(
-    observationsSearchSchema.$_terms.keys,
-    child => transform( child.schema.label( child.key ) )
+  const parameters = [
+    transform(
+      Joi.number( ).integer( )
+        .label( "id" )
+        .meta( { in: "path" } )
+        .required( )
+        .description( "A single ID" )
+    )
+  ].concat(
+    _.map( projectsMembersSchema.$_terms.keys, child => (
+      transform( child.schema.label( child.key ) )
+    ) )
   );
   parameters.push(
     transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )

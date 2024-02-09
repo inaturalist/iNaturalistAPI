@@ -445,6 +445,45 @@
             "id": 122,
             "login": "user122"
           }
+        },
+        {
+          "id": 2023092501,
+          "uuid": "09130216-6201-11ee-8c99-0242ac120002",
+          "user": {
+            "id": 2023092501,
+            "login": "user2023092501",
+            "spam" : false,
+            "suspended" : false
+           },
+          "body": "2023092501",
+          "category": "leading",
+          "current": true,
+          "current_taxon": true,
+          "taxon": {
+            "id": 5,
+            "uuid": "e6c0f90f-8527-4b56-a552-fe2273b61ec4",
+            "min_species_taxon_id": 5,
+            "is_active": true,
+            "iconic_taxon_id": 1,
+            "ancestor_ids": [1,2,3,4,5],
+            "min_species_ancestry": "1,2,3,4,5",
+            "rank_level": 10,
+             "min_species_ancestors": [
+              { "id": 1 }, { "id": 2 }, { "id": 3 }, { "id": 4 }, { "id": 5 }
+            ]
+         },
+          "observation": {
+            "id": 2023092501,
+            "user_id": 2023092501,
+            "taxon": {
+              "id": 5,
+              "iconic_taxon_id": 1,
+              "ancestor_ids": [1,2,3,4,5],
+              "min_species_taxon_id": 5,
+              "min_species_ancestry": "1,2,3,4,5",
+              "rank_level": 10
+            }
+          }
         }
       ]
     },
@@ -1115,6 +1154,21 @@
           "user": { "id": 2021121602 },
           "created_at": "2021-12-08T01:00:00",
           "description": "Obs by a user who blocks user 2021121601"
+        },
+        {
+          "id": 2023092501,
+          "uuid": "78e0b6e4-61fa-11ee-8c99-0242ac120002",
+          "user": { 
+            "id": 2023092501,
+            "login": "user2023092501",
+            "spam" : false,
+            "suspended" : false
+          },
+          "location": "50,50",
+          "private_location": "3,4",
+          "private_geojson": { "type": "Point", "coordinates": [ 4, 3 ] },
+          "place_guess": "Tangerina",
+          "captive": true
         }
       ]
     },
@@ -1128,7 +1182,11 @@
           "location": "11,12",
           "slug": "project-one",
           "user_ids": [ 1, 5, 123 ],
-          "featured_at": "2018-04-20T20:57:17.137Z"
+          "site_features":[{
+            "site_id": 1,
+            "noteworthy": true,
+            "featured_at": "2018-04-20T20:57:17.137Z"
+          }]
         },
         {
           "id": 2,
@@ -1273,6 +1331,33 @@
           },
           "user_id": 2020100101,
           "user_ids": [2020100101, 2020100102],
+          "prefers_user_trust": false
+        },
+        {
+          "id": 2023092501,
+          "title": "project-2023092501",
+          "title_autocomplete": "project-2023092501",
+          "title_exact": "project-2023092501",
+          "slug": "project-2023092501",
+          "search_parameters": [
+            {
+              "field": "place_id",
+              "value": 2
+            }
+          ],
+          "search_parameter_fields": {
+            "place_id": 2
+          },
+          "user_id": 2023092501,
+          "user_ids": [2023092501, 2023092502, 2023092503],
+          "admins" : [
+            {
+              "id" : 2023092501,
+              "user_id" : 2023092501,
+              "project_id" : 2023092501,
+              "role" : "manager"
+            }
+          ],
           "prefers_user_trust": false
         }
       ]
@@ -1736,7 +1821,8 @@
         {
           "id": 123,
           "login": "a-user",
-          "name": "A User"
+          "name": "A User",
+          "orcid": "0000-0001-0002-0004"
         },
         {
           "id": 124,
@@ -1805,6 +1891,27 @@
           "id": 2021121602,
           "login": "user2021121602",
           "name": "User that blocks user2021121601"
+        },
+        {
+          "id": 2023092501,
+          "login": "user2023092501",
+          "name": "User2023092501 with email and IP",
+          "email": "user2023092501@gmail.com",
+          "last_ip": "192.168.0.1"
+        },
+        {
+          "id": 2023092502,
+          "login": "user2023092502",
+          "name": "User2023092502 with email and IP",
+          "email": "user2023092502@gmail.com",
+          "last_ip": "192.168.0.2"
+        },
+        {
+          "id": 2023092503,
+          "login": "user2023092503",
+          "name": "User2023092503 with email and IP",
+          "email": "user2023092503@gmail.com",
+          "last_ip": "192.168.0.3"
         }
       ]
     },
@@ -1846,7 +1953,8 @@
         "updated_at": "2023-01-01 00:00:00",
         "placement": "mobile/home",
         "locales": "{}",
-        "dismissible": true
+        "dismissible": true,
+        "clients": "{}"
       },
       {
         "id": 2,
@@ -1857,7 +1965,8 @@
         "updated_at": "2023-01-01 00:00:00",
         "placement": "mobile/home",
         "locales": "{}",
-        "dismissible": true
+        "dismissible": true,
+        "clients": "{}"
       },
       {
         "id": 3,
@@ -1868,7 +1977,8 @@
         "updated_at": "2023-01-01 00:00:00",
         "placement": "mobile/home",
         "locales": "{en-US,fr}",
-        "dismissible": true
+        "dismissible": true,
+        "clients": "{}"
       },
       {
         "id": 4,
@@ -1879,7 +1989,20 @@
         "updated_at": "2023-01-01 00:00:00",
         "placement": "mobile/home",
         "locales": "{en}",
-        "dismissible": true
+        "dismissible": true,
+        "clients": "{}"
+      },
+      {
+        "id": 5,
+        "body": "Active announcement for inat-ios and inat-android",
+        "start": "2023-01-01 00:00:00",
+        "end": "2100-01-01 00:00:00",
+        "created_at": "2023-01-01 00:00:00",
+        "updated_at": "2023-01-01 00:00:00",
+        "placement": "mobile/home",
+        "locales": "{}",
+        "dismissible": true,
+        "clients": "{inat-ios,inat-android}"
       }
     ],
     "comments": [
@@ -2069,6 +2192,14 @@
         "category": "leading",
         "user_id": 122,
         "observation_id": 13
+      },
+      {
+        "id": 2023092501,
+        "current": true,
+        "created_at": "2023-09-25 00:00:00",
+        "category": "leading",
+        "user_id": 2023092501,
+        "observation_id": 2023092501
       }
     ],
     "lists": [
@@ -2109,6 +2240,16 @@
         "list_id": 1000,
         "place_id": 432,
         "establishment_means": "endemic"
+      }
+    ],
+    "messages": [
+      {
+        "id": 1,
+        "from_user_id": 1,
+        "to_user_id": 123,
+        "user_id": 123,
+        "created_at": "2023-12-12 00:00:00",
+        "updated_at": "2023-12-12 00:00:00"
       }
     ],
     "oauth_applications": [
@@ -2163,6 +2304,28 @@
         "created_at": "2020-10-20 01:54:15.314522",
         "revoked_at": "2020-10-20 03:54:15.314522",
         "scopes": "write login"
+      }
+    ],
+    "observation_fields": [
+      {
+        "id": 1,
+        "name": "fieldname",
+        "description": "fieldname description",
+        "datatype": "text",
+        "allowed_values": "one|two|three",
+        "values_count": 1
+      }
+    ],
+    "observation_field_values": [
+      {
+        "id": 1,
+        "observation_id": 1,
+        "observation_field_id": 1,
+        "value": "one",
+        "created_at": "2024-02-01T00:00:00",
+        "updated_at": "2024-02-01T00:00:00",
+        "user_id": 1,
+        "uuid": "b027f2ff-c913-470e-a1da-a3e2f3ec2359"
       }
     ],
     "observations": [
@@ -2333,6 +2496,10 @@
       {
         "id": 2021121601,
         "uuid": "b568967d-4f0e-430c-9cb9-e28db5004c37"
+      },
+      {
+        "id": 2023092501,
+        "uuid": "78e0b6e4-61fa-11ee-8c99-0242ac120002"
       }
     ],
     "observation_photos": [
@@ -2436,17 +2603,17 @@
       {
         "id": 111,
         "name": "United States",
-        "ancestry": "111"
+        "ancestry": ""
       },
       {
         "id": 222,
         "name": "California",
-        "ancestry": "111/222"
+        "ancestry": "111"
       },
       {
         "id": 333,
         "name": "Nevada",
-        "ancestry": "111/333"
+        "ancestry": "111"
       },
       {
         "id": 432,
@@ -2457,7 +2624,7 @@
         "id": 433,
         "name": "a-place-in-a-place",
         "display_name": "A Place In A Place",
-        "ancestry": "432/433"
+        "ancestry": "432"
       },
       {
         "id": 511,
@@ -2652,6 +2819,23 @@
         "id": 2020100102,
         "project_id": 2020100101,
         "user_id": 2020100102
+      },
+      {
+        "id": 2023092501,
+        "project_id": 2023092501,
+        "user_id": 2023092501,
+        "role": "manager"
+      },
+      {
+        "id": 2023092502,
+        "project_id": 2023092501,
+        "user_id": 2023092502,
+        "role": "curator"
+      },
+      {
+        "id": 2023092503,
+        "project_id": 2023092501,
+        "user_id": 2023092503
       }
     ],
     "projects": [
@@ -2687,6 +2871,12 @@
         "project_type": "collection",
         "title": "Redundant Observations in Massachusetts With Disabled Trust",
         "slug": "redundant-observations-in-massachusetts-with-disabled-trust"
+      },
+      {
+        "id": 2023092501,
+        "slug": "project-2023092501",
+        "title": "project-2023092501",
+        "user_id": 2023092501
       }
     ],
     "provider_authorizations": [
@@ -2718,6 +2908,33 @@
         "title": "post 2 title",
         "body": "post 2 body2",
         "user_id": 1
+      },
+      {
+        "id": 2023092501,
+        "parent_id": 2023092501,
+        "parent_type": "Project",
+        "published_at": "2023-09-25 02:00:00",
+        "title": "2023092501 title",
+        "body": "2023092501 body",
+        "user_id": 2023092501
+      },
+      {
+        "id": 2023092502,
+        "parent_id": 2023092501,
+        "parent_type": "Project",
+        "published_at": "2023-09-25 02:00:00",
+        "title": "2023092502 title",
+        "body": "2023092502 body",
+        "user_id": 2023092502
+      },
+      {
+        "id": 2023092503,
+        "parent_id": 2023092501,
+        "parent_type": "Project",
+        "published_at": "2023-09-25 02:00:00",
+        "title": "2023092503 title",
+        "body": "2023092503 body",
+        "user_id": 2023092503
       }
     ],
     "roles": [
@@ -2958,7 +3175,7 @@
         "name": "username",
         "site_id": 1,
         "description": "a very original user",
-        "last_active": "2022-03-01"
+        "last_active": "2022-03-01"      
       },
       {
         "id": 5,
@@ -3067,6 +3284,36 @@
         "login": "user2021121602",
         "name": "User that blocks user2021121601",
         "description": "User that blocks user2021121601"
+      },
+      {
+        "id": 2023092501,
+        "login": "user2023092501",
+        "name": "User2023092501 with email and IP",
+        "email": "user2023092501@gmail.com",
+        "last_ip": "192.168.0.1",
+        "created_at": "2020-01-01",
+        "updated_at": "2020-01-01",
+        "last_active": "2023-01-01"
+      },
+      {
+        "id": 2023092502,
+        "login": "user2023092502",
+        "name": "User2023092502 with email and IP",
+        "email": "user2023092502@gmail.com",
+        "last_ip": "192.168.0.2",
+        "created_at": "2020-01-01",
+        "updated_at": "2020-01-01",
+        "last_active": "2023-01-01"
+      },
+      {
+        "id": 2023092503,
+        "login": "user2023092503",
+        "name": "User2023092503 with email and IP",
+        "email": "user2023092503@gmail.com",
+        "last_ip": "192.168.0.3",
+        "created_at": "2020-01-01",
+        "updated_at": "2020-01-01",
+        "last_active": "2023-01-01"
       }
     ],
     "user_blocks": [

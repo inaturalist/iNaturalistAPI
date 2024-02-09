@@ -12,4 +12,4 @@ module.exports = Joi.object( ).keys( {
   following: Joi.boolean( ).description( "Whether the user notifications about new content made by the friend" ),
   trust: Joi.boolean( ).description( "Whether the user trusts the friend with hidden coordinates" ),
   reciprocal_trust: Joi.boolean( ).description( "Whether the friend trusts the user with hidden coordinates" )
-} );
+} ).meta( { className: "Relationship" } );

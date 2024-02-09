@@ -6,4 +6,4 @@ module.exports = Joi.object( ).keys( {
   photo,
   position: Joi.number( ).integer( ).valid( null ),
   uuid: Joi.string( ).guid( { version: "uuidv4" } )
-} ).unknown( false );
+} ).unknown( false ).meta( { className: "ObservationPhoto" } );

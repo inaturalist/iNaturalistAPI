@@ -1,4 +1,4 @@
-**/.DS_Store
+.DS_Store
 .coveralls.yml
 .ruby-gemset
 coverage
@@ -25,3 +25,4 @@ openapi/uploads/**
 lib/tasks/**.csv
 env.list
 build
+.vscode

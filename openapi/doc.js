@@ -170,6 +170,13 @@ Privacy Policy: <https://www.inaturalist.org/privacy>`
         in: "header",
         description: "User-specific JSON Web Token optional, may be used to customize responses for the authenticated user, e.g. localizing common names"
       },
+      appJwtRequired: {
+        type: "apiKey",
+        name: "Authorization",
+        in: "header",
+        description: "Application JSON Web Token required (application tokens only available to "
+          + "official apps), and user-specific JSON Web Tokens are not allowed"
+      },
       appOrUserJwtRequired: {
         type: "apiKey",
         name: "Authorization",

@@ -39,6 +39,21 @@ describe( "Users", ( ) => {
       request( this.app ).get( "/v1/users/123123" )
         .expect( "Content-Type", /json/ ).expect( 404, done );
     } );
+
+    it( "never returns email or IP for user", function ( done ) {
+      request( this.app ).get( "/v1/users/2023092501" )
+        .expect( res => {
+          const user = res.body.results[0];
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( user.id ).to.eq( 2023092501 );
+          expect( user ).to.not.have.property( "email" );
+          expect( user ).to.not.have.property( "last_ip" );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "update", ( ) => {
@@ -96,6 +111,20 @@ describe( "Users", ( ) => {
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "never returns email or IP for user", function ( done ) {
+      request( this.app ).get( "/v1/users/autocomplete?q=user2023092501" )
+        .expect( res => {
+          const user = res.body.results[0];
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( user.id ).to.eq( 2023092501 );
+          expect( user ).to.not.have.property( "email" );
+          expect( user ).to.not.have.property( "last_ip" );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "projects", ( ) => {
@@ -118,6 +147,24 @@ describe( "Users", ( ) => {
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( _.find( res.body.results, p => p.slug === "project-one" ) ).not.to.be.undefined;
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "never returns email or IP for user in project", function ( done ) {
+      request( this.app ).get( "/v1/users/2023092501/projects" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          const project = _.find( res.body.results, p => p.slug === "project-2023092501" );
+          expect( project ).not.to.be.undefined;
+          expect( project.admins ).not.to.be.undefined;
+          expect( project.admins[0] ).not.to.be.undefined;
+          expect( project.admins[0].user ).not.to.be.undefined;
+          expect( project.admins[0].user.email ).to.be.undefined;
+          expect( project.admins[0].user.last_ip ).to.be.undefined;
+          expect( project.user ).not.to.be.undefined;
+          expect( project.user.email ).to.be.undefined;
+          expect( project.user.last_ip ).to.be.undefined;
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
@@ -313,6 +360,38 @@ describe( "Users", ( ) => {
           .set( "Authorization", token )
           .expect( 200, done );
       } );
+    } );
+  } );
+
+  describe( "recentObservationFields", ( ) => {
+    it( "fails for unauthenticated requests", function ( done ) {
+      request( this.app ).get( "/v1/users/recent_observation_fields" ).expect( res => {
+        expect( res.error.text ).to.eq( "{\"error\":\"Unauthorized\",\"status\":401}" );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 401, done );
+    } );
+
+    it( "returns observation fields", function ( done ) {
+      const token = jwt.sign( { user_id: 1 },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      const fixtureObservationField = fixtures.postgresql.observation_fields[0];
+      request( this.app ).get( "/v1/users/recent_observation_fields" )
+        .set( "Authorization", token )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( res.body.results[0].id ).to.eq( fixtureObservationField.id );
+          expect( res.body.results[0].name ).to.eq( fixtureObservationField.name );
+          expect( res.body.results[0].description ).to.eq( fixtureObservationField.description );
+          expect( res.body.results[0].datatype ).to.eq( fixtureObservationField.datatype );
+          expect( res.body.results[0].allowed_values ).to
+            .eq( fixtureObservationField.allowed_values );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
     } );
   } );
 } );

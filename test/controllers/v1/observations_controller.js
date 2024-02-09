@@ -3,7 +3,6 @@ const moment = require( "moment" );
 const _ = require( "lodash" );
 const { observations } = require( "inaturalistjs" );
 const testHelper = require( "../../../lib/test_helper" );
-const util = require( "../../../lib/util" );
 const Observation = require( "../../../lib/models/observation" );
 const Project = require( "../../../lib/models/project" );
 const List = require( "../../../lib/models/list" );
@@ -250,7 +249,9 @@ describe( "ObservationsController", ( ) => {
         { http_param: "site_id", es_field: "site_id.keyword" },
         { http_param: "license", es_field: "license_code" },
         { http_param: "photo_license", es_field: ["photos.license_code", "photo_licenses"] },
-        { http_param: "sound_license", es_field: ["sounds.license_code", "sound_licenses"] }
+        { http_param: "sound_license", es_field: ["sounds.license_code", "sound_licenses"] },
+        { http_param: "oauth_application_id", es_field: "oauth_application_id.keyword" },
+        { http_param: "outlink_source", es_field: "outlinks.source" }
       ], f => asyncTest( f ) ) );
     } );
 
@@ -606,6 +607,13 @@ describe( "ObservationsController", ( ) => {
       expect( q.filters[0].nested.query.bool.filter.length ).to.eql( 2 );
       expect( q.filters[0].nested.query.bool.filter[0].match["ofvs.name_ci"] ).to.eql( "habitat" );
       expect( q.filters[0].nested.query.bool.filter[1].match["ofvs.value_ci"] ).to.eql( "marine" );
+    } );
+
+    it( "filters by missing observation field", async ( ) => {
+      const q = await Q( { without_field: "habitat" } );
+      expect( q.inverse_filters[0].nested.query.bool.filter.length ).to.eql( 1 );
+      expect( q.inverse_filters[0].nested.query.bool.filter[0].terms["ofvs.name"] )
+        .to.deep.eql( ["habitat"] );
     } );
 
     it( "filters by conservation status", async ( ) => {

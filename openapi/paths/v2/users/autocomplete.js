@@ -3,7 +3,6 @@ const usersAutocompleteSchema = require( "../../../schema/request/users_autocomp
 const transform = require( "../../../joi_to_openapi_parameter" );
 const UsersController = require( "../../../../lib/controllers/v1/users_controller" );
 
-
 module.exports = sendWrapper => {
   async function GET( req, res ) {
     const results = await UsersController.autocomplete( req );

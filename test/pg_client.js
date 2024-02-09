@@ -1,7 +1,6 @@
 const chai = require( "chai" );
 const chaiAsPromised = require( "chai-as-promised" );
 const pgClient = require( "../lib/pg_client" );
-const config = require( "../config" );
 
 const { expect } = chai;
 chai.use( chaiAsPromised );
@@ -17,7 +16,7 @@ describe( "pgClient", ( ) => {
 
     it( "uses the test database", async ( ) => {
       const connection = await pgClient.connect( );
-      expect( connection.database ).to.eq( config.database.dbname );
+      expect( connection.database ).to.eq( "inaturalist_test" );
     } );
 
     it( "returns the open connection", async ( ) => {

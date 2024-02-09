@@ -77,6 +77,12 @@
     },
     "uuid": {
       "type": "keyword"
+    },
+    "email": {
+      "type": "keyword"
+    },
+    "last_ip": {
+      "type": "keyword"
     }
   }
 }

@@ -70,6 +70,25 @@ describe( "Projects", ( ) => {
         } )
         .expect( 200, done );
     } );
+    it( "never returns email or IP for user in project", function ( done ) {
+      request( this.app ).get( "/v1/projects?q=project-2023092501" )
+        .expect( res => {
+          const project = res.body.results[0];
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( project.id ).to.eq( 2023092501 );
+          expect( project.admins ).not.to.be.undefined;
+          expect( project.admins[0] ).not.to.be.undefined;
+          expect( project.admins[0].user ).not.to.be.undefined;
+          expect( project.admins[0].user.email ).to.be.undefined;
+          expect( project.admins[0].user.last_ip ).to.be.undefined;
+          expect( project.user ).not.to.be.undefined;
+          expect( project.user.email ).to.be.undefined;
+          expect( project.user.last_ip ).to.be.undefined;
+        } )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "show", ( ) => {
@@ -109,6 +128,27 @@ describe( "Projects", ( ) => {
           expect( res.body.status ).to.eq( 422 );
         } ).expect( "Content-Type", /json/ )
         .expect( 422, done );
+    } );
+
+    it( "never returns email or IP for user in project", function ( done ) {
+      request( this.app ).get( "/v1/projects/2023092501" )
+        .expect( res => {
+          const project = res.body.results[0];
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( project.id ).to.eq( 2023092501 );
+          expect( project.admins ).not.to.be.undefined;
+          expect( project.admins[0] ).not.to.be.undefined;
+          expect( project.admins[0].user ).not.to.be.undefined;
+          expect( project.admins[0].user.email ).to.be.undefined;
+          expect( project.admins[0].user.last_ip ).to.be.undefined;
+          expect( project.user ).not.to.be.undefined;
+          expect( project.user.email ).to.be.undefined;
+          expect( project.user.last_ip ).to.be.undefined;
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
     } );
   } );
 
@@ -182,6 +222,27 @@ describe( "Projects", ( ) => {
         } )
         .expect( 200, done );
     } );
+
+    it( "never returns email or IP for user in project", function ( done ) {
+      request( this.app ).get( "/v1/projects/autocomplete?q=2023092501" )
+        .expect( res => {
+          const project = res.body.results[0];
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( project.id ).to.eq( 2023092501 );
+          expect( project.admins ).not.to.be.undefined;
+          expect( project.admins[0] ).not.to.be.undefined;
+          expect( project.admins[0].user ).not.to.be.undefined;
+          expect( project.admins[0].user.email ).to.be.undefined;
+          expect( project.admins[0].user.last_ip ).to.be.undefined;
+          expect( project.user ).not.to.be.undefined;
+          expect( project.user.email ).to.be.undefined;
+          expect( project.user.last_ip ).to.be.undefined;
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "members", ( ) => {
@@ -233,6 +294,29 @@ describe( "Projects", ( ) => {
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "never returns email or IP for user in project", function ( done ) {
+      request( this.app ).get( "/v1/projects/2023092501/members" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 3 );
+          expect( res.body.total_results ).to.eq( 3 );
+          expect( res.body.results.length ).to.eq( 3 );
+          const user1 = _.find( res.body.results, u => u.id === 2023092501 );
+          expect( user1 ).not.to.be.undefined;
+          expect( user1.email ).to.be.undefined;
+          expect( user1.last_ip ).to.be.undefined;
+          const user2 = _.find( res.body.results, u => u.id === 2023092502 );
+          expect( user2 ).not.to.be.undefined;
+          expect( user2.email ).to.be.undefined;
+          expect( user2.last_ip ).to.be.undefined;
+          const user3 = _.find( res.body.results, u => u.id === 2023092503 );
+          expect( user3 ).not.to.be.undefined;
+          expect( user3.email ).to.be.undefined;
+          expect( user3.last_ip ).to.be.undefined;
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "posts", ( ) => {
@@ -266,6 +350,26 @@ describe( "Projects", ( ) => {
           expect( res.body.rsp ).to.eq( "success" );
         } )
         .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "never returns email or IP for user in project", function ( done ) {
+      request( this.app ).get( "/v1/projects/2023092501/posts" )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( 3 );
+          const user1 = _.find( res.body.results, u => u.id === 2023092501 );
+          expect( user1 ).not.to.be.undefined;
+          expect( user1.email ).to.be.undefined;
+          expect( user1.last_ip ).to.be.undefined;
+          const user2 = _.find( res.body.results, u => u.id === 2023092502 );
+          expect( user2 ).not.to.be.undefined;
+          expect( user2.email ).to.be.undefined;
+          expect( user2.last_ip ).to.be.undefined;
+          const user3 = _.find( res.body.results, u => u.id === 2023092503 );
+          expect( user3 ).not.to.be.undefined;
+          expect( user3.email ).to.be.undefined;
+          expect( user3.last_ip ).to.be.undefined;
+        } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
   } );

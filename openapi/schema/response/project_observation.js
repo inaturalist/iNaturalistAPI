@@ -16,4 +16,4 @@ module.exports = Joi.object( ).keys( {
   user,
   user_id: Joi.number( ).integer( ).valid( null ),
   uuid: Joi.string( ).guid( { version: "uuidv4" } ).required( )
-} ).unknown( false );
+} ).unknown( false ).meta( { className: "ProjectObservation" } );

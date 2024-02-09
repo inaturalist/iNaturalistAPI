@@ -273,6 +273,8 @@ module.exports = Joi.object( ).keys( {
     "needs_id",
     "research"
   ) ),
+  without_field: Joi.string( ),
+  outlink_source: Joi.string( ),
   updated_since: Joi.string( ),
   viewer_id: Joi.number( ).integer( ),
   reviewed: Joi.boolean( ),

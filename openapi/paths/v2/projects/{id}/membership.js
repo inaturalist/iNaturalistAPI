@@ -1,6 +1,6 @@
 const Joi = require( "joi" );
 const transform = require( "../../../../joi_to_openapi_parameter" );
-const projectsController = require( "../../../../../lib/controllers/v2/projects_controller" );
+const projectsController = require( "../../../../../lib/controllers/v1/projects_controller" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
@@ -16,11 +16,12 @@ module.exports = sendWrapper => {
     }],
     parameters: [
       transform(
-        Joi.number( ).integer( )
+        Joi.array( )
+          .items( Joi.number( ).integer( ) )
           .label( "id" )
           .meta( { in: "path" } )
           .required( )
-          .description( "A single project ID" )
+          .description( "A single ID or a comma-separated list of them" )
       ),
       transform( Joi.string( ).label( "fields" ).meta( { in: "query" } ) ),
       transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
@@ -38,7 +39,6 @@ module.exports = sendWrapper => {
       }
     }
   };
-
 
   async function POST( req, res ) {
     await projectsController.join( req );
