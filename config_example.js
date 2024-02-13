@@ -1,25 +1,16 @@
-const fs = require( "fs" );
-
 const {
   INAT_DB_HOST,
   INAT_DB_USER,
   INAT_DB_PASS,
   INAT_ES_HOST,
   INAT_REDIS_HOST,
-  INAT_API_URL,
-  INAT_RAILS_URL,
-  INAT_VISION_URL,
-  INAT_DB_SSL_KEY_PATH,
-  INAT_DB_SSL_CRT_PATH,
-  INAT_STATIC_IMAGE_URL,
-  INAT_JWT_SECRET,
-  INAT_JWT_APPLICATION_SECRET
+  INAT_RAILS_URL
 } = process.env;
 module.exports = {
   // Host running the iNaturalist Rails app
-  apiURL: INAT_RAILS_URL ? `${INAT_RAILS_URL}` : "http://localhost:3000",
+  apiURL: INAT_RAILS_URL || "http://localhost:3000",
   // Base URL for the current version of *this* app
-  currentVersionURL: INAT_API_URL ? `${INAT_API_URL}` : "http://localhost:4000/v1",
+  currentVersionURL: "http://localhost:4000/v1",
   // Whether the Rails app supports SSL requests. For local dev assume it does not
   apiHostSSL: false,
   writeHostSSL: false,
@@ -37,20 +28,16 @@ module.exports = {
     geometry_field: "geom",
     srid: 4326,
     password: INAT_DB_PASS || "inaturalist",
-    ssl: ( INAT_DB_SSL_KEY_PATH && INAT_DB_SSL_CRT_PATH ) ? {
-      rejectUnauthorized: false,
-      key: fs.readFileSync( INAT_DB_SSL_KEY_PATH ),
-      cert: fs.readFileSync( INAT_DB_SSL_CRT_PATH )
-    } : false
+    ssl: false
   },
   tileSize: 512,
   debug: true,
   logLevel: "info", // only "debug" does anything right now
-  websiteURL: INAT_RAILS_URL ? `${INAT_RAILS_URL}` : "http://localhost:3000/",
-  staticImagePrefix: INAT_STATIC_IMAGE_URL ? `${INAT_STATIC_IMAGE_URL}` : "http://localhost:3000/attachments/",
+  websiteURL: "http://localhost:3000/",
+  staticImagePrefix: "http://localhost:3000/attachments/",
   userImagePrefix: "/attachments/users/icons/",
-  jwtSecret: INAT_JWT_SECRET ? `${INAT_JWT_SECRET}` : "secret",
-  jwtApplicationSecret: INAT_JWT_APPLICATION_SECRET ? `${INAT_JWT_APPLICATION_SECRET}` : "application_secret",
+  jwtSecret: "secret",
+  jwtApplicationSecret: "application_secret",
   imageProcesing: {
     // Path to a file listing the taxonomy used in the computer vision model
     taxaFilePath: "",
@@ -58,7 +45,7 @@ module.exports = {
     // *nix systems
     uploadsDir: "/tmp/",
     // Base URL for the web app returning computer vision results
-    tensorappURL: INAT_VISION_URL ? `${INAT_VISION_URL}` : "http://localhost:6006"
+    tensorappURL: "http://localhost:6006"
   },
   redis: {
     host: INAT_REDIS_HOST || "127.0.0.1",

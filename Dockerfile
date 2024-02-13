@@ -2,6 +2,8 @@
 # because node-mapnik is not available in arm64
 FROM --platform=linux/amd64 node:16 as base
 
+RUN apt-get update -qq && apt-get install -y postgresql-client-11
+
 ENV NODE_ENV=development
 
 RUN useradd -ms /bin/bash inaturalist
@@ -17,18 +19,6 @@ COPY --chown=inaturalist:inaturalist config.docker.js config.js
 # Install dependencies
 RUN npm install
 
-FROM base as test
-
-ENV NODE_ENV=test
-
-RUN apt-get update -qq && apt-get install -y postgresql-client-11
-
-COPY . .
-
-CMD [ "npm", "run", "coverage" ]
-
-FROM base as development
-
 # Copy app and libs
 COPY --chown=inaturalist:inaturalist lib lib
 COPY --chown=inaturalist:inaturalist openapi openapi
@@ -42,6 +32,15 @@ RUN mkdir /home/inaturalist/api/log
 RUN mkdir /home/inaturalist/api/cache
 RUN mkdir -p /home/inaturalist/api/public/uploads
 
+FROM base as test
+
+ENV NODE_ENV=test
+
+COPY --chown=inaturalist:inaturalist test test
+
+CMD [ "npm", "run", "coverage" ]
+
+FROM base as development
 
 EXPOSE 4000
 
