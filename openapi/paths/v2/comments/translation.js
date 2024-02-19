@@ -2,15 +2,15 @@ const CommentsController = require( "../../../../lib/controllers/v2/comments_con
 
 module.exports = sendWrapper => {
   async function POST( req, res ) {
-    await CommentsController.translateComment( req );
-    sendWrapper( req, res.status( 204 ) );
+    const result = await CommentsController.translate( req );
+    sendWrapper( req, res, null, result );
   }
 
   POST.apiDoc = {
     tags: ["Comments"],
     summary: "Translate a comment",
     security: [{
-      appJwtRequired: []
+      userJwtRequired: []
     }],
     requestBody: {
       content: {
@@ -22,11 +22,15 @@ module.exports = sendWrapper => {
       }
     },
     responses: {
-      204: {
-        description: "No response body"
-      },
-      default: {
-        $ref: "#/components/responses/Error"
+      200: {
+        description: "A translated comment",
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/ResultsCommentsTranslated"
+            }
+          }
+        }
       }
     }
   };

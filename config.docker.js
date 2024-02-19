@@ -20,7 +20,9 @@ const {
   INAT_AWS_OPENDATA_DOMAIN,
   INAT_AWS_OPENDATA_REGION,
   INAT_AWS_OPENDATA_ACL,
-  INAT_TAXA_FILE_PATH
+  INAT_TAXA_FILE_PATH,
+  INAT_GOOGLE_TRANSLATE_PROJECT_ID,
+  INAT_GOOGLE_TRANSLATE_KEY
 } = process.env;
 
 module.exports = {
@@ -66,6 +68,10 @@ module.exports = {
   },
   elasticsearch: {
     host: INAT_ES_HOST ? `http://${INAT_ES_HOST}:9200` : "http://localhost:9200"
+  },
+  googleTranslate: {
+    projectId: INAT_GOOGLE_TRANSLATE_PROJECT_ID,
+    key: INAT_GOOGLE_TRANSLATE_KEY
   },
   cacheDir: "/home/inaturalist/api/cache",
   seekExceptionListID: 945029
