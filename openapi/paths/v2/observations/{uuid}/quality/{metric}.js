@@ -36,6 +36,7 @@ module.exports = sendWrapper => {
             needs_id: Whether the observation should remain in the Needs ID category.
             recent: Whether the evidence demonstrates that the organism was present recently.
             wild: Whether the individual organism was where and when it was without human intervention.
+            subject: Whether the media evidence is related to a single subject.
           `.replace( /\s+/m, " " ) )
           .meta( { in: "path" } )
           .valid(
@@ -44,7 +45,8 @@ module.exports = sendWrapper => {
             "location",
             "needs_id",
             "recent",
-            "wild"
+            "wild",
+            "subject"
           )
       ),
       transform( Joi.boolean( ).label( "agree" ).meta( { in: "query" } ) )
@@ -88,7 +90,8 @@ module.exports = sendWrapper => {
             "location",
             "needs_id",
             "recent",
-            "wild"
+            "wild",
+            "subject"
           )
       )
     ],
