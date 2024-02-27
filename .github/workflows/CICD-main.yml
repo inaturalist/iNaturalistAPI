@@ -35,7 +35,9 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/inaturalistapi:${{ github.sha }}
+        tags: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/inaturalistapi:${{ github.sha }}
+          ${{ secrets.DOCKERHUB_USERNAME }}/inaturalistapi:latest
 
   notify-slack:
     name: Notify Slack
