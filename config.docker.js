@@ -59,14 +59,14 @@ module.exports = {
     port: 6379
   },
   aws: {
-    openDataBucket: INAT_AWS_OPENDATA_BUCKET || "staticdev-public",
-    openDataDomain: INAT_AWS_OPENDATA_DOMAIN || "staticdev-public.s3.amazonaws.com",
-    openDataRegion: INAT_AWS_OPENDATA_REGION || "us-east-1",
+    openDataBucket: INAT_AWS_OPENDATA_BUCKET || "INAT_AWS_OPENDATA_BUCKET",
+    openDataDomain: INAT_AWS_OPENDATA_DOMAIN || "INAT_AWS_OPENDATA_DOMAIN",
+    openDataRegion: INAT_AWS_OPENDATA_REGION || "INAT_AWS_OPENDATA_REGION",
     openDataACL: INAT_AWS_OPENDATA_ACL || ""
   },
   elasticsearch: {
     host: INAT_ES_HOST ? `http://${INAT_ES_HOST}:9200` : "http://localhost:9200"
   },
   cacheDir: "/home/inaturalist/api/cache",
-  seekExceptionListID: 945029
+  seekExceptionListID: INAT_SEEK_EXCEPTION_LIST_ID || "INAT_SEEK_EXCEPTION_LIST_ID"
 };
