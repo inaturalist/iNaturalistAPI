@@ -4,11 +4,11 @@ const {
   INAT_DB_PASS,
   INAT_ES_HOST,
   INAT_REDIS_HOST,
-  INAT_WEB_HOST
+  INAT_RAILS_URL
 } = process.env;
 module.exports = {
   // Host running the iNaturalist Rails app
-  apiURL: INAT_WEB_HOST ? `http://${INAT_WEB_HOST}:3000` : "http://localhost:3000",
+  apiURL: INAT_RAILS_URL || "http://localhost:3000",
   // Base URL for the current version of *this* app
   currentVersionURL: "http://localhost:4000/v1",
   // Whether the Rails app supports SSL requests. For local dev assume it does not

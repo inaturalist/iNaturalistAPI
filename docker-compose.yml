@@ -9,7 +9,7 @@ services:
       INAT_DB_PASS: 'password'
       INAT_ES_HOST: es
       INAT_REDIS_HOST: redis
-      INAT_WEB_HOST: host.docker.internal
+      INAT_RAILS_URL: http://host.docker.internal:3000
     ports:
       - 4000:4000
     command: node app.js
