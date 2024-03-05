@@ -15,6 +15,13 @@ module.exports = sendWrapper => {
     child => transform( child.schema.label( child.key ) )
   );
   parameters.push(
+    transform(
+      Joi.number( ).integer( )
+        .label( "id" )
+        .meta( { in: "path" } )
+        .required( )
+        .description( "A single ID" )
+    ),
     transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
   );
 

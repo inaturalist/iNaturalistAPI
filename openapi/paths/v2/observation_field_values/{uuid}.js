@@ -1,3 +1,5 @@
+const Joi = require( "joi" );
+const transform = require( "../../../joi_to_openapi_parameter" );
 const observationFieldValuesController = require( "../../../../lib/controllers/v2/observation_field_values_controller" );
 
 module.exports = sendWrapper => {
@@ -12,6 +14,15 @@ module.exports = sendWrapper => {
     security: [{
       userJwtOptional: []
     }],
+    parameters: [
+      transform(
+        Joi.string( ).guid( )
+          .label( "uuid" )
+          .meta( { in: "path" } )
+          .required( )
+          .description( "A single UUID" )
+      )
+    ],
     requestBody: {
       content: {
         "application/json": {
@@ -46,6 +57,15 @@ module.exports = sendWrapper => {
     security: [{
       userJwtRequired: []
     }],
+    parameters: [
+      transform(
+        Joi.string( ).guid( )
+          .label( "uuid" )
+          .meta( { in: "path" } )
+          .required( )
+          .description( "A single UUID" )
+      )
+    ],
     responses: {
       204: {
         description: "Observation field value deleted"
