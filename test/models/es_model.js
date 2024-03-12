@@ -49,4 +49,54 @@ describe( "ESModel", ( ) => {
       expect( instances["11"].name ).to.eq( "Junonia hierta" );
     } );
   } );
+
+  describe( "searchHashReferencesPotentiallySensitiveFields", ( ) => {
+    it( "returns false by default", ( ) => {
+      expect( ESModel.searchHashReferencesPotentiallySensitiveFields( {
+        query: { match_all: { } }
+      } ) ).to.be.false;
+    } );
+
+    it( "returns true for filters on user.id", ( ) => {
+      expect( ESModel.searchHashReferencesPotentiallySensitiveFields( {
+        query: {
+          bool: {
+            filter: [{
+              term: {
+                "user.id": 1
+              }
+            }]
+          }
+        }
+      } ) ).to.be.true;
+    } );
+
+    it( "returns true for filters on user.id.keyword", ( ) => {
+      expect( ESModel.searchHashReferencesPotentiallySensitiveFields( {
+        query: {
+          bool: {
+            filter: [{
+              term: {
+                "user.id.keyword": 1
+              }
+            }]
+          }
+        }
+      } ) ).to.be.true;
+    } );
+
+    it( "returns true for references to private_* fields", ( ) => {
+      expect( ESModel.searchHashReferencesPotentiallySensitiveFields( {
+        query: {
+          bool: {
+            filter: [{
+              term: {
+                private_place_id: 1
+              }
+            }]
+          }
+        }
+      } ) ).to.be.true;
+    } );
+  } );
 } );
