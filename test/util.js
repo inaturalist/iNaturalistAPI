@@ -163,4 +163,66 @@ describe( "util", ( ) => {
       } ) ).to.be.null;
     } );
   } );
+
+  describe( "observationSearchRequestCacheKey", ( ) => {
+    it( "returns a cache key for cacheable queries", ( ) => {
+      const req = {
+        query: {
+          page: "1",
+          return_bounds: "true"
+        }
+      };
+      expect( util.observationSearchRequestCacheKey( req, "ObservationsController.search", {
+        enableInTestEnv: true
+      } ) ).to.eq( "ObservationsController.search-returnBounds-true" );
+    } );
+
+    it( "allows queries with place_id to be cached for obs search", ( ) => {
+      const req = {
+        query: {
+          place_id: 1
+        }
+      };
+      expect( util.observationSearchRequestCacheKey( req, "ObservationsController.search", {
+        enableInTestEnv: true
+      } ) ).to.eq( "ObservationsController.search-placeID-1" );
+    } );
+
+    it( "does not allow queries with place_id to be cached for obs search when logged in", ( ) => {
+      const req = {
+        query: {
+          place_id: 1
+        },
+        userSession: {
+          user_id: 1
+        }
+      };
+      expect( util.observationSearchRequestCacheKey( req, "ObservationsController.search", {
+        enableInTestEnv: true
+      } ) ).to.be.null;
+    } );
+
+    it( "includes locale in cache key for obs search by default", ( ) => {
+      const req = {
+        query: {
+          locale: "en"
+        }
+      };
+      expect( util.observationSearchRequestCacheKey( req, "ObservationsController.search", {
+        enableInTestEnv: true
+      } ) ).to.eq( "ObservationsController.search-locale-en" );
+    } );
+
+    it( "excludes locale from cache key for obs search when requested", ( ) => {
+      const req = {
+        query: {
+          locale: "en"
+        }
+      };
+      expect( util.observationSearchRequestCacheKey( req, "ObservationsController.search", {
+        enableInTestEnv: true,
+        ignoreLocalization: true
+      } ) ).to.eq( "ObservationsController.search" );
+    } );
+  } );
 } );

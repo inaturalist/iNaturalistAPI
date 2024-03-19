@@ -14,6 +14,15 @@ module.exports = sendWrapper => {
     security: [{
       userJwtRequired: []
     }],
+    parameters: [
+      transform(
+        Joi.number( ).integer( )
+          .label( "id" )
+          .meta( { in: "path" } )
+          .required( )
+          .description( "A single ID" )
+      )
+    ],
     requestBody: {
       content: {
         "application/json": {
@@ -50,8 +59,7 @@ module.exports = sendWrapper => {
     }],
     parameters: [
       transform(
-        Joi.array( )
-          .items( Joi.number( ).integer( ) )
+        Joi.number( ).integer( )
           .label( "id" )
           .meta( { in: "path" } )
           .required( )

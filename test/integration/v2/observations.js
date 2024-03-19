@@ -505,7 +505,7 @@ describe( "Observations", ( ) => {
     it( "should include a relevant listed taxon", function ( done ) {
       const o = fixtures.elasticsearch.observations.observation[0];
       const railsResponse = {
-        conservation_status: {},
+        conservation_status: null,
         listed_taxon: {
           id: 1,
           establishment_means_label: "introduced"

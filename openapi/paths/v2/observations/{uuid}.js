@@ -55,6 +55,15 @@ module.exports = sendWrapper => {
     security: [{
       userJwtRequired: []
     }],
+    parameters: [
+      transform(
+        Joi.string( ).guid( )
+          .label( "uuid" )
+          .meta( { in: "path" } )
+          .required( )
+          .description( "A single UUID" )
+      )
+    ],
     requestBody: {
       content: {
         "multipart/form-data": {
@@ -94,6 +103,15 @@ module.exports = sendWrapper => {
     security: [{
       userJwtRequired: []
     }],
+    parameters: [
+      transform(
+        Joi.string( ).guid( )
+          .label( "uuid" )
+          .meta( { in: "path" } )
+          .required( )
+          .description( "A single UUID" )
+      )
+    ],
     responses: {
       200: {
         description: "No response body; success implies deletion"

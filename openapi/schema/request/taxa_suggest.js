@@ -4,7 +4,10 @@ module.exports = Joi.object( ).keys( {
   featured_observation_id: Joi.string( ).guid( )
     .description( "When `source` is `observations`, ignore this observation" ),
   fields: Joi.any( ),
-  image_url: Joi.string( ),
+  image_url: Joi.string( )
+    .label( "image_url" )
+    .uri( )
+    .description( "URL for image to use when `source` is `visual`" ),
   limit: Joi.number( ).min( 0 ).description( "Number of results to return" ),
   lat: Joi.number( ).min( -90 ).max( 90 )
     .description( "Coordinate used when fetching nearby results `source` is `visual` or `*observations`" ),

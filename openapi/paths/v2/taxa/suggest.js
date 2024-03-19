@@ -26,13 +26,7 @@ module.exports = sendWrapper => {
         schema: {
           type: "string"
         }
-      },
-      transform(
-        Joi.string( )
-          .label( "image_url" )
-          .uri( )
-          .description( "URL for image to use when `source` is `visual`" )
-      )
+      }
     ].concat( _.map( taxaSuggestSchema.$_terms.keys, child => (
       transform( child.schema.label( child.key ) )
     ) ) ),
