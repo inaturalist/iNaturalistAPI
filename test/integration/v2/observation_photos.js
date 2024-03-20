@@ -16,24 +16,45 @@ describe( "ObservationPhotos", ( ) => {
   };
 
   describe( "create", ( ) => {
-    it( "returns JSON", function ( done ) {
+    beforeEach( ( ) => {
       nock( "http://localhost:3000" )
         .post( "/observation_photos" )
         .reply( 200, obsPhoto );
-      request( this.app ).post( "/v2/observation_photos" )
-        .set( "Authorization", token )
-        .set( "Content-Type", "multipart/form-data" )
-        .field( "fields", "id,uuid" )
-        .field( "observation_photo[observation_id]", obsPhoto.uuid )
-        .attach( "file", "test/fixtures/cuthona_abronia-tagged.jpg" )
-        .expect( 200 )
-        .expect( res => {
-          const resObj = res.body.results[0];
-          expect( resObj.uuid ).to.eq( obsPhoto.uuid );
-          expect( resObj.id ).to.eq( obsPhoto.id );
-        } )
-        .expect( "Content-Type", /json/ )
-        .expect( 200, done );
+    } );
+    describe( "with a new photo", ( ) => {
+      it( "returns JSON", function ( done ) {
+        request( this.app ).post( "/v2/observation_photos" )
+          .set( "Authorization", token )
+          .set( "Content-Type", "multipart/form-data" )
+          .field( "fields", "id,uuid" )
+          .field( "observation_photo[observation_id]", obsPhoto.observation_id )
+          .attach( "file", "test/fixtures/cuthona_abronia-tagged.jpg" )
+          .expect( 200 )
+          .expect( res => {
+            const resObj = res.body.results[0];
+            expect( resObj.uuid ).to.eq( obsPhoto.uuid );
+            expect( resObj.id ).to.eq( obsPhoto.id );
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+    } );
+
+    describe( "with an existing photo", ( ) => {
+      it( "accepts a UUID", function ( done ) {
+        request( this.app ).post( "/v2/observation_photos" )
+          .set( "Authorization", token )
+          .set( "Content-Type", "multipart/form-data" )
+          .set( "Content-Type", "application/json" )
+          .send( {
+            observation_photo: {
+              observation_id: obsPhoto.observation_id,
+              photo_id: 123,
+              uuid: obsPhoto.uuid
+            }
+          } )
+          .expect( 200, done );
+      } );
     } );
   } );
 
