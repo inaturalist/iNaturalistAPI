@@ -15,6 +15,7 @@ module.exports = sendWrapper => {
       appOrUserJwtRequired: []
     }],
     "x-unpublished": true,
+    "x-allow-empty-results": true,
     parameters: [
       transform(
         Joi.string( ).guid( )
