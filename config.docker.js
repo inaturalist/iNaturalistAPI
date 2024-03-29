@@ -69,5 +69,5 @@ module.exports = {
     host: INAT_ES_HOST ? `http://${INAT_ES_HOST}:9200` : "http://localhost:9200"
   },
   cacheDir: "/home/inaturalist/api/cache",
-  seekExceptionListID: INAT_SEEK_EXCEPTION_LIST_ID || "INAT_SEEK_EXCEPTION_LIST_ID"
+  seekExceptionListID: INAT_SEEK_EXCEPTION_LIST_ID || 0
 };
