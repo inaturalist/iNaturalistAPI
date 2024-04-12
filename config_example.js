@@ -15,8 +15,7 @@ module.exports = {
   apiHostSSL: false,
   writeHostSSL: false,
   elasticsearch: {
-    host: INAT_ES_HOST ? `http://${INAT_ES_HOST}:9200` : "http://localhost:9200",
-    geoPointField: "location"
+    host: INAT_ES_HOST ? `http://${INAT_ES_HOST}:9200` : "http://localhost:9200"
   },
   // Note that the database name will be inferred from the NODE_ENV
   // environment variable, e.g. `inaturalist_${process.env.NODE_ENV}`, or it
