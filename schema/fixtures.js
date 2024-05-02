@@ -2306,6 +2306,22 @@
         "scopes": "write login"
       }
     ],
+    "observation_accuracy_samples": [
+      {
+        "id": 1,
+        "observation_accuracy_experiment_id": 1,
+        "observation_id": 1,
+        "created_at": "2024-05-01T00:00:00",
+        "updated_at": "2024-05-01T00:00:00"
+      },
+      {
+        "id": 2,
+        "observation_accuracy_experiment_id": 1,
+        "observation_id": 10,
+        "created_at": "2024-05-01T00:00:00",
+        "updated_at": "2024-05-01T00:00:00"
+      }
+    ],
     "observation_fields": [
       {
         "id": 1,

@@ -629,6 +629,22 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
+    it( "finds observations in an accuracy experiment", function ( done ) {
+      const experimentID = 1;
+      const experimentObsIDs = _.map( _.filter(
+        fixtures.postgresql.observation_accuracy_samples,
+        s => s.observation_accuracy_experiment_id === experimentID
+      ), "observation_id" );
+      expect( experimentObsIDs.length ).to.eq( 2 );
+      request( this.app ).get( `/v1/observations?observation_accuracy_experiment_id=${experimentID}` )
+        .expect( res => {
+          expect( res.body.results.length ).to.eq( experimentObsIDs.length );
+          _.each( experimentObsIDs, id => {
+            expect( _.map( res.body.results, "id" ) ).to.contain( id );
+          } );
+        } ).expect( 200, done );
+    } );
+
     describe( "ofv_datatype", ( ) => {
       const obsWithNumericField = 22;
       const obsWithTaxonField = 23;

@@ -1,12 +1,15 @@
 const { expect } = require( "chai" );
 const moment = require( "moment" );
 const _ = require( "lodash" );
+const fs = require( "fs" );
 const { observations } = require( "inaturalistjs" );
 const testHelper = require( "../../../lib/test_helper" );
 const Observation = require( "../../../lib/models/observation" );
 const Project = require( "../../../lib/models/project" );
 const List = require( "../../../lib/models/list" );
 const ObservationsController = require( "../../../lib/controllers/v1/observations_controller" );
+
+const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
 let eq;
 
@@ -726,6 +729,16 @@ describe( "ObservationsController", ( ) => {
     it( "does not add a filter when all months are requested", async ( ) => {
       const q = await Q( { month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] } );
       expect( q.filters ).to.be.empty;
+    } );
+
+    it( "filters by observation accuracy experiment observations", async ( ) => {
+      const experimentID = 1;
+      const experimentObsIDs = _.map( _.filter(
+        fixtures.postgresql.observation_accuracy_samples,
+        s => s.observation_accuracy_experiment_id === experimentID
+      ), "observation_id" );
+      const q = await Q( { observation_accuracy_experiment_id: experimentID } );
+      expect( q.filters ).to.eql( [{ terms: { id: experimentObsIDs } }] );
     } );
 
     //

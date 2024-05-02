@@ -134,6 +134,7 @@ module.exports = Joi.object( ).keys( {
   observed_on: Joi.string( ),
   unobserved_by_user_id: Joi.string( ),
   apply_project_rules_for: Joi.string( ),
+  observation_accuracy_experiment_id: Joi.array( ).items( Joi.number( ).integer( ) ),
   cs: Joi.string( ),
   csa: Joi.string( ),
   csi: Joi.array( ).items( Joi.string( ).valid(
