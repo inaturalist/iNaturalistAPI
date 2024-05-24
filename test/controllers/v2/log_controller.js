@@ -24,17 +24,17 @@ describe( "LogController", ( ) => {
         .set( "Content-Type", "application/json" )
         .expect( 401, done );
     } );
-    it( "should fail with just an application token", function ( done ) {
+    it( "should succeed with just an application token", function ( done ) {
       request( this.app ).post( "/v2/log" )
         .set( "Authorization", applicationToken )
         .set( "Content-Type", "application/json" )
-        .expect( 401, done );
+        .expect( 204, done );
     } );
-    it( "should fail with just a user token", function ( done ) {
+    it( "should succeed with just a user token", function ( done ) {
       request( this.app ).post( "/v2/log" )
         .set( "Authorization", userToken )
         .set( "Content-Type", "application/json" )
-        .expect( 401, done );
+        .expect( 204, done );
     } );
     it( "should succeed with both a user and application token", function ( done ) {
       request( this.app ).post( "/v2/log" )
