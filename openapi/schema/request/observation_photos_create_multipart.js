@@ -8,5 +8,6 @@ module.exports = Joi.object( ).keys( {
     .description(
       "New UUID for the photo, helps prevent duplication in poor network conditions"
     ),
+  "observation_photo[position]": Joi.number( ).integer( ),
   file: Joi.binary( ).required( )
 } ).unknown( true );

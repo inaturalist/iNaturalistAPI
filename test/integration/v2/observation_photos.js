@@ -12,7 +12,7 @@ describe( "ObservationPhotos", ( ) => {
     id: 1234,
     uuid: "b9576748-095f-43e4-ae25-0bb86ec74c47",
     observation_id: "c1386ffd-1a87-40f7-b646-b9f716595567",
-    position: 0
+    position: 1
   };
 
   describe( "create", ( ) => {
@@ -26,14 +26,19 @@ describe( "ObservationPhotos", ( ) => {
         request( this.app ).post( "/v2/observation_photos" )
           .set( "Authorization", token )
           .set( "Content-Type", "multipart/form-data" )
-          .field( "fields", "id,uuid" )
+          .field( "fields", "id,uuid,position" )
           .field( "observation_photo[observation_id]", obsPhoto.observation_id )
+          .field( "observation_photo[position]", 1 )
           .attach( "file", "test/fixtures/cuthona_abronia-tagged.jpg" )
           .expect( 200 )
           .expect( res => {
+            // NOTE: these properties are just what was stubbed with `const obsPhoto` above, so
+            // this just tests that the endpoint was hit without error and returned what we
+            // instructed it to return
             const resObj = res.body.results[0];
             expect( resObj.uuid ).to.eq( obsPhoto.uuid );
             expect( resObj.id ).to.eq( obsPhoto.id );
+            expect( resObj.position ).to.eq( obsPhoto.position );
           } )
           .expect( "Content-Type", /json/ )
           .expect( 200, done );
@@ -50,7 +55,8 @@ describe( "ObservationPhotos", ( ) => {
             observation_photo: {
               observation_id: obsPhoto.observation_id,
               photo_id: 123,
-              uuid: obsPhoto.uuid
+              uuid: obsPhoto.uuid,
+              position: 2
             }
           } )
           .expect( 200, done );

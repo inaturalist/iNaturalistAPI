@@ -9,7 +9,7 @@ module.exports = sendWrapper => {
   }
 
   PUT.apiDoc = {
-    tags: ["ObservationPhotos"],
+    tags: ["ObservationSounds"],
     summary: "Update an observation sound",
     security: [{
       userJwtRequired: []
