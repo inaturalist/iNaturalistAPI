@@ -21,7 +21,8 @@ const {
   INAT_AWS_OPENDATA_REGION,
   INAT_AWS_OPENDATA_ACL,
   INAT_TAXA_FILE_PATH,
-  INAT_SEEK_EXCEPTION_LIST_ID
+  INAT_SEEK_EXCEPTION_LIST_ID,
+  INAT_NLS_ES_URL
 } = process.env;
 
 module.exports = {
@@ -53,7 +54,8 @@ module.exports = {
     taxaFilePath: INAT_TAXA_FILE_PATH || "",
     geomodel: true,
     combinedThreshold: 0.001,
-    frequencyBackend: "redis"
+    frequencyBackend: "redis",
+    inatnlsURL: INAT_NLS_ES_URL || ""
   },
   redis: {
     host: INAT_REDIS_HOST || "127.0.0.1",
