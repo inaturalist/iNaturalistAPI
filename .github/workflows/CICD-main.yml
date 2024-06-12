@@ -38,6 +38,11 @@ jobs:
         tags: |
           ${{ secrets.DOCKERHUB_USERNAME }}/inaturalistapi:${{ github.sha }}
           ${{ secrets.DOCKERHUB_USERNAME }}/inaturalistapi:latest
+        build-args: |
+          GIT_BRANCH=${{ github.ref_name }}
+          GIT_COMMIT=${{ github.sha }}
+          IMAGE_TAG=${{ secrets.DOCKERHUB_USERNAME }}/inaturalistapi:latest
+          BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
   refresh-main-staging-deployment:
     name: Refresh Main Staging Deployment

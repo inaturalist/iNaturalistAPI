@@ -37,6 +37,11 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/inaturalistapi:${{ github.ref_name }}
+        build-args: |
+          GIT_BRANCH=${{ github.ref_name }}
+          GIT_COMMIT=${{ github.sha }}
+          IMAGE_TAG=${{ secrets.DOCKERHUB_USERNAME }}/inaturalistapi:${{ github.ref_name }}
+          BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
   refresh-dev-staging-deployment:
     name: Refresh Dev Staging Deployment
