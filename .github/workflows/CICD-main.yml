@@ -30,7 +30,7 @@ jobs:
       uses: docker/setup-buildx-action@v3
 
     - name: Set build date
-      run: echo "BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+      run: echo "BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_ENV
 
     - name: Build/Push Main inaturalistapi
       uses: docker/build-push-action@v5
