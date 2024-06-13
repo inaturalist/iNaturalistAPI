@@ -21,7 +21,8 @@ const {
   INAT_AWS_OPENDATA_REGION,
   INAT_AWS_OPENDATA_ACL,
   INAT_TAXA_FILE_PATH,
-  INAT_SEEK_EXCEPTION_LIST_ID
+  INAT_SEEK_EXCEPTION_LIST_ID,
+  INAT_INTERNAL_IP_RANGES
 } = process.env;
 
 module.exports = {
@@ -69,5 +70,6 @@ module.exports = {
     host: INAT_ES_HOST ? `http://${INAT_ES_HOST}:9200` : "http://localhost:9200"
   },
   cacheDir: "/home/inaturalist/api/cache",
-  seekExceptionListID: INAT_SEEK_EXCEPTION_LIST_ID || 0
+  seekExceptionListID: INAT_SEEK_EXCEPTION_LIST_ID || 0,
+  internalIPs: INAT_INTERNAL_IP_RANGES || ""
 };

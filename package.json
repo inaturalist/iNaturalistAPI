@@ -43,6 +43,7 @@
     "handlebars": "^4.7.7",
     "inaturalistjs": "github:inaturalist/inaturalistjs",
     "intl": "^1.2.5",
+    "ip-range-check": "^0.2.0",
     "joi": "^17.5.0",
     "joi-to-swagger": "^6.1.1",
     "js-yaml": "^4.1.0",
