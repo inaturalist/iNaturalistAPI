@@ -42,9 +42,9 @@ ENV GIT_COMMIT=${GIT_COMMIT}
 ENV IMAGE_TAG=${IMAGE_TAG}
 ENV BUILD_DATE=${BUILD_DATE}
 
-RUN echo "GIT_BRANCH=${GIT_BRANCH}" >> /home/inaturalist/api/build_info
+RUN echo "GIT_BRANCH=${GIT_BRANCH}" > /home/inaturalist/api/build_info
 RUN echo "GIT_COMMIT=${GIT_COMMIT}" >> /home/inaturalist/api/build_info
-RUN echo "IMAGE_TAG=${IMAGE_TAG}" > /home/inaturalist/api/build_info
+RUN echo "IMAGE_TAG=${IMAGE_TAG}" >> /home/inaturalist/api/build_info
 RUN echo "BUILD_DATE=${BUILD_DATE}" >> /home/inaturalist/api/build_info
 
 FROM base as test
