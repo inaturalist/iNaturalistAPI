@@ -123,6 +123,7 @@ module.exports = Joi.object( ).keys( {
   term_value_id: Joi.array( ).items( Joi.number( ).integer( ) ),
   without_term_value_id: Joi.array( ).items( Joi.number( ).integer( ) ),
   term_id_or_unknown: Joi.array( ).items( Joi.number( ).integer( ) ),
+  annotation_user_id: Joi.array( ).items( Joi.number( ).integer( ) ),
   acc_above: Joi.number( ).integer( ),
   acc_below: Joi.number( ).integer( ),
   acc_below_or_unknown: Joi.number( ).integer( ),
