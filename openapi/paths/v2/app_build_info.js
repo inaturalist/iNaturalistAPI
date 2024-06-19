@@ -1,24 +1,24 @@
-const BuildInfoController = require( "../../../lib/controllers/v2/build_info_controller" );
+const AppBuildInfoController = require( "../../../lib/controllers/v2/app_build_info_controller" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    const results = await BuildInfoController.index( req );
+    const results = await AppBuildInfoController.index( req );
     sendWrapper( req, res, null, results );
   }
 
   GET.apiDoc = {
-    tags: ["BuildInfo"],
-    summary: "Display build information",
+    tags: ["AppBuildInfo"],
+    summary: "Display application build information",
     security: [{
       userJwtRequired: []
     }],
     responses: {
       200: {
-        description: "Build information",
+        description: "Application build information",
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/BuildInfo"
+              $ref: "#/components/schemas/AppBuildInfo"
             }
           }
         }
