@@ -41,7 +41,7 @@
     "geoip-lite": "^1.4.3",
     "h3-js": "^4.1.0",
     "handlebars": "^4.7.7",
-    "inaturalistjs": "github:inaturalist/inaturalistjs",
+    "inaturalistjs": "github:inaturalist/inaturalistjs#0828cb8fb22736ffe78b737edea793405a158ce8",
     "intl": "^1.2.5",
     "joi": "^17.5.0",
     "joi-to-swagger": "^6.1.1",
