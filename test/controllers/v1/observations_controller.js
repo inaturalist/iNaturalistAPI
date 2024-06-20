@@ -742,7 +742,7 @@ describe( "ObservationsController", ( ) => {
     } );
 
     it( "filters by annotation user ID", async ( ) => {
-      const q = await Q( { annotation_user_id: 1 } );
+      const q = await Q( { inat: { annotation_users: [{ id: 1, login: "userlogin" }] } } );
       expect( q.filters[0].nested.query.bool.filter[0]
         .terms["annotations.user_id"][0] ).to.eql( 1 );
     } );
