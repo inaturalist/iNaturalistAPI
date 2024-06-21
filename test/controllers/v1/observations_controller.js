@@ -741,6 +741,12 @@ describe( "ObservationsController", ( ) => {
       expect( q.filters ).to.eql( [{ terms: { id: experimentObsIDs } }] );
     } );
 
+    it( "filters by annotation user ID", async ( ) => {
+      const q = await Q( { inat: { annotation_users: [{ id: 1, login: "userlogin" }] } } );
+      expect( q.filters[0].nested.query.bool.filter[0]
+        .terms["annotations.user_id"][0] ).to.eql( 1 );
+    } );
+
     //
     // Sorting
     //
