@@ -13,6 +13,7 @@ module.exports = Joi.object( ).keys( {
   icon_url: Joi.string( ).valid( null ),
   identifications_count: Joi.number( ).integer( ),
   journal_posts_count: Joi.number( ).integer( ),
+  annotated_observations_count: Joi.number( ).integer( ),
   last_active: Joi.date( ).iso( ),
   login: Joi.string( ),
   monthly_supporter: Joi.boolean( ).valid( null ),
