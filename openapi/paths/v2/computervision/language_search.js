@@ -12,9 +12,6 @@ module.exports = sendWrapper => {
   GET.apiDoc = {
     tags: ["Computer Vision"],
     summary: "Fetch language demo search results for a search term",
-    security: [{
-      appOrUserJwtRequired: []
-    }],
     "x-unpublished": true,
     parameters: _.map(
       languageSearchSchema.$_terms.keys, child => (
