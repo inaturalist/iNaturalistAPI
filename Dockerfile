@@ -32,6 +32,21 @@ RUN mkdir /home/inaturalist/api/log
 RUN mkdir /home/inaturalist/api/cache
 RUN mkdir -p /home/inaturalist/api/public/uploads
 
+ARG GIT_BRANCH
+ARG GIT_COMMIT
+ARG IMAGE_TAG
+ARG BUILD_DATE
+
+ENV GIT_BRANCH=${GIT_BRANCH}
+ENV GIT_COMMIT=${GIT_COMMIT}
+ENV IMAGE_TAG=${IMAGE_TAG}
+ENV BUILD_DATE=${BUILD_DATE}
+
+RUN echo "GIT_BRANCH=${GIT_BRANCH}" > /home/inaturalist/api/build_info
+RUN echo "GIT_COMMIT=${GIT_COMMIT}" >> /home/inaturalist/api/build_info
+RUN echo "IMAGE_TAG=${IMAGE_TAG}" >> /home/inaturalist/api/build_info
+RUN echo "BUILD_DATE=${BUILD_DATE}" >> /home/inaturalist/api/build_info
+
 FROM base as test
 
 ENV NODE_ENV=test
