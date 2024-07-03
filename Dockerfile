@@ -2,7 +2,7 @@
 # because node-mapnik is not available in arm64
 FROM --platform=linux/amd64 node:22 as base
 
-RUN apt-get update -qq && apt-cache search postgresql && apt-get install -y postgresql-client-15
+RUN apt-get update -qq && apt-get install -y postgresql-client-15
 
 ENV NODE_ENV=development
 
