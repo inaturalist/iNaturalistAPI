@@ -24,7 +24,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '22.4'
+        node-version: '20.x'
 
     - name: Configure sysctl limits
       run: |
@@ -50,7 +50,7 @@ jobs:
 
     - run: npm install
 
-    - run: npm test
+    - run: npm run coverage
       env:
         NODE_ENV: test
         PGHOST: 0.0.0.0
