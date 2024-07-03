@@ -1,6 +1,6 @@
 # Platform should be forced to amd64
 # because node-mapnik is not available in arm64
-FROM --platform=linux/amd64 node:22 as base
+FROM --platform=linux/amd64 node:20 as base
 
 RUN apt-get update -qq && apt-get install -y postgresql-client-15
 
