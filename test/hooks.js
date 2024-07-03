@@ -1,4 +1,7 @@
 /* eslint-disable no-console */
+// requiring nock up-front as it will override the native `fetch`
+// function so it works properly with nock interceptors
+require( "nock" );
 const { expect } = require( "chai" );
 const { execSync } = require( "child_process" );
 const inaturalistjs = require( "inaturalistjs" );
