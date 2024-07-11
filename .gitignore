@@ -1,6 +1,7 @@
 .DS_Store
 .coveralls.yml
 .ruby-gemset
+.nyc_output
 coverage
 node_modules
 config.js
@@ -14,11 +15,9 @@ public/taxa.txt
 public/uploads/
 lib/vision/**
 !lib/vision/cache_images.js
-!lib/vision/cv_stats.js
 !lib/vision/file_cache.js
 !lib/vision/image_cache.js
 !lib/vision/photos_csv_transformer.js
-!lib/vision/run_stats.js
 cache/**
 log/**
 openapi/uploads/**
