@@ -121,6 +121,130 @@ describe( "Announcements", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    describe( "targeting", ( ) => {
+      it( "targets users with even IDs", function ( done ) {
+        const evenUserIDAnnouncement = _.find(
+          fixtures.postgresql.announcements, a => a.body.match( /targeting even user_ids/ )
+        );
+        const evenUserIDToken = jwt.sign( { user_id: 2024071502 },
+          config.jwtSecret || "secret",
+          { algorithm: "HS512" } );
+        request( this.app )
+          .get( "/v2/announcements" )
+          .set( "Authorization", evenUserIDToken )
+          .expect( res => {
+            expect( res.body.results ).to.not.be.empty;
+            expect( _.map( res.body.results, "id" ) ).to.include( evenUserIDAnnouncement.id );
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "does not include announcements targeting even user IDs if user iD is odd", function ( done ) {
+        const evenUserIDAnnouncement = _.find(
+          fixtures.postgresql.announcements, a => a.body.match( /targeting even user_ids/ )
+        );
+        const oddUserIDToken = jwt.sign( { user_id: 2024071501 },
+          config.jwtSecret || "secret",
+          { algorithm: "HS512" } );
+        request( this.app )
+          .get( "/v2/announcements" )
+          .set( "Authorization", oddUserIDToken )
+          .expect( res => {
+            expect( res.body.results ).to.not.be.empty;
+            expect( _.map( res.body.results, "id" ) ).to.not.include( evenUserIDAnnouncement.id );
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "does not include announcements targeting even user IDs if unauthenticated", function ( done ) {
+        const evenUserIDAnnouncement = _.find(
+          fixtures.postgresql.announcements, a => a.body.match( /targeting even user_ids/ )
+        );
+        request( this.app )
+          .get( "/v2/announcements" )
+          .expect( res => {
+            expect( res.body.results ).to.not.be.empty;
+            expect( _.map( res.body.results, "id" ) ).to.not.include( evenUserIDAnnouncement.id );
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "targets users with even IDs", function ( done ) {
+        const evenUserCreatedAnnouncement = _.find(
+          fixtures.postgresql.announcements, a => a.body.match( /targeting even created seconds/ )
+        );
+        const evenUserCreatedToken = jwt.sign( { user_id: 2024071501 },
+          config.jwtSecret || "secret",
+          { algorithm: "HS512" } );
+        request( this.app )
+          .get( "/v2/announcements" )
+          .set( "Authorization", evenUserCreatedToken )
+          .expect( res => {
+            expect( res.body.results ).to.not.be.empty;
+            expect( _.map( res.body.results, "id" ) ).to.include( evenUserCreatedAnnouncement.id );
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "does not include announcements targeting even user IDs if user ID is odd", function ( done ) {
+        const evenUserIDAnnouncement = _.find(
+          fixtures.postgresql.announcements, a => a.body.match( /targeting even created seconds/ )
+        );
+        const oddUserCreatedToken = jwt.sign( { user_id: 2024071502 },
+          config.jwtSecret || "secret",
+          { algorithm: "HS512" } );
+        request( this.app )
+          .get( "/v2/announcements" )
+          .set( "Authorization", oddUserCreatedToken )
+          .expect( res => {
+            expect( res.body.results ).to.not.be.empty;
+            expect( _.map( res.body.results, "id" ) ).to.not.include( evenUserIDAnnouncement.id );
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "targets users with even ID sums", function ( done ) {
+        const evenIDSumAnnouncement = _.find(
+          fixtures.postgresql.announcements, a => a.body.match( /targeting even user_id digit sums/ )
+        );
+        const evenIDSumToken = jwt.sign( { user_id: 2024071501 },
+          config.jwtSecret || "secret",
+          { algorithm: "HS512" } );
+        request( this.app )
+          .get( "/v2/announcements" )
+          .set( "Authorization", evenIDSumToken )
+          .expect( res => {
+            expect( res.body.results ).to.not.be.empty;
+            expect( _.map( res.body.results, "id" ) ).to.include( evenIDSumAnnouncement.id );
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "does not include announcements targeting even ID sums if ID sum is odd", function ( done ) {
+        const evenIDSumAnnouncement = _.find(
+          fixtures.postgresql.announcements, a => a.body.match( /targeting even user_id digit sums/ )
+        );
+        const oddIDSumToken = jwt.sign( { user_id: 2024071502 },
+          config.jwtSecret || "secret",
+          { algorithm: "HS512" } );
+        request( this.app )
+          .get( "/v2/announcements" )
+          .set( "Authorization", oddIDSumToken )
+          .expect( res => {
+            expect( res.body.results ).to.not.be.empty;
+            expect( _.map( res.body.results, "id" ) ).to.not.include( evenIDSumAnnouncement.id );
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+    } );
   } );
 
   describe( "dismiss", ( ) => {

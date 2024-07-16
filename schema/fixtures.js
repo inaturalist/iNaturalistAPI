@@ -2003,6 +2003,48 @@
         "locales": "{}",
         "dismissible": true,
         "clients": "{inat-ios,inat-android}"
+      },
+      {
+        "id": 6,
+        "body": "Active announcement targeting even user_ids",
+        "start": "2023-01-01 00:00:00",
+        "end": "2100-01-01 00:00:00",
+        "created_at": "2023-01-01 00:00:00",
+        "updated_at": "2023-01-01 00:00:00",
+        "placement": "mobile/home",
+        "locales": "{}",
+        "dismissible": true,
+        "clients": "{}",
+        "target_group_type": "user_id_parity",
+        "target_group_partition": "even"
+      },
+      {
+        "id": 7,
+        "body": "Active announcement targeting even created seconds",
+        "start": "2023-01-01 00:00:00",
+        "end": "2100-01-01 00:00:00",
+        "created_at": "2023-01-01 00:00:00",
+        "updated_at": "2023-01-01 00:00:00",
+        "placement": "mobile/home",
+        "locales": "{}",
+        "dismissible": true,
+        "clients": "{}",
+        "target_group_type": "created_second_parity",
+        "target_group_partition": "even"
+      },
+      {
+        "id": 8,
+        "body": "Active announcement targeting even user_id digit sums",
+        "start": "2023-01-01 00:00:00",
+        "end": "2100-01-01 00:00:00",
+        "created_at": "2023-01-01 00:00:00",
+        "updated_at": "2023-01-01 00:00:00",
+        "placement": "mobile/home",
+        "locales": "{}",
+        "dismissible": true,
+        "clients": "{}",
+        "target_group_type": "user_id_digit_sum_parity",
+        "target_group_partition": "even"
       }
     ],
     "comments": [
@@ -3191,7 +3233,7 @@
         "name": "username",
         "site_id": 1,
         "description": "a very original user",
-        "last_active": "2022-03-01"      
+        "last_active": "2022-03-01"
       },
       {
         "id": 5,
@@ -3330,6 +3372,18 @@
         "created_at": "2020-01-01",
         "updated_at": "2020-01-01",
         "last_active": "2023-01-01"
+      },
+      {
+        "id": 2024071501,
+        "login": "user2024071501",
+        "name": "User2024071501 with even created_at second",
+        "created_at": "2020-01-01 00:00:00"
+      },
+      {
+        "id": 2024071502,
+        "login": "user2024071502",
+        "name": "User2024071502 with odd created_at second",
+        "created_at": "2020-01-01 00:00:01"
       }
     ],
     "user_blocks": [
