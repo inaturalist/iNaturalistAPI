@@ -2045,6 +2045,48 @@
         "clients": "{}",
         "target_group_type": "user_id_digit_sum_parity",
         "target_group_partition": "even"
+      },
+      {
+        "id": 9,
+        "body": "Active announcement targeting 2024 donors",
+        "start": "2023-01-01 00:00:00",
+        "end": "2100-01-01 00:00:00",
+        "created_at": "2023-01-01 00:00:00",
+        "updated_at": "2023-01-01 00:00:00",
+        "placement": "mobile/home",
+        "locales": "{}",
+        "dismissible": true,
+        "clients": "{}",
+        "include_donor_start_date": "2024-01-01",
+        "include_donor_end_date":  "2024-12-31"
+      },
+      {
+        "id": 10,
+        "body": "Active announcement excluding 2024 donors",
+        "start": "2023-01-01 00:00:00",
+        "end": "2100-01-01 00:00:00",
+        "created_at": "2023-01-01 00:00:00",
+        "updated_at": "2023-01-01 00:00:00",
+        "placement": "mobile/home",
+        "locales": "{}",
+        "dismissible": true,
+        "clients": "{}",
+        "exclude_donor_start_date": "2024-01-01",
+        "exclude_donor_end_date":  "2024-12-31"
+      },
+      {
+        "id": 11,
+        "body": "Active announcement targeting welcome/index placement",
+        "start": "2023-01-01 00:00:00",
+        "end": "2100-01-01 00:00:00",
+        "created_at": "2023-01-01 00:00:00",
+        "updated_at": "2023-01-01 00:00:00",
+        "placement": "welcome/index",
+        "locales": "{}",
+        "dismissible": true,
+        "clients": "{}",
+        "exclude_donor_start_date": "2024-01-01",
+        "exclude_donor_end_date":  "2024-12-31"
       }
     ],
     "comments": [
@@ -3384,6 +3426,18 @@
         "login": "user2024071502",
         "name": "User2024071502 with odd created_at second",
         "created_at": "2020-01-01 00:00:01"
+      },
+      {
+        "id": 2024071701,
+        "login": "user2024071701",
+        "name": "User2024071701 with 2024 donation",
+        "created_at": "2020-01-01 00:00:00"
+      },
+      {
+        "id": 2024071702,
+        "login": "user2024071702",
+        "name": "User2024071702 with 2023 donation",
+        "created_at": "2020-01-01 00:00:00"
       }
     ],
     "user_blocks": [
@@ -3393,6 +3447,22 @@
         "blocked_user_id": 2021121601,
         "created_at": "2021-11-15T00:00:00",
         "updated_at": "2021-11-15T00:00:00"
+      }
+    ],
+    "user_donations": [
+      {
+        "id": 2024071701,
+        "user_id": 2024071701,
+        "donated_at": "2024-04-01 00:00:00",
+        "created_at": "2024-04-01 00:00:00",
+        "updated_at": "2024-04-01 00:00:00"
+      },
+      {
+        "id": 2024071702,
+        "user_id": 2024071702,
+        "donated_at": "2023-04-01 00:00:00",
+        "created_at": "2023-04-01 00:00:00",
+        "updated_at": "2023-04-01 00:00:00"
       }
     ],
     "user_privileges": [

@@ -122,6 +122,27 @@ describe( "Announcements", ( ) => {
         .expect( 200, done );
     } );
 
+    it( "returns announcements with matching placement", function ( done ) {
+      const welcomePlacementAnnouncement = _.find(
+        fixtures.postgresql.announcements, a => a.placement === "welcome/index"
+      );
+      request( this.app ).get( "/v2/announcements?fields=all&placement=welcome%2Findex" ).expect( res => {
+        expect( res.body.results ).to.not.be.empty;
+        expect( _.size( res.body.results ) ).to.eq( 1 );
+        expect( _.map( res.body.results, "id" ) ).to.include( welcomePlacementAnnouncement.id );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns announcements matching mobile placements", function ( done ) {
+      request( this.app ).get( "/v2/announcements?fields=all&placement=mobile" ).expect( res => {
+        expect( res.body.results ).to.not.be.empty;
+        expect( _.size( res.body.results ) ).to.be.above( 0 );
+        expect( _.every( res.body.results, r => r.placement.match( /^mobile/ ) ) ).to.be.true;
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
     describe( "targeting", ( ) => {
       it( "targets users with even IDs", function ( done ) {
         const evenUserIDAnnouncement = _.find(
@@ -141,7 +162,7 @@ describe( "Announcements", ( ) => {
           .expect( 200, done );
       } );
 
-      it( "does not include announcements targeting even user IDs if user iD is odd", function ( done ) {
+      it( "does not include announcements targeting even user IDs if user ID is odd", function ( done ) {
         const evenUserIDAnnouncement = _.find(
           fixtures.postgresql.announcements, a => a.body.match( /targeting even user_ids/ )
         );
@@ -191,7 +212,7 @@ describe( "Announcements", ( ) => {
           .expect( 200, done );
       } );
 
-      it( "does not include announcements targeting even user IDs if user ID is odd", function ( done ) {
+      it( "does not include announcements targeting even user created seconds if user second is odd", function ( done ) {
         const evenUserIDAnnouncement = _.find(
           fixtures.postgresql.announcements, a => a.body.match( /targeting even created seconds/ )
         );
@@ -240,6 +261,110 @@ describe( "Announcements", ( ) => {
           .expect( res => {
             expect( res.body.results ).to.not.be.empty;
             expect( _.map( res.body.results, "id" ) ).to.not.include( evenIDSumAnnouncement.id );
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+    } );
+
+    describe( "targeting donor dates", ( ) => {
+      it( "includes announcements targeting donors", function ( done ) {
+        const donor2024 = _.find( fixtures.postgresql.users, u => u.name?.match( /2024 donation/ ) );
+        const announcementTo2024Donors = _.find(
+          fixtures.postgresql.announcements, a => a.body.match( /targeting 2024 donors/ )
+        );
+        const donor2024Token = jwt.sign( { user_id: donor2024.id },
+          config.jwtSecret || "secret",
+          { algorithm: "HS512" } );
+        request( this.app )
+          .get( "/v2/announcements" )
+          .set( "Authorization", donor2024Token )
+          .expect( res => {
+            expect( res.body.results ).to.not.be.empty;
+            expect( _.map( res.body.results, "id" ) ).to.include( announcementTo2024Donors.id );
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "does not include announcements targeting donors if requestor is not a donor", function ( done ) {
+        const announcementTo2024Donors = _.find(
+          fixtures.postgresql.announcements, a => a.body.match( /targeting 2024 donors/ )
+        );
+        const donor2024Token = jwt.sign( { user_id: 1 },
+          config.jwtSecret || "secret",
+          { algorithm: "HS512" } );
+        request( this.app )
+          .get( "/v2/announcements" )
+          .set( "Authorization", donor2024Token )
+          .expect( res => {
+            expect( res.body.results ).to.not.be.empty;
+            expect( _.map( res.body.results, "id" ) ).to.not.include( announcementTo2024Donors.id );
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "does not include announcements targeting donors if unauthenticated", function ( done ) {
+        const announcementTo2024Donors = _.find(
+          fixtures.postgresql.announcements, a => a.body.match( /targeting 2024 donors/ )
+        );
+        request( this.app )
+          .get( "/v2/announcements" )
+          .expect( res => {
+            expect( res.body.results ).to.not.be.empty;
+            expect( _.map( res.body.results, "id" ) ).to.not.include( announcementTo2024Donors.id );
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "excludes announcements excluding donors", function ( done ) {
+        const donor2024 = _.find( fixtures.postgresql.users, u => u.name?.match( /2024 donation/ ) );
+        const announcementExcluding2024Donors = _.find(
+          fixtures.postgresql.announcements, a => a.body.match( /excluding 2024 donors/ )
+        );
+        const donor2024Token = jwt.sign( { user_id: donor2024.id },
+          config.jwtSecret || "secret",
+          { algorithm: "HS512" } );
+        request( this.app )
+          .get( "/v2/announcements" )
+          .set( "Authorization", donor2024Token )
+          .expect( res => {
+            expect( res.body.results ).to.not.be.empty;
+            expect( _.map( res.body.results, "id" ) ).to.not.include( announcementExcluding2024Donors.id );
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "does not exclude announcements excluding donors if requestor is not a donor", function ( done ) {
+        const announcementExcluding2024Donors = _.find(
+          fixtures.postgresql.announcements, a => a.body.match( /excluding 2024 donors/ )
+        );
+        const donor2024Token = jwt.sign( { user_id: 1 },
+          config.jwtSecret || "secret",
+          { algorithm: "HS512" } );
+        request( this.app )
+          .get( "/v2/announcements" )
+          .set( "Authorization", donor2024Token )
+          .expect( res => {
+            expect( res.body.results ).to.not.be.empty;
+            expect( _.map( res.body.results, "id" ) ).to.include( announcementExcluding2024Donors.id );
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "does not exclude announcements excluding donors if request is unauthenticated", function ( done ) {
+        const announcementExcluding2024Donors = _.find(
+          fixtures.postgresql.announcements, a => a.body.match( /excluding 2024 donors/ )
+        );
+        request( this.app )
+          .get( "/v2/announcements" )
+          .expect( res => {
+            expect( res.body.results ).to.not.be.empty;
+            expect( _.map( res.body.results, "id" ) ).to.include( announcementExcluding2024Donors.id );
           } )
           .expect( "Content-Type", /json/ )
           .expect( 200, done );
