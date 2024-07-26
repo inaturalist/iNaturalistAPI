@@ -394,4 +394,30 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "resend_confirmation", ( ) => {
+    const currentUser = fixtures.elasticsearch.users.user[0];
+    const token = jwt.sign( { user_id: currentUser.id },
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+
+    it( "should 401 without auth", function ( done ) {
+      request( this.app )
+        .post( "/v1/users/resend_confirmation" )
+        .expect( 401, done );
+    } );
+    it( "should hit the Rails equivalent and return 200", function ( done ) {
+      const nockScope = nock( "http://localhost:3000" )
+        .post( "/users/resend_confirmation" )
+        .reply( 200 );
+      request( this.app )
+        .post( "/v1/users/resend_confirmation" )
+        .set( "Authorization", token )
+        .expect( ( ) => {
+          // Raise an exception if the nocked endpoint doesn't get called
+          nockScope.done( );
+        } )
+        .expect( 200, done );
+    } );
+  } );
 } );
