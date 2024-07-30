@@ -333,6 +333,9 @@
       "analyzer": "keyword_analyzer",
       "type": "text"
     },
+    "slug_keyword": {
+      "type": "keyword"
+    },
     "spam": {
       "type": "boolean"
     },

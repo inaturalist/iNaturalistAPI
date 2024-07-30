@@ -117,6 +117,14 @@ describe( "Projects", ( ) => {
         .expect( 200, done );
     } );
 
+    it( "returns projects by slug with non-ASCII characters", function ( done ) {
+      request( this.app ).get( "/v1/projects/proyecto-águilas" )
+        .expect( res => {
+          expect( res.body.results[0].slug ).to.eq( "proyecto-águilas" );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
     it( "returns an error if too many IDs are requested", function ( done ) {
       const ids = [];
       const count = 101;

@@ -15,6 +15,7 @@ module.exports = Joi.object( ).keys( {
   status: Joi.string( ),
   status_name: Joi.string( ),
   taxon_id: Joi.number( ).integer( ),
+  user_id: Joi.number( ).integer( ).valid( null ),
   url: Joi.string( ).valid( null )
 } ).unknown( false ).meta( { className: "ConservationStatus" } )
   .valid( null );

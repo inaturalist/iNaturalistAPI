@@ -463,6 +463,21 @@ describe( "Observations", ( ) => {
         .expect( 422, done );
     } );
 
+    it( "raises an error for missing projects", function ( done ) {
+      request( this.app ).get( "/v1/observations?project_id=nonsense" )
+        .expect( res => {
+          expect( res.error.text ).to.eq( "{\"error\":\"Unknown project_id: [nonsense]\",\"status\":422}" );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 422, done );
+    } );
+
+    it( "looks up projects with non-ASCII characters", function ( done ) {
+      request( this.app ).get( "/v1/observations?project_id=proyecto-águilas" )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( 1 );
+        } ).expect( 200, done );
+    } );
+
     it( "return iconic taxon names", function ( done ) {
       request( this.app ).get( "/v1/observations?id=1" )
         .expect( res => {

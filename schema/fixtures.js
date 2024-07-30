@@ -526,7 +526,7 @@
             "min_species_ancestry": "1,2,3,4,5",
             "rank_level": 10
           },
-          "project_ids": [ 543 ],
+          "project_ids": [ 543, 2024072601 ],
           "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] }
         },
         {
@@ -1359,6 +1359,14 @@
             }
           ],
           "prefers_user_trust": false
+        },
+        {
+          "id": 2024072601,
+          "title": "Proyecto águilas",
+          "title_autocomplete": "Proyecto águilas",
+          "title_exact": "Proyecto águilas",
+          "slug": "proyecto-águilas",
+          "slug_keyword": "proyecto-águilas"
         }
       ]
     },
