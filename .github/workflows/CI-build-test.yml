@@ -46,7 +46,7 @@ jobs:
     - name: Copy config
       run: |
         cp config.js.ci config.js
-        touch vision-taxa.txt
+        touch vision-taxonomy.csv
 
     - run: npm install
 

@@ -14,9 +14,10 @@ module.exports = {
   staticImagePrefix: "http://localhost:3000/attachments/",
   userImagePrefix: "/attachments/users/icons/",
   imageProcesing: {
-    taxaFilePath: "/home/travis/build/inaturalist/iNaturalistAPI/vision-taxa.txt",
+    taxonomyPath: "/home/travis/build/inaturalist/iNaturalistAPI/vision-taxonomy.csv",
     uploadsDir: "/tmp/",
-    tensorappURL: "http://localhost:6006"
+    tensorappURL: "http://localhost:6006",
+    delegateCommonAncestor: true
   },
   tileSize: 512,
   debug: true,

@@ -134,7 +134,15 @@ describe( "Taxa", ( ) => {
       const sandbox = sinon.createSandbox( );
       afterEach( ( ) => sandbox.restore( ) );
       it( "accepts an image and returns results", function ( done ) {
-        const fakeVisionResults = { 1: 0.01 };
+        const fakeVisionResults = {
+          results: [{
+            id: 1,
+            combined_score: 0.9,
+            geo_score: 0.9,
+            geo_threshold: 1.0,
+            vision_score: 0.9
+          }]
+        };
         nock( config.imageProcesing.tensorappURL )
           .post( "/" )
           .reply( 200, fakeVisionResults );
@@ -156,9 +164,7 @@ describe( "Taxa", ( ) => {
             // Ensure ComputervisionController.scoreImage gets called and not scoreImageURL
             expect( scoreImageSpy ).to.have.been.calledOnce;
             // Ensure response includes the taxon from vision
-            expect( res.body.results[0].taxon.id ).to.eq(
-              parseInt( _.keys( fakeVisionResults )[0], 10 )
-            );
+            expect( res.body.results[0].taxon.id ).to.eq( fakeVisionResults.results[0].id );
             // Ensure fields is working on the results
             expect( res.body.results[0].taxon.name ).not.to.be.undefined;
             expect( res.body.results[0].taxon.rank ).to.be.undefined;

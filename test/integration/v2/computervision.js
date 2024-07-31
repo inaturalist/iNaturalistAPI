@@ -17,19 +17,21 @@ describe( "Computervision", ( ) => {
     );
     const url = `/v2/computervision/score_observation/${fixtureObs.uuid}`;
     beforeEach( ( ) => {
-      const fakeVisionResults = [{
-        id: 1,
-        combined_score: 0.9,
-        geo_score: 0.9,
-        geo_threshold: 1.0,
-        vision_score: 0.9
-      }, {
-        id: 2,
-        combined_score: 0.1,
-        geo_score: 0.1,
-        geo_threshold: 0.5,
-        vision_score: 0.1
-      }];
+      const fakeVisionResults = {
+        results: [{
+          id: 1,
+          combined_score: 0.9,
+          geo_score: 0.9,
+          geo_threshold: 1.0,
+          vision_score: 0.9
+        }, {
+          id: 2,
+          combined_score: 0.1,
+          geo_score: 0.1,
+          geo_threshold: 0.5,
+          vision_score: 0.1
+        }]
+      };
       nock( config.imageProcesing.tensorappURL )
         .post( "/" )
         .reply( 200, fakeVisionResults );
@@ -95,19 +97,21 @@ describe( "Computervision", ( ) => {
       { algorithm: "HS512" }
     );
     beforeEach( ( ) => {
-      const fakeVisionResults = [{
-        id: 1,
-        combined_score: 0.9,
-        geo_score: 0.9,
-        geo_threshold: 1.0,
-        vision_score: 0.9
-      }, {
-        id: 2,
-        combined_score: 0.1,
-        geo_score: 0.1,
-        geo_threshold: 0.5,
-        vision_score: 0.1
-      }];
+      const fakeVisionResults = {
+        results: [{
+          id: 1,
+          combined_score: 0.9,
+          geo_score: 0.9,
+          geo_threshold: 1.0,
+          vision_score: 0.9
+        }, {
+          id: 2,
+          combined_score: 0.1,
+          geo_score: 0.1,
+          geo_threshold: 0.5,
+          vision_score: 0.1
+        }]
+      };
       nock( config.imageProcesing.tensorappURL )
         .post( "/" )
         .reply( 200, fakeVisionResults );

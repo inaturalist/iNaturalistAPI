@@ -20,7 +20,7 @@ const {
   INAT_AWS_OPENDATA_DOMAIN,
   INAT_AWS_OPENDATA_REGION,
   INAT_AWS_OPENDATA_ACL,
-  INAT_TAXA_FILE_PATH,
+  INAT_TAXONOMY_PATH,
   INAT_SEEK_EXCEPTION_LIST_ID,
   INAT_NLS_URL
 } = process.env;
@@ -51,11 +51,12 @@ module.exports = {
   imageProcesing: {
     tensorappURL: INAT_VISION_URL || "http://localhost:6006",
     uploadsDir: "/home/inaturalist/api/public/uploads",
-    taxaFilePath: INAT_TAXA_FILE_PATH || "",
+    taxonomyPath: INAT_TAXONOMY_PATH || "",
     geomodel: true,
     combinedThreshold: 0.001,
     frequencyBackend: "redis",
-    inatnlsURL: INAT_NLS_URL || ""
+    inatnlsURL: INAT_NLS_URL || "",
+    delegateCommonAncestor: true
   },
   redis: {
     host: INAT_REDIS_HOST || "127.0.0.1",
