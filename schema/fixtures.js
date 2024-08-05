@@ -962,7 +962,7 @@
           "location": "42.1,-71.5",
           "private_location": "42.1,-71.5",
           "geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] },
-          "private_geojson": { "type": "Point", "coordinates": [ -71.5, 42.1 ] },
+          "private_geojson": { "type": "Point", "coordinates": [ -71.6, 42.2 ] },
           "geoprivacy": "obscured"
         },
         {
