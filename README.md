@@ -17,6 +17,23 @@ cp config_example.js config.js
 NODE_ENV=development node app.js
 ```
 
+## Troubleshooting
+
+If you use a Mac w/ an Apple processor but run into dependency build issues w/ mapnik, try [this](https://github.com/mapnik/node-mapnik/issues/983#issuecomment-1218367878):
+
+1. Uninstall the version of node listed in `.nvmrc`, e.g. `nvm use 18 && nvm uninstall 20.15.1`
+1. Quit your terminal
+1. Get info on your terminal app and check `Open using Rosetta`
+1. Open your termainl
+1. Clear the nvm cache: `nvm cache clear`
+1. `nvm install`
+1. Quit the terminal
+1. Get info and uncheck `Open using Rosetta`
+1. Open the terminal
+1. `npm install`
+
+In theory that will install an x86 version of node that should not have problems building dependencies that won't build with Apple's ARM processors.
+
 # Running Tests
 
 If [running iNaturalist services from Docker](https://github.com/inaturalist/inaturalist/blob/main/CONTRIBUTING.md#using-docker), make sure to run `make services` from the main app first (note that Elasticsearch may take a few seconds to start).
