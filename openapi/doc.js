@@ -124,6 +124,26 @@ names or a JSON string.
 To see all available fields, you can use \`fields=all\`, e.g.
 <${url}/observations?fields=all>
 
+Photos served from https://static.inaturalist.org and
+https://inaturalist-open-data.s3.amazonaws.com have multiple size
+variants and not all size variants are returned in responses. To access
+other sizes, the photo URL can be modified to replace only the size
+qualifier (each variant shares the exact same extension). The domain a photo
+is hosted under reflects the license under which the photo is being shared,
+and the domain may change over time if the license changes. Photos in
+the \`inaturalist-open-data\` domain are shared under open licenses. These can
+be accessed in bulk in the [iNaturalist AWS Open Dataset](
+https://registry.opendata.aws/inaturalist-open-data/). Photos in the
+\`static.inaturalist.org\` domain do not have open licenses.
+
+The available photo sizes are:
+* original (max 2048px in either dimension)
+* large (max 1024px in either dimension)
+* medium (max 500px in either dimension)
+* small (max 240px in either dimension)
+* thumb (max 100px in either dimension)
+* square (75px square)
+
 ## About iNaturalist
 
 [iNaturalist](https://www.inaturalist.org/) is a global community of

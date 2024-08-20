@@ -9,24 +9,20 @@ module.exports = Joi.object( ).keys( {
   common_ancestor: commonAncestor,
   experimental: Joi.string( ),
   results: Joi.array( ).items( Joi.object( ).keys( {
-    combined_score: Joi.number( ).required( ).description( `
+    combined_score: Joi.number( ).min( 0 ).max( 100 ).required( )
+      .description( `
       Combination of the vision and frequency scores, i.e. a score that
-      incorporates visual similarity and spatio-temporal similarity
+      incorporates visual similarity and spatial similarity
     `.replace( /\s+/m, " " ) ),
-    frequency_score: Joi.number( ).description( `
-      Score based on spatio-temporal similarity to observations of this taxon,
-      i.e. a number based on the number of Research Grade observations of this
-      taxon in the 3-degree lat/lng cell that contains this location and the 3
-      month window that contains the date. The reference values for the location
-      and date depend on what kind of record was used to generate the vision
-      results, so if it was an observation they come from the observation, but
-      if just a photo they will come from the photo's metadata. For example,
-      when generating a frequency_score for an observation observed on 1 June,
-      2020 at lat: 1, lng: 1, we would look at observations made in May, June,
-      and July and where latitude and longitude are greater than 0 or less than
-      3. 
+    frequency_score: Joi.number( ).integer( ).valid( 0, 1 ).description( `
+      This value used to be any float value between 0 and 1 reflecting a
+      measure of spatial similarity to observations of this taxon.
+      Currently frequency_score can only be 0 meaning the taxon is not expected
+      nearby, or 1 meaning the taxon is expected to be nearby. These values
+      are derived from the iNaturalist Geomodel trained on iNaturalist
+      observation locations.
     `.replace( /\s+/m, " " ) ),
-    vision_score: Joi.number( ).description( `
+    vision_score: Joi.number( ).min( 0 ).max( 100 ).description( `
       Score based on the visual similarity of the provided photo to photos of
       taxa in the computer vision model.
     `.replace( /\s+/m, " " ) ),
@@ -34,9 +30,15 @@ module.exports = Joi.object( ).keys( {
   } ) ).required( ).description( `
     Scores are provided without units and are intended for sorting the
     suggestions. One type of score is not necessarily comparable to another,
-    e.g. a taxon with a frequency_score of 3 should not necessarily be shown
-    before one with a vision_score of 1. None of the scores are probabilities of
-    accuracy or measures of confidence.
+    e.g. a taxon with a vision_score of 30 should not necessarily be shown
+    before one with a frequency_score of 1. None of the scores are probabilities of
+    accuracy or measures of confidence. Score ranges will vary from
+    observation to observation (e.g. a result with combined_score of 80 for one
+    observation is not equally as likely a result with the same score for a
+    different observation). Within results for a single observation, scores
+    reflect relative confidence. In a single response, a result with a combined
+    score twice another result is more likely to be accurate, but not exactly
+    twice as likely.
   `.replace( /\s+/m, " " ) )
 } ).unknown( false )
   .meta( { unpublished: true } );
