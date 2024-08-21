@@ -32,13 +32,12 @@ module.exports = Joi.object( ).keys( {
     suggestions. One type of score is not necessarily comparable to another,
     e.g. a taxon with a vision_score of 30 should not necessarily be shown
     before one with a frequency_score of 1. None of the scores are probabilities of
-    accuracy or measures of confidence. Score ranges will vary from
-    observation to observation (e.g. a result with combined_score of 80 for one
-    observation is not equally as likely a result with the same score for a
-    different observation). Within results for a single observation, scores
-    reflect relative confidence. In a single response, a result with a combined
-    score twice another result is more likely to be accurate, but not exactly
-    twice as likely.
+    accuracy. Score ranges will vary from observation to observation (e.g. a
+    result with combined_score of 80 for one observation is not equally as
+    likely a result with the same score for a different observation). Within
+    results for a single observation, scores reflect relative confidence. In a
+    single response, a result with a combined score twice another result is
+    more likely to be accurate, but not neseccarily exactly twice as likely.
   `.replace( /\s+/m, " " ) )
 } ).unknown( false )
   .meta( { unpublished: true } );
