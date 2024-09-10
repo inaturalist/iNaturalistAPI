@@ -40,6 +40,19 @@ describe( "Users", ( ) => {
         } )
         .expect( 200, done );
     } );
+
+    it( "fetches users by login", function ( done ) {
+      const fixtureUser = fixtures.elasticsearch.users.user[0];
+      request( this.app ).get( `/v2/users/${fixtureUser.login}?fields=id,login` )
+        .expect( 200 )
+        .expect( res => {
+          const responseUser = res.body.results[0];
+          expect( responseUser.id ).to.eq( fixtureUser.id );
+          expect( responseUser.login ).to.eq( fixtureUser.login );
+        } )
+        .expect( 200, done );
+    } );
+
     it( "never returns email or IP for user", function ( done ) {
       request( this.app ).get( "/v2/users/2023092501?fields=all" )
         .expect( res => {
