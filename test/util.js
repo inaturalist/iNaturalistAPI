@@ -178,15 +178,55 @@ describe( "util", ( ) => {
       } ) ).to.eq( "ObservationsController.search-returnBounds-true" );
     } );
 
-    it( "allows queries with place_id to be cached for obs search", ( ) => {
+    function expectParamInCacheKey( paramKey, paramVal, paramCacheKey ) {
       const req = {
         query: {
-          place_id: 1
+          [paramKey]: paramVal
         }
       };
       expect( util.observationSearchRequestCacheKey( req, "ObservationsController.search", {
         enableInTestEnv: true
-      } ) ).to.eq( "ObservationsController.search-placeID-1" );
+      } ) ).to.eq( `ObservationsController.search-${paramCacheKey}-${paramVal}` );
+    }
+
+    it( "allows queries with place_id to be cached for obs search", ( ) => {
+      expectParamInCacheKey( "place_id", 1, "placeID" );
+    } );
+
+    it( "allows queries with lat to be cached for obs search", ( ) => {
+      expectParamInCacheKey( "lat", 1, "lat" );
+    } );
+
+    it( "allows queries with lng to be cached for obs search", ( ) => {
+      expectParamInCacheKey( "lng", 1, "lng" );
+    } );
+
+    it( "allows queries with radius to be cached for obs search", ( ) => {
+      expectParamInCacheKey( "radius", 1, "radius" );
+    } );
+
+    it( "allows queries with swlat to be cached for obs search", ( ) => {
+      expectParamInCacheKey( "swlat", 1, "swlat" );
+    } );
+
+    it( "allows queries with swlng to be cached for obs search", ( ) => {
+      expectParamInCacheKey( "swlng", 1, "swlng" );
+    } );
+
+    it( "allows queries with nelat to be cached for obs search", ( ) => {
+      expectParamInCacheKey( "nelat", 1, "nelat" );
+    } );
+
+    it( "allows queries with nelng to be cached for obs search", ( ) => {
+      expectParamInCacheKey( "nelng", 1, "nelng" );
+    } );
+
+    it( "allows queries with lat of 0 to be cached for obs search", ( ) => {
+      expectParamInCacheKey( "lat", 0, "lat" );
+    } );
+
+    it( "allows queries with nelat of 0 to be cached for obs search", ( ) => {
+      expectParamInCacheKey( "nelat", 0, "nelat" );
     } );
 
     it( "does not allow queries with place_id to be cached for obs search when logged in", ( ) => {
