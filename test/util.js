@@ -1,4 +1,5 @@
 const { expect } = require( "chai" );
+const crypto = require( "crypto" );
 const util = require( "../lib/util" );
 
 function expectError( e, done ) {
@@ -223,6 +224,32 @@ describe( "util", ( ) => {
         enableInTestEnv: true,
         ignoreLocalization: true
       } ) ).to.eq( "ObservationsController.search" );
+    } );
+
+    it( "returns a cache key for v2-like cacheable queries", ( ) => {
+      const fields = {
+        taxon: true,
+        user: true
+      };
+      const fieldsHash = crypto
+        .createHash( "md5" )
+        .update( JSON.stringify( fields ), "utf8" )
+        .digest( "hex" );
+      const req = {
+        query: {
+          locale: "en",
+          fields
+        },
+        inat: {
+          isV2: true,
+          fieldRequested: ( ) => { },
+          fields
+        }
+      };
+      expect( util.observationSearchRequestCacheKey( req, "ObservationsController.search", {
+        enableInTestEnv: true,
+        ignoreLocalization: true
+      } ) ).to.eq( `ObservationsController.search-fields-${fieldsHash}` );
     } );
   } );
 } );
