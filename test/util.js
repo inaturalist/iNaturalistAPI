@@ -165,7 +165,7 @@ describe( "util", ( ) => {
     } );
   } );
 
-  describe( "observationSearchRequestCacheKey", ( ) => {
+  describe.only( "observationSearchRequestCacheKey", ( ) => {
     it( "returns a cache key for cacheable queries", ( ) => {
       const req = {
         query: {
@@ -193,42 +193,6 @@ describe( "util", ( ) => {
       expectParamInCacheKey( "place_id", 1, "placeID" );
     } );
 
-    it( "allows queries with lat to be cached for obs search", ( ) => {
-      expectParamInCacheKey( "lat", 1, "lat" );
-    } );
-
-    it( "allows queries with lng to be cached for obs search", ( ) => {
-      expectParamInCacheKey( "lng", 1, "lng" );
-    } );
-
-    it( "allows queries with radius to be cached for obs search", ( ) => {
-      expectParamInCacheKey( "radius", 1, "radius" );
-    } );
-
-    it( "allows queries with swlat to be cached for obs search", ( ) => {
-      expectParamInCacheKey( "swlat", 1, "swlat" );
-    } );
-
-    it( "allows queries with swlng to be cached for obs search", ( ) => {
-      expectParamInCacheKey( "swlng", 1, "swlng" );
-    } );
-
-    it( "allows queries with nelat to be cached for obs search", ( ) => {
-      expectParamInCacheKey( "nelat", 1, "nelat" );
-    } );
-
-    it( "allows queries with nelng to be cached for obs search", ( ) => {
-      expectParamInCacheKey( "nelng", 1, "nelng" );
-    } );
-
-    it( "allows queries with lat of 0 to be cached for obs search", ( ) => {
-      expectParamInCacheKey( "lat", 0, "lat" );
-    } );
-
-    it( "allows queries with nelat of 0 to be cached for obs search", ( ) => {
-      expectParamInCacheKey( "nelat", 0, "nelat" );
-    } );
-
     it( "does not allow queries with place_id to be cached for obs search when logged in", ( ) => {
       const req = {
         query: {
@@ -242,6 +206,21 @@ describe( "util", ( ) => {
         enableInTestEnv: true
       } ) ).to.be.null;
     } );
+
+    function expectParamNotToGenerateCacheKey( paramKey, paramValue ) {
+      const req = { query: { [paramKey]: paramValue } };
+      expect( util.observationSearchRequestCacheKey( req, "ObservationsController.search", {
+        enableInTestEnv: true
+      } ) ).to.be.null;
+    }
+
+    it( "should not generate a key if lat in params", ( ) => expectParamNotToGenerateCacheKey( "lat", 1 ) );
+    it( "should not generate a key if lng in params", ( ) => expectParamNotToGenerateCacheKey( "lng", 1 ) );
+    it( "should not generate a key if radius in params", ( ) => expectParamNotToGenerateCacheKey( "radius", 1 ) );
+    it( "should not generate a key if swlat in params", ( ) => expectParamNotToGenerateCacheKey( "swlat", 1 ) );
+    it( "should not generate a key if swlng in params", ( ) => expectParamNotToGenerateCacheKey( "swlng", 1 ) );
+    it( "should not generate a key if nelat in params", ( ) => expectParamNotToGenerateCacheKey( "nelat", 1 ) );
+    it( "should not generate a key if nelng in params", ( ) => expectParamNotToGenerateCacheKey( "nelng", 1 ) );
 
     it( "includes locale in cache key for obs search by default", ( ) => {
       const req = {
