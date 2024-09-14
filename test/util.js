@@ -165,7 +165,7 @@ describe( "util", ( ) => {
     } );
   } );
 
-  describe.only( "observationSearchRequestCacheKey", ( ) => {
+  describe( "observationSearchRequestCacheKey", ( ) => {
     it( "returns a cache key for cacheable queries", ( ) => {
       const req = {
         query: {
