@@ -178,15 +178,19 @@ describe( "util", ( ) => {
       } ) ).to.eq( "ObservationsController.search-returnBounds-true" );
     } );
 
-    it( "allows queries with place_id to be cached for obs search", ( ) => {
+    function expectParamInCacheKey( paramKey, paramVal, paramCacheKey ) {
       const req = {
         query: {
-          place_id: 1
+          [paramKey]: paramVal
         }
       };
       expect( util.observationSearchRequestCacheKey( req, "ObservationsController.search", {
         enableInTestEnv: true
-      } ) ).to.eq( "ObservationsController.search-placeID-1" );
+      } ) ).to.eq( `ObservationsController.search-${paramCacheKey}-${paramVal}` );
+    }
+
+    it( "allows queries with place_id to be cached for obs search", ( ) => {
+      expectParamInCacheKey( "place_id", 1, "placeID" );
     } );
 
     it( "does not allow queries with place_id to be cached for obs search when logged in", ( ) => {
@@ -202,6 +206,21 @@ describe( "util", ( ) => {
         enableInTestEnv: true
       } ) ).to.be.null;
     } );
+
+    function expectParamNotToGenerateCacheKey( paramKey, paramValue ) {
+      const req = { query: { [paramKey]: paramValue } };
+      expect( util.observationSearchRequestCacheKey( req, "ObservationsController.search", {
+        enableInTestEnv: true
+      } ) ).to.be.null;
+    }
+
+    it( "should not generate a key if lat in params", ( ) => expectParamNotToGenerateCacheKey( "lat", 1 ) );
+    it( "should not generate a key if lng in params", ( ) => expectParamNotToGenerateCacheKey( "lng", 1 ) );
+    it( "should not generate a key if radius in params", ( ) => expectParamNotToGenerateCacheKey( "radius", 1 ) );
+    it( "should not generate a key if swlat in params", ( ) => expectParamNotToGenerateCacheKey( "swlat", 1 ) );
+    it( "should not generate a key if swlng in params", ( ) => expectParamNotToGenerateCacheKey( "swlng", 1 ) );
+    it( "should not generate a key if nelat in params", ( ) => expectParamNotToGenerateCacheKey( "nelat", 1 ) );
+    it( "should not generate a key if nelng in params", ( ) => expectParamNotToGenerateCacheKey( "nelng", 1 ) );
 
     it( "includes locale in cache key for obs search by default", ( ) => {
       const req = {
