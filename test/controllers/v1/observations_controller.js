@@ -798,6 +798,11 @@ describe( "ObservationsController", ( ) => {
       const q = await Q( { order_by: "id" } );
       expect( q.sort ).to.eql( { id: "desc" } );
     } );
+
+    it( "sorts by geo_score", async ( ) => {
+      const q = await Q( { order_by: "geo_score" } );
+      expect( q.sort ).to.eql( { geo_score: "desc" } );
+    } );
   } );
 
   describe( "index", ( ) => {

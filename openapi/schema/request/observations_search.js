@@ -292,16 +292,17 @@ module.exports = Joi.object( ).keys( {
   order: Joi.string( ).valid(
     "desc",
     "asc"
-  ),
+  ).default( "desc" ),
   order_by: Joi.string( ).valid(
-    "observed_on",
-    "updated_at",
-    "species_guess",
-    "votes",
-    "id",
     "created_at",
-    "random"
-  ),
+    "geo_score",
+    "id",
+    "observed_on",
+    "random",
+    "species_guess",
+    "updated_at",
+    "votes"
+  ).default( "created_at" ),
   only_id: Joi.boolean( ),
   fields: Joi.any( )
     .description( "Attribute fields to return in the response" )
