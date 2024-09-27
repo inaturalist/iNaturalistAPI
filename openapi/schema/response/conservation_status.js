@@ -3,7 +3,7 @@ const place = require( "./place" );
 
 module.exports = Joi.object( ).keys( {
   id: Joi.number( ).integer( ).required( ),
-  authority: Joi.string( ),
+  authority: Joi.string( ).valid( null ),
   description: Joi.string( ).valid( null ),
   geoprivacy: Joi.string( ).valid( null ),
   iucn: Joi.number( ).integer( ),
