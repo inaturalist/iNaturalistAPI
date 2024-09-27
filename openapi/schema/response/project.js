@@ -1,9 +1,11 @@
 const Joi = require( "joi" );
 const flag = require( "./flag" );
 const observationField = require( "./observation_field" );
+const place = require( "./place" );
+const taxon = require( "./taxon" );
 const user = require( "./user" );
 
-module.exports = Joi.object( ).keys( {
+const project = Joi.object( ).keys( {
   id: Joi.number( ).integer( )
     .description( "Unique auto-increment integer identifier." )
     .required( ),
@@ -33,16 +35,20 @@ module.exports = Joi.object( ).keys( {
   place_id: Joi.number( ).integer( ).valid( null ),
   prefers_user_trust: Joi.boolean( ).valid( null ),
   project_observation_fields: Joi.array( ).items( Joi.object( ).keys( {
-    id: Joi.number( ).integer( ),
+    id: Joi.number( ).integer( ).required( ),
     observation_field: observationField,
     position: Joi.number( ).integer( ),
     required: Joi.boolean( ).valid( null )
   } ).unknown( false ) ),
   project_observation_rules: Joi.array( ).items( Joi.object( ).keys( {
-    id: Joi.number( ).integer( ),
+    id: Joi.number( ).integer( ).required( ),
     operand_id: Joi.number( ).integer( ).valid( null ),
     operand_type: Joi.string( ).valid( null ),
-    operator: Joi.string( )
+    operator: Joi.string( ),
+    place,
+    project: Joi.object( ).meta( { className: "Project" } ),
+    taxon,
+    user
   } ).unknown( false ) ),
   project_type: Joi.string( ).valid( null ),
   rule_preferences: Joi.array( ).items( Joi.object( ).keys( {
@@ -71,3 +77,5 @@ module.exports = Joi.object( ).keys( {
   user_ids: Joi.array( ).items( Joi.number( ).integer( ) )
 } ).unknown( false ).meta( { className: "Project" } )
   .valid( null );
+
+module.exports = project;

@@ -20,6 +20,7 @@ module.exports = sendWrapper => {
           .required( )
           .description( "A single ID or a comma-separated list of them" )
       ),
+      transform( Joi.boolean( ).valid( true ).label( "rule_details" ).meta( { in: "query" } ) ),
       transform( Joi.string( ).label( "fields" ).meta( { in: "query" } ) ),
       transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
     ],

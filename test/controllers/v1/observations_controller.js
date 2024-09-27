@@ -322,6 +322,14 @@ describe( "ObservationsController", ( ) => {
       ], f => asyncTest( f ) ) );
     } );
 
+    it( "filters by hour", async ( ) => {
+      const q = await Q( { hour: "0,1,2,3" } );
+      expect( q.filters ).to.eql( [
+        { terms: { "observed_on_details.hour": ["0", "1", "2", "3"] } },
+        { exists: { field: "time_observed_at" } }
+      ] );
+    } );
+
     it( "filters by verifiable true", async ( ) => {
       const q = await Q( { verifiable: "true" } );
       expect( q.inverse_filters ).to.eql( [

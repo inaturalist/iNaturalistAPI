@@ -66,6 +66,21 @@ describe( "Projects", ( ) => {
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+    it( "accepts a rule_details parameter", function ( done ) {
+      const firstUmbrella = _.find( fixtures.elasticsearch.projects.project, p => (
+        p.title === "First Umbrella"
+      ) );
+      request( this.app ).get( `/v2/projects/${firstUmbrella.id}?fields=all&rule_details=true` )
+        .expect( res => {
+          const p = res.body.results[0];
+          expect( p.project_observation_rules.length ).to.be.above( 0 );
+          expect( p.project_observation_rules[0].project ).not.to.be.undefined;
+          expect( _.map( p.project_observation_rules, r => r.project.id ).sort ).to.eq(
+            _.map( firstUmbrella.project_observation_rules, "operand_id" ).sort
+          );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "search", ( ) => {
