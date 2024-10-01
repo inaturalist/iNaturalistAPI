@@ -710,6 +710,23 @@ describe( "ObservationsController", ( ) => {
       }] );
     } );
 
+    it( "filters by multiple geoprivacy values", async ( ) => {
+      const q = await Q( { geoprivacy: "open,obscured" } );
+      expect( q.filters ).to.eql( [{
+        bool: {
+          should: [{
+            bool: {
+              should: [
+                { terms: { geoprivacy: ["open"] } },
+                { bool: { must_not: { exists: { field: "geoprivacy" } } } }
+              ]
+            }
+          },
+          { terms: { geoprivacy: ["obscured"] } }]
+        }
+      }] );
+    } );
+
     it( "filters by geoprivacy obscured_private", async ( ) => {
       const q = await Q( { geoprivacy: "obscured_private" } );
       expect( q.filters ).to.eql( [{ terms: { geoprivacy: ["obscured", "private"] } }] );
@@ -727,6 +744,13 @@ describe( "ObservationsController", ( ) => {
       expect( q.filters ).to.eql( [{ exists: { field: "photo_licenses" } }] );
       q = await Q( { photo_licensed: "false" } );
       expect( q.inverse_filters ).to.eql( [{ exists: { field: "photo_licenses" } }] );
+    } );
+
+    it( "filters by expected_nearby", async ( ) => {
+      let q = await Q( { expected_nearby: "true" } );
+      expect( q.filters ).to.eql( [{ range: { geo_score: { gte: 1.0 } } }] );
+      q = await Q( { expected_nearby: "false" } );
+      expect( q.filters ).to.eql( [{ range: { geo_score: { lt: 1.0 } } }] );
     } );
 
     it( "filters by month", async ( ) => {

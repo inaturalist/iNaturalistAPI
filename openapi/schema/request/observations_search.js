@@ -285,6 +285,7 @@ module.exports = Joi.object( ).keys( {
   updated_since: Joi.string( ),
   viewer_id: Joi.number( ).integer( ),
   reviewed: Joi.boolean( ),
+  expected_nearby: Joi.boolean( ),
   locale: Joi.string( ),
   preferred_place_id: Joi.number( ).integer( ),
   ttl: Joi.number( ).integer( ),
