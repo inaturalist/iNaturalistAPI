@@ -29,8 +29,8 @@ module.exports = {
   environment: NODE_ENV || "development",
   currentVersionURL: INAT_API_URL || "http://localhost:4000/v1",
   apiURL: INAT_RAILS_URL || "http://localhost:3000",
-  jwtSecret: INAT_JWT_SECRET || "INAT_JWT_SECRET",
-  jwtApplicationSecret: INAT_JWT_APPLICATION_SECRET || "INAT_JWT_APPLICATION_SECRET",
+  jwtSecret: INAT_JWT_SECRET || "secret",
+  jwtApplicationSecret: INAT_JWT_APPLICATION_SECRET || "application_secret",
   tileSize: 512,
   debug: NODE_DEBUG || false,
   database: {
