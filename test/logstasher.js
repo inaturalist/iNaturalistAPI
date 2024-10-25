@@ -47,4 +47,15 @@ describe( "Logstasher", ( ) => {
       x_real_ip_all: ["127.0.0.1", "192.168.1.1"]
     } );
   } );
+
+  it( "returns the IP of a request", ( ) => {
+    expect( Logstasher.ipFromRequest( null ) ).to.be.null;
+    expect( Logstasher.ipFromRequest( {} ) ).to.be.null;
+    expect( Logstasher.ipFromRequest(
+      { headers: { x_real_ip: "127.0.0.1" } }
+    ) ).to.eq( "127.0.0.1" );
+    expect( Logstasher.ipFromRequest(
+      { headers: { x_real_ip: "127.0.0.1, 192.168.1.1" } }
+    ) ).to.eq( "192.168.1.1" );
+  } );
 } );
