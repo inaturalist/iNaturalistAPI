@@ -5,14 +5,24 @@ const nock = require( "nock" );
 const jwt = require( "jsonwebtoken" );
 const fs = require( "fs" );
 const config = require( "../../../config" );
+const pgClient = require( "../../../lib/pg_client" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
+
+const fetchAnnouncementImpressions = async ( ) => {
+  const { rows } = await pgClient.query( "SELECT * FROM announcement_impressions" );
+  return rows;
+};
 
 describe( "Announcements", ( ) => {
   const token = jwt.sign( { user_id: 333 },
     config.jwtSecret || "secret",
     { algorithm: "HS512" } );
   const announcement = _.find( fixtures.postgresql.announcements, a => a.body.match( /^Active/ ) );
+
+  afterEach( async ( ) => {
+    await pgClient.query( "TRUNCATE TABLE announcement_impressions RESTART IDENTITY" );
+  } );
 
   describe( "search", ( ) => {
     it( "returns announcements", function ( done ) {
@@ -21,6 +31,35 @@ describe( "Announcements", ( ) => {
         expect( res.body.results[0].body ).to.eq( announcement.body );
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
+    } );
+
+    it( "generates announcement impressions", async function ( ) {
+      const initialAnnouncementImpressions = await fetchAnnouncementImpressions( );
+      expect( _.size( initialAnnouncementImpressions ) ).to.eq( 0 );
+      const response = await request( this.app ).get( "/v2/announcements?fields=all" );
+      const resultAnnouncementImpressions = await fetchAnnouncementImpressions( );
+      expect( _.size( resultAnnouncementImpressions ) ).to.be.above( 0 );
+      expect( _.map( resultAnnouncementImpressions, i => Number( i.id ) ).sort ).to.eq(
+        _.map( response.body.results, "id" ).sort
+      );
+      _.each( resultAnnouncementImpressions, impression => {
+        expect( impression.user_id ).to.be.null;
+        expect( impression.platform_type ).to.eq( "mobile" );
+        expect( impression.impressions_count ).to.eq( 1 );
+      } );
+    } );
+
+    it( "increments announcement impressions counts", async function ( ) {
+      const initialAnnouncementImpressions = await fetchAnnouncementImpressions( );
+      expect( _.size( initialAnnouncementImpressions ) ).to.eq( 0 );
+      await request( this.app ).get( "/v2/announcements?fields=all" );
+      await request( this.app ).get( "/v2/announcements?fields=all" );
+      await request( this.app ).get( "/v2/announcements?fields=all" );
+      const resultAnnouncementImpressions = await fetchAnnouncementImpressions( );
+      expect( _.size( resultAnnouncementImpressions ) ).to.be.above( 0 );
+      _.each( resultAnnouncementImpressions, impression => {
+        expect( impression.impressions_count ).to.eq( 3 );
+      } );
     } );
 
     it( "does not return inactive announcements", function ( done ) {
@@ -160,6 +199,46 @@ describe( "Announcements", ( ) => {
           } )
           .expect( "Content-Type", /json/ )
           .expect( 200, done );
+      } );
+
+      it( "generates announcement impressions for authenticated requests", async function ( ) {
+        const evenUserIDToken = jwt.sign( { user_id: 2024071502 },
+          config.jwtSecret || "secret",
+          { algorithm: "HS512" } );
+
+        const initialAnnouncementImpressions = await fetchAnnouncementImpressions( );
+        expect( _.size( initialAnnouncementImpressions ) ).to.eq( 0 );
+        const response = await request( this.app )
+          .get( "/v2/announcements" )
+          .set( "Authorization", evenUserIDToken );
+        const resultAnnouncementImpressions = await fetchAnnouncementImpressions( );
+        expect( _.size( resultAnnouncementImpressions ) ).to.be.above( 0 );
+        expect( _.map( resultAnnouncementImpressions, i => Number( i.id ) ).sort ).to.eq(
+          _.map( response.body.results, "id" ).sort
+        );
+        _.each( resultAnnouncementImpressions, impression => {
+          expect( impression.user_id ).to.eq( 2024071502 );
+          expect( impression.platform_type ).to.eq( "mobile" );
+          expect( impression.impressions_count ).to.eq( 1 );
+        } );
+      } );
+
+      it( "increments announcement impressions for authenticated requests", async function ( ) {
+        const evenUserIDToken = jwt.sign( { user_id: 2024071502 },
+          config.jwtSecret || "secret",
+          { algorithm: "HS512" } );
+
+        const initialAnnouncementImpressions = await fetchAnnouncementImpressions( );
+        expect( _.size( initialAnnouncementImpressions ) ).to.eq( 0 );
+        await request( this.app ).get( "/v2/announcements" ).set( "Authorization", evenUserIDToken );
+        await request( this.app ).get( "/v2/announcements" ).set( "Authorization", evenUserIDToken );
+        await request( this.app ).get( "/v2/announcements" ).set( "Authorization", evenUserIDToken );
+        const resultAnnouncementImpressions = await fetchAnnouncementImpressions( );
+        expect( _.size( resultAnnouncementImpressions ) ).to.be.above( 0 );
+        _.each( resultAnnouncementImpressions, impression => {
+          expect( impression.user_id ).to.eq( 2024071502 );
+          expect( impression.impressions_count ).to.eq( 3 );
+        } );
       } );
 
       it( "does not include announcements targeting even user IDs if user ID is odd", function ( done ) {
