@@ -60,6 +60,10 @@ module.exports = Joi.object( ).keys( {
     Joi.number( ).integer( ),
     Joi.string( )
   ) ),
+  coords_viewable_for_proj: Joi.boolean( )
+    .description(
+      "Filter by observers who trust the project(s) specified in `project_id` OR trust the authenticated viewer"
+    ),
   rank: Joi.array( ).items( Joi.string( ).valid(
     "kingdom",
     "phylum",
