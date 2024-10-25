@@ -779,6 +779,47 @@ describe( "ObservationsController", ( ) => {
         .terms["annotations.user_id"][0] ).to.eql( 1 );
     } );
 
+    it( "filters by term_id", async ( ) => {
+      const q = await Q( { term_id: 1 } );
+      expect( q.filters ).to.eql( [{
+        nested: {
+          path: "annotations",
+          query: {
+            bool: {
+              filter: [{
+                terms: {
+                  "annotations.controlled_attribute_id.keyword": [1]
+                }
+              },
+              {
+                range: {
+                  "annotations.vote_score_short": {
+                    gte: 0
+                  }
+                }
+              }]
+            }
+          }
+        }
+      }] );
+    } );
+
+    it( "filters by annotation_min_score", async ( ) => {
+      const q = await Q( { annotation_min_score: 1 } );
+      expect( q.filters ).to.eql( [{
+        nested: {
+          path: "annotations",
+          query: {
+            bool: {
+              filter: [
+                { range: { "annotations.vote_score_short": { gte: 1 } } }
+              ]
+            }
+          }
+        }
+      }] );
+    } );
+
     //
     // Sorting
     //

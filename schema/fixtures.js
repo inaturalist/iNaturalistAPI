@@ -616,7 +616,7 @@
               "controlled_attribute_id": 1,
               "controlled_value_id": 1,
               "concatenated_attr_val": "1|1",
-              "vote_score": 1.0,
+              "vote_score_short": 1,
               "user_id": 5,
               "votes": []
             }
@@ -634,7 +634,7 @@
               "controlled_attribute_id": 1,
               "controlled_value_id": 2,
               "concatenated_attr_val": "1|2",
-              "vote_score": 1.0,
+              "vote_score_short": 1,
               "user_id": 5,
               "votes": []
             }
@@ -652,7 +652,7 @@
               "controlled_attribute_id": 1,
               "controlled_value_id": 2,
               "concatenated_attr_val": "1|2",
-              "vote_score": -1,
+              "vote_score_short": -1,
               "user_id": 5,
               "votes": [
                 {
@@ -761,7 +761,7 @@
               "controlled_attribute_id": 2,
               "controlled_value_id": 3,
               "concatenated_attr_val": "2|3",
-              "vote_score": 1.0,
+              "vote_score_short": 1,
               "user_id": 5,
               "votes": []
             }
@@ -780,7 +780,7 @@
               "controlled_attribute_id": 1,
               "controlled_value_id": 1,
               "concatenated_attr_val": "1|1",
-              "vote_score": 1.0,
+              "vote_score_short": 1,
               "user_id": 5,
               "votes": []
             },
@@ -788,7 +788,7 @@
               "controlled_attribute_id": 2,
               "controlled_value_id": 3,
               "concatenated_attr_val": "2|3",
-              "vote_score": 1.0,
+              "vote_score_short": 1,
               "user_id": 5,
               "votes": []
             }

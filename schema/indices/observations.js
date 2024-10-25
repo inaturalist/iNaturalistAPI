@@ -31,8 +31,8 @@
         "uuid": {
           "type": "keyword"
         },
-        "vote_score": {
-          "type": "byte"
+        "vote_score_short": {
+          "type": "short"
         },
         "votes": {
           "properties": {

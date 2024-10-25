@@ -165,6 +165,33 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
+    it( "maps vote_score_short to vote_score for response", function ( done ) {
+      const observationWithAnnotationVotes = _.find(
+        fixtures.elasticsearch.observations.observation,
+        o => !_.isEmpty( o.annotations ) && _.find( o.annotations, a => a.vote_score_short === 1 )
+      );
+      request( this.app )
+        .post( "/v2/observations" )
+        .set( "Content-Type", "application/json" )
+        .send( {
+          id: observationWithAnnotationVotes.id,
+          fields: {
+            annotations: "all"
+          }
+        } )
+        .set( "X-HTTP-Method-Override", "GET" )
+        .expect( res => {
+          expect(
+            _.find( res.body.results[0].annotations, a => a.vote_score === 1 )
+          ).to.not.be.undefined;
+          expect(
+            _.find( res.body.results[0].annotations, a => a.vote_score_short === 1 )
+          ).to.be.undefined;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
     // the observations.show endpoint should use the ES mget method to fetch observations for the
     // show endpoint, unless there are additional parameters that will filter the observations
     // returned. This is because the mget method is not affected by the normal ES refresh cycle,
