@@ -238,6 +238,24 @@ describe( "Users", ( ) => {
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "sorts by ID ascending by default", function ( done ) {
+      const firstUser = _.sortBy( fixtures.elasticsearch.users.user, "id" )[0];
+      request( this.app ).get( "/v2/users?per_page=1" )
+        .expect( res => {
+          expect( res.body.results[0].id ).to.eq( firstUser.id );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "accepts a page parameter", function ( done ) {
+      const secondUser = _.sortBy( fixtures.elasticsearch.users.user, "id" )[1];
+      request( this.app ).get( "/v2/users?per_page=1&page=2" )
+        .expect( res => {
+          expect( res.body.results[0].id ).to.eq( secondUser.id );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "update", ( ) => {
