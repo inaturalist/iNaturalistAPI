@@ -135,7 +135,7 @@ describe( "ElasticRequest", ( ) => {
             precision: 10
           },
           aggs: {
-            callMaxObsID: {
+            cellMaxObsID: {
               max: {
                 field: "id"
               }
