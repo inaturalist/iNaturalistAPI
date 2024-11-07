@@ -135,28 +135,14 @@ describe( "ElasticRequest", ( ) => {
             precision: 10
           },
           aggs: {
-            geohash: {
-              top_hits: {
-                sort: {
-                  id: {
-                    order: "desc"
-                  }
-                },
-                _source: false,
-                size: 1
+            callMaxObsID: {
+              max: {
+                field: "id"
               }
             }
           }
         }
       } );
-    } );
-
-    it( "returns the source if requested", ( ) => {
-      const agg = ElasticRequest.geohashAggregation( {
-        query: { source: true },
-        params: { zoom: 15 }
-      } );
-      expect( agg.zoom1.aggs.geohash.top_hits._source ).to.be.true;
     } );
   } );
 } );
