@@ -1367,6 +1367,20 @@
           "title_exact": "Proyecto águilas",
           "slug": "proyecto-águilas",
           "slug_keyword": "proyecto-águilas"
+        },
+        {
+          "id": 2024111101,
+          "title": "Umbrella Project 2005",
+          "slug": "umbrella-project-2005",
+          "project_type": "umbrella",
+          "project_observation_rules": [
+            {
+              "id": 2024111101,
+              "operand_id": 2005,
+              "operand_type": "Project",
+              "operator": "in_project?"
+            }
+          ]
         }
       ]
     },
@@ -2944,6 +2958,27 @@
         "id": 2023092503,
         "project_id": 2023092501,
         "user_id": 2023092503
+      },
+      {
+        "id": 2024111101,
+        "project_id": 2024111101,
+        "user_id": 123,
+        "role": "curator"
+      },
+      {
+        "id": 2024111102,
+        "project_id": 2024111101,
+        "user_id": 5
+      },
+      {
+        "id": 2024111103,
+        "project_id": 2024111101,
+        "user_id": 6
+      },
+      {
+        "id": 2024111104,
+        "project_id": 2024111101,
+        "user_id": 121
       }
     ],
     "projects": [
