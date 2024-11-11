@@ -262,13 +262,43 @@ describe( "Projects", ( ) => {
         .expect( 422, done );
     } );
 
-    it( "returns an empty response if not given a query", function ( done ) {
+    it( "returns project members", function ( done ) {
       request( this.app ).get( "/v1/projects/543/members" )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.per_page ).to.eq( 3 );
           expect( res.body.total_results ).to.eq( 3 );
           expect( res.body.results.length ).to.eq( 3 );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns project members counts for collection projects", function ( done ) {
+      request( this.app ).get( "/v1/projects/2005/members" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 4 );
+          expect( res.body.total_results ).to.eq( 4 );
+          expect( res.body.results.length ).to.eq( 4 );
+          expect( _.filter( res.body.results, r => r.taxa_count > 0 ).length )
+            .to.be.above( 0 );
+          expect( _.filter( res.body.results, r => r.observations_count > 0 ).length )
+            .to.be.above( 0 );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns project members counts for umbrella projects", function ( done ) {
+      request( this.app ).get( "/v1/projects/2024111101/members" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 4 );
+          expect( res.body.total_results ).to.eq( 4 );
+          expect( res.body.results.length ).to.eq( 4 );
+          expect( _.filter( res.body.results, r => r.taxa_count > 0 ).length )
+            .to.be.above( 0 );
+          expect( _.filter( res.body.results, r => r.observations_count > 0 ).length )
+            .to.be.above( 0 );
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
