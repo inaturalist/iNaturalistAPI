@@ -163,6 +163,11 @@ module.exports = Joi.object( ).keys( {
     "open",
     "private"
   ) ),
+  obscuration: Joi.array( ).items( Joi.string( ).valid(
+    "obscured",
+    "private",
+    "none"
+  ) ).description( "Filter by observations where the `geoprivacy` or `taxon_geoprivacy` match these values" ),
   hrank: Joi.array( ).items( Joi.string( ).valid(
     "kingdom",
     "phylum",

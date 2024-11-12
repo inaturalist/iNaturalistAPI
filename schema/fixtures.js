@@ -1169,6 +1169,16 @@
           "private_geojson": { "type": "Point", "coordinates": [ 4, 3 ] },
           "place_guess": "Tangerina",
           "captive": true
+        },
+        {
+          "id": 2024111201,
+          "uuid": "2450abff-8007-46a8-ae88-45808f5dc83a ",
+          "user": {
+            "id": 123,
+            "login": "a-user",
+            "name": "A User"
+          },
+          "taxon_geoprivacy": "private"
         }
       ]
     },

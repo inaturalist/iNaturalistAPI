@@ -440,6 +440,76 @@ describe( "Observations", ( ) => {
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    describe( "obscuration", ( ) => {
+      it( "filters by obscuration=obscured", function ( done ) {
+        request( this.app ).get(
+          "/v2/observations?obscuration=obscured&fields=geoprivacy,taxon_geoprivacy"
+        ).expect( res => {
+          expect( res.body.results.length ).to.above( 0 );
+          expect( _.every( res.body.results, r => (
+            r.geoprivacy === "obscured" || r.taxon_geoprivacy === "obscured"
+          ) ) ).to.be.true;
+          expect( _.some( res.body.results, r => (
+            r.geoprivacy === "obscured" && r.taxon_geoprivacy !== "obscured"
+          ) ) ).to.be.true;
+          expect( _.some( res.body.results, r => (
+            r.geoprivacy !== "obscured" && r.taxon_geoprivacy === "obscured"
+          ) ) ).to.be.true;
+        } ).expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "filters by obscuration=private", function ( done ) {
+        request( this.app ).get(
+          "/v2/observations?per_page=200&obscuration=private&fields=geoprivacy,taxon_geoprivacy"
+        ).expect( res => {
+          expect( res.body.results.length ).to.above( 0 );
+          expect( _.every( res.body.results, r => (
+            r.geoprivacy === "private" || r.taxon_geoprivacy === "private"
+          ) ) ).to.be.true;
+          expect( _.some( res.body.results, r => (
+            r.geoprivacy === "private" && r.taxon_geoprivacy !== "private"
+          ) ) ).to.be.true;
+          expect( _.some( res.body.results, r => (
+            r.geoprivacy !== "private" && r.taxon_geoprivacy === "private"
+          ) ) ).to.be.true;
+        } ).expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "filters by obscuration=obscured,private", function ( done ) {
+        request( this.app ).get(
+          "/v2/observations?per_page=200&obscuration=obscured,private&fields=geoprivacy,taxon_geoprivacy"
+        ).expect( res => {
+          expect( res.body.results.length ).to.above( 0 );
+          expect( _.every( res.body.results, r => (
+            r.geoprivacy === "private" || r.taxon_geoprivacy === "private"
+            || r.geoprivacy === "obscured" || r.taxon_geoprivacy === "obscured"
+          ) ) ).to.be.true;
+          expect( _.some( res.body.results, r => (
+            r.geoprivacy !== "obscured" && r.taxon_geoprivacy !== "obscured"
+          ) ) ).to.be.true;
+          expect( _.some( res.body.results, r => (
+            r.geoprivacy !== "private" && r.taxon_geoprivacy !== "private"
+          ) ) ).to.be.true;
+        } ).expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "filters by obscuration=none", function ( done ) {
+        request( this.app ).get(
+          "/v2/observations?per_page=200&obscuration=none&fields=geoprivacy,taxon_geoprivacy"
+        ).expect( res => {
+          expect( res.body.results.length ).to.above( 0 );
+          expect( _.every( res.body.results, r => (
+            r.geoprivacy !== "private" && r.taxon_geoprivacy !== "private"
+            && r.geoprivacy !== "obscured" && r.taxon_geoprivacy !== "obscured"
+          ) ) ).to.be.true;
+        } ).expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+    } );
   } );
 
   describe( "create", ( ) => {
