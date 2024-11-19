@@ -29,14 +29,34 @@ describe( "Places", ( ) => {
 
   describe( "show", ( ) => {
     it( "returns json", function ( done ) {
-      request( this.app ).get( "/v1/places/1" )
-        .expect( "Content-Type", /json/ ).expect( 200, done );
+      const place = fixtures.elasticsearch.places.place[0];
+      request( this.app ).get( `/v1/places/${place.id}` )
+        .expect( res => {
+          expect( res.body.results[0].id ).to.eq( place.id );
+          expect( res.body.results[0].slug ).to.eq( place.slug );
+          expect( res.body.results[0].uuid ).to.eq( place.uuid );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
     } );
 
     it( "returns projects by slug", function ( done ) {
-      request( this.app ).get( "/v1/places/united-states" )
+      const place = fixtures.elasticsearch.places.place[0];
+      request( this.app ).get( `/v1/places/${place.slug}` )
         .expect( res => {
-          expect( res.body.results[0].slug ).to.eq( "united-states" );
+          expect( res.body.results[0].id ).to.eq( place.id );
+          expect( res.body.results[0].slug ).to.eq( place.slug );
+          expect( res.body.results[0].uuid ).to.eq( place.uuid );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns projects by UUID", function ( done ) {
+      const place = fixtures.elasticsearch.places.place[0];
+      request( this.app ).get( `/v1/places/${place.uuid}` )
+        .expect( res => {
+          expect( res.body.results[0].id ).to.eq( place.id );
+          expect( res.body.results[0].slug ).to.eq( place.slug );
+          expect( res.body.results[0].uuid ).to.eq( place.uuid );
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
