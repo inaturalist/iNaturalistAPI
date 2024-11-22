@@ -8,8 +8,9 @@ module.exports = Joi.object( ).keys( {
         information to the United States. The only way to revoke this consent
         is to delete the account.
       ` ),
-    description: Joi.string( ),
+    description: Joi.string( ).valid( null ),
     email: Joi.string( ),
+    icon: Joi.object( ).valid( null ),
     locale: Joi.string( ),
     login: Joi.string( ),
     make_observation_licenses_same: Joi
@@ -38,7 +39,7 @@ module.exports = Joi.object( ).keys( {
         account.
       ` ),
     place_id: Joi.number( ).integer( )
-      .description( "ID of place for localizing common names" ),
+      .description( "ID of place for localizing common names" ).valid( null ),
     prefers_automatic_taxonomic_changes: Joi.boolean( ),
     prefers_comment_email_notification: Joi.boolean( ),
     prefers_common_names: Joi.boolean( ),
@@ -64,7 +65,7 @@ module.exports = Joi.object( ).keys( {
     preferred_project_addition_by: Joi.string( ),
     preferred_sound_license: Joi.string( ),
     search_place_id: Joi.number( ).integer( )
-      .description( "ID of place for default observation searches" ),
+      .description( "ID of place for default observation searches" ).valid( null ),
     site_id: Joi.number( ).integer( ),
     time_zone: Joi.string( ),
     password: Joi.string( ),
