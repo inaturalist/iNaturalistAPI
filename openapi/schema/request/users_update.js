@@ -30,7 +30,7 @@ module.exports = Joi.object( ).keys( {
         "Whether a change to `preferred_sound_license` should be apply to "
         + "all the user's existing sounds"
       ),
-    name: Joi.string( ),
+    name: Joi.string( ).valid( null ),
     pi_consent: Joi.boolean( ).valid( true, null )
       .description( `
         Whether the user consents to the storage of their personal
