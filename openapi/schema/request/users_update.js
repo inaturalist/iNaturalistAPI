@@ -11,7 +11,7 @@ module.exports = Joi.object( ).keys( {
     description: Joi.string( ).valid( null ),
     email: Joi.string( ),
     icon: Joi.object( ).valid( null ),
-    locale: Joi.string( ),
+    locale: Joi.string( ).valid( null ),
     login: Joi.string( ),
     make_observation_licenses_same: Joi
       .boolean( )
@@ -60,14 +60,14 @@ module.exports = Joi.object( ).keys( {
     prefers_taxon_or_place_observation_email_notification: Joi.boolean( ),
     prefers_user_observation_email_notification: Joi.boolean( ),
     preferred_observation_fields_by: Joi.string( ),
-    preferred_observation_license: Joi.string( ),
-    preferred_photo_license: Joi.string( ),
+    preferred_observation_license: Joi.string( ).valid( null ),
+    preferred_photo_license: Joi.string( ).valid( null ),
     preferred_project_addition_by: Joi.string( ),
-    preferred_sound_license: Joi.string( ),
+    preferred_sound_license: Joi.string( ).valid( null ),
     search_place_id: Joi.number( ).integer( )
       .description( "ID of place for default observation searches" ).valid( null ),
-    site_id: Joi.number( ).integer( ),
-    time_zone: Joi.string( ),
+    site_id: Joi.number( ).integer( ).valid( null ),
+    time_zone: Joi.string( ).valid( null ),
     password: Joi.string( ),
     password_confirmation: Joi.string( )
   } ),
