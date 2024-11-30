@@ -889,6 +889,43 @@ describe( "Observations", ( ) => {
           } )
           .expect( 200, done );
       } );
+
+      describe( "filtering by bounds", ( ) => {
+        // an observation with public and private coords, where the coords are different
+        const obsWithPublicAndPrivateCoords = _.find(
+          fixtures.elasticsearch.observations.observation,
+          o => o.id === 24
+        );
+        const privateBounds = {
+          swlat: obsWithPublicAndPrivateCoords.private_geojson.coordinates[1] - 0.00001,
+          swlng: obsWithPublicAndPrivateCoords.private_geojson.coordinates[0] - 0.00001,
+          nelat: obsWithPublicAndPrivateCoords.private_geojson.coordinates[1] + 0.00001,
+          nelng: obsWithPublicAndPrivateCoords.private_geojson.coordinates[0] + 0.00001
+        };
+        const privateBoundsParams = _.map( privateBounds, ( v, k ) => `${k}=${v}` ).join( "&" );
+
+        it( "does not use private coordinates for un authenticated user with bounding boxes", function ( done ) {
+          request( this.app ).get( `/v1/observations?${privateBoundsParams}` )
+            .expect( res => {
+              expect( _.map( res.body.results, "id" ) ).to.not.include( obsWithPublicAndPrivateCoords.id );
+            } )
+            .expect( "Content-Type", /json/ )
+            .expect( 200, done );
+        } );
+
+        it( "uses private coordinates when authenticated users search their own obs with bounding boxes", function ( done ) {
+          const observerToken = jwt.sign( { user_id: obsWithPublicAndPrivateCoords.user.id },
+            config.jwtSecret || "secret",
+            { algorithm: "HS512" } );
+          request( this.app ).get( `/v1/observations?${privateBoundsParams}` ).set( "Authorization", observerToken )
+            .expect( res => {
+              expect( _.map( res.body.results, "id" ) ).to.include( obsWithPublicAndPrivateCoords.id );
+            } )
+            .expect( "Content-Type", /json/ )
+            .expect( 200, done );
+        } );
+      } );
+
       describe( "filtering by a collection project they curate", ( ) => {
         const project = _.find( fixtures.elasticsearch.projects.project, p => p.id === 2005 );
         const placeId = _.find( project.search_parameters, sp => sp.field === "place_id" ).value;
