@@ -282,7 +282,8 @@ module.exports = Joi.object( ).keys( {
     "names",
     "tags",
     "description",
-    "place"
+    "place",
+    "taxon_page_obs_photos"
   ),
   quality_grade: Joi.array( ).items( Joi.string( ).valid(
     "casual",
