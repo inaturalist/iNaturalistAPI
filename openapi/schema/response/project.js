@@ -61,7 +61,10 @@ const project = Joi.object( ).keys( {
     value_bool: Joi.boolean( ),
     value_date: Joi.array( ).items( Joi.string( ) ),
     value_keyword: Joi.any( ).description( "TODO: values can be single values or arrays" ),
-    value_number: Joi.array( ).items( Joi.number( ) )
+    value_number: Joi.alternatives( ).try(
+      Joi.number( ),
+      Joi.array( ).items( Joi.number( ) )
+    )
   } ).unknown( false ) ),
   site_features: Joi.array( ).items( Joi.object( ).keys( {
     noteworthy: Joi.boolean( ),
