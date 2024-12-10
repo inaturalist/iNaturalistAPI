@@ -3,6 +3,7 @@ const moment = require( "moment" );
 const _ = require( "lodash" );
 const fs = require( "fs" );
 const { observations } = require( "inaturalistjs" );
+const esClient = require( "../../../lib/es_client" );
 const testHelper = require( "../../../lib/test_helper" );
 const Observation = require( "../../../lib/models/observation" );
 const Project = require( "../../../lib/models/project" );
@@ -461,21 +462,21 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by bounding box", async ( ) => {
       const q = await Q( {
-        nelat: 1,
-        nelng: 2,
-        swlat: 3,
-        swlng: 4
+        nelat: 3,
+        nelng: 4,
+        swlat: 1,
+        swlng: 2
       } );
-      expect( q.filters ).to.eql( [{
+      expect( q.filters ).to.eql( [esClient.envelopeFilter( {
         envelope: {
           geojson: {
-            nelat: 1,
-            nelng: 2,
-            swlat: 3,
-            swlng: 4
+            nelat: 3,
+            nelng: 4,
+            swlat: 1,
+            swlng: 2
           }
         }
-      }] );
+      } )] );
     } );
 
     it( "filters by point and radius", async ( ) => {
