@@ -714,6 +714,24 @@ describe( "Observations", ( ) => {
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "does not return ancestors by default", function ( done ) {
+      request( this.app ).get( "/v2/observations/species_counts?taxon_id=3" ).expect( res => {
+        expect( res.body.results[0].taxon.ancestors ).to.be.undefined;
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns ancestors if requested", function ( done ) {
+      request( this.app ).get(
+        "/v2/observations/species_counts?fields=all&taxon_id=3&include_ancestors=true"
+      ).expect( res => {
+        expect( res.body.results[0].taxon.ancestors ).to.not.be.undefined;
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "observers", ( ) => {
