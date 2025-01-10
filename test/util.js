@@ -1,3 +1,4 @@
+const _ = require( "lodash" );
 const { expect } = require( "chai" );
 const crypto = require( "crypto" );
 const util = require( "../lib/util" );
@@ -304,6 +305,33 @@ describe( "util", ( ) => {
         enableInTestEnv: true,
         ignoreLocalization: true
       } ) ).to.eq( `ObservationsController.search-fields-${fieldsHash}` );
+    } );
+  } );
+
+  describe( "inRandomGrouping", ( ) => {
+    it( "returns true when percentage is at or above 100", ( ) => {
+      let samples = _.times( 10000, util.inRandomGrouping( 100 ) );
+      expect( _.every( samples, sample => sample === true ) );
+      samples = _.times( 10000, util.inRandomGrouping( 110 ) );
+      expect( _.every( samples, sample => sample === true ) );
+    } );
+
+    it( "returns false when percentage is at or below 0", ( ) => {
+      let samples = _.times( 10000, util.inRandomGrouping( 0 ) );
+      expect( _.every( samples, sample => sample === false ) );
+      samples = _.times( 10000, util.inRandomGrouping( -1 ) );
+      expect( _.every( samples, sample => sample === false ) );
+    } );
+
+    it( "returns true roughly `percentage` percent of the time", ( ) => {
+      const testPercentages = [1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 99];
+      _.each( testPercentages, testPercentage => {
+        const samples = _.times( 100000, ( ) => util.inRandomGrouping( testPercentage ) );
+        const countTrue = _.filter( samples, sample => sample === true ).length;
+        const truePercentage = ( countTrue / samples.length ) * 100;
+        expect( truePercentage ).to.be.below( testPercentage + 2 );
+        expect( truePercentage ).to.be.above( testPercentage - 2 );
+      } );
     } );
   } );
 } );
