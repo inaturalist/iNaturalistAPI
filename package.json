@@ -20,7 +20,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.614.0",
     "@aws-sdk/lib-storage": "^3.614.0",
-    "@elastic/elasticsearch": "8.15.2",
+    "@elastic/elasticsearch": "8.15.3",
     "@joi/date": "^2.1.1",
     "@mapbox/sphericalmercator": "^1.2.0",
     "body-parser": "^1.20.2",
