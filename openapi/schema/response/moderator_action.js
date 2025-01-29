@@ -10,5 +10,6 @@ module.exports = Joi.object( ).keys( {
   created_at_details: dateDetails,
   user,
   action: Joi.string( ),
-  reason: Joi.string( )
+  reason: Joi.string( ),
+  private: Joi.boolean( )
 } ).meta( { className: "ModeratorAction" } );
