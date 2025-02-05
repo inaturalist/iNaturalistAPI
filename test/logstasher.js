@@ -58,4 +58,22 @@ describe( "Logstasher", ( ) => {
       { headers: { "x-real-ip": "127.0.0.1, 192.168.1.1" } }
     ) ).to.eq( "192.168.1.1" );
   } );
+
+  describe( "afterRequestPayload", ( ) => {
+    it( "includes request context", ( ) => {
+      const req = { inat: { requestContext: "inatContext" } };
+      expect( Logstasher.afterRequestPayload( req ).context ).to.eq( "inatContext" );
+    } );
+
+    it( "prioritizes context from log response bodies", ( ) => {
+      const req = {
+        _logClientError: true,
+        inat: { requestContext: "inatContext" },
+        body: {
+          context: "logContext"
+        }
+      };
+      expect( Logstasher.afterRequestPayload( req ).context ).to.eq( "logContext" );
+    } );
+  } );
 } );

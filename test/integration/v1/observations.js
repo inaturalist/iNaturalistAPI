@@ -498,7 +498,7 @@ describe( "Observations", ( ) => {
     it( "filters by sounds", function ( done ) {
       request( this.app ).get( "/v1/observations?sounds=true" )
         .expect( res => {
-          expect( res.body.results.length ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 3 );
         } ).expect( 200, done );
     } );
 
