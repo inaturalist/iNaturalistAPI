@@ -1,3 +1,6 @@
+const Joi = require( "joi" );
+const usersEmailAvailableSchema = require( "../../../schema/request/users_email_available" );
+const transform = require( "../../../joi_to_openapi_parameter" );
 const UsersController = require( "../../../../lib/controllers/v2/users_controller" );
 
 module.exports = sendWrapper => {
@@ -12,15 +15,12 @@ module.exports = sendWrapper => {
     security: [{
       appJwtRequired: []
     }],
-    requestBody: {
-      content: {
-        "application/json": {
-          schema: {
-            $ref: "#/components/schemas/UsersEmailAvailable"
-          }
-        }
-      }
-    },
+    parameters: [
+      transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) ),
+      transform( Joi.string( ).label( "fields" ) )
+    ].concat( usersEmailAvailableSchema.$_terms.keys.map( child => (
+      transform( child.schema.label( child.key ) )
+    ) ) ),
     responses: {
       200: {
         description: "Whether or not the email is available",
