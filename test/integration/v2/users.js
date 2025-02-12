@@ -425,4 +425,47 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "email_available", ( ) => {
+    const currentUser = fixtures.elasticsearch.users.user[0];
+    const userToken = jwt.sign( { user_id: currentUser.id },
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+    const applicationToken = jwt.sign(
+      { application: "whatever" },
+      config.jwtApplicationSecret || "application_secret",
+      { algorithm: "HS512" }
+    );
+
+    it( "should 401 without auth", function ( done ) {
+      request( this.app )
+        .get( "/v2/users/email_available" )
+        .expect( 401, done );
+    } );
+
+    it( "should 401 with a user token", function ( done ) {
+      request( this.app )
+        .get( "/v2/users/email_available" )
+        .set( "Authorization", userToken )
+        .expect( 401, done );
+    } );
+
+    it( "should hit the Rails equivalent and return 200", function ( done ) {
+      const nockScope = nock( "http://localhost:3000" )
+        .get( "/users/email_available?email=email@domain.com" )
+        .reply( 200, { valid: true } );
+      request( this.app )
+        .get( "/v2/users/email_available?email=email@domain.com" )
+        .set( "Authorization", applicationToken )
+        .expect( ( ) => {
+          // Raise an exception if the nocked endpoint doesn't get called
+          nockScope.done( );
+        } )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.valid ).to.be.true;
+        } )
+        .expect( 200, done );
+    } );
+  } );
 } );

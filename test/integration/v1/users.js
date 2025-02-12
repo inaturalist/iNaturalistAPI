@@ -420,4 +420,34 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "email_available", ( ) => {
+    it( "should return a 401 status from the Rails app", function ( done ) {
+      const nockScope = nock( "http://localhost:3000" )
+        .get( "/users/email_available" )
+        .reply( 401 );
+      request( this.app )
+        .get( "/v1/users/email_available" )
+        .expect( ( ) => {
+          // Raise an exception if the nocked endpoint doesn't get called
+          nockScope.done( );
+        } )
+        .expect( 401, done );
+    } );
+    it( "should return JSON from the Rails app", function ( done ) {
+      const nockScope = nock( "http://localhost:3000" )
+        .get( "/users/email_available?email=foo@bar.com" )
+        .reply( 200, { valid: true } );
+      request( this.app )
+        .get( "/v1/users/email_available?email=foo@bar.com" )
+        .expect( ( ) => {
+          // Raise an exception if the nocked endpoint doesn't get called
+          nockScope.done( );
+        } )
+        .expect( res => {
+          expect( res.body.valid ).to.be.true;
+        } )
+        .expect( 200, done );
+    } );
+  } );
 } );

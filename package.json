@@ -1,6 +1,6 @@
 {
   "name": "inaturalist_api",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Node.js API for iNaturalist.org",
   "main": "app.js",
   "scripts": {
@@ -37,7 +37,7 @@
     "flat": "^5.0.2",
     "geoip-lite": "^1.4.10",
     "h3-js": "^4.1.0",
-    "inaturalistjs": "github:inaturalist/inaturalistjs",
+    "inaturalistjs": "github:inaturalist/inaturalistjs#web-587-email-address-uniqueness-api-for-mobile-account-creation",
     "joi": "^17.13.3",
     "joi-to-swagger": "^6.2.0",
     "jsonwebtoken": "^9.0.2",
