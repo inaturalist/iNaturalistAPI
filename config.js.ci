@@ -16,8 +16,7 @@ module.exports = {
   imageProcesing: {
     taxonomyPath: "/home/travis/build/inaturalist/iNaturalistAPI/vision-taxonomy.csv",
     uploadsDir: "/tmp/",
-    tensorappURL: "http://localhost:6006",
-    delegateCommonAncestor: true
+    tensorappURL: "http://localhost:6006"
   },
   tileSize: 512,
   debug: true,
