@@ -453,7 +453,7 @@ describe( "Users", ( ) => {
     it( "should hit the Rails equivalent and return 200", function ( done ) {
       const nockScope = nock( "http://localhost:3000" )
         .get( "/users/email_available?email=email@domain.com" )
-        .reply( 200, { valid: true } );
+        .reply( 200, { available: true } );
       request( this.app )
         .get( "/v2/users/email_available?email=email@domain.com" )
         .set( "Authorization", applicationToken )
@@ -463,7 +463,7 @@ describe( "Users", ( ) => {
         } )
         .expect( 200 )
         .expect( res => {
-          expect( res.body.valid ).to.be.true;
+          expect( res.body.available ).to.be.true;
         } )
         .expect( 200, done );
     } );

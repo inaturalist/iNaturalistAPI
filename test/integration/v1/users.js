@@ -437,7 +437,7 @@ describe( "Users", ( ) => {
     it( "should return JSON from the Rails app", function ( done ) {
       const nockScope = nock( "http://localhost:3000" )
         .get( "/users/email_available?email=foo@bar.com" )
-        .reply( 200, { valid: true } );
+        .reply( 200, { available: true } );
       request( this.app )
         .get( "/v1/users/email_available?email=foo@bar.com" )
         .expect( ( ) => {
@@ -445,7 +445,7 @@ describe( "Users", ( ) => {
           nockScope.done( );
         } )
         .expect( res => {
-          expect( res.body.valid ).to.be.true;
+          expect( res.body.available ).to.be.true;
         } )
         .expect( 200, done );
     } );
