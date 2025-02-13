@@ -55,8 +55,7 @@ module.exports = {
     geomodel: true,
     combinedThreshold: 0.001,
     frequencyBackend: "redis",
-    inatnlsURL: INAT_NLS_URL || "",
-    delegateCommonAncestor: true
+    inatnlsURL: INAT_NLS_URL || ""
   },
   redis: {
     host: INAT_REDIS_HOST || "127.0.0.1",
