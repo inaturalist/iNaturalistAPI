@@ -422,24 +422,34 @@ describe( "Users", ( ) => {
   } );
 
   describe( "email_available", ( ) => {
-    it( "should return a 401 status from the Rails app", function ( done ) {
-      const nockScope = nock( "http://localhost:3000" )
-        .get( "/users/email_available" )
-        .reply( 401 );
+    it( "should return a 401 status without auth", function ( done ) {
       request( this.app )
         .get( "/v1/users/email_available" )
-        .expect( ( ) => {
-          // Raise an exception if the nocked endpoint doesn't get called
-          nockScope.done( );
-        } )
+        .expect( 401, done );
+    } );
+    it( "should return a 401 status with a user token", function ( done ) {
+      const userToken = jwt.sign(
+        { user_id: 123 },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" }
+      );
+      request( this.app )
+        .get( "/v1/users/email_available" )
+        .set( "Authorization", userToken )
         .expect( 401, done );
     } );
     it( "should return JSON from the Rails app", function ( done ) {
+      const applicationToken = jwt.sign(
+        { application: "whatever" },
+        config.jwtApplicationSecret || "application_secret",
+        { algorithm: "HS512" }
+      );
       const nockScope = nock( "http://localhost:3000" )
         .get( "/users/email_available?email=foo@bar.com" )
         .reply( 200, { available: true } );
       request( this.app )
         .get( "/v1/users/email_available?email=foo@bar.com" )
+        .set( "Authorization", applicationToken )
         .expect( ( ) => {
           // Raise an exception if the nocked endpoint doesn't get called
           nockScope.done( );
