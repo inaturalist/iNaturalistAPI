@@ -16,7 +16,7 @@ services:
       - 11211:11211
 
   pg:
-    container_name: pg
+    container_name: pg-test
     image: postgis/postgis:12-3.0
     environment:
       POSTGRES_USER: 'inaturalist'
@@ -29,7 +29,7 @@ services:
       - ./schema/database.sql:/docker-entrypoint-initdb.d/database.sql
 
   es:
-    container_name: es
+    container_name: es-test
     image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
     environment:
       - discovery.type=single-node
@@ -52,10 +52,10 @@ services:
     environment:
       NODE_ENV: test
       NODE_DEBUG: true
-      INAT_DB_HOST: pg
+      INAT_DB_HOST: pg-test
       INAT_DB_USER : 'inaturalist'
       INAT_DB_PASS: 'inaturalist'
-      INAT_ES_HOST: es
+      INAT_ES_HOST: es-test
       INAT_REDIS_HOST: redis
       INAT_RAILS_URL: http://localhost:3000
       INAT_DB_NAME: inaturalist_test
