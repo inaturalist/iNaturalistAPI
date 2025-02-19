@@ -8,6 +8,10 @@ module.exports = Joi.object( ).keys( {
     .label( "image_url" )
     .uri( )
     .description( "URL for image to use when `source` is `visual`" ),
+  include_representative_photos: Joi.alternatives( ).try(
+    Joi.boolean( ),
+    Joi.string( )
+  ),
   limit: Joi.number( ).min( 0 ).description( "Number of results to return" ),
   lat: Joi.number( ).min( -90 ).max( 90 )
     .description( "Coordinate used when fetching nearby results `source` is `visual` or `*observations`" ),
