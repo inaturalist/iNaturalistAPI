@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-22.04
     services:
       postgres:
-        image: postgis/postgis:11-2.5
+        image: postgis/postgis:13-3.2
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -24,7 +24,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20.x'
+        node-version: 20.15.1
 
     - name: Configure sysctl limits
       run: |
@@ -36,7 +36,7 @@ jobs:
     - name: Runs Elasticsearch
       uses: miyataka/elastic-github-actions/elasticsearch@feature/plugin_support
       with:
-        stack-version: 8.9.0
+        stack-version: 8.15.3
         plugins: analysis-kuromoji
 
     - name: Elasticsearch is reachable
