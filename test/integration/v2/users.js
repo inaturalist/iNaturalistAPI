@@ -83,6 +83,15 @@ describe( "Users", ( ) => {
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+    it( "never returns suspended users", function ( done ) {
+      const suspendedUser = fixtures.elasticsearch.users.user.find( u => u.suspended_at );
+      expect( suspendedUser ).not.to.be.undefined;
+      request( this.app ).get( `/v2/users/autocomplete?q=${suspendedUser.login}` )
+        .expect( res => {
+          expect( res.body.results.find( u => u.id === suspendedUser.id ) ).to.be.undefined;
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "update_session", ( ) => {
