@@ -1851,92 +1851,109 @@
           "login_autocomplete": "userloginautocomplete",
           "name": "username",
           "name_autocomplete": "usernameautocomplete",
-          "site_id": 1
+          "site_id": 1,
+          "suspended": false
         },
         {
           "id": 2,
           "login": "search_test_user",
           "login_autocomplete": "search_test_user",
           "name": "Search Test User",
-          "name_autocomplete": "Search Test User"
+          "name_autocomplete": "Search Test User",
+          "suspended": false
         },
         {
           "id": 5,
           "login": "b-user",
-          "name": "B User"
+          "name": "B User",
+          "suspended": false
         },
         {
           "id": 6,
           "login": "z-user",
-          "name": "Z User"
+          "name": "Z User",
+          "suspended": false
         },
         {
           "id": 121,
           "login": "user121",
-          "name": "user121"
+          "name": "user121",
+          "suspended": false
         },
         {
           "id": 122,
           "login": "user122",
-          "name": "user122"
+          "name": "user122",
+          "suspended": false
         },
         {
           "id": 123,
           "login": "a-user",
           "name": "A User",
-          "orcid": "0000-0001-0002-0004"
+          "orcid": "0000-0001-0002-0004",
+          "suspended": false
         },
         {
           "id": 124,
           "login": "es-user",
           "name": "ES User",
           "locale": "es",
-          "place_id": 222
+          "place_id": 222,
+          "suspended": false
         },
         {
           "id": 125,
-          "login": "totally-trustworthy"
+          "login": "totally-trustworthy",
+          "suspended": false
         },
         {
           "id": 126,
-          "login": "totally-trusting"
+          "login": "totally-trusting",
+          "suspended": false
         },
         {
           "id": 127,
           "login": "user127",
-          "name": "Observer that trusts user 123"
+          "name": "Observer that trusts user 123",
+          "suspended": false
         },
         {
           "id": 128,
           "login": "user125",
-          "name": "Observer that does NOT trust user 123"
+          "name": "Observer that does NOT trust user 123",
+          "suspended": false
         },
         {
           "id": 2,
           "login": "search_test_user",
           "login_autocomplete": "search_test_user",
           "name": "Search Test User",
-          "name_autocomplete": "Search Test User"
+          "name_autocomplete": "Search Test User",
+          "suspended": false
         },
         {
           "id": 129,
           "login": "prefers-no-common-names",
-          "name": "Prefers No Common Names"
+          "name": "Prefers No Common Names",
+          "suspended": false
         },
         {
           "id": 1234,
           "login": "user1234",
-          "name": "user1234"
+          "name": "user1234",
+          "suspended": false
         },
         {
           "id": 2020110501,
           "login": "user2020110501",
-          "name": "User that follows user 126 and trusts them"
+          "name": "User that follows user 126 and trusts them",
+          "suspended": false
         },
         {
           "id": 2020111201,
           "login": "user2020111201",
-          "name": "User that follows user 126 and does NOT trusts them"
+          "name": "User that follows user 126 and does NOT trusts them",
+          "suspended": false
         },
         {
           "id": 2021111401,
@@ -1947,40 +1964,38 @@
         {
           "id": 2021121601,
           "login": "user2021121601",
-          "name": "User that will be blocked"
+          "name": "User that will be blocked",
+          "suspended": false
         },
         {
           "id": 2021121602,
           "login": "user2021121602",
-          "name": "User that blocks user2021121601"
+          "name": "User that blocks user2021121601",
+          "suspended": false
         },
         {
           "id": 2023092501,
           "login": "user2023092501",
           "name": "User2023092501 with email and IP",
           "email": "user2023092501@gmail.com",
-          "last_ip": "192.168.0.1"
+          "last_ip": "192.168.0.1",
+          "suspended": false
         },
         {
           "id": 2023092502,
           "login": "user2023092502",
           "name": "User2023092502 with email and IP",
           "email": "user2023092502@gmail.com",
-          "last_ip": "192.168.0.2"
+          "last_ip": "192.168.0.2",
+          "suspended": false
         },
         {
           "id": 2023092503,
           "login": "user2023092503",
           "name": "User2023092503 with email and IP",
           "email": "user2023092503@gmail.com",
-          "last_ip": "192.168.0.3"
-        },
-        {
-          "id": 2025022801,
-          "login": "user2025022801",
-          "name": "very bad suspended user",
-          "email": "user2025022801@gmail.com",
-          "suspended_at": "2025-02-28 00:00:00"
+          "last_ip": "192.168.0.3",
+          "suspended": false
         }
       ]
     },

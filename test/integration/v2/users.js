@@ -84,7 +84,7 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
     it( "never returns suspended users", function ( done ) {
-      const suspendedUser = fixtures.elasticsearch.users.user.find( u => u.suspended_at );
+      const suspendedUser = fixtures.elasticsearch.users.user.find( u => u.suspended );
       expect( suspendedUser ).not.to.be.undefined;
       request( this.app ).get( `/v2/users/autocomplete?q=${suspendedUser.login}` )
         .expect( res => {
@@ -267,12 +267,15 @@ describe( "Users", ( ) => {
     } );
 
     it( "never returns suspended users", function ( done ) {
-      const suspendedUser = fixtures.elasticsearch.users.user.find( u => u.suspended_at );
+      const suspendedUser = fixtures.elasticsearch.users.user.find( u => u.suspended );
+      const okUser = fixtures.elasticsearch.users.user.find( u => !u.suspended );
       expect( suspendedUser ).not.to.be.undefined;
+      expect( okUser ).not.to.be.undefined;
       request( this.app ).get( "/v2/users?per_page=100" )
         .expect( res => {
           expect( res.body.results ).not.to.be.empty;
-          expect( res.body.results.find( u => u.id === suspendedUser.id ) ).to.be.undefined;
+          expect( res.body.results.find( u => u.id === suspendedUser.id ) ).not.to.exist;
+          expect( res.body.results.find( u => u.id === okUser.id ) ).to.exist;
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
