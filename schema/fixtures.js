@@ -1974,6 +1974,13 @@
           "name": "User2023092503 with email and IP",
           "email": "user2023092503@gmail.com",
           "last_ip": "192.168.0.3"
+        },
+        {
+          "id": 2025022801,
+          "login": "user2025022801",
+          "name": "very bad suspended user",
+          "email": "user2025022801@gmail.com",
+          "suspended_at": "2025-02-28 00:00:00"
         }
       ]
     },
