@@ -49,6 +49,36 @@ describe( "LogController", ( ) => {
         .expect( 204, done );
     } );
 
+    describe( "extra payload", ( ) => {
+      it( "accepts extra payloads", function ( done ) {
+        request( this.app ).post( "/v2/log" )
+          .set( "Authorization", userToken )
+          .set( "Content-Type", "application/json" )
+          .send( {
+            extra: {
+              string: "string",
+              number: 123.4,
+              boolean: true
+            }
+          } )
+          .expect( 204, done );
+      } );
+
+      it( "does not accept objects in extra payloads", function ( done ) {
+        request( this.app ).post( "/v2/log" )
+          .set( "Authorization", userToken )
+          .set( "Content-Type", "application/json" )
+          .send( {
+            extra: {
+              object: {
+                string: "string"
+              }
+            }
+          } )
+          .expect( 422, done );
+      } );
+    } );
+
     describe( "Logstasher.afterRequestPayload", ( ) => {
       const sandbox = sinon.createSandbox( );
 
@@ -101,6 +131,28 @@ describe( "LogController", ( ) => {
             expect( payload.error_type ).to.eq( body.error_type );
             expect( payload.error_message ).to.eq( body.message );
             expect( payload.backtrace ).to.eq( body.backtrace );
+            done( );
+          } );
+      } );
+
+      it( "logs extra payloads", function ( done ) {
+        const body = {
+          extra: {
+            string: "string",
+            number: 123.4,
+            boolean: true
+          }
+        };
+        request( this.app ).post( "/v2/log" )
+          .set( "Authorization", [userToken, applicationToken].join( ", " ) )
+          .set( "Content-Type", "application/json" )
+          .send( body )
+          .expect( 204, ( ) => {
+            expect( Logstasher.afterRequestPayload ).to.have.been.called;
+            const payload = Logstasher.afterRequestPayload.returnValues[0];
+            expect( payload.extra.string ).to.eq( body.extra.string );
+            expect( payload.extra.number ).to.eq( body.extra.number );
+            expect( payload.extra.boolean ).to.eq( body.extra.boolean );
             done( );
           } );
       } );
