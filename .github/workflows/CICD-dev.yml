@@ -17,7 +17,7 @@ jobs:
   build-and-push-dev-docker-image:
     name: Build/Push Dev Docker Image
     needs: pre-build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:    
     - uses: actions/checkout@v4
 
@@ -62,7 +62,7 @@ jobs:
   refresh-dev-staging-deployment:
     name: Refresh Dev Staging Deployment
     needs: build-and-push-dev-docker-image
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - name: Refresh Dev inaturalistapi
       uses: actions/github-script@v6
@@ -89,7 +89,7 @@ jobs:
     name: Notify Slack
     needs: build-and-push-dev-docker-image
     if: ${{ success() || failure() }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - uses: iRoachie/slack-github-actions@v2.3.2
       if: env.SLACK_WEBHOOK_URL != null
