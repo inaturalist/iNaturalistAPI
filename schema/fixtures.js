@@ -198,6 +198,12 @@
           "ancestor_place_ids": [432, 433]
         },
         {
+          "id": 696,
+          "uuid": "06c859b1-e145-3ae9-a283-81aaadddcad0",
+          "name": "La-Coruna-,-España",
+          "display_name_autocomplete": "La Coruña, España"
+        },
+        {
           "id": 2020120501,
           "uuid": "9dc9c5a9-41b4-4a45-9a20-41c4a0be2ae8",
           "name": "Alameda County",
@@ -1421,6 +1427,15 @@
               "operator": "in_project?"
             }
           ]
+        },
+        {
+          "id": 2024111102,
+          "title": "Project 696",
+          "title_autocomplete": "Project 696",
+          "title_exact": "Project 696",
+          "location": "21,22",
+          "slug": "project-696",
+          "user_ids": [ 123 ]
         }
       ]
     },
@@ -1840,6 +1855,13 @@
           "name": "Reptilia",
           "is_active": true,
           "iconic_taxon_id": 113
+        },
+        {
+          "id": 696,
+          "uuid": "c5e7f8a3-2b4d-4c98-87f1-9a6d3e5b1c72",
+          "name": "Chelicerata",
+          "is_active": true,
+          "iconic_taxon_id": 696
         }
       ]
     },
