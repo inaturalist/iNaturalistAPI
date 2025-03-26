@@ -396,7 +396,17 @@ CREATE TABLE public.announcements (
     include_donor_start_date date,
     include_donor_end_date date,
     exclude_donor_start_date date,
-    exclude_donor_end_date date
+    exclude_donor_end_date date,
+    target_logged_in character varying DEFAULT 'any'::character varying,
+    min_identifications integer,
+    max_identifications integer,
+    min_observations integer,
+    max_observations integer,
+    user_created_start_date date,
+    user_created_end_date date,
+    last_observation_start_date date,
+    last_observation_end_date date,
+    ip_countries text[] DEFAULT '{}'::text[]
 );
 
 
@@ -2511,7 +2521,8 @@ CREATE TABLE public.messages (
     body text,
     read_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    sent_at timestamp without time zone
 );
 
 
@@ -4102,6 +4113,42 @@ ALTER SEQUENCE public.quality_metrics_id_seq OWNED BY public.quality_metrics.id;
 
 
 --
+-- Name: redirect_links; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.redirect_links (
+    id bigint NOT NULL,
+    user_id integer,
+    title character varying,
+    description text,
+    app_store_url character varying,
+    play_store_url character varying,
+    view_count integer DEFAULT 0,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: redirect_links_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.redirect_links_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: redirect_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.redirect_links_id_seq OWNED BY public.redirect_links.id;
+
+
+--
 -- Name: roles; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -4674,7 +4721,7 @@ ALTER SEQUENCE public.taggings_id_seq OWNED BY public.taggings.id;
 
 CREATE TABLE public.tags (
     id integer NOT NULL,
-    name character varying(255),
+    name character varying(255) COLLATE pg_catalog."und-x-icu",
     taggings_count integer DEFAULT 0
 );
 
@@ -5706,7 +5753,8 @@ CREATE TABLE public.users (
     data_transfer_consent_at timestamp without time zone,
     unconfirmed_email character varying,
     annotated_observations_count integer DEFAULT 0,
-    icon_path_version smallint DEFAULT 0 NOT NULL
+    icon_path_version smallint DEFAULT 0 NOT NULL,
+    canonical_email character varying(100)
 );
 
 
@@ -6610,6 +6658,13 @@ ALTER TABLE ONLY public.provider_authorizations ALTER COLUMN id SET DEFAULT next
 --
 
 ALTER TABLE ONLY public.quality_metrics ALTER COLUMN id SET DEFAULT nextval('public.quality_metrics_id_seq'::regclass);
+
+
+--
+-- Name: redirect_links id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.redirect_links ALTER COLUMN id SET DEFAULT nextval('public.redirect_links_id_seq'::regclass);
 
 
 --
@@ -7724,6 +7779,14 @@ ALTER TABLE ONLY public.quality_metrics
 
 
 --
+-- Name: redirect_links redirect_links_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.redirect_links
+    ADD CONSTRAINT redirect_links_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: roles roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8562,6 +8625,13 @@ CREATE INDEX index_deleted_observations_on_user_id_and_created_at ON public.dele
 --
 
 CREATE INDEX index_deleted_photos_on_created_at ON public.deleted_photos USING btree (created_at);
+
+
+--
+-- Name: index_deleted_photos_on_photo_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_deleted_photos_on_photo_id ON public.deleted_photos USING btree (photo_id);
 
 
 --
@@ -9993,6 +10063,13 @@ CREATE INDEX index_quality_metrics_on_user_id ON public.quality_metrics USING bt
 
 
 --
+-- Name: index_redirect_links_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_redirect_links_on_user_id ON public.redirect_links USING btree (user_id);
+
+
+--
 -- Name: index_roles_users_on_role_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10606,6 +10683,13 @@ CREATE INDEX index_user_signups_on_ip_and_browser_id ON public.user_signups USIN
 --
 
 CREATE UNIQUE INDEX index_user_signups_on_user_id ON public.user_signups USING btree (user_id);
+
+
+--
+-- Name: index_users_on_canonical_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_canonical_email ON public.users USING btree (canonical_email);
 
 
 --
@@ -11395,8 +11479,22 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20240828123245'),
 ('20240923134239'),
 ('20240923134658'),
+('20241016204033'),
 ('20241127180606'),
 ('20241202092831'),
+('20241217203007'),
 ('20241218164832'),
 ('20250124155306'),
-('20250127200519');
+('20250127200519'),
+('20250130003627'),
+('20250204222646'),
+('20250219234716'),
+('20250226225252'),
+('20250306224627'),
+('20250307000624'),
+('20250307004743'),
+('20250311191217'),
+('20250311212144'),
+('20250311225953');
+
+
