@@ -436,15 +436,11 @@ describe( "Project", ( ) => {
 
     it( "photos requires photos to be present", ( ) => {
       project = buildProject( { photos: true } );
-      observation = { photos_count: 1, photos: [{ id: 1 }] };
+      observation = { photos: [{ id: 1 }] };
       expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.true;
-      observation = { photos_count: 1, photos: [] };
+      observation = { photos: [] };
       expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
-      observation = { photos_count: 0, photos: [{ id: 1 }] };
-      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
-      observation = { photos_count: 0 };
-      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
-      observation = { sounds_count: 1, sounds: [{ id: 1 }] };
+      observation = { sounds: [{ id: 1 }] };
       expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
 
       observation = { };
@@ -453,15 +449,11 @@ describe( "Project", ( ) => {
 
     it( "sounds requires sounds to be present", ( ) => {
       project = buildProject( { sounds: true } );
-      observation = { sounds_count: 1, sounds: [{ id: 1 }] };
+      observation = { sounds: [{ id: 1 }] };
       expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.true;
-      observation = { sounds_count: 1, sounds: [] };
+      observation = { sounds: [] };
       expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
-      observation = { sounds_count: 0, sounds: [{ id: 1 }] };
-      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
-      observation = { sounds_count: 0 };
-      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
-      observation = { photos_count: 1, photos: [{ id: 1 }] };
+      observation = { photos: [{ id: 1 }] };
       expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
 
       observation = { };
