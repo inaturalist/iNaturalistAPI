@@ -436,11 +436,13 @@ describe( "Project", ( ) => {
 
     it( "photos requires photos to be present", ( ) => {
       project = buildProject( { photos: true } );
-      observation = { photos: [{ id: 1 }] };
+      observation = { photos_count: 1 };
       expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.true;
-      observation = { photos: [] };
+      observation = { photos_count: 0 };
       expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
-      observation = { sounds: [{ id: 1 }] };
+      observation = { photos_count: null };
+      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
+      observation = { sounds_count: 1 };
       expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
 
       observation = { };
@@ -449,11 +451,30 @@ describe( "Project", ( ) => {
 
     it( "sounds requires sounds to be present", ( ) => {
       project = buildProject( { sounds: true } );
-      observation = { sounds: [{ id: 1 }] };
+      observation = { sounds_count: 1 };
       expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.true;
-      observation = { sounds: [] };
+      observation = { sounds_count: 0 };
       expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
-      observation = { photos: [{ id: 1 }] };
+      observation = { sounds_count: null };
+      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
+      observation = { photos_count: 1 };
+      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
+
+      observation = { };
+      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
+    } );
+
+    it( "photos and sounds can both be required", ( ) => {
+      project = buildProject( { photos: true, sounds: true } );
+      observation = { photos_count: 1 };
+      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
+      observation = { sounds_count: 1 };
+      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
+      observation = { photos_count: 1, sounds_count: 1 };
+      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.true;
+      observation = { photos_count: 0, sounds_count: 1 };
+      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
+      observation = { photos_count: null, sounds_count: 1 };
       expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
 
       observation = { };
