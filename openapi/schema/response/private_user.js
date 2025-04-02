@@ -34,6 +34,7 @@ module.exports = user.append( {
   prefers_common_names: Joi.boolean( ).valid( null ),
   prefers_community_taxa: Joi.boolean( ).valid( null ),
   prefers_identification_email_notification: Joi.boolean( ).valid( null ),
+  prefers_infraspecies_identification_notifications: Joi.boolean( ).valid( null ),
   prefers_mention_email_notification: Joi.boolean( ).valid( null ),
   prefers_message_email_notification: Joi.boolean( ).valid( null ),
   prefers_monthly_supporter_badge: Joi.boolean( ).valid( null ),
