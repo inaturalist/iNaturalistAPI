@@ -56,6 +56,7 @@ module.exports = Joi.object( ).keys( {
     prefers_monthly_supporter_badge: Joi.boolean( ),
     prefers_no_email: Joi.boolean( ),
     prefers_no_tracking: Joi.boolean( ),
+    prefers_non_disagreeing_identification_notifications: Joi.boolean( ),
     prefers_project_added_your_observation_email_notification: Joi.boolean( ),
     prefers_project_curator_change_email_notification: Joi.boolean( ),
     prefers_project_journal_post_email_notification: Joi.boolean( ),
