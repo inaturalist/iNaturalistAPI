@@ -83,6 +83,15 @@ describe( "Users", ( ) => {
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+    it( "never returns suspended users", function ( done ) {
+      const suspendedUser = fixtures.elasticsearch.users.user.find( u => u.suspended );
+      expect( suspendedUser ).not.to.be.undefined;
+      request( this.app ).get( `/v2/users/autocomplete?q=${suspendedUser.login}` )
+        .expect( res => {
+          expect( res.body.results.find( u => u.id === suspendedUser.id ) ).to.be.undefined;
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "update_session", ( ) => {
@@ -256,6 +265,20 @@ describe( "Users", ( ) => {
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "never returns suspended users", function ( done ) {
+      const suspendedUser = fixtures.elasticsearch.users.user.find( u => u.suspended );
+      const okUser = fixtures.elasticsearch.users.user.find( u => !u.suspended );
+      expect( suspendedUser ).not.to.be.undefined;
+      expect( okUser ).not.to.be.undefined;
+      request( this.app ).get( "/v2/users?per_page=100" )
+        .expect( res => {
+          expect( res.body.results ).not.to.be.empty;
+          expect( res.body.results.find( u => u.id === suspendedUser.id ) ).not.to.exist;
+          expect( res.body.results.find( u => u.id === okUser.id ) ).to.exist;
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "update", ( ) => {
@@ -422,6 +445,49 @@ describe( "Users", ( ) => {
             .eq( fixtureObservationField.allowed_values );
         } )
         .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "email_available", ( ) => {
+    const currentUser = fixtures.elasticsearch.users.user[0];
+    const userToken = jwt.sign( { user_id: currentUser.id },
+      config.jwtSecret || "secret",
+      { algorithm: "HS512" } );
+    const applicationToken = jwt.sign(
+      { application: "whatever" },
+      config.jwtApplicationSecret || "application_secret",
+      { algorithm: "HS512" }
+    );
+
+    it( "should 401 without auth", function ( done ) {
+      request( this.app )
+        .get( "/v2/users/email_available" )
+        .expect( 401, done );
+    } );
+
+    it( "should 401 with a user token", function ( done ) {
+      request( this.app )
+        .get( "/v2/users/email_available" )
+        .set( "Authorization", userToken )
+        .expect( 401, done );
+    } );
+
+    it( "should hit the Rails equivalent and return 200", function ( done ) {
+      const nockScope = nock( "http://localhost:3000" )
+        .get( "/users/email_available?email=email@domain.com" )
+        .reply( 200, { available: true } );
+      request( this.app )
+        .get( "/v2/users/email_available?email=email@domain.com" )
+        .set( "Authorization", applicationToken )
+        .expect( ( ) => {
+          // Raise an exception if the nocked endpoint doesn't get called
+          nockScope.done( );
+        } )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.available ).to.be.true;
+        } )
         .expect( 200, done );
     } );
   } );

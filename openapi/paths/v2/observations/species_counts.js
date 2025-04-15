@@ -15,6 +15,9 @@ module.exports = sendWrapper => {
     child => transform( child.schema.label( child.key ) )
   ), p => !_.includes( ["order_by", "only_id"], p.name ) );
   parameters.push(
+    transform( Joi.boolean( ).default( false ).label( "include_ancestors" ).meta( { in: "path" } ) )
+  );
+  parameters.push(
     transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
   );
 

@@ -29,6 +29,19 @@ describe( "Taxa", ( ) => {
         .expect( 200, done );
     } );
 
+    it( "returns the correct taxon when searching by id", function ( done ) {
+      request( this.app ).get( "/v1/taxa/autocomplete?q=110" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 10 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( res.body.results[0].id ).to.eq( 110 );
+          expect( res.body.results[0].name ).to.eq( "Mollusca" );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
     it( "searches japanese characters", function ( done ) {
       request( this.app ).get( `/v1/taxa/autocomplete?q=${querystring.escape( "眼紋疏廣蠟蟬" )}` )
         .expect( res => {

@@ -52,6 +52,17 @@ describe( "Search", ( ) => {
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+    it( "general search by integer returns 2 classes by id and 1 project by name", function ( done ) {
+      request( this.app ).get( "/v1/search?q=696" )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( 3 );
+          expect( res.body.results[0].record.id ).to.eq( 696 );
+          expect( res.body.results[1].record.id ).to.eq( 696 );
+          expect( res.body.results[2].record.title ).to.eq( "Project 696" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
     it( "does not return spam projects", function ( done ) {
       request( this.app ).get( "/v1/search?q=spammiest+spam+project" ).expect( res => {
         expect( res.body.results.length ).to.eq( 0 );

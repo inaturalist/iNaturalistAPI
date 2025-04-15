@@ -396,7 +396,17 @@ CREATE TABLE public.announcements (
     include_donor_start_date date,
     include_donor_end_date date,
     exclude_donor_start_date date,
-    exclude_donor_end_date date
+    exclude_donor_end_date date,
+    target_logged_in character varying DEFAULT 'any'::character varying,
+    min_identifications integer,
+    max_identifications integer,
+    min_observations integer,
+    max_observations integer,
+    user_created_start_date date,
+    user_created_end_date date,
+    last_observation_start_date date,
+    last_observation_end_date date,
+    ip_countries text[] DEFAULT '{}'::text[]
 );
 
 
@@ -691,6 +701,38 @@ CREATE SEQUENCE public.audits_id_seq
 --
 
 ALTER SEQUENCE public.audits_id_seq OWNED BY public.audits.id;
+
+
+--
+-- Name: blocked_ips; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.blocked_ips (
+    id bigint NOT NULL,
+    ip character varying,
+    user_id integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: blocked_ips_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.blocked_ips_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: blocked_ips_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.blocked_ips_id_seq OWNED BY public.blocked_ips.id;
 
 
 --
@@ -2479,7 +2521,8 @@ CREATE TABLE public.messages (
     body text,
     read_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    sent_at timestamp without time zone
 );
 
 
@@ -2546,7 +2589,12 @@ CREATE TABLE public.moderator_actions (
     action character varying,
     reason character varying,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    private boolean DEFAULT false,
+    resource_user_id integer,
+    resource_parent_id integer,
+    resource_parent_type character varying,
+    resource_content text
 );
 
 
@@ -3968,7 +4016,9 @@ CREATE TABLE public.projects (
     trusted boolean DEFAULT false,
     "group" character varying(255),
     last_aggregated_at timestamp without time zone,
-    observation_requirements_updated_at timestamp without time zone
+    observation_requirements_updated_at timestamp without time zone,
+    icon_path_version smallint DEFAULT 0 NOT NULL,
+    cover_path_version smallint DEFAULT 0 NOT NULL
 );
 
 
@@ -4060,6 +4110,42 @@ CREATE SEQUENCE public.quality_metrics_id_seq
 --
 
 ALTER SEQUENCE public.quality_metrics_id_seq OWNED BY public.quality_metrics.id;
+
+
+--
+-- Name: redirect_links; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.redirect_links (
+    id bigint NOT NULL,
+    user_id integer,
+    title character varying,
+    description text,
+    app_store_url character varying,
+    play_store_url character varying,
+    view_count integer DEFAULT 0,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: redirect_links_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.redirect_links_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: redirect_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.redirect_links_id_seq OWNED BY public.redirect_links.id;
 
 
 --
@@ -4635,7 +4721,7 @@ ALTER SEQUENCE public.taggings_id_seq OWNED BY public.taggings.id;
 
 CREATE TABLE public.tags (
     id integer NOT NULL,
-    name character varying(255),
+    name character varying(255) COLLATE pg_catalog."und-x-icu",
     taggings_count integer DEFAULT 0
 );
 
@@ -5561,6 +5647,44 @@ ALTER SEQUENCE public.user_privileges_id_seq OWNED BY public.user_privileges.id;
 
 
 --
+-- Name: user_signups; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.user_signups (
+    id bigint NOT NULL,
+    user_id integer,
+    ip character varying,
+    vpn boolean,
+    browser_id character varying,
+    incognito boolean,
+    root_user_id_by_ip integer,
+    root_user_id_by_browser_id integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    mobile boolean DEFAULT false
+);
+
+
+--
+-- Name: user_signups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.user_signups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: user_signups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.user_signups_id_seq OWNED BY public.user_signups.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -5628,7 +5752,9 @@ CREATE TABLE public.users (
     oauth_application_id integer,
     data_transfer_consent_at timestamp without time zone,
     unconfirmed_email character varying,
-    annotated_observations_count integer DEFAULT 0
+    annotated_observations_count integer DEFAULT 0,
+    icon_path_version smallint DEFAULT 0 NOT NULL,
+    canonical_email character varying(100)
 );
 
 
@@ -5807,7 +5933,8 @@ CREATE TABLE public.year_statistic_localized_shareable_images (
     shareable_image_file_size bigint,
     shareable_image_updated_at timestamp without time zone,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    shareable_image_path_version smallint DEFAULT 0 NOT NULL
 );
 
 
@@ -5943,6 +6070,13 @@ ALTER TABLE ONLY public.atlases ALTER COLUMN id SET DEFAULT nextval('public.atla
 --
 
 ALTER TABLE ONLY public.audits ALTER COLUMN id SET DEFAULT nextval('public.audits_id_seq'::regclass);
+
+
+--
+-- Name: blocked_ips id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.blocked_ips ALTER COLUMN id SET DEFAULT nextval('public.blocked_ips_id_seq'::regclass);
 
 
 --
@@ -6527,6 +6661,13 @@ ALTER TABLE ONLY public.quality_metrics ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- Name: redirect_links id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.redirect_links ALTER COLUMN id SET DEFAULT nextval('public.redirect_links_id_seq'::regclass);
+
+
+--
 -- Name: roles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -6814,6 +6955,13 @@ ALTER TABLE ONLY public.user_privileges ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
+-- Name: user_signups id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_signups ALTER COLUMN id SET DEFAULT nextval('public.user_signups_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -6956,6 +7104,14 @@ ALTER TABLE ONLY public.atlases
 
 ALTER TABLE ONLY public.audits
     ADD CONSTRAINT audits_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: blocked_ips blocked_ips_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.blocked_ips
+    ADD CONSTRAINT blocked_ips_pkey PRIMARY KEY (id);
 
 
 --
@@ -7623,6 +7779,14 @@ ALTER TABLE ONLY public.quality_metrics
 
 
 --
+-- Name: redirect_links redirect_links_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.redirect_links
+    ADD CONSTRAINT redirect_links_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: roles roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7959,6 +8123,14 @@ ALTER TABLE ONLY public.user_privileges
 
 
 --
+-- Name: user_signups user_signups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_signups
+    ADD CONSTRAINT user_signups_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8239,6 +8411,13 @@ CREATE INDEX index_audits_on_request_uuid ON public.audits USING btree (request_
 
 
 --
+-- Name: index_blocked_ips_on_ip; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_blocked_ips_on_ip ON public.blocked_ips USING btree (ip);
+
+
+--
 -- Name: index_cohort_lifecycles_on_cohort_and_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8446,6 +8625,13 @@ CREATE INDEX index_deleted_observations_on_user_id_and_created_at ON public.dele
 --
 
 CREATE INDEX index_deleted_photos_on_created_at ON public.deleted_photos USING btree (created_at);
+
+
+--
+-- Name: index_deleted_photos_on_photo_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_deleted_photos_on_photo_id ON public.deleted_photos USING btree (photo_id);
 
 
 --
@@ -9121,13 +9307,6 @@ CREATE UNIQUE INDEX index_observation_field_values_on_uuid ON public.observation
 
 
 --
--- Name: index_observation_geo_scores_on_observation_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_observation_geo_scores_on_observation_id ON public.observation_geo_scores USING btree (observation_id);
-
-
---
 -- Name: index_observation_field_values_on_value_and_field; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9153,6 +9332,13 @@ CREATE INDEX index_observation_fields_on_name ON public.observation_fields USING
 --
 
 CREATE UNIQUE INDEX index_observation_fields_on_uuid ON public.observation_fields USING btree (uuid);
+
+
+--
+-- Name: index_observation_geo_scores_on_observation_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_observation_geo_scores_on_observation_id ON public.observation_geo_scores USING btree (observation_id);
 
 
 --
@@ -9877,6 +10063,13 @@ CREATE INDEX index_quality_metrics_on_user_id ON public.quality_metrics USING bt
 
 
 --
+-- Name: index_redirect_links_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_redirect_links_on_user_id ON public.redirect_links USING btree (user_id);
+
+
+--
 -- Name: index_roles_users_on_role_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10462,6 +10655,41 @@ CREATE INDEX index_user_privileges_on_revoke_user_id ON public.user_privileges U
 --
 
 CREATE INDEX index_user_privileges_on_user_id ON public.user_privileges USING btree (user_id);
+
+
+--
+-- Name: index_user_signups_on_browser_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_user_signups_on_browser_id ON public.user_signups USING btree (browser_id);
+
+
+--
+-- Name: index_user_signups_on_ip; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_user_signups_on_ip ON public.user_signups USING btree (ip);
+
+
+--
+-- Name: index_user_signups_on_ip_and_browser_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_user_signups_on_ip_and_browser_id ON public.user_signups USING btree (ip, browser_id);
+
+
+--
+-- Name: index_user_signups_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_user_signups_on_user_id ON public.user_signups USING btree (user_id);
+
+
+--
+-- Name: index_users_on_canonical_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_canonical_email ON public.users USING btree (canonical_email);
 
 
 --
@@ -11223,6 +11451,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230907210748'),
 ('20231017190352'),
 ('20231025144604'),
+('20231206194146'),
 ('20240109034635'),
 ('20240109035846'),
 ('20240109035854'),
@@ -11249,4 +11478,23 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20240819213348'),
 ('20240828123245'),
 ('20240923134239'),
-('20240923134658');
+('20240923134658'),
+('20241016204033'),
+('20241127180606'),
+('20241202092831'),
+('20241217203007'),
+('20241218164832'),
+('20250124155306'),
+('20250127200519'),
+('20250130003627'),
+('20250204222646'),
+('20250219234716'),
+('20250226225252'),
+('20250306224627'),
+('20250307000624'),
+('20250307004743'),
+('20250311191217'),
+('20250311212144'),
+('20250311225953');
+
+

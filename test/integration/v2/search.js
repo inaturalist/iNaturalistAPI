@@ -84,5 +84,23 @@ describe( "Search", ( ) => {
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "does not return taxon ancestors by default", function ( done ) {
+      request( this.app ).get( "/v2/search?q=search+test&sources=taxa&fields=all" ).expect( res => {
+        expect( res.body.results[0].taxon.ancestors ).to.be.undefined;
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns taxon ancestors if requested", function ( done ) {
+      request( this.app ).get(
+        "/v2/search?q=search+test&sources=taxa&include_taxon_ancestors=true&fields=all"
+      ).expect( res => {
+        expect( res.body.results[0].taxon.ancestors ).to.not.be.undefined;
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 } );

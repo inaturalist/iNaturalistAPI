@@ -198,6 +198,12 @@
           "ancestor_place_ids": [432, 433]
         },
         {
+          "id": 696,
+          "uuid": "06c859b1-e145-3ae9-a283-81aaadddcad0",
+          "name": "La-Coruna-,-España",
+          "display_name_autocomplete": "La Coruña, España"
+        },
+        {
           "id": 2020120501,
           "uuid": "9dc9c5a9-41b4-4a45-9a20-41c4a0be2ae8",
           "name": "Alameda County",
@@ -1179,6 +1185,36 @@
             "name": "A User"
           },
           "taxon_geoprivacy": "private"
+        },
+        {
+          "id": 2025012201,
+          "uuid": "cc646758-039d-4b54-a9c9-72adef454379",
+          "user": { "id": 123 },
+          "photo_licenses": ["cc-by"],
+          "photos_count": 1,
+          "description": "Observation with media with moderator actions with no users",
+          "sounds": [
+            {
+              "id": 2025012201,
+              "license_code": "CC-BY"
+            }
+          ],
+          "sounds_count": 1
+        },
+        {
+          "id": 2025012202,
+          "uuid": "537d9290-df3c-404f-a26d-ffe07156908c",
+          "user": { "id": 123 },
+          "photo_licenses": ["cc-by"],
+          "photos_count": 1,
+          "description": "Observation with media with moderator actions",
+          "sounds": [
+            {
+              "id": 2025012202,
+              "license_code": "CC-BY"
+            }
+          ],
+          "sounds_count": 1
         }
       ]
     },
@@ -1391,6 +1427,15 @@
               "operator": "in_project?"
             }
           ]
+        },
+        {
+          "id": 2024111102,
+          "title": "Project 696",
+          "title_autocomplete": "Project 696",
+          "title_exact": "Project 696",
+          "location": "21,22",
+          "slug": "project-696",
+          "user_ids": [ 123 ]
         }
       ]
     },
@@ -1810,6 +1855,13 @@
           "name": "Reptilia",
           "is_active": true,
           "iconic_taxon_id": 113
+        },
+        {
+          "id": 696,
+          "uuid": "c5e7f8a3-2b4d-4c98-87f1-9a6d3e5b1c72",
+          "name": "Chelicerata",
+          "is_active": true,
+          "iconic_taxon_id": 696
         }
       ]
     },
@@ -1821,92 +1873,109 @@
           "login_autocomplete": "userloginautocomplete",
           "name": "username",
           "name_autocomplete": "usernameautocomplete",
-          "site_id": 1
+          "site_id": 1,
+          "suspended": false
         },
         {
           "id": 2,
           "login": "search_test_user",
           "login_autocomplete": "search_test_user",
           "name": "Search Test User",
-          "name_autocomplete": "Search Test User"
+          "name_autocomplete": "Search Test User",
+          "suspended": false
         },
         {
           "id": 5,
           "login": "b-user",
-          "name": "B User"
+          "name": "B User",
+          "suspended": false
         },
         {
           "id": 6,
           "login": "z-user",
-          "name": "Z User"
+          "name": "Z User",
+          "suspended": false
         },
         {
           "id": 121,
           "login": "user121",
-          "name": "user121"
+          "name": "user121",
+          "suspended": false
         },
         {
           "id": 122,
           "login": "user122",
-          "name": "user122"
+          "name": "user122",
+          "suspended": false
         },
         {
           "id": 123,
           "login": "a-user",
           "name": "A User",
-          "orcid": "0000-0001-0002-0004"
+          "orcid": "0000-0001-0002-0004",
+          "suspended": false
         },
         {
           "id": 124,
           "login": "es-user",
           "name": "ES User",
           "locale": "es",
-          "place_id": 222
+          "place_id": 222,
+          "suspended": false
         },
         {
           "id": 125,
-          "login": "totally-trustworthy"
+          "login": "totally-trustworthy",
+          "suspended": false
         },
         {
           "id": 126,
-          "login": "totally-trusting"
+          "login": "totally-trusting",
+          "suspended": false
         },
         {
           "id": 127,
           "login": "user127",
-          "name": "Observer that trusts user 123"
+          "name": "Observer that trusts user 123",
+          "suspended": false
         },
         {
           "id": 128,
           "login": "user125",
-          "name": "Observer that does NOT trust user 123"
+          "name": "Observer that does NOT trust user 123",
+          "suspended": false
         },
         {
           "id": 2,
           "login": "search_test_user",
           "login_autocomplete": "search_test_user",
           "name": "Search Test User",
-          "name_autocomplete": "Search Test User"
+          "name_autocomplete": "Search Test User",
+          "suspended": false
         },
         {
           "id": 129,
           "login": "prefers-no-common-names",
-          "name": "Prefers No Common Names"
+          "name": "Prefers No Common Names",
+          "suspended": false
         },
         {
           "id": 1234,
           "login": "user1234",
-          "name": "user1234"
+          "name": "user1234",
+          "suspended": false
         },
         {
           "id": 2020110501,
           "login": "user2020110501",
-          "name": "User that follows user 126 and trusts them"
+          "name": "User that follows user 126 and trusts them",
+          "suspended": false
         },
         {
           "id": 2020111201,
           "login": "user2020111201",
-          "name": "User that follows user 126 and does NOT trusts them"
+          "name": "User that follows user 126 and does NOT trusts them",
+          "suspended": false
         },
         {
           "id": 2021111401,
@@ -1917,33 +1986,38 @@
         {
           "id": 2021121601,
           "login": "user2021121601",
-          "name": "User that will be blocked"
+          "name": "User that will be blocked",
+          "suspended": false
         },
         {
           "id": 2021121602,
           "login": "user2021121602",
-          "name": "User that blocks user2021121601"
+          "name": "User that blocks user2021121601",
+          "suspended": false
         },
         {
           "id": 2023092501,
           "login": "user2023092501",
           "name": "User2023092501 with email and IP",
           "email": "user2023092501@gmail.com",
-          "last_ip": "192.168.0.1"
+          "last_ip": "192.168.0.1",
+          "suspended": false
         },
         {
           "id": 2023092502,
           "login": "user2023092502",
           "name": "User2023092502 with email and IP",
           "email": "user2023092502@gmail.com",
-          "last_ip": "192.168.0.2"
+          "last_ip": "192.168.0.2",
+          "suspended": false
         },
         {
           "id": 2023092503,
           "login": "user2023092503",
           "name": "User2023092503 with email and IP",
           "email": "user2023092503@gmail.com",
-          "last_ip": "192.168.0.3"
+          "last_ip": "192.168.0.3",
+          "suspended": false
         }
       ]
     },
@@ -2368,6 +2442,48 @@
         "updated_at": "2023-12-12 00:00:00"
       }
     ],
+    "moderator_actions": [
+      {
+        "id": 2025012201,
+        "resource_type": "Photo",
+        "resource_id": 2025012201,
+        "user_id": -1,
+        "action": "hide",
+        "reason": "reason for hiding content",
+        "created_at": "2025-01-22 01:00:00",
+        "updated_at": "2025-01-22 01:00:00"
+      },
+      {
+        "id": 2025012202,
+        "resource_type": "Sound",
+        "resource_id": 2025012201,
+        "user_id": -1,
+        "action": "hide",
+        "reason": "reason for hiding content",
+        "created_at": "2025-01-22 01:00:00",
+        "updated_at": "2025-01-22 01:00:00"
+      },
+      {
+        "id": 2025012203,
+        "resource_type": "Photo",
+        "resource_id": 2025012202,
+        "user_id": 1,
+        "action": "hide",
+        "reason": "reason for hiding content",
+        "created_at": "2025-01-22 01:00:00",
+        "updated_at": "2025-01-22 01:00:00"
+      },
+      {
+        "id": 2025012204,
+        "resource_type": "Sound",
+        "resource_id": 2025012202,
+        "user_id": 1,
+        "action": "hide",
+        "reason": "reason for hiding content",
+        "created_at": "2025-01-22 01:00:00",
+        "updated_at": "2025-01-22 01:00:00"
+      }
+    ],
     "oauth_applications": [
       {
         "id": 3,
@@ -2632,6 +2748,14 @@
       {
         "id": 2023092501,
         "uuid": "78e0b6e4-61fa-11ee-8c99-0242ac120002"
+      },
+      {
+        "id": 2025012201,
+        "uuid": "cc646758-039d-4b54-a9c9-72adef454379"
+      },
+      {
+        "id": 2025012202,
+        "uuid": "537d9290-df3c-404f-a26d-ffe07156908c"
       }
     ],
     "observation_photos": [
@@ -2661,6 +2785,42 @@
         "created_at": "2021-10-08 01:00:00",
         "updated_at": "2021-10-08 01:00:00",
         "uuid": "677e1bbb-6782-4166-aed7-ee14124d8216"
+      },
+      {
+        "id": 2025012201,
+        "observation_id": 2025012201,
+        "photo_id": 2025012201,
+        "position": 0,
+        "created_at": "2025-01-22 01:00:00",
+        "updated_at": "2025-01-22 01:00:00",
+        "uuid": "5c44e86f-ac79-4d4c-9f55-1b54d8d3b681"
+      },
+      {
+        "id": 2025012202,
+        "observation_id": 2025012202,
+        "photo_id": 2025012202,
+        "position": 0,
+        "created_at": "2025-01-22 01:00:00",
+        "updated_at": "2025-01-22 01:00:00",
+        "uuid": "ad529a09-97df-4daa-bc88-8eff4881d872"
+      }
+    ],
+    "observation_sounds": [
+      {
+        "id": 2025012201,
+        "observation_id": 2025012201,
+        "sound_id": 2025012201,
+        "created_at": "2025-01-22 01:00:00",
+        "updated_at": "2025-01-22 01:00:00",
+        "uuid": "cf8c7f16-8680-4545-85e8-be258068a9fa"
+      },
+      {
+        "id": 2025012202,
+        "observation_id": 2025012202,
+        "sound_id": 2025012202,
+        "created_at": "2025-01-22 01:00:00",
+        "updated_at": "2025-01-22 01:00:00",
+        "uuid": "5eef64b4-7ca6-49c1-abe7-57fbb77c06fe"
       }
     ],
     "photos": [
@@ -2720,6 +2880,44 @@
         "file_file_size": 2040108,
         "file_updated_at": "2021-10-08 01:00:00",
         "uuid": "a9d9a70f-caf0-4a04-9a3a-037cb8ba842d",
+        "file_prefix_id": 1,
+        "file_extension_id": 1,
+        "width": 400,
+        "height": 300
+      },
+      {
+        "id": 2025012201,
+        "user_id": 123,
+        "native_photo_id": 2025012201,
+        "created_at": "2025-01-22 01:00:00",
+        "updated_at": "2025-01-22 01:00:00",
+        "native_page_url": "https://www.inaturalist.org/photos/2025012201",
+        "license": 4,
+        "type": "LocalPhoto",
+        "file_content_type": "image/jpeg",
+        "file_file_name": "2025012201.jpeg",
+        "file_file_size": 12201,
+        "file_updated_at": "2025-01-22 01:00:00",
+        "uuid": "0f252785-4bf0-4455-9793-9350acca1ebd",
+        "file_prefix_id": 1,
+        "file_extension_id": 1,
+        "width": 400,
+        "height": 300
+      },
+      {
+        "id": 2025012202,
+        "user_id": 123,
+        "native_photo_id": 2025012202,
+        "created_at": "2025-01-22 01:00:00",
+        "updated_at": "2025-01-22 01:00:00",
+        "native_page_url": "https://www.inaturalist.org/photos/2025012202",
+        "license": 4,
+        "type": "LocalPhoto",
+        "file_content_type": "image/jpeg",
+        "file_file_name": "2025012202.jpeg",
+        "file_file_size": 12202,
+        "file_updated_at": "2025-01-22 01:00:00",
+        "uuid": "933d40cb-fde1-4f50-bfe4-a9dc2f9a34ae",
         "file_prefix_id": 1,
         "file_extension_id": 1,
         "width": 400,
@@ -3180,6 +3378,38 @@
         "updated_at": "2018-12-31T00:00:00"
       }
     ],
+    "sounds": [
+      {
+        "id": 2025012201,
+        "user_id": 123,
+        "native_sound_id": 2025012201,
+        "created_at": "2025-01-22 01:00:00",
+        "updated_at": "2025-01-22 01:00:00",
+        "native_page_url": "https://www.inaturalist.org/sounds/2025012201",
+        "license": 4,
+        "type": "LocalSound",
+        "file_content_type": "audio/mp4",
+        "file_file_name": "2025012201.m4a",
+        "file_file_size": 12201,
+        "file_updated_at": "2025-01-22 01:00:00",
+        "uuid": "953e64da-181f-481f-9e5e-af9fd344695e"
+      },
+      {
+        "id": 2025012202,
+        "user_id": 123,
+        "native_sound_id": 2025012202,
+        "created_at": "2025-01-22 01:00:00",
+        "updated_at": "2025-01-22 01:00:00",
+        "native_page_url": "https://www.inaturalist.org/sounds/2025012202",
+        "license": 4,
+        "type": "LocalSound",
+        "file_content_type": "audio/mp4",
+        "file_file_name": "2025012202.m4a",
+        "file_file_size": 12202,
+        "file_updated_at": "2025-01-22 01:00:00",
+        "uuid": "3e36c900-b554-4297-ae66-dbe1b11b1bf5"
+      }
+    ],
     "subscriptions": [
       {
         "id": 1,
@@ -3328,7 +3558,9 @@
         "name": "username",
         "site_id": 1,
         "description": "a very original user",
-        "last_active": "2022-03-01"
+        "last_active": "2022-03-01",
+        "created_at": "2020-01-01 00:00:00",
+        "updated_at": "2020-01-01 00:00:00"
       },
       {
         "id": 5,
@@ -3361,7 +3593,9 @@
         "login": "a-user",
         "name": "A User",
         "icon_content_type": "image/jpeg",
-        "icon_file_name": "img.jpg"
+        "icon_file_name": "img.jpg",
+        "created_at": "2020-01-01 00:00:00",
+        "updated_at": "2020-01-01 00:00:00"
       },
       {
         "id": 124,

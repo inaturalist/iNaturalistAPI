@@ -2,6 +2,9 @@ const { expect } = require( "chai" );
 const request = require( "supertest" );
 const fs = require( "fs" );
 const _ = require( "lodash" );
+const jwt = require( "jsonwebtoken" );
+const nock = require( "nock" );
+const config = require( "../../../config" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
@@ -61,6 +64,28 @@ describe( "Identifications", ( ) => {
           expect( identification.observation.identifications[0].user.email ).to.be.undefined;
           expect( identification.observation.identifications[0].user.last_ip ).to.be.undefined;
         } ).expect( 200, done );
+    } );
+  } );
+
+  describe( "create", ( ) => {
+    it( "sets `no_html` to true for all passthrough requests", function ( done ) {
+      const token = jwt.sign( { user_id: 1 },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      nock( "http://localhost:3000" )
+        .post( "/identifications", body => {
+          expect( body.no_html ).to.eq( true );
+          return body;
+        } )
+        .reply( 200, [] );
+      request( this.app ).post( "/v1/identifications", {
+        identification: {
+          observation_id: 1
+        }
+      } )
+        .set( "Authorization", token )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
     } );
   } );
 

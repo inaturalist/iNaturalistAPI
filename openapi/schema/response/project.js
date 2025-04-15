@@ -18,6 +18,7 @@ const project = Joi.object( ).keys( {
   } ).unknown( false ) ),
   banner_color: Joi.string( ).valid( null ),
   created_at: Joi.string( ),
+  delegated_project_id: Joi.number( ).integer( ).valid( null ),
   description: Joi.string( ).valid( null ),
   flags: Joi.array( ).items( flag ),
   header_image_contain: Joi.boolean( ),
@@ -27,6 +28,7 @@ const project = Joi.object( ).keys( {
   hide_umbrella_map_flags: Joi.boolean( ),
   icon: Joi.string( ).valid( null ),
   icon_file_name: Joi.string( ).valid( null ),
+  is_delegated_umbrella: Joi.boolean( ).valid( null ),
   is_umbrella: Joi.boolean( ),
   latitude: Joi.string( ),
   location: Joi.string( ).valid( null ),
@@ -61,7 +63,10 @@ const project = Joi.object( ).keys( {
     value_bool: Joi.boolean( ),
     value_date: Joi.array( ).items( Joi.string( ) ),
     value_keyword: Joi.any( ).description( "TODO: values can be single values or arrays" ),
-    value_number: Joi.array( ).items( Joi.number( ) )
+    value_number: Joi.alternatives( ).try(
+      Joi.number( ),
+      Joi.array( ).items( Joi.number( ) )
+    )
   } ).unknown( false ) ),
   site_features: Joi.array( ).items( Joi.object( ).keys( {
     noteworthy: Joi.boolean( ),

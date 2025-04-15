@@ -97,7 +97,6 @@ describe( "Observations", ( ) => {
         { algorithm: "HS512" } );
       request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
         .expect( res => {
-          // util.pp( res.body );
           expect( res.body.results[0].private_location ).to.not.be.undefined;
         } )
         .expect( "Content-Type", /json/ )
@@ -111,7 +110,6 @@ describe( "Observations", ( ) => {
         { algorithm: "HS512" } );
       request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
         .expect( res => {
-          // util.pp( res.body );
           expect( res.body.results[0].private_location ).to.not.be.undefined;
         } )
         .expect( "Content-Type", /json/ )
@@ -187,6 +185,42 @@ describe( "Observations", ( ) => {
           expect(
             _.find( res.body.results[0].annotations, a => a.vote_score_short === 1 )
           ).to.be.undefined;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "includes media moderator actions", function ( done ) {
+      obs = _.find( fixtures.elasticsearch.observations.observation, o => (
+        o.description === "Observation with media with moderator actions"
+      ) );
+      request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` )
+        .expect( res => {
+          expect( res.body.results[0].photos.length ).to.eq( 1 );
+          expect( res.body.results[0].photos[0].moderator_actions.length ).to.eq( 1 );
+          expect( res.body.results[0].photos[0].moderator_actions[0].user ).to.not.be.null;
+
+          expect( res.body.results[0].sounds.length ).to.eq( 1 );
+          expect( res.body.results[0].sounds[0].moderator_actions.length ).to.eq( 1 );
+          expect( res.body.results[0].sounds[0].moderator_actions[0].user ).to.not.be.null;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "media moderator actions have null user if user does not exist", function ( done ) {
+      obs = _.find( fixtures.elasticsearch.observations.observation, o => (
+        o.description === "Observation with media with moderator actions with no users"
+      ) );
+      request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` )
+        .expect( res => {
+          expect( res.body.results[0].photos.length ).to.eq( 1 );
+          expect( res.body.results[0].photos[0].moderator_actions.length ).to.eq( 1 );
+          expect( res.body.results[0].photos[0].moderator_actions[0].user ).to.be.null;
+
+          expect( res.body.results[0].sounds.length ).to.eq( 1 );
+          expect( res.body.results[0].sounds[0].moderator_actions.length ).to.eq( 1 );
+          expect( res.body.results[0].sounds[0].moderator_actions[0].user ).to.be.null;
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
@@ -710,6 +744,24 @@ describe( "Observations", ( ) => {
     it( "returns json", function ( done ) {
       request( this.app ).get( "/v2/observations/species_counts" ).expect( res => {
         expect( res.body.results[0].taxon ).to.not.be.undefined;
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "does not return ancestors by default", function ( done ) {
+      request( this.app ).get( "/v2/observations/species_counts?taxon_id=3" ).expect( res => {
+        expect( res.body.results[0].taxon.ancestors ).to.be.undefined;
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns ancestors if requested", function ( done ) {
+      request( this.app ).get(
+        "/v2/observations/species_counts?fields=all&taxon_id=3&include_ancestors=true"
+      ).expect( res => {
+        expect( res.body.results[0].taxon.ancestors ).to.not.be.undefined;
       } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );

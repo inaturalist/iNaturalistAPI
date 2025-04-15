@@ -8,12 +8,13 @@ const config = require( "../../../config" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
+const token = jwt.sign( { user_id: 333 },
+  config.jwtSecret || "secret",
+  { algorithm: "HS512" } );
+
 describe( "Projects", ( ) => {
   describe( "membership", ( ) => {
     const project = fixtures.elasticsearch.projects.project[0];
-    const token = jwt.sign( { user_id: 333 },
-      config.jwtSecret || "secret",
-      { algorithm: "HS512" } );
     describe( "POST", ( ) => {
       it( "should hit projects/:id/join in the Rails API", function ( done ) {
         nock( "http://localhost:3000" )
@@ -133,6 +134,42 @@ describe( "Projects", ( ) => {
           expect( project.user.last_ip ).to.be.undefined;
         } )
         .expect( 200, done );
+    } );
+  } );
+
+  describe( "feature", ( ) => {
+    const project = fixtures.elasticsearch.projects.project[0];
+
+    it( "should succeed", function ( done ) {
+      nock( "http://localhost:3000" )
+        .put( `/projects/${project.id}/feature` )
+        .reply( 200, {} );
+      request( this.app ).put( `/v2/projects/${project.id}/feature` )
+        .set( "Authorization", token )
+        .expect( 204, done );
+    } );
+
+    it( "requires authentication", function ( done ) {
+      request( this.app ).put( `/v2/projects/${project.id}/feature` )
+        .expect( 401, done );
+    } );
+  } );
+
+  describe( "unfeature", ( ) => {
+    const project = fixtures.elasticsearch.projects.project[0];
+
+    it( "should succeed", function ( done ) {
+      nock( "http://localhost:3000" )
+        .put( `/projects/${project.id}/unfeature` )
+        .reply( 200, {} );
+      request( this.app ).put( `/v2/projects/${project.id}/unfeature` )
+        .set( "Authorization", token )
+        .expect( 204, done );
+    } );
+
+    it( "requires authentication", function ( done ) {
+      request( this.app ).put( `/v2/projects/${project.id}/unfeature` )
+        .expect( 401, done );
     } );
   } );
 } );

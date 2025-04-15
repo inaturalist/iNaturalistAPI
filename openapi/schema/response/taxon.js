@@ -78,6 +78,7 @@ module.exports = Joi.object( ).keys( {
   preferred_common_names: Joi.array( ).valid( null ),
   rank: Joi.string( ),
   rank_level: Joi.number( ),
+  representative_photo: photo,
   statuses: Joi.array( ).items(
     Joi.any( ).description( "TODO: status can be strings or objects" )
   ),

@@ -21,6 +21,7 @@ module.exports = Joi.object( ).keys( {
         "users"
       )
     ).description( "Filters search results by record types. Can be specified as an array or a comma-separated list of values" ),
+  include_taxon_ancestors: Joi.boolean( ).default( false ),
   page: Joi.number( ).integer( ),
   per_page: Joi.number( ).integer( ),
   fields: Joi.any( )
