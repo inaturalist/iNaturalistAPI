@@ -111,7 +111,7 @@ describe( "IdentificationsController", ( ) => {
       const q = await Q( { taxon_change_id: 4 } );
       expect( _.find( q.filters, f => (
         f.terms && f.terms["taxon_change.id"]
-          && f.terms["taxon_change.id"][0] === 89
+          && f.terms["taxon_change.id"][0] === 4
       ) ) ).to.not.be.undefined;
     } );
 
