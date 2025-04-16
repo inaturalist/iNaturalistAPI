@@ -107,6 +107,14 @@ describe( "IdentificationsController", ( ) => {
       ) ) ).to.not.be.undefined;
     } );
 
+    it( "filters by taxon_change_id", async ( ) => {
+      const q = await Q( { taxon_change_id: 4 } );
+      expect( _.find( q.filters, f => (
+        f.terms && f.terms["taxon_change.id"]
+          && f.terms["taxon_change.id"][0] === 4
+      ) ) ).to.not.be.undefined;
+    } );
+
     it( "filters by exact_observation_taxon_id", async ( ) => {
       const q = await Q( { exact_observation_taxon_id: 89 } );
       expect( _.find( q.filters, f => (
