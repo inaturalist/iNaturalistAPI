@@ -1409,6 +1409,45 @@ describe( "Observations", ( ) => {
     } );
   } );
 
+  describe.only( "place_counts", ( ) => {
+    it( "returns JSON", function ( done ) {
+      request( this.app ).get( "/v1/observations/places_counts?order=desc&order_by=created_at" )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  
+    it( "sorts by count desc by default", function ( done ) {
+      request( this.app ).get( "/v1/observations/places_counts?order=desc&order_by=created_at" ).expect( res => {
+        expect( res.body.results.length ).to.be.greaterThan( 1 );
+        expect( res.body.results[0].count ).to.be.at.least( res.body.results[1].count );
+      } ).expect( 200, done );
+    } );
+  
+    it( "can sort by count asc", function ( done ) {
+      request( this.app ).get( "/v1/observations/places_counts?order=asc&order_by=created_at" ).expect( res => {
+        expect( res.body.results.length ).to.be.greaterThan( 1 );
+        expect( res.body.results[1].count ).to.be.at.least( res.body.results[0].count );
+      } ).expect( 200, done );
+    } );
+  
+    it( "supports pagination", function ( done ) {
+      request( this.app ).get( "/v1/observations/places_counts?order=desc&order_by=created_at&per_page=1&page=2" ).expect( res => {
+        expect( res.body.page ).to.eq( 2 );
+        expect( res.body.per_page ).to.eq( 1 );
+      } ).expect( 200, done );
+    } );
+  
+    it( "returns results places counts with expected fields", function ( done ) {
+      request( this.app ).get( "/v1/observations/places_counts?order=desc&order_by=created_at" ).expect( res => {
+        const result = res.body.results[0];
+        expect( result ).to.have.property( "count" );
+        expect( result.place ).to.have.property( "id" );
+        expect( result.place ).to.have.property( "name" );
+        expect( result.place ).to.have.property( "display_name" );
+      } ).expect( 200, done );
+    } );
+  } );
+
   describe( "iconic_taxa_counts", ( ) => {
     it( "returns json", function ( done ) {
       request( this.app ).get( "/v1/observations/iconic_taxa_counts" )
