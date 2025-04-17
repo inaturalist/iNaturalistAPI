@@ -1409,7 +1409,7 @@ describe( "Observations", ( ) => {
     } );
   } );
 
-  describe.only( "place_counts", ( ) => {
+  describe( "place_counts", ( ) => {
     it( "returns JSON", function ( done ) {
       request( this.app ).get( "/v1/observations/places_counts?order=desc&order_by=created_at" )
         .expect( "Content-Type", /json/ )
