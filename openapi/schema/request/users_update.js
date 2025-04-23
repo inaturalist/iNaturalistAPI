@@ -9,6 +9,11 @@ module.exports = Joi.object( ).keys( {
         is to delete the account.
       ` ),
     description: Joi.string( ).valid( null ),
+    faved_project_ids: Joi.array( ).items( Joi.number( ) )
+      .description( `
+        Ordered list of IDs of projects the user has faved. Order of IDs in
+        the array is the order in which they will be displayed
+      ` ),
     email: Joi.string( ),
     icon: Joi.object( ).valid( null ),
     locale: Joi.string( ).valid( null ),

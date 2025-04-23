@@ -201,6 +201,7 @@ describe( "Users", ( ) => {
         p => p.name === "common_names" && p.owner_type === "User" && p.owner_id === 1 );
       expect( existingCommonNamesPref ).to.be.undefined;
       request( this.app ).get( "/v1/users/me" ).set( "Authorization", token )
+        .expect( 200 )
         .expect( res => {
           expect( res.body.total_results ).to.eq( 1 );
           expect( res.body.results[0].id ).to.eq( 1 );

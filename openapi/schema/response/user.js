@@ -9,6 +9,8 @@ module.exports = Joi.object( ).keys( {
   uuid: Joi.string( ).guid( { version: "uuidv4" } ),
   created_at: Joi.string( ).isoDate( ),
   description: Joi.string( ).valid( null ),
+  faved_project_ids: Joi.array( ).items( Joi.number( ) )
+    .description( "Ordered list of IDs of projects the user has faved" ),
   icon: Joi.string( ).valid( null ),
   icon_url: Joi.string( ).valid( null ),
   identifications_count: Joi.number( ).integer( ),

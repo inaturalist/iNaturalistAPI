@@ -406,7 +406,13 @@ CREATE TABLE public.announcements (
     user_created_end_date date,
     last_observation_start_date date,
     last_observation_end_date date,
-    ip_countries text[] DEFAULT '{}'::text[]
+    ip_countries text[] DEFAULT '{}'::text[],
+    user_id integer,
+    include_observation_oauth_application_ids integer[] DEFAULT '{}'::integer[],
+    exclude_observation_oauth_application_ids integer[] DEFAULT '{}'::integer[],
+    target_curators character varying DEFAULT 'any'::character varying,
+    target_project_admins character varying DEFAULT 'any'::character varying,
+    target_creator boolean DEFAULT false
 );
 
 
@@ -1302,7 +1308,8 @@ CREATE TABLE public.deleted_observations (
     observation_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    observation_created_at timestamp without time zone
+    observation_created_at timestamp without time zone,
+    observation_uuid uuid
 );
 
 
@@ -2884,7 +2891,7 @@ CREATE TABLE public.observation_accuracy_validators (
     email_date timestamp without time zone,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    validation_count integer
+    validation_count integer DEFAULT 0
 );
 
 
@@ -3842,6 +3849,39 @@ ALTER SEQUENCE public.project_assets_id_seq OWNED BY public.project_assets.id;
 
 
 --
+-- Name: project_faves; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.project_faves (
+    id bigint NOT NULL,
+    project_id integer,
+    user_id integer,
+    "position" integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: project_faves_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.project_faves_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: project_faves_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.project_faves_id_seq OWNED BY public.project_faves.id;
+
+
+--
 -- Name: project_observation_fields; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -4761,7 +4801,7 @@ CREATE TABLE public.taxa (
     iconic_taxon_id integer,
     is_iconic boolean DEFAULT false,
     auto_photos boolean DEFAULT true,
-    auto_description boolean DEFAULT true,
+    shows_wikipedia boolean DEFAULT true,
     version integer,
     name_provider character varying(255),
     delta boolean DEFAULT false,
@@ -5513,9 +5553,9 @@ ALTER SEQUENCE public.user_donations_id_seq OWNED BY public.user_donations.id;
 
 CREATE TABLE public.user_installations (
     id bigint NOT NULL,
-    installation_id character varying(255),
+    installation_id character varying,
     oauth_application_id integer,
-    platform_id character varying(255),
+    platform_id character varying,
     user_id integer,
     created_at date,
     first_logged_in_at date
@@ -6609,6 +6649,13 @@ ALTER TABLE ONLY public.preferences ALTER COLUMN id SET DEFAULT nextval('public.
 --
 
 ALTER TABLE ONLY public.project_assets ALTER COLUMN id SET DEFAULT nextval('public.project_assets_id_seq'::regclass);
+
+
+--
+-- Name: project_faves id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.project_faves ALTER COLUMN id SET DEFAULT nextval('public.project_faves_id_seq'::regclass);
 
 
 --
@@ -7723,6 +7770,14 @@ ALTER TABLE ONLY public.project_assets
 
 
 --
+-- Name: project_faves project_faves_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.project_faves
+    ADD CONSTRAINT project_faves_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: project_observation_fields project_observation_fields_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8292,6 +8347,13 @@ CREATE INDEX index_announcements_on_start_and_end ON public.announcements USING 
 
 
 --
+-- Name: index_announcements_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_announcements_on_user_id ON public.announcements USING btree (user_id);
+
+
+--
 -- Name: index_announcements_sites_on_announcement_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8611,6 +8673,20 @@ CREATE INDEX index_custom_projects_on_project_id ON public.custom_projects USING
 --
 
 CREATE INDEX index_delayed_jobs_on_unique_hash ON public.delayed_jobs USING btree (unique_hash);
+
+
+--
+-- Name: index_deleted_observations_on_observation_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_deleted_observations_on_observation_id ON public.deleted_observations USING btree (observation_id);
+
+
+--
+-- Name: index_deleted_observations_on_observation_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_deleted_observations_on_observation_uuid ON public.deleted_observations USING btree (observation_uuid);
 
 
 --
@@ -8936,10 +9012,10 @@ CREATE INDEX index_identifications_on_created_at ON public.identifications USING
 
 
 --
--- Name: index_identifications_on_observation_id_and_created_at; Type: INDEX; Schema: public; Owner: -
+-- Name: index_identifications_on_observation_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_identifications_on_observation_id_and_created_at ON public.identifications USING btree (observation_id, created_at);
+CREATE INDEX index_identifications_on_observation_id ON public.identifications USING btree (observation_id);
 
 
 --
@@ -9913,6 +9989,20 @@ CREATE INDEX index_project_assets_on_asset_content_type ON public.project_assets
 --
 
 CREATE INDEX index_project_assets_on_project_id ON public.project_assets USING btree (project_id);
+
+
+--
+-- Name: index_project_faves_on_project_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_project_faves_on_project_id ON public.project_faves USING btree (project_id);
+
+
+--
+-- Name: index_project_faves_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_project_faves_on_user_id ON public.project_faves USING btree (user_id);
 
 
 --
@@ -11495,6 +11585,15 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20250307004743'),
 ('20250311191217'),
 ('20250311212144'),
-('20250311225953');
+('20250311225953'),
+('20250326170449'),
+('20250326190722'),
+('20250326213516'),
+('20250326223846'),
+('20250327191619'),
+('20250328144900'),
+('20250404192042'),
+('20250409212827'),
+('20250417172959');
 
 
