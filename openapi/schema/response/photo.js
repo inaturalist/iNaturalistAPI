@@ -7,6 +7,7 @@ module.exports = Joi.object( ).keys( {
     .description( "Unique auto-increment integer identifier." )
     .required( ),
   attribution: Joi.string( ),
+  attribution_name: Joi.string( ),
   flags: Joi.array( ).items( flag ),
   hidden: Joi.boolean( ),
   large_url: Joi.string( ).valid( null ),
