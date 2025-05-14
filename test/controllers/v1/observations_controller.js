@@ -459,6 +459,11 @@ describe( "ObservationsController", ( ) => {
       expect( q.filters ).to.eql( [{ terms: { identifications_most_disagree: [true] } }] );
     } );
 
+    it( "filters by identifications some_disagree", async ( ) => {
+      const q = await Q( { identifications: "some_disagree" } );
+      expect( q.filters ).to.eql( [{ range: { num_identification_disagreements: { gt: 0 } } }] );
+    } );
+
     it( "filters by bounding box", async ( ) => {
       const q = await Q( {
         nelat: 1,
