@@ -267,15 +267,13 @@ module.exports = Joi.object( ).keys( {
     .valid(
       "most_agree",
       "most_disagree",
-      "some_agree",
-      "some_disagree"
+      "some_agree"
     )
     .description(
       "Filter by level of agreement among identifications:\n\n"
       + "* **most_agree:** returns observations where there are more active identifications of taxa that agree with the Observation Taxon than active identifications that disagree with the Observation Taxon\n"
       + "* **some_agree:** returns observations where there are some active identifications of taxa that agree with the Observation Taxon\n"
-      + "* **most_disagree:** returns observations where there are more active identifications of taxa that disagree with the Observation Taxon than active identifications that agree with the Observation Taxon\n"
-      + "* **some_disagree:** returns observations where there are some active identifications of taxa that disagree with the Observation Taxon"
+      + "* **most_disagree:** returns observations where there are more active identifications of taxa that disagree with the Observation Taxon than active identifications that agree with the Observation Taxon"
     ),
   lat: Joi.number( ).min( -90 ).max( 90 ),
   lng: Joi.number( ).min( -180 ).max( 180 ),
