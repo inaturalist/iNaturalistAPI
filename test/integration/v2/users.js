@@ -83,12 +83,23 @@ describe( "Users", ( ) => {
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
-    it( "never returns suspended users", function ( done ) {
+
+    it( "does not return suspended users by default", function ( done ) {
       const suspendedUser = fixtures.elasticsearch.users.user.find( u => u.suspended );
       expect( suspendedUser ).not.to.be.undefined;
       request( this.app ).get( `/v2/users/autocomplete?q=${suspendedUser.login}` )
         .expect( res => {
           expect( res.body.results.find( u => u.id === suspendedUser.id ) ).to.be.undefined;
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "can return suspended users if requested", function ( done ) {
+      const suspendedUser = fixtures.elasticsearch.users.user.find( u => u.suspended );
+      expect( suspendedUser ).not.to.be.undefined;
+      request( this.app ).get( `/v2/users/autocomplete?q=${suspendedUser.login}&include_suspended=true` )
+        .expect( res => {
+          expect( res.body.results.find( u => u.id === suspendedUser.id ) ).not.to.be.undefined;
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
