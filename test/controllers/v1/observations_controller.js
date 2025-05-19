@@ -758,9 +758,9 @@ describe( "ObservationsController", ( ) => {
       expect( q.filters ).to.eql( [{ terms: { "observed_on_details.month": [1, 2] } }] );
     } );
 
-    it( "does not add a filter when all months are requested", async ( ) => {
+    it( "when all months are requested observed_on must exist", async ( ) => {
       const q = await Q( { month: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] } );
-      expect( q.filters ).to.be.empty;
+      expect( q.filters ).to.eql( [{ exists: { field: "observed_on" } }] );
     } );
 
     it( "filters by observation accuracy experiment observations", async ( ) => {
