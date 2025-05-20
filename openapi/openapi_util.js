@@ -11,6 +11,15 @@ const openapiUtil = class openapiUtil {
           openapiUtil.applicationJsonToMultipart( attr.schema, thisKey )
         );
       } else {
+        // Note that array values will get appended here and may not actually
+        // validate properly, b/c if there is an attribute like
+        // user.some_array, it will get declared here as user
+        // [some_array], but when submitted as a multipart request, each
+        // value will be user[some_array][0] (or another index), and openapi
+        // raise an error due to an unknown key. We are currently handling
+        // that by allowing unknown attributes in multipart requests that
+        // support array values, with the caveat that these values will not
+        // be properly validated.
         multipartRequest = multipartRequest.append( { [thisKey]: attr.schema } );
       }
     } );
