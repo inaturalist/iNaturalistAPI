@@ -34,6 +34,7 @@ module.exports = user.append( {
   preferred_photo_license: Joi.string( ).valid( null ),
   preferred_project_addition_by: Joi.string( ).valid( null ),
   preferred_sound_license: Joi.string( ).valid( null ),
+  prefers_activity_email_notification: Joi.boolean( ).valid( null ),
   prefers_automatic_taxonomic_changes: Joi.boolean( ).valid( null ),
   prefers_comment_email_notification: Joi.boolean( ).valid( null ),
   prefers_common_names: Joi.boolean( ).valid( null ),

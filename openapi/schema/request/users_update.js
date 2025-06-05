@@ -51,6 +51,7 @@ module.exports = Joi.object( ).keys( {
     preferred_project_addition_by: Joi.string( ),
     preferred_sound_license: Joi.string( ).valid( null ),
     prefers_automatic_taxonomic_changes: Joi.boolean( ),
+    prefers_activity_email_notification: Joi.boolean( ),
     prefers_comment_email_notification: Joi.boolean( ),
     prefers_common_names: Joi.boolean( ),
     prefers_community_taxa: Joi.boolean( ),
