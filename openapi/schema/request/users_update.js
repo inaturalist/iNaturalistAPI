@@ -9,6 +9,23 @@ module.exports = Joi.object( ).keys( {
         is to delete the account.
       ` ),
     description: Joi.string( ).valid( null ),
+    email_suppression_types: Joi
+      .array( ).items(
+        Joi.string( ).valid(
+          "account_emails",
+          "activity",
+          "blocks",
+          "bounces",
+          "donation_emails",
+          "invalid_emails",
+          "messages",
+          "news_from_inaturalist",
+          "spam_reports",
+          "transactional_emails",
+          "unsubscribes"
+        )
+      )
+      .description( "List of email suppression types" ),
     faved_project_ids: Joi.array( ).items( Joi.number( ) )
       .description( `
         Ordered list of IDs of projects the user has faved. Order of IDs in
@@ -51,7 +68,6 @@ module.exports = Joi.object( ).keys( {
     preferred_project_addition_by: Joi.string( ),
     preferred_sound_license: Joi.string( ).valid( null ),
     prefers_automatic_taxonomic_changes: Joi.boolean( ),
-    prefers_activity_email_notification: Joi.boolean( ),
     prefers_comment_email_notification: Joi.boolean( ),
     prefers_common_names: Joi.boolean( ),
     prefers_community_taxa: Joi.boolean( ),

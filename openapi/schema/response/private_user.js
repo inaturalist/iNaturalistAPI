@@ -11,6 +11,7 @@ module.exports = user.append( {
   confirmation_sent_at: Joi.date( ).valid( null ),
   data_transfer_consent: Joi.boolean( ).valid( true, null ),
   email: Joi.string( ).valid( null ),
+  email_suppression_types: Joi.array( ).items( Joi.string( ) ).valid( null ),
   locale: Joi.string( ).valid( null ),
   login: Joi.string( ),
   muted_user_ids: Joi.array( ).items(
@@ -34,7 +35,6 @@ module.exports = user.append( {
   preferred_photo_license: Joi.string( ).valid( null ),
   preferred_project_addition_by: Joi.string( ).valid( null ),
   preferred_sound_license: Joi.string( ).valid( null ),
-  prefers_activity_email_notification: Joi.boolean( ).valid( null ),
   prefers_automatic_taxonomic_changes: Joi.boolean( ).valid( null ),
   prefers_comment_email_notification: Joi.boolean( ).valid( null ),
   prefers_common_names: Joi.boolean( ).valid( null ),
