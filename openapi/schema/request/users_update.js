@@ -17,6 +17,7 @@ module.exports = Joi.object( ).keys( {
           "blocks",
           "bounces",
           "donation_emails",
+          "feedback",
           "invalid_emails",
           "messages",
           "news_from_inaturalist",
