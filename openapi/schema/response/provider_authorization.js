@@ -19,7 +19,10 @@ module.exports = Joi.object( ).keys( {
       "Name of the provider from a controlled vocabulary. The `open_id` means Yahoo in this context"
     )
     .example( "google_oauth2" ),
-  provider_uid: Joi.string( ).description( "Unique identifier for the user from the provider" ),
+  provider_uid: Joi
+    .string( )
+    .description( "Unique identifier for the user from the provider" )
+    .valid( null ),
   scope: Joi
     .string( )
     .valid( null )
