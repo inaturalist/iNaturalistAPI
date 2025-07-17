@@ -475,6 +475,72 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
+    describe( "sandbox", ( ) => {
+      const sandbox = sinon.createSandbox( );
+
+      beforeEach( ( ) => {
+        sandbox.spy( ESModel, "elasticResults" );
+      } );
+
+      afterEach( ( ) => {
+        sandbox.restore( );
+      } );
+
+      it( "accepts radius float values", function ( done ) {
+        request( this.app ).get( "/v2/observations?lat=1&lng=1&radius=10.1" ).expect( ( ) => {
+          expect( ESModel.elasticResults ).to.have.been.calledWith(
+            sinon.match.any, {
+              where: undefined,
+              filters: [{
+                geo_distance: {
+                  distance: "10.1km",
+                  location: {
+                    lat: 1,
+                    lon: 1
+                  }
+                }
+              }],
+              inverse_filters: [],
+              grouped_inverse_filters: [],
+              per_page: 30,
+              page: 1,
+              sort: {
+                created_at: "desc"
+              }
+            }, "observations", sinon.match.any
+          );
+        } )
+          .expect( 200, done );
+      } );
+
+      it( "accepts radius values less than 1", function ( done ) {
+        request( this.app ).get( "/v2/observations?lat=1&lng=1&radius=0.001" ).expect( ( ) => {
+          expect( ESModel.elasticResults ).to.have.been.calledWith(
+            sinon.match.any, {
+              where: undefined,
+              filters: [{
+                geo_distance: {
+                  distance: "0.001km",
+                  location: {
+                    lat: 1,
+                    lon: 1
+                  }
+                }
+              }],
+              inverse_filters: [],
+              grouped_inverse_filters: [],
+              per_page: 30,
+              page: 1,
+              sort: {
+                created_at: "desc"
+              }
+            }, "observations", sinon.match.any
+          );
+        } )
+          .expect( 200, done );
+      } );
+    } );
+
     describe( "obscuration", ( ) => {
       it( "filters by obscuration=obscured", function ( done ) {
         request( this.app ).get(

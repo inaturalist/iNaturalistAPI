@@ -278,7 +278,7 @@ module.exports = Joi.object( ).keys( {
   disagreements: Joi.boolean( ).description( "Whether there is disagreement among active identifications" ),
   lat: Joi.number( ).min( -90 ).max( 90 ),
   lng: Joi.number( ).min( -180 ).max( 180 ),
-  radius: Joi.number( ).integer( ),
+  radius: Joi.number( ),
   nelat: Joi.number( ).min( -90 ).max( 90 ),
   nelng: Joi.number( ).min( -180 ).max( 180 ),
   swlat: Joi.number( ).min( -90 ).max( 90 ),
