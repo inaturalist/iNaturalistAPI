@@ -233,6 +233,17 @@ describe( "util", ( ) => {
       } ) ).to.eq( "ObservationsController.search" );
     } );
 
+    it( "ignores known invalid parameters", ( ) => {
+      const req = {
+        query: {
+          queryKey: "something"
+        }
+      };
+      expect( util.observationSearchRequestCacheKey( req, "ObservationsController.search", {
+        enableInTestEnv: true
+      } ) ).to.eq( "ObservationsController.search" );
+    } );
+
     it( "does not generate a key if lat and lng are present", ( ) => {
       const req = {
         query: {
