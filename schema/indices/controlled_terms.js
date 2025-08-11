@@ -39,6 +39,9 @@
         }
       }
     },
+    "multivalued": {
+      "type": "boolean"
+    },
     "multivalues": {
       "type": "boolean"
     },

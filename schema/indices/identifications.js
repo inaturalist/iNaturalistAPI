@@ -287,7 +287,7 @@
               "type": "keyword"
             },
             "rank_level": {
-              "scaling_factor": 100.0,
+              "scaling_factor": 100,
               "type": "scaled_float"
             }
           }
@@ -353,7 +353,7 @@
           "type": "keyword"
         },
         "rank_level": {
-          "scaling_factor": 100.0,
+          "scaling_factor": 100,
           "type": "scaled_float"
         }
       }

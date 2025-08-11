@@ -2,6 +2,11 @@
   "dynamic": "true",
   "properties": {
     "ancestor_ids": {
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      },
       "type": "integer"
     },
     "ancestry": {
@@ -37,6 +42,10 @@
     "default_photo": {
       "properties": {
         "attribution": {
+          "index": false,
+          "type": "keyword"
+        },
+        "attribution_name": {
           "index": false,
           "type": "keyword"
         },
@@ -99,9 +108,128 @@
             }
           }
         },
+        "photo": {
+          "properties": {
+            "attribution": {
+              "fields": {
+                "keyword": {
+                  "ignore_above": 256,
+                  "type": "keyword"
+                }
+              },
+              "type": "text"
+            },
+            "id": {
+              "type": "long"
+            },
+            "large_url": {
+              "fields": {
+                "keyword": {
+                  "ignore_above": 256,
+                  "type": "keyword"
+                }
+              },
+              "type": "text"
+            },
+            "license_code": {
+              "fields": {
+                "keyword": {
+                  "ignore_above": 256,
+                  "type": "keyword"
+                }
+              },
+              "type": "text"
+            },
+            "medium_url": {
+              "fields": {
+                "keyword": {
+                  "ignore_above": 256,
+                  "type": "keyword"
+                }
+              },
+              "type": "text"
+            },
+            "native_page_url": {
+              "fields": {
+                "keyword": {
+                  "ignore_above": 256,
+                  "type": "keyword"
+                }
+              },
+              "type": "text"
+            },
+            "native_photo_id": {
+              "fields": {
+                "keyword": {
+                  "ignore_above": 256,
+                  "type": "keyword"
+                }
+              },
+              "type": "text"
+            },
+            "original_dimensions": {
+              "properties": {
+                "height": {
+                  "type": "long"
+                },
+                "width": {
+                  "type": "long"
+                }
+              }
+            },
+            "original_url": {
+              "fields": {
+                "keyword": {
+                  "ignore_above": 256,
+                  "type": "keyword"
+                }
+              },
+              "type": "text"
+            },
+            "small_url": {
+              "fields": {
+                "keyword": {
+                  "ignore_above": 256,
+                  "type": "keyword"
+                }
+              },
+              "type": "text"
+            },
+            "square_url": {
+              "fields": {
+                "keyword": {
+                  "ignore_above": 256,
+                  "type": "keyword"
+                }
+              },
+              "type": "text"
+            },
+            "type": {
+              "fields": {
+                "keyword": {
+                  "ignore_above": 256,
+                  "type": "keyword"
+                }
+              },
+              "type": "text"
+            },
+            "url": {
+              "fields": {
+                "keyword": {
+                  "ignore_above": 256,
+                  "type": "keyword"
+                }
+              },
+              "type": "text"
+            }
+          }
+        },
         "square_url": {
           "index": false,
           "type": "keyword"
+        },
+        "taxon_id": {
+          "type": "long"
         },
         "url": {
           "index": false,
@@ -189,6 +317,12 @@
         "is_valid": {
           "type": "boolean"
         },
+        "lexicon": {
+          "type": "keyword"
+        },
+        "lexicon-new": {
+          "type": "keyword"
+        },
         "locale": {
           "type": "keyword"
         },
@@ -247,7 +381,7 @@
       "type": "keyword"
     },
     "rank_level": {
-      "scaling_factor": 100.0,
+      "scaling_factor": 100,
       "type": "scaled_float"
     },
     "statuses": {
@@ -257,6 +391,12 @@
         },
         "geoprivacy": {
           "type": "keyword"
+        },
+        "id": {
+          "type": "long"
+        },
+        "idddd": {
+          "type": "integer"
         },
         "iucn": {
           "type": "byte"
@@ -290,6 +430,10 @@
         "photo": {
           "properties": {
             "attribution": {
+              "index": false,
+              "type": "keyword"
+            },
+            "attribution_name": {
               "index": false,
               "type": "keyword"
             },
