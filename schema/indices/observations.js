@@ -331,6 +331,10 @@
         }
       }
     },
+    "geo_score": {
+      "scaling_factor": 1000000,
+      "type": "scaled_float"
+    },
     "geojson": {
       "type": "geo_shape"
     },
@@ -358,6 +362,9 @@
     },
     "identification_categories": {
       "type": "keyword"
+    },
+    "identification_disagreements_count": {
+      "type": "integer"
     },
     "identifications_count": {
       "type": "short"
@@ -470,6 +477,9 @@
         "taxon_id": {
           "type": "integer"
         },
+        "updater_id": {
+          "type": "integer"
+        },
         "user_id": {
           "type": "integer"
         },
@@ -562,10 +572,10 @@
       "type": "integer"
     },
     "project_ids_with_curator_id": {
-      "type": "integer"
+      "type": "keyword"
     },
     "project_ids_without_curator_id": {
-      "type": "integer"
+      "type": "keyword"
     },
     "public_positional_accuracy": {
       "type": "integer"
@@ -755,7 +765,7 @@
           "type": "keyword"
         },
         "rank_level": {
-          "scaling_factor": 100.0,
+          "scaling_factor": 100,
           "type": "scaled_float"
         },
         "statuses": {
@@ -770,7 +780,7 @@
               "type": "byte"
             },
             "place_id": {
-              "type": "integer"
+              "type": "keyword"
             },
             "source_id": {
               "type": "short"
