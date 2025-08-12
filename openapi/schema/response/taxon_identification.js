@@ -1,11 +1,13 @@
 const Joi = require( "joi" );
 const annotation = require( "./annotation" );
 const photo = require( "./photo" );
+const vote = require( "./vote" );
 
 module.exports = Joi.object( ).keys( {
   id: Joi.number( ).integer( )
     .description( "Unique auto-increment integer identifier." )
     .required( ),
+  uuid: Joi.string( ).guid( { version: "uuidv4" } ).required( ),
   body: Joi.string( ).valid( null ),
   created_at: Joi.string( ),
   observation: Joi.object( {
@@ -18,6 +20,7 @@ module.exports = Joi.object( ).keys( {
     login: Joi.string( ),
     name: Joi.string( ).valid( null ),
     icon: Joi.string( ).valid( null )
-  } )
+  } ),
+  votes: Joi.array( ).items( vote )
 } ).unknown( true ).meta( { className: "TaxonIdentification" } )
   .valid( null );

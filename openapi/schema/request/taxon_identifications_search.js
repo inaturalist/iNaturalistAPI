@@ -15,7 +15,10 @@ module.exports = Joi.object( ).keys( {
     "asc"
   ).default( "desc" ),
   order_by: Joi.string( ).valid(
-    "id"
+    "id",
+    "created_at",
+    "votes",
+    "word_count"
   ).default( "id" ),
   fields: Joi.any( )
     .description( "Attribute fields to return in the response" )
