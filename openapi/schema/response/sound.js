@@ -4,8 +4,8 @@ const moderatorAction = require( "./moderator_action" );
 
 module.exports = Joi.object( ).keys( {
   attribution: Joi.string( ),
-  file_content_type: Joi.string( ),
-  file_url: Joi.string( ),
+  file_content_type: Joi.string( ).valid( null ),
+  file_url: Joi.string( ).valid( null ),
   flags: Joi.array( ).items( flag ),
   hidden: Joi.boolean( ),
   id: Joi.number( ).integer( ).description( "Unique auto-increment integer identifier." ).required( ),
