@@ -442,6 +442,17 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
+    it( "should return original filenames for photos and sounds", function ( done ) {
+      const obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 2025012201 );
+      request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` )
+        .expect( res => {
+          const observation = res.body.results[0];
+          expect( observation.photos[0].file_file_name ).to.not.be.undefined;
+          expect( observation.sounds[0].file_file_name ).to.not.be.undefined;
+        } )
+        .expect( 200, done );
+    } );
+
     it( "should error with internal server error as result window is too large for elastic search", function ( done ) {
       request( this.app )
         .get( "/v2/observations?page=700" )
