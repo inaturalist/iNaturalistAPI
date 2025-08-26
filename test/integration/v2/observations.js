@@ -445,7 +445,11 @@ describe( "Observations", ( ) => {
     it( "should return original filenames for photos and sounds", function ( done ) {
       const o2 = _.find( fixtures.elasticsearch.observations.observation,
         o => o.id === 2025012201 );
+      const token = jwt.sign( { user_id: 123 },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
       request( this.app ).get( `/v2/observations/${o2.uuid}?fields=all` )
+        .set( "Authorization", token )
         .expect( res => {
           const observation = res.body.results[0];
           expect( observation.photos[0].file_file_name ).to.not.be.undefined;

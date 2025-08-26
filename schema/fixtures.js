@@ -1193,10 +1193,17 @@
           "photo_licenses": ["cc-by"],
           "photos_count": 1,
           "description": "Observation with media with moderator actions with no users",
+          "photos": [
+            {
+              "id": 2025012201,
+              "user_id": 123
+            }
+          ],
           "sounds": [
             {
               "id": 2025012201,
-              "license_code": "CC-BY"
+              "license_code": "CC-BY",
+              "user_id": 123
             }
           ],
           "sounds_count": 1

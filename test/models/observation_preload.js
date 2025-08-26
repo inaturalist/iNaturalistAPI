@@ -34,5 +34,53 @@ describe( "ObservationPreload", ( ) => {
       expect( obs[0].observation_photos[0].photo.license_code ).to.eq( "cc-by" );
       expect( obs[0].observation_photos[0].photo.attribution ).to.match( /some rights reserved \(CC BY\)/ );
     } );
+
+    it( "fills file_file_name when logged in as photo owner", async ( ) => {
+      const observation = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 29 );
+      const obs = [new Observation( observation )];
+      const options = { userSession: { user_id: 5 } };
+      await ObservationPreload.observationPhotos( obs, options );
+      expect( obs[0].photos[0].file_file_name ).to.not.be.undefined;
+    } );
+
+    it( "does not fill file_file_name when logged in as another user", async ( ) => {
+      const observation = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 29 );
+      const obs = [new Observation( observation )];
+      const options = { userSession: { user_id: 1 } };
+      await ObservationPreload.observationPhotos( obs, options );
+      expect( obs[0].photos[0].file_file_name ).to.be.undefined;
+    } );
+
+    it( "does not fill file_file_name when not logged in", async ( ) => {
+      const observation = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 29 );
+      const obs = [new Observation( observation )];
+      await ObservationPreload.observationPhotos( obs, { } );
+      expect( obs[0].photos[0].file_file_name ).to.be.undefined;
+    } );
+  } );
+
+  describe( "observationSounds", ( ) => {
+    it( "fills file_file_name when logged in as sound owner", async ( ) => {
+      const observation = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 2025012201 );
+      const obs = [new Observation( observation )];
+      const options = { userSession: { user_id: 123 } };
+      await ObservationPreload.observationSounds( obs, options );
+      expect( obs[0].sounds[0].file_file_name ).to.not.be.undefined;
+    } );
+
+    it( "does not fill file_file_name when logged in as another user", async ( ) => {
+      const observation = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 2025012201 );
+      const obs = [new Observation( observation )];
+      const options = { userSession: { user_id: 1 } };
+      await ObservationPreload.observationSounds( obs, options );
+      expect( obs[0].sounds[0].file_file_name ).to.be.undefined;
+    } );
+
+    it( "does not fill file_file_name when not logged in", async ( ) => {
+      const observation = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 2025012201 );
+      const obs = [new Observation( observation )];
+      await ObservationPreload.observationSounds( obs, { } );
+      expect( obs[0].sounds[0].file_file_name ).to.be.undefined;
+    } );
   } );
 } );
