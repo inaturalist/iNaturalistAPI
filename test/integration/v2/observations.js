@@ -445,6 +445,8 @@ describe( "Observations", ( ) => {
     it( "should return original filenames for photos and sounds", function ( done ) {
       const o2 = _.find( fixtures.elasticsearch.observations.observation,
         o => o.id === 2025012201 );
+      // Simulate the user logged in with ID 123, which matches the user_id for
+      // this observation's photos and sounds in fixtures.js.
       const token = jwt.sign( { user_id: 123 },
         config.jwtSecret || "secret",
         { algorithm: "HS512" } );
