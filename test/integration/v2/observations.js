@@ -159,7 +159,7 @@ describe( "Observations", ( ) => {
             po.project_id === memberProjectID
           ) );
           const nonMemberProjectObservation = _.find( observation.project_observations, po => (
-            po.project_id != memberProjectID
+            po.project_id !== memberProjectID
           ) );
           expect( memberProjectObservation ).not.to.be.undefined;
           expect( memberProjectObservation.current_user_is_member ).to.be.true;
