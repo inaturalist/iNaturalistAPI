@@ -25,6 +25,6 @@ module.exports = Joi.object( ).keys( {
   square_url: Joi.string( ).valid( null ),
   type: Joi.string( ),
   url: Joi.string( ).valid( null ),
-  file_file_name: Joi.string( ).valid( null )
+  original_filename: Joi.string( ).valid( null )
 } ).unknown( false ).meta( { className: "Photo" } )
   .valid( null );
