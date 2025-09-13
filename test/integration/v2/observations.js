@@ -454,8 +454,8 @@ describe( "Observations", ( ) => {
         .set( "Authorization", token )
         .expect( res => {
           const observation = res.body.results[0];
-          expect( observation.photos[0].file_file_name ).to.not.be.undefined;
-          expect( observation.sounds[0].file_file_name ).to.not.be.undefined;
+          expect( observation.photos[0].original_filename ).to.not.be.undefined;
+          expect( observation.sounds[0].original_filename ).to.not.be.undefined;
         } )
         .expect( 200, done );
     } );
