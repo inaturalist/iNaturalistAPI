@@ -470,6 +470,24 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
+    it( "should return original filenames for photos and sounds", function ( done ) {
+      const o2 = _.find( fixtures.elasticsearch.observations.observation,
+        o => o.id === 2025012201 );
+      // Simulate the user logged in with ID 123, which matches the user_id for
+      // this observation's photos and sounds in fixtures.js.
+      const token = jwt.sign( { user_id: 123 },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( this.app ).get( `/v2/observations/${o2.uuid}?fields=all` )
+        .set( "Authorization", token )
+        .expect( res => {
+          const observation = res.body.results[0];
+          expect( observation.photos[0].original_filename ).to.not.be.undefined;
+          expect( observation.sounds[0].original_filename ).to.not.be.undefined;
+        } )
+        .expect( 200, done );
+    } );
+
     it( "should error with internal server error as result window is too large for elastic search", function ( done ) {
       request( this.app )
         .get( "/v2/observations?page=700" )

@@ -11,6 +11,7 @@ module.exports = Joi.object( ).keys( {
   id: Joi.number( ).integer( ).description( "Unique auto-increment integer identifier." ).required( ),
   license_code: Joi.string( ).valid( null ),
   moderator_actions: Joi.array( ).items( moderatorAction ),
-  native_sound_id: Joi.string( ).valid( null )
+  native_sound_id: Joi.string( ).valid( null ),
+  original_filename: Joi.string( ).valid( null )
 } ).unknown( false ).meta( { className: "Sound" } )
   .valid( null );
