@@ -46,7 +46,8 @@ module.exports = sendWrapper => {
             "needs_id",
             "recent",
             "wild",
-            "subject"
+            "subject",
+            "accurate"
           )
       ),
       transform( Joi.boolean( ).label( "agree" ).meta( { in: "query" } ) )
@@ -91,7 +92,8 @@ module.exports = sendWrapper => {
             "needs_id",
             "recent",
             "wild",
-            "subject"
+            "subject",
+            "accurate"
           )
       )
     ],
