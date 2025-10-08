@@ -2025,6 +2025,38 @@
           "email": "user2023092503@gmail.com",
           "last_ip": "192.168.0.3",
           "suspended": false
+        },
+        {
+          "id": 2025100708,
+          "login": "user2025100708",
+          "name": "User2025100708 is an active donorbox monthly donor but shy about it",
+          "email": "user2025100708@gmail.com",
+          "last_ip": "192.168.0.3",
+          "suspended": false
+        },
+        {
+          "id": 2025100709,
+          "login": "user2025100709",
+          "name": "User2025100709 is an inactive donorbox monthly donor and boastful about it",
+          "email": "user2025100709@gmail.com",
+          "last_ip": "192.168.0.3",
+          "suspended": false
+        },
+        {
+          "id": 2025100710,
+          "login": "user2025100710",
+          "name": "User2025100710 is an active fundraiseup monthly donor and boastful about it",
+          "email": "user2025100710@gmail.com",
+          "last_ip": "192.168.0.3",
+          "suspended": false
+        },
+        {
+          "id": 2025100711,
+          "login": "user2025100711",
+          "name": "User2025100711 is an active fundraiseup nonmonthly donor and boastful about it",
+          "email": "user2025100711@gmail.com",
+          "last_ip": "192.168.0.3",
+          "suspended": false
         }
       ]
     },
@@ -3068,6 +3100,27 @@
         "owner_type": "Project",
         "owner_id": 2005,
         "value": "t"
+      },
+      {
+        "id": 2025100700,
+        "name": "prefers_monthly_supporter_badge",
+        "owner_id": 2025100709,
+        "owner_type": "User",
+        "value": "t"
+      },
+      {
+        "id": 2025100701,
+        "name": "prefers_monthly_supporter_badge",
+        "owner_id": 2025100710,
+        "owner_type": "User",
+        "value": "t"
+      },
+      {
+        "id": 2025100702,
+        "name": "prefers_monthly_supporter_badge",
+        "owner_id": 2025100711,
+        "owner_type": "User",
+        "value": "t"
       }
     ],
     "project_observations": [
@@ -3739,6 +3792,46 @@
         "login": "user2024071702",
         "name": "User2024071702 with 2023 donation",
         "created_at": "2020-01-01 00:00:00"
+      },
+      {
+        "id": 2025100708,
+        "login": "user2025100708",
+        "name": "User2025100708 is an active donorbox monthly donor but shy about it",
+        "created_at": "2025-10-07 00:00:00",
+        "updated_at": "2025-10-07 00:00:00",
+        "last_active": "2025-10-07",
+        "donorbox_plan_type": "monthly",
+        "donorbox_plan_status": "active"
+      },
+      {
+        "id": 2025100709,
+        "login": "user2025100709",
+        "name": "User2025100709 is an inactive donorbox monthly donor and boastful about it",
+        "created_at": "2025-10-07 00:00:00",
+        "updated_at": "2025-10-07 00:00:00",
+        "last_active": "2025-10-07",
+        "donorbox_plan_type": "monthly",
+        "donorbox_plan_status": "inactive"
+      },
+      {
+        "id": 2025100710,
+        "login": "user2025100710",
+        "name": "User2025100710 is an active fundraiseup monthly donor and boastful about it",
+        "created_at": "2025-10-07 00:00:00",
+        "updated_at": "2025-10-07 00:00:00",
+        "last_active": "2025-10-07",
+        "fundraiseup_plan_frequency": "monthly",
+        "fundraiseup_plan_status": "active"
+      },
+      {
+        "id": 2025100711,
+        "login": "user2025100711",
+        "name": "User2025100711 is an active fundraiseup nonmonthly donor and boastful about it",
+        "created_at": "2025-10-07 00:00:00",
+        "updated_at": "2025-10-07 00:00:00",
+        "last_active": "2025-10-07",
+        "fundraiseup_plan_frequency": "yearly",
+        "fundraiseup_plan_status": "active"
       }
     ],
     "user_blocks": [
