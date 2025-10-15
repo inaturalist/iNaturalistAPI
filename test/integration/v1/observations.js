@@ -1438,12 +1438,34 @@ describe( "Observations", ( ) => {
     } );
 
     it( "returns results places counts with expected fields", function ( done ) {
-      request( this.app ).get( "/v1/observations/place_counts?order=desc&order_by=created_at" ).expect( res => {
+      request( this.app ).get( "/v1/observations/place_counts" ).expect( res => {
         const result = res.body.results[0];
         expect( result ).to.have.property( "count" );
         expect( result.place ).to.have.property( "id" );
         expect( result.place ).to.have.property( "name" );
         expect( result.place ).to.have.property( "display_name" );
+      } ).expect( 200, done );
+    } );
+
+    it( "returns counts from all places filtered in observations when place_id is specified", function ( done ) {
+      request( this.app ).get( "/v1/observations/place_counts?place_id=2025101508" ).expect( res => {
+        expect( res.body.results.length ).to.be.eq( 3 );
+        expect( res.body.results[0].place.id ).to.be.eq( 2025101508 );
+        expect( res.body.results[0].count ).to.be.eq( 3 );
+        expect( res.body.results[1].place.id ).to.be.eq( 2025101510 );
+        expect( res.body.results[1].count ).to.be.eq( 2 );
+        expect( res.body.results[2].place.id ).to.be.eq( 2025101509 );
+        expect( res.body.results[2].count ).to.be.eq( 1 );
+      } ).expect( 200, done );
+    } );
+
+    it( "returns counts only from count_place_id when both it and place_id are specified", function ( done ) {
+      request( this.app ).get( "/v1/observations/place_counts?place_id=2025101508&count_place_id=2025101510%2C2025101509" ).expect( res => {
+        expect( res.body.results.length ).to.be.eq( 2 );
+        expect( res.body.results[0].place.id ).to.be.eq( 2025101510 );
+        expect( res.body.results[0].count ).to.be.eq( 2 );
+        expect( res.body.results[1].place.id ).to.be.eq( 2025101509 );
+        expect( res.body.results[1].count ).to.be.eq( 1 );
       } ).expect( 200, done );
     } );
   } );
