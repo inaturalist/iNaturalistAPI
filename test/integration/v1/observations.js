@@ -1417,21 +1417,21 @@ describe( "Observations", ( ) => {
     } );
 
     it( "sorts by count desc by default", function ( done ) {
-      request( this.app ).get( "/v1/observations/place_counts?order=desc&order_by=created_at" ).expect( res => {
+      request( this.app ).get( "/v1/observations/place_counts?" ).expect( res => {
         expect( res.body.results.length ).to.be.greaterThan( 1 );
         expect( res.body.results[0].count ).to.be.at.least( res.body.results[1].count );
       } ).expect( 200, done );
     } );
 
     it( "can sort by count asc", function ( done ) {
-      request( this.app ).get( "/v1/observations/place_counts?order=asc&order_by=created_at" ).expect( res => {
+      request( this.app ).get( "/v1/observations/place_counts?order=asc&order_by=count" ).expect( res => {
         expect( res.body.results.length ).to.be.greaterThan( 1 );
         expect( res.body.results[1].count ).to.be.at.least( res.body.results[0].count );
       } ).expect( 200, done );
     } );
 
     it( "supports pagination", function ( done ) {
-      request( this.app ).get( "/v1/observations/place_counts?order=desc&order_by=created_at&per_page=1&page=2" ).expect( res => {
+      request( this.app ).get( "/v1/observations/place_counts?order=desc&order_by=count&per_page=1&page=2" ).expect( res => {
         expect( res.body.page ).to.eq( 2 );
         expect( res.body.per_page ).to.eq( 1 );
       } ).expect( 200, done );
@@ -1460,12 +1460,12 @@ describe( "Observations", ( ) => {
     } );
 
     it( "returns counts only from count_place_id when both it and place_id are specified", function ( done ) {
-      request( this.app ).get( "/v1/observations/place_counts?place_id=2025101508&count_place_id=2025101510%2C2025101509" ).expect( res => {
+      request( this.app ).get( "/v1/observations/place_counts?place_id=2025101508&count_place_id=2025101510%2C2025101509&order=asc&order_by=id" ).expect( res => {
         expect( res.body.results.length ).to.be.eq( 2 );
-        expect( res.body.results[0].place.id ).to.be.eq( 2025101510 );
-        expect( res.body.results[0].count ).to.be.eq( 2 );
-        expect( res.body.results[1].place.id ).to.be.eq( 2025101509 );
-        expect( res.body.results[1].count ).to.be.eq( 1 );
+        expect( res.body.results[0].place.id ).to.be.eq( 2025101509 );
+        expect( res.body.results[0].count ).to.be.eq( 1 );
+        expect( res.body.results[1].place.id ).to.be.eq( 2025101510 );
+        expect( res.body.results[1].count ).to.be.eq( 2 );
       } ).expect( 200, done );
     } );
   } );
