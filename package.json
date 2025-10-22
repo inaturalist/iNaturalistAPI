@@ -43,7 +43,7 @@
     "jsonwebtoken": "^9.0.2",
     "latlon-geohash": "^1.1.0",
     "lodash": "^4.17.21",
-    "mapnik": "^4.5.9",
+    "@mapnik/mapnik": "^4.6.9",
     "moment": "^2.30.1",
     "moment-timezone": "^0.5.45",
     "multer": "2.0.2",
