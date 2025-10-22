@@ -1,8 +1,13 @@
 # Platform should be forced to amd64
 # because node-mapnik is not available in arm64
-FROM --platform=linux/amd64 node:20 as base
+FROM --platform=linux/amd64 node:20 AS base
 
-RUN apt-get update -qq && apt-get install -y postgresql-client-15
+RUN apt-get update -qq && apt-get install -y curl gnupg2 lsb-release
+
+RUN curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+
+RUN apt-get update -qq && apt-get install -y postgresql-client-17
 
 ENV NODE_ENV=development
 
@@ -47,7 +52,7 @@ RUN echo "GIT_COMMIT=${GIT_COMMIT}" >> /home/inaturalist/api/build_info
 RUN echo "IMAGE_TAG=${IMAGE_TAG}" >> /home/inaturalist/api/build_info
 RUN echo "BUILD_DATE=${BUILD_DATE}" >> /home/inaturalist/api/build_info
 
-FROM base as test
+FROM base AS test
 
 ENV NODE_ENV=test
 
@@ -55,7 +60,7 @@ COPY --chown=inaturalist:inaturalist test test
 
 CMD [ "npm", "run", "coverage" ]
 
-FROM base as development
+FROM base AS development
 
 EXPOSE 4000
 
