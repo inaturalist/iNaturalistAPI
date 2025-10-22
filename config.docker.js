@@ -32,7 +32,7 @@ module.exports = {
   jwtSecret: INAT_JWT_SECRET || "secret",
   jwtApplicationSecret: INAT_JWT_APPLICATION_SECRET || "application_secret",
   tileSize: 512,
-  debug: true,
+  debug: NODE_DEBUG || false,
   database: {
     user: INAT_DB_USER || "inaturalist",
     host: INAT_DB_HOST || "127.0.0.1",
