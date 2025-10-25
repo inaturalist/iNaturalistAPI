@@ -1222,6 +1222,72 @@
             }
           ],
           "sounds_count": 1
+        },
+        {
+          "id": 2025102201,
+          "user": { "id": 2025102299 },
+          "annotations": [
+            {
+              "controlled_attribute_id": 10,
+              "controlled_value_id": 20,
+              "concatenated_attr_val": "10|20",
+              "vote_score_short": 0
+            },
+            {
+              "controlled_attribute_id": 10,
+              "controlled_value_id": 21,
+              "concatenated_attr_val": "10|21",
+              "vote_score_short": 0
+            },
+            {
+              "controlled_attribute_id": 12,
+              "controlled_value_id": 22,
+              "concatenated_attr_val": "12|22",
+              "vote_score_short": 0
+            }
+          ]
+        },
+        {
+          "id": 2025102202,
+          "user": { "id": 2025102299 },
+          "annotations": [
+            {
+              "controlled_attribute_id": 10,
+              "controlled_value_id": 20,
+              "concatenated_attr_val": "10|20",
+              "vote_score_short": 0
+            },
+            {
+              "controlled_attribute_id": 12,
+              "controlled_value_id": 22,
+              "concatenated_attr_val": "12|22",
+              "vote_score_short": 0
+            },
+            {
+              "controlled_attribute_id": 13,
+              "controlled_value_id": 23,
+              "concatenated_attr_val": "13|23",
+              "vote_score_short": 0
+            }
+          ]
+        },
+        {
+          "id": 2025102203,
+          "user": { "id": 2025102299 },
+          "annotations": [
+            {
+              "controlled_attribute_id": 10,
+              "controlled_value_id": 20,
+              "concatenated_attr_val": "10|20",
+              "vote_score_short": 0
+            },
+            {
+              "controlled_attribute_id": 10,
+              "controlled_value_id": 21,
+              "concatenated_attr_val": "10|21",
+              "vote_score_short": 0
+            }
+          ]
         }
       ]
     },
