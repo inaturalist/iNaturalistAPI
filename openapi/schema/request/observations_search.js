@@ -138,7 +138,7 @@ module.exports = Joi.object( ).keys( {
       + "If false, observations will satisfy having at least one of term_value_id's for any of the provided term_id's.\n"
       + "If true, term_id and term_value_id are grouped and filtered for in pairs. "
       + "For example, term_id=1,1,3 and term_value_id=2,5,6 is interpreted as the following {term_id, term_value_id} pairs: "
-      + "{1, 2}, {1, 5}, and {1, 6}. Observations will satisfy having an entry for every pair with a 0 or positive vote score.\n"
+      + "{1, 2}, {1, 5}, and {3, 6}. Observations will satisfy having an entry for every pair with a 0 or positive vote score.\n"
       + "If this parameter is true, but term_id and term_value_id are not the same length, error code 400 is returned. "
     ),
   annotation_user_id: Joi.array( ).items( Joi.string( ) ),
