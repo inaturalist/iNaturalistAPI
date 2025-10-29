@@ -16,12 +16,11 @@ module.exports = sendWrapper => {
     }],
     parameters: [
       transform(
-        Joi.array( )
-          .items( Joi.string( ).guid( ) )
-          .label( "uuid" )
+        Joi.number( ).integer( )
+          .label( "id" )
           .meta( { in: "path" } )
           .required( )
-          .description( "A single UUID" )
+          .description( "A single ID" )
       )
     ],
     responses: {
@@ -44,12 +43,11 @@ module.exports = sendWrapper => {
     }],
     parameters: [
       transform(
-        Joi.array( )
-          .items( Joi.string( ).guid( ) )
-          .label( "uuid" )
+        Joi.number( ).integer( )
+          .label( "id" )
           .meta( { in: "path" } )
           .required( )
-          .description( "A single UUID" )
+          .description( "A single ID" )
       )
     ],
     responses: {
