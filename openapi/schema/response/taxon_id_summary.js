@@ -21,6 +21,8 @@ module.exports = Joi.object( ).keys( {
     .description( "Common name, if available." ),
   taxon_photo_id: Joi.number( ).integer( ).allow( null )
     .description( "Photo ID for the taxon" ),
+  taxon_photo_observation_id: Joi.number( ).integer( ).allow( null )
+    .description( "Observation ID associated with the taxon photo, when the photo comes from an observation." ),
   taxon_group: Joi.string( ).allow( null )
     .description( "Iconic taxon group, if available." ),
   run_name: Joi.string( ).allow( null )
