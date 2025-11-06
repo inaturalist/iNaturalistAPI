@@ -41,7 +41,7 @@ module.exports = Joi.object( ).keys( {
       id: Joi.number( ).integer( ),
       name: Joi.string( ),
       display_name: Joi.string( ),
-      ancestry: Joi.string( )
+      ancestry: Joi.string( ).valid( null )
     } )
   } ),
   preferred_establishment_means: Joi.string( ),

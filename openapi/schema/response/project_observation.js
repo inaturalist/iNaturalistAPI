@@ -7,6 +7,7 @@ module.exports = Joi.object( ).keys( {
   id: Joi.number( ).integer( )
     .description( "Unique auto-increment integer identifier." )
     .required( ),
+  current_user_is_member: Joi.boolean( ),
   preferences: Joi.object( ).keys( {
     allows_curator_coordinate_access: Joi.boolean( )
   } ),

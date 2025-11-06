@@ -34,6 +34,9 @@
     "created_at": {
       "type": "date"
     },
+    "delegated_project_id": {
+      "type": "long"
+    },
     "description": {
       "analyzer": "ascii_snowball_analyzer",
       "type": "text"
@@ -111,6 +114,9 @@
         }
       },
       "type": "integer"
+    },
+    "is_delegated_umbrella": {
+      "type": "boolean"
     },
     "last_post_at": {
       "type": "date"
@@ -235,6 +241,9 @@
         "introduced": {
           "type": "boolean"
         },
+        "members_only": {
+          "type": "boolean"
+        },
         "month": {
           "type": "byte"
         },
@@ -330,6 +339,10 @@
       "type": "nested"
     },
     "slug": {
+      "analyzer": "keyword_analyzer",
+      "type": "text"
+    },
+    "slug_ci": {
       "analyzer": "keyword_analyzer",
       "type": "text"
     },

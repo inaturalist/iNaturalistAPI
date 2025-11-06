@@ -77,6 +77,7 @@ describe( "Observations", ( ) => {
         } )
         .expect( 200, done );
     } );
+
     it( "shows authenticated users their own private info", function ( done ) {
       obs = _.find( fixtures.elasticsearch.observations.observation, o => o.id === 1 );
       const token = jwt.sign( { user_id: 123 },
@@ -137,6 +138,33 @@ describe( "Observations", ( ) => {
       request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
         .expect( res => {
           expect( res.body.results[0].private_location ).to.be.undefined;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns project membership status", function ( done ) {
+      const userID = 123;
+      const memberProjectID = 543;
+      obs = _.find( fixtures.elasticsearch.observations.observation, o => (
+        o.user.id === userID && _.includes( o.project_ids, memberProjectID )
+      ) );
+      const token = jwt.sign( { user_id: userID },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` ).set( "Authorization", token )
+        .expect( res => {
+          const observation = res.body.results[0];
+          const memberProjectObservation = _.find( observation.project_observations, po => (
+            po.project_id === memberProjectID
+          ) );
+          const nonMemberProjectObservation = _.find( observation.project_observations, po => (
+            po.project_id !== memberProjectID
+          ) );
+          expect( memberProjectObservation ).not.to.be.undefined;
+          expect( memberProjectObservation.current_user_is_member ).to.be.true;
+          expect( nonMemberProjectObservation ).not.to.be.undefined;
+          expect( nonMemberProjectObservation.current_user_is_member ).to.be.false;
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
@@ -439,6 +467,24 @@ describe( "Observations", ( ) => {
           expect( res.get( "Pragma" ) ).to.eq( "no-cache" );
         } )
         .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "should return original filenames for photos and sounds", function ( done ) {
+      const o2 = _.find( fixtures.elasticsearch.observations.observation,
+        o => o.id === 2025012201 );
+      // Simulate the user logged in with ID 123, which matches the user_id for
+      // this observation's photos and sounds in fixtures.js.
+      const token = jwt.sign( { user_id: 123 },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      request( this.app ).get( `/v2/observations/${o2.uuid}?fields=all` )
+        .set( "Authorization", token )
+        .expect( res => {
+          const observation = res.body.results[0];
+          expect( observation.photos[0].original_filename ).to.not.be.undefined;
+          expect( observation.sounds[0].original_filename ).to.not.be.undefined;
+        } )
         .expect( 200, done );
     } );
 

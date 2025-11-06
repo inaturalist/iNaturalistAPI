@@ -4,8 +4,14 @@
     "activity_count": {
       "type": "integer"
     },
+    "annotated_observations_count": {
+      "type": "integer"
+    },
     "created_at": {
       "type": "date"
+    },
+    "email": {
+      "type": "keyword"
     },
     "icon": {
       "index": false,
@@ -24,6 +30,9 @@
     },
     "journal_posts_count": {
       "type": "integer"
+    },
+    "last_ip": {
+      "type": "keyword"
     },
     "login": {
       "analyzer": "ascii_snowball_analyzer",
@@ -76,12 +85,6 @@
       "type": "integer"
     },
     "uuid": {
-      "type": "keyword"
-    },
-    "email": {
-      "type": "keyword"
-    },
-    "last_ip": {
       "type": "keyword"
     }
   }
