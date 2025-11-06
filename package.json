@@ -38,7 +38,7 @@
     "flat": "^5.0.2",
     "geoip-lite": "^1.4.10",
     "h3-js": "^4.1.0",
-    "inaturalistjs": "github:inaturalist/inaturalistjs#c4bc405ca516f0a531266afbf3c95d90583b1253",
+    "inaturalistjs": "github:inaturalist/inaturalistjs#e69dc6dc1645406bdfb95a1b49b778a3aca218cf",
     "joi": "^17.13.3",
     "joi-to-swagger": "^6.2.0",
     "jsonwebtoken": "^9.0.2",
