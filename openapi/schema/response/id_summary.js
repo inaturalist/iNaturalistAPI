@@ -10,6 +10,8 @@ module.exports = Joi.object( ).keys( {
     .required( ),
   summary: Joi.string( ).allow( null )
     .description( "Short human-readable identification summary text." ),
+  photo_tip: Joi.string( ).allow( null )
+    .description( "Plain-language tip describing what to photograph to capture key ID features." ),
   visual_key_group: Joi.string( ).allow( null )
     .description( "Grouping label for the summary (e.g. 'Coloration', 'Shape')." ),
   score: Joi.number( ).allow( null )
