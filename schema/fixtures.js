@@ -99,6 +99,7 @@
           "name": "United States",
           "slug": "united-states",
           "display_name_autocomplete": "United States",
+          "display_name": "United States",
           "location": "48.8907012939,-116.9820022583",
           "admin_level": 0,
           "bbox_area": 5500,
@@ -252,6 +253,20 @@
               ]
             ]
           }
+        },
+        {
+          "id": 2025101508,
+          "name": "Testing Place Counts Island"
+        },
+        {
+          "id": 2025101509,
+          "name": "Forest In Testing Place Counts Island",
+          "ancestor_place_ids": [2025101508, 2025101509]
+        },
+        {
+          "id": 2025101510,
+          "name": "Lake In Testing Place Counts Island",
+          "ancestor_place_ids": [2025101508, 2025101510]
         }
       ]
     },
@@ -1222,6 +1237,24 @@
             }
           ],
           "sounds_count": 1
+        },
+        {
+          "id": 2025101501,
+          "uuid": "testing-obsv-places-count1",
+          "place_ids": [2025101508, 2025101509],
+          "private_place_ids": [2025101508, 2025101509]
+        },
+        {
+          "id": 2025101502,
+          "uuid": "testing-obsv-places-count2",
+          "place_ids": [2025101508, 2025101510],
+          "private_place_ids": [2025101508, 2025101510]
+        },
+        {
+          "id": 2025101503,
+          "uuid": "testing-obsv-places-count3",
+          "place_ids": [2025101508, 2025101510],
+          "private_place_ids": [2025101508, 2025101510]
         }
       ]
     },
@@ -2763,6 +2796,18 @@
       {
         "id": 2025012202,
         "uuid": "537d9290-df3c-404f-a26d-ffe07156908c"
+      },
+      {
+        "id": 2025101501,
+        "uuid": "testing-obsv-places-count1"
+      },
+      {
+        "id": 2025101502,
+        "uuid": "testing-obsv-places-count2"
+      },
+      {
+        "id": 2025101503,
+        "uuid": "testing-obsv-places-count3"
       }
     ],
     "observation_photos": [
