@@ -27,6 +27,8 @@ module.exports = Joi.object( ).keys( {
     .description( "Observation ID associated with the taxon photo, when the photo comes from an observation." ),
   taxon_group: Joi.string( ).allow( null )
     .description( "Iconic taxon group, if available." ),
+  language: Joi.string( ).allow( null )
+    .description( "ISO language code for the summary content." ),
   run_name: Joi.string( ).allow( null )
     .description( "Label for the run that produced this summary." ),
   run_generated_at: Joi.string( ).isoDate( ).allow( null )

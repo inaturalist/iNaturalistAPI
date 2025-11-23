@@ -11,6 +11,10 @@ module.exports = Joi.object( ).keys( {
   ).description( "Group or groups; comma-separated in the query becomes an array here" ),
   run_name: Joi.string( )
     .description( "Case-insensitive contains match on run_name" ),
+  language: Joi.alternatives( ).try(
+    Joi.string( ),
+    Joi.array( ).items( Joi.string( ) )
+  ).description( "Filter by one or more ISO language codes" ),
 
   // --- IDs / names ---
   taxon_id: Joi.array( ).items( Joi.number( ).integer( ) )
