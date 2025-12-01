@@ -305,6 +305,22 @@ module.exports = Joi.object( ).keys( {
   viewer_id: Joi.number( ).integer( ),
   reviewed: Joi.boolean( ),
   expected_nearby: Joi.boolean( ),
+  fails_dqa_accurate: Joi.boolean( )
+    .description( "Filter by observations voted as not accurately depicting an organism or scene" ),
+  fails_dqa_date: Joi.boolean( )
+    .description( "Filter by observations voted as not having an accurate date" ),
+  fails_dqa_evidence: Joi.boolean( )
+    .description( "Filter by observations voted as not evidence of an organism" ),
+  fails_dqa_location: Joi.boolean( )
+    .description( "Filter by observations voted as not having an accurate location" ),
+  fails_dqa_needs_id: Joi.boolean( )
+    .description( "Filter by observations voted as the community ID cannot be improved" ),
+  fails_dqa_recent: Joi.boolean( )
+    .description( "Filter by observations voted as not recent evidence of an organism" ),
+  fails_dqa_subject: Joi.boolean( )
+    .description( "Filter by observations voted as not having evidence related to a single subject" ),
+  fails_dqa_wild: Joi.boolean( )
+    .description( "Filter by observations voted as not wild" ),
   locale: Joi.string( ),
   preferred_place_id: Joi.number( ).integer( ),
   ttl: Joi.number( ).integer( ),
