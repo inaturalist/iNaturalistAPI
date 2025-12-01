@@ -292,6 +292,23 @@
       "analyzer": "ascii_snowball_analyzer",
       "type": "text"
     },
+    "dqa_stats": {
+      "properties": {
+        "fail": {
+          "type": "boolean"
+        },
+        "metric": {
+          "type": "keyword"
+        },
+        "pass": {
+          "type": "boolean"
+        },
+        "vote_score": {
+          "type": "short"
+        }
+      },
+      "type": "nested"
+    },
     "faves_count": {
       "type": "short"
     },
