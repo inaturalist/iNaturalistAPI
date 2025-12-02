@@ -240,6 +240,9 @@
     "extinct": {
       "type": "boolean"
     },
+    "provisional": {
+      "type": "boolean"
+    },
     "flag_counts": {
       "properties": {
         "resolved": {
