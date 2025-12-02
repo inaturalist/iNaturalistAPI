@@ -11,6 +11,8 @@ module.exports = Joi.object( ).keys( {
     .description( "External UUID for the referenced object (e.g. identification or comment), if available." ),
   reference_source: Joi.string( ).allow( null )
     .description( "Origin of the reference, e.g. 'observation' or 'identification'." ),
+  reference_observation_id: Joi.number( ).integer( ).allow( null )
+    .description( "Observation ID associated with the reference, if any." ),
   reference_date: Joi.string( ).isoDate( ).allow( null )
     .description( "When the referenced content was created, if known." ),
   reference_content: Joi.string( ).allow( null )
