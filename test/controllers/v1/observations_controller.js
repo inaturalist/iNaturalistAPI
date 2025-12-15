@@ -322,6 +322,41 @@ describe( "ObservationsController", ( ) => {
       ], f => asyncTest( f ) ) );
     } );
 
+    it( "filters by dqa failures", async ( ) => {
+      const asyncTest = async metric => {
+        const qp = { };
+        const nestedFilters = [{
+          nested: {
+            path: "dqa_stats",
+            query: {
+              bool: {
+                filter: [{
+                  terms: { "dqa_stats.metric": [metric] }
+                }, {
+                  terms: { "dqa_stats.fail": [true] }
+                }]
+              }
+            }
+          }
+        }];
+        let q;
+        // true values
+        qp[`fails_dqa_${metric}`] = "true";
+        q = await Q( qp );
+        expect( q.filters ).to.eql( nestedFilters );
+        expect( q.inverse_filters ).to.be.empty;
+
+        // false values
+        qp[`fails_dqa_${metric}`] = "false";
+        q = await Q( qp );
+        expect( q.filters ).to.be.empty;
+        expect( q.inverse_filters ).to.eql( nestedFilters );
+      };
+      await Promise.all( _.map( [
+        "wild", "location", "date", "evidence", "recent", "subject", "accurate", "needs_id"
+      ], f => asyncTest( f ) ) );
+    } );
+
     it( "filters by hour", async ( ) => {
       const q = await Q( { hour: "0,1,2,3" } );
       expect( q.filters ).to.eql( [
