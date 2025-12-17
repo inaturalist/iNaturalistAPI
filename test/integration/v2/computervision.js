@@ -89,6 +89,30 @@ describe( "Computervision", ( ) => {
         .set( "Authorization", token )
         .expect( 401, done );
     } );
+    it( "filters for photo id if provided", function ( done ) {
+      const token = jwt.sign(
+        { application: "whatever" },
+        config.jwtApplicationSecret || "application_secret",
+        { algorithm: "HS512" }
+      );
+      request( this.app ).get( `${url}?photo_id=1` )
+        .set( "Authorization", token )
+        .expect( 200 )
+        .expect( res => {
+          expect( res.body.results.length ).to.be.above( 0 );
+        } )
+        .expect( 200, done );
+    } );
+    it( "should fail when given a photo id not attributed to the observation", function ( done ) {
+      const token = jwt.sign(
+        { application: "whatever" },
+        config.jwtApplicationSecret || "application_secret",
+        { algorithm: "HS512" }
+      );
+      request( this.app ).get( `${url}?photo_id=2020101601` )
+        .set( "Authorization", token )
+        .expect( 422, done );
+    } );
   } );
   describe( "score_image", ( ) => {
     const token = jwt.sign(
