@@ -5,6 +5,7 @@ const request = require( "supertest" );
 const nock = require( "nock" );
 const fs = require( "fs" );
 const config = require( "../../../config" );
+const testHelper = require( "../../../lib/test_helper" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
@@ -245,6 +246,55 @@ describe( "Users", ( ) => {
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
+    } );
+
+    it( "returns monthly supporter = true even if user does not prefer to show the monthly badge", async function ( ) {
+      const userPG = {
+        id: 2025101011,
+        created_at: "2025-10-10 00:00:00",
+        updated_at: "2025-10-10 00:00:00",
+        last_active: "2025-10-10",
+        login: "20251011_monthly_supporter",
+        name: "Monthly Supporter",
+        site_id: 1,
+        donorbox_plan_status: "active",
+        donorbox_plan_type: "monthly"
+      };
+      const userES = {
+        id: 2025101011,
+        login: "20251011_monthly_supporter",
+        suspended: false
+      };
+      const preferencePG = {
+        id: 2025101013,
+        name: "prefers_monthly_supporter_badge",
+        owner_id: 2025101011,
+        owner_type: "User",
+        value: "f"
+      };
+      const userPGIds = await testHelper.insertJSObjectsIntoPostgresTable( "users", [userPG] );
+      const preferencePGIds = await testHelper.insertJSObjectsIntoPostgresTable( "preferences", [preferencePG] );
+      const userESIds = await testHelper.insertJSObjectsIntoESIndex( "users", [userES] );
+      const cleanUp = async () => {
+        await testHelper.deleteIdsFromPostgresTable( "users", userPGIds );
+        await testHelper.deleteIdsFromPostgresTable( "preferences", preferencePGIds );
+        await testHelper.deleteIdsFromESIndex( "users", userESIds );
+      };
+
+      const token = jwt.sign( { user_id: 2025101011 },
+        config.jwtSecret || "secret",
+        { algorithm: "HS512" } );
+      try {
+        await request( this.app ).get( "/v1/users/me" ).set( "Authorization", token )
+          .expect( res => {
+            expect( res.body.total_results ).to.eq( 1 );
+            expect( res.body.results[0].monthly_supporter ).to.eq( true );
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200 );
+      } finally {
+        await cleanUp();
+      }
     } );
 
     _.each( [
