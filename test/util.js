@@ -194,6 +194,10 @@ describe( "util", ( ) => {
       expectParamInCacheKey( "place_id", 1, "placeID" );
     } );
 
+    it( "allows queries with numeric per_page value of 0 to be cached for obs search", ( ) => {
+      expectParamInCacheKey( "per_page", 0, "perPage" );
+    } );
+
     it( "does not allow queries with place_id to be cached for obs search when logged in", ( ) => {
       const req = {
         query: {
