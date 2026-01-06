@@ -158,7 +158,7 @@ describe( "Taxon", ( ) => {
           position: 1
         }]
       };
-      t.prepareForResponse( { userSession } );
+      t.prepareForV1Response( { userSession } );
       expect( t.preferred_common_name ).to.eq( "BestEnglish · BestSpanish" );
       expect( t.preferred_common_names[0].name ).to.eq( "BestEnglish" );
       expect( t.preferred_common_names[1].name ).to.eq( "BestSpanish" );
@@ -175,7 +175,7 @@ describe( "Taxon", ( ) => {
           position: 1
         }]
       };
-      t.prepareForResponse( { userSession } );
+      t.prepareForV1Response( { userSession } );
       expect( t.preferred_common_name ).to.be.undefined;
       expect( t.preferred_common_names ).to.be.undefined;
     } );
@@ -190,7 +190,7 @@ describe( "Taxon", ( ) => {
           position: 1
         }]
       };
-      t.prepareForResponse( { userSession } );
+      t.prepareForV1Response( { userSession } );
       expect( t.preferred_common_name ).to.eq( "BestSpanish · BestEnglish" );
       expect( t.preferred_common_names[0].name ).to.eq( "BestSpanish" );
       expect( t.preferred_common_names[1].name ).to.eq( "BestEnglish" );
@@ -203,7 +203,7 @@ describe( "Taxon", ( ) => {
           position: 0
         }]
       };
-      t.prepareForResponse( { userSession } );
+      t.prepareForV1Response( { userSession } );
       expect( t.preferred_common_name ).to.be.undefined;
       expect( t.preferred_common_names ).to.be.empty;
     } );
@@ -215,11 +215,11 @@ describe( "Taxon", ( ) => {
           position: 0
         }]
       };
-      t.prepareForResponse( { locale: "en", userSession } );
+      t.prepareForV1Response( { locale: "en", userSession } );
       expect( t.preferred_common_name ).to.eq( "BestEnglish" );
       expect( t.preferred_common_names[0].name ).to.eq( "BestEnglish" );
       t = _.cloneDeep( stubTaxon );
-      t.prepareForResponse( { locale: "es", userSession } );
+      t.prepareForV1Response( { locale: "es", userSession } );
       expect( t.preferred_common_name ).to.eq( "BestSpanish" );
       expect( t.preferred_common_names[0].name ).to.eq( "BestSpanish" );
     } );
@@ -235,19 +235,19 @@ describe( "Taxon", ( ) => {
         }]
       };
       // en
-      t.prepareForResponse( { locale: "en", userSession } );
+      t.prepareForV1Response( { locale: "en", userSession } );
       expect( t.preferred_common_name ).to.eq( "BestEnglish" );
       expect( t.preferred_common_names[0].name ).to.eq( "BestEnglish" );
       expect( t.preferred_common_names[1].name ).to.eq( "BestEnglish" );
       // es
       t = _.cloneDeep( stubTaxon );
-      t.prepareForResponse( { locale: "es", userSession } );
+      t.prepareForV1Response( { locale: "es", userSession } );
       expect( t.preferred_common_name ).to.eq( "BestEnglish · BestSpanish" );
       expect( t.preferred_common_names[0].name ).to.eq( "BestEnglish" );
       expect( t.preferred_common_names[1].name ).to.eq( "BestSpanish" );
       // es-mx
       t = _.cloneDeep( stubTaxon );
-      t.prepareForResponse( { locale: "es-mx", userSession } );
+      t.prepareForV1Response( { locale: "es-mx", userSession } );
       expect( t.preferred_common_name ).to.eq( "BestEnglish · BestSpanish" );
       expect( t.preferred_common_names[0].name ).to.eq( "BestEnglish" );
       expect( t.preferred_common_names[1].name ).to.eq( "BestSpanish" );
@@ -261,7 +261,7 @@ describe( "Taxon", ( ) => {
           place_id: 222
         }]
       };
-      t.prepareForResponse( { locale: "en", userSession } );
+      t.prepareForV1Response( { locale: "en", userSession } );
       expect( t.preferred_common_name ).to.eq( "BestInCalifornia" );
       expect( t.preferred_common_names[0].name ).to.eq( "BestInCalifornia" );
     } );
@@ -274,7 +274,7 @@ describe( "Taxon", ( ) => {
           place_id: 222
         }]
       };
-      t.prepareForResponse( { locale: "de", userSession } );
+      t.prepareForV1Response( { locale: "de", userSession } );
       expect( t.preferred_common_name ).to.be.undefined;
       expect( t.preferred_common_names ).to.be.empty;
     } );
@@ -288,7 +288,7 @@ describe( "Taxon", ( ) => {
           ancestor_place_ids: [111, 333]
         }]
       };
-      t.prepareForResponse( { locale: "en", userSession } );
+      t.prepareForV1Response( { locale: "en", userSession } );
       expect( t.preferred_common_name ).to.eq( "BestInAmerica" );
       expect( t.preferred_common_names[0].name ).to.eq( "BestInAmerica" );
     } );
@@ -300,7 +300,7 @@ describe( "Taxon", ( ) => {
           position: 0
         }]
       };
-      t.prepareForResponse( { locale: "en", userSession } );
+      t.prepareForV1Response( { locale: "en", userSession } );
       expect( t.preferred_common_name ).to.be.undefined;
       expect( t.preferred_common_names ).to.be.empty;
     } );
@@ -360,14 +360,14 @@ describe( "Taxon", ( ) => {
   describe( "prepareForResponse", ( ) => {
     it( "skips listed taxa without means", ( ) => {
       const t2 = new Taxon( t );
-      t2.prepareForResponse( );
+      t2.prepareForV1Response( );
       // expect( t2.preferred_common_name ).to.eq( "BestEnglish" );
       // TODO I'm not sure how the above tested anything related to listed taxa
     } );
 
     it( "defaults to strict locale check", ( ) => {
       const t2 = new Taxon( t );
-      t2.prepareForResponse( { locale: "de" } );
+      t2.prepareForV1Response( { locale: "de" } );
       expect( t2.preferred_common_name ).to.be.undefined;
     } );
   } );
