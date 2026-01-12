@@ -284,6 +284,15 @@ describe( "Observations", ( ) => {
         .expect( "Content-Type", /json/ ).expect( 200, done );
     } );
 
+    it( "allows searching with more than 20 array values", function ( done ) {
+      let path = "/v1/observations?place_id[]=1";
+      for ( let i = 2; i <= 200; i += 1 ) {
+        path += `&place_id[]=${i}`;
+      }
+      request( this.app ).get( path )
+        .expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+
     it( "looks up observation users from the DB", function ( done ) {
       request( this.app ).get( "/v1/observations" )
         .expect( res => {
