@@ -2,28 +2,20 @@ const Joi = require( "joi" );
 const annotation = require( "./annotation" );
 const photo = require( "./photo" );
 const vote = require( "./vote" );
+const identification = require( "./identification" );
 
 module.exports = Joi.object( ).keys( {
   id: Joi.number( ).integer( )
     .description( "Unique auto-increment integer identifier." )
     .required( ),
-  identification: Joi.object( ).keys( {
-    uuid: Joi.string( ).guid( { version: "uuidv4" } ).required( ),
-    body: Joi.string( ).valid( null ),
-    created_at: Joi.string( ),
+  identification: identification.keys( {
     observation: Joi.object( {
       id: Joi.number( ).integer( ),
       discussion_count: Joi.number( ).integer( ),
       annotations: Joi.array( ).items( annotation ),
       photos: Joi.array( ).items( photo )
-    } ),
-    user: Joi.object( {
-      id: Joi.number( ).integer( ),
-      login: Joi.string( ),
-      name: Joi.string( ).valid( null ),
-      icon: Joi.string( ).valid( null )
     } )
-  } ),
+  } ).meta( { className: "TaxonIdentificationIdentification" } ),
   nominated_by_user: Joi.object( {
     id: Joi.number( ).integer( ),
     login: Joi.string( ),
