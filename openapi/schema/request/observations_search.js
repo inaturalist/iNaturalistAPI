@@ -321,6 +321,12 @@ module.exports = Joi.object( ).keys( {
     .description( "Filter by observations voted as not having evidence related to a single subject" ),
   fails_dqa_wild: Joi.boolean( )
     .description( "Filter by observations voted as not wild" ),
+  user_after: Joi.string( )
+    .description( "Filter by users created after a date. Accepts dates with or without times, "
+      + "e.g. 2025-01-01, as well as relative day, month, or year, e.g. 10d, 2w, 1y" ),
+  user_before: Joi.string( )
+    .description( "Filter by users created before a date. Accepts dates with or without times, "
+      + "e.g. 2025-01-01, as well as relative day, month, or year, e.g. 10d, 2w, 1y" ),
   locale: Joi.string( ),
   preferred_place_id: Joi.number( ).integer( ),
   ttl: Joi.number( ).integer( ),
