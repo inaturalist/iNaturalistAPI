@@ -585,6 +585,84 @@ describe( "Observations", ( ) => {
         } )
           .expect( 200, done );
       } );
+
+      it( "properly handles field parameters with X-HTTP-Method-Override", function ( done ) {
+        request( this.app )
+          .post( "/v2/observations" )
+          .set( "Content-Type", "application/json" )
+          .send( {
+            "field:count": ""
+          } )
+          .set( "X-HTTP-Method-Override", "GET" )
+          .expect( ( ) => {
+            expect( ESModel.elasticResults ).to.have.been.calledWith(
+              sinon.match.any, {
+                where: undefined,
+                filters: [{
+                  nested: {
+                    path: "ofvs",
+                    query: {
+                      bool: {
+                        filter: [{
+                          match: {
+                            "ofvs.name_ci": "count"
+                          }
+                        }]
+                      }
+                    }
+                  }
+                }],
+                inverse_filters: [],
+                grouped_inverse_filters: [],
+                per_page: 30,
+                page: 1,
+                sort: {
+                  created_at: "desc"
+                }
+              }, "observations", sinon.match.any
+            );
+          } )
+          .expect( 200, done );
+      } );
+
+      it( "properly handles field parameters with brackets with X-HTTP-Method-Override", function ( done ) {
+        request( this.app )
+          .post( "/v2/observations" )
+          .set( "Content-Type", "application/json" )
+          .send( {
+            "field:Origin [IUCN Red List]": ""
+          } )
+          .set( "X-HTTP-Method-Override", "GET" )
+          .expect( ( ) => {
+            expect( ESModel.elasticResults ).to.have.been.calledWith(
+              sinon.match.any, {
+                where: undefined,
+                filters: [{
+                  nested: {
+                    path: "ofvs",
+                    query: {
+                      bool: {
+                        filter: [{
+                          match: {
+                            "ofvs.name_ci": "Origin [IUCN Red List]"
+                          }
+                        }]
+                      }
+                    }
+                  }
+                }],
+                inverse_filters: [],
+                grouped_inverse_filters: [],
+                per_page: 30,
+                page: 1,
+                sort: {
+                  created_at: "desc"
+                }
+              }, "observations", sinon.match.any
+            );
+          } )
+          .expect( 200, done );
+      } );
     } );
 
     describe( "obscuration", ( ) => {
