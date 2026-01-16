@@ -67,6 +67,72 @@ describe( "Users", ( ) => {
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    describe( "monthly_supporter_badge property", ( ) => {
+      it( "is false if user does not prefer to show it", function ( done ) {
+        request( this.app ).get( "/v2/users/2025100708?fields=all" )
+          .expect( res => {
+            const user = res.body.results[0];
+            expect( res.body.page ).to.eq( 1 );
+            expect( res.body.per_page ).to.eq( 1 );
+            expect( res.body.total_results ).to.eq( 1 );
+            expect( res.body.results.length ).to.eq( 1 );
+            expect( user.id ).to.eq( 2025100708 );
+            expect( user ).to.have.property( "monthly_supporter_badge" );
+            expect( user.monthly_supporter_badge ).to.be.false;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "is false if user is an inactive donor", function ( done ) {
+        request( this.app ).get( "/v2/users/2025100709?fields=all" )
+          .expect( res => {
+            const user = res.body.results[0];
+            expect( res.body.page ).to.eq( 1 );
+            expect( res.body.per_page ).to.eq( 1 );
+            expect( res.body.total_results ).to.eq( 1 );
+            expect( res.body.results.length ).to.eq( 1 );
+            expect( user.id ).to.eq( 2025100709 );
+            expect( user ).to.have.property( "monthly_supporter_badge" );
+            expect( user.monthly_supporter_badge ).to.be.false;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "is true if user is an active monthly donor and prefers to show it", function ( done ) {
+        request( this.app ).get( "/v2/users/2025100710?fields=all" )
+          .expect( res => {
+            const user = res.body.results[0];
+            expect( res.body.page ).to.eq( 1 );
+            expect( res.body.per_page ).to.eq( 1 );
+            expect( res.body.total_results ).to.eq( 1 );
+            expect( res.body.results.length ).to.eq( 1 );
+            expect( user.id ).to.eq( 2025100710 );
+            expect( user ).to.have.property( "monthly_supporter_badge" );
+            expect( user.monthly_supporter_badge ).to.be.true;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "is false if user is an active yearly donor, not monthly", function ( done ) {
+        request( this.app ).get( "/v2/users/2025100711?fields=all" )
+          .expect( res => {
+            const user = res.body.results[0];
+            expect( res.body.page ).to.eq( 1 );
+            expect( res.body.per_page ).to.eq( 1 );
+            expect( res.body.total_results ).to.eq( 1 );
+            expect( res.body.results.length ).to.eq( 1 );
+            expect( user.id ).to.eq( 2025100711 );
+            expect( user ).to.have.property( "monthly_supporter_badge" );
+            expect( user.monthly_supporter_badge ).to.be.false;
+          } )
+          .expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+    } );
   } );
 
   describe( "autocomplete", ( ) => {
