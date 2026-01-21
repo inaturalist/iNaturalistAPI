@@ -11,6 +11,7 @@ module.exports = user.append( {
   confirmation_sent_at: Joi.date( ).valid( null ),
   data_transfer_consent: Joi.boolean( ).valid( true, null ),
   email: Joi.string( ).valid( null ),
+  email_suppression_types: Joi.array( ).items( Joi.string( ) ).valid( null ),
   locale: Joi.string( ).valid( null ),
   login: Joi.string( ),
   muted_user_ids: Joi.array( ).items(
