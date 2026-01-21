@@ -6,6 +6,7 @@ const nock = require( "nock" );
 const fs = require( "fs" );
 const jwt = require( "jsonwebtoken" );
 const config = require( "../../../config" );
+const testHelper = require( "../../../lib/test_helper" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
@@ -706,6 +707,39 @@ describe( "Observations", ( ) => {
           expect( res.body.results.map( r => r.id ) ).not.to.contain( 7 );
           expect( res.body.results.map( r => r.id ) ).not.to.contain( 6 );
         } ).expect( 200, done );
+    } );
+
+    it( "filters by term_value_id for multiple values", async function ( ) {
+      const annotationES = {
+        id: 2025101003,
+        controlled_attribute_id: 7,
+        controlled_value_id: 8,
+        concatenated_attr_val: "7|8",
+        vote_score_short: 0
+      };
+      const observationES = {
+        id: 2025101004,
+        user: {
+          id: 2025101002
+        },
+        annotations: [
+          annotationES
+        ]
+      };
+      const observationESIds = await testHelper.insertJSObjectsIntoESIndex( "observations", [observationES] );
+      const cleanUp = async () => {
+        await testHelper.deleteIdsFromESIndex( "observations", observationESIds );
+      };
+
+      try {
+        await request( this.app ).get( "/v1/observations?term_id=7&term_value_id=8,9" )
+          .expect( res => {
+            expect( res.body.results.length ).to.eq( 1 );
+            expect( res.body.results.map( r => r.id ) ).to.contain( observationES.id );
+          } ).expect( 200 );
+      } finally {
+        await cleanUp();
+      }
     } );
 
     it( "filters by without_term_id", function ( done ) {
