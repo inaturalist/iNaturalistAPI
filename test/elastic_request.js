@@ -32,7 +32,7 @@ describe( "ElasticRequest", ( ) => {
       } );
     } );
 
-    it( "creates a conditional query for dateline wrapping bboxes", ( ) => {
+    it( "creates a conditional query for antimeridian wrapping bboxes", ( ) => {
       expect( ElasticRequest.boundingBoxFilter( { }, [179, 1, -179, 2], false ) ).to.eql( {
         bool: {
           should: [

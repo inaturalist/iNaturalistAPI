@@ -8,6 +8,7 @@ const jwt = require( "jsonwebtoken" );
 const { v4: uuidv4 } = require( "uuid" );
 const config = require( "../../../config" );
 const ESModel = require( "../../../lib/models/es_model" );
+const esClient = require( "../../../lib/es_client" );
 const ObservationsController = require( "../../../lib/controllers/v1/observations_controller" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
@@ -526,6 +527,7 @@ describe( "Observations", ( ) => {
 
       beforeEach( ( ) => {
         sandbox.spy( ESModel, "elasticResults" );
+        sandbox.spy( esClient, "envelopeFilter" );
       } );
 
       afterEach( ( ) => {
@@ -582,6 +584,49 @@ describe( "Observations", ( ) => {
               }
             }, "observations", sinon.match.any
           );
+        } )
+          .expect( 200, done );
+      } );
+
+      it( "properly handles 0 values for lat lng queries", function ( done ) {
+        request( this.app ).get( "/v2/observations?lat=0&lng=0" ).expect( ( ) => {
+          expect( ESModel.elasticResults ).to.have.been.calledWith(
+            sinon.match.any, {
+              where: undefined,
+              filters: [{
+                geo_distance: {
+                  distance: "10km",
+                  location: {
+                    lat: 0,
+                    lon: 0
+                  }
+                }
+              }],
+              inverse_filters: [],
+              grouped_inverse_filters: [],
+              per_page: 30,
+              page: 1,
+              sort: {
+                created_at: "desc"
+              }
+            }, "observations", sinon.match.any
+          );
+        } )
+          .expect( 200, done );
+      } );
+
+      it( "properly handles 0 values for bounds queries", function ( done ) {
+        request( this.app ).get( "/v2/observations?nelat=0&nelng=0&swlat=0&swlng=0" ).expect( ( ) => {
+          expect( esClient.envelopeFilter ).to.returned( {
+            geo_shape: {
+              geojson: {
+                shape: {
+                  type: "envelope",
+                  coordinates: [[0, 0], [0, 0]]
+                }
+              }
+            }
+          } );
         } )
           .expect( 200, done );
       } );

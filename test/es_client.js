@@ -100,7 +100,7 @@ describe( "esClient", ( ) => {
         } );
     } );
 
-    it( "splits envelopes that cross the dateline into a bool should query", ( ) => {
+    it( "splits envelopes that cross the antimeridian into a bool should query", ( ) => {
       expect( esClient.envelopeFilter( { envelope: { loc: { nelng: -10, swlng: 30 } } } ) ).to
         .eql( {
           bool: {
