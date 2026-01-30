@@ -66,6 +66,23 @@ describe( "esClient", ( ) => {
         }
       }] );
     } );
+
+    it( "compiles envelope filters with string inputs", ( ) => {
+      expect( esClient.compileFilters( [{
+        envelope: {
+          geojson: { nelat: "5" }
+        }
+      }] ) ).to.eql( [{
+        geo_shape: {
+          geojson: {
+            shape: {
+              coordinates: [[-180, 5], [180, -90]],
+              type: "envelope"
+            }
+          }
+        }
+      }] );
+    } );
   } );
 
   describe( "envelopeFilter", ( ) => {
@@ -100,8 +117,63 @@ describe( "esClient", ( ) => {
         } );
     } );
 
+    it( "sets reasonable default values given string inputs", ( ) => {
+      expect( esClient.envelopeFilter( { envelope: { loc: { nelat: "5" } } } ) ).to
+        .eql( {
+          geo_shape: {
+            loc: {
+              shape: {
+                type: "envelope",
+                coordinates: [[-180, 5], [180, -90]]
+              }
+            }
+          }
+        } );
+      expect( esClient.envelopeFilter( { envelope: { loc: { swlng: "5" } } } ) ).to
+        .eql( {
+          geo_shape: {
+            loc: {
+              shape: {
+                type: "envelope",
+                coordinates: [[5, 90], [180, -90]]
+              }
+            }
+          }
+        } );
+    } );
+
     it( "splits envelopes that cross the antimeridian into a bool should query", ( ) => {
       expect( esClient.envelopeFilter( { envelope: { loc: { nelng: -10, swlng: 30 } } } ) ).to
+        .eql( {
+          bool: {
+            should: [
+              {
+                geo_shape: {
+                  loc: {
+                    shape: {
+                      type: "envelope",
+                      coordinates: [[30, 90], [180, -90]]
+                    }
+                  }
+                }
+              },
+              {
+                geo_shape: {
+                  loc: {
+                    shape: {
+                      type: "envelope",
+                      coordinates: [[-180, 90], [-10, -90]]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        } );
+    } );
+
+    it( "splits envelopes that cross the antimeridian into a bool should query given string inputs", ( ) => {
+      expect( esClient.envelopeFilter( { envelope: { loc: { nelng: "-10", swlng: "30" } } } ) ).to
         .eql( {
           bool: {
             should: [
