@@ -13,7 +13,7 @@ module.exports = Joi.object( ).keys( {
     name: Joi.string( ),
     display_name: Joi.string( ),
     ancestry: Joi.string( ).valid( null )
-  } ),
+  } ).valid( null ),
   place_id: Joi.number( ).integer( ).valid( null ),
   source_id: Joi.number( ).integer( ).valid( null ),
   status: Joi.string( ),

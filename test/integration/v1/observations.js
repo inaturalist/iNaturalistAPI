@@ -5,7 +5,9 @@ const request = require( "supertest" );
 const nock = require( "nock" );
 const fs = require( "fs" );
 const jwt = require( "jsonwebtoken" );
+const sinon = require( "sinon" );
 const config = require( "../../../config" );
+const esClient = require( "../../../lib/es_client" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
@@ -281,6 +283,15 @@ describe( "Observations", ( ) => {
   describe( "search", ( ) => {
     it( "returns json", function ( done ) {
       request( this.app ).get( "/v1/observations" )
+        .expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+
+    it( "allows searching with more than 20 array values", function ( done ) {
+      let path = "/v1/observations?place_id[]=1";
+      for ( let i = 2; i <= 200; i += 1 ) {
+        path += `&place_id[]=${i}`;
+      }
+      request( this.app ).get( path )
         .expect( "Content-Type", /json/ ).expect( 200, done );
     } );
 
@@ -1295,6 +1306,50 @@ describe( "Observations", ( ) => {
         expect( observation.identifications[0].user.last_ip ).to.be.undefined;
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
+    } );
+
+    describe( "sandbox", ( ) => {
+      const sandbox = sinon.createSandbox( );
+
+      beforeEach( ( ) => {
+        sandbox.spy( esClient, "envelopeFilter" );
+      } );
+
+      afterEach( ( ) => {
+        sandbox.restore( );
+      } );
+
+      it( "properly handles 0 values for bounds queries", function ( done ) {
+        request( this.app ).get( "/v1/observations?nelat=0&nelng=0&swlat=0&swlng=0" ).expect( ( ) => {
+          expect( esClient.envelopeFilter ).to.returned( {
+            geo_shape: {
+              geojson: {
+                shape: {
+                  type: "envelope",
+                  coordinates: [[0, 0], [0, 0]]
+                }
+              }
+            }
+          } );
+        } )
+          .expect( 200, done );
+      } );
+
+      it( "properly handles bounds queries", function ( done ) {
+        request( this.app ).get( "/v1/observations?nelat=30&nelng=40&swlat=10&swlng=20" ).expect( ( ) => {
+          expect( esClient.envelopeFilter ).to.returned( {
+            geo_shape: {
+              geojson: {
+                shape: {
+                  type: "envelope",
+                  coordinates: [[20, 30], [40, 10]]
+                }
+              }
+            }
+          } );
+        } )
+          .expect( 200, done );
+      } );
     } );
   } );
 

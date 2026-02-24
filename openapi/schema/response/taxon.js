@@ -46,6 +46,7 @@ module.exports = Joi.object( ).keys( {
   } ),
   preferred_establishment_means: Joi.string( ),
   extinct: Joi.boolean( ),
+  provisional: Joi.boolean( ),
   flag_counts: Joi.object( ).keys( {
     resolved: Joi.number( ).integer( ),
     unresolved: Joi.number( ).integer( )
