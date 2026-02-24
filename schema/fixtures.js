@@ -91,6 +91,131 @@
         }
       ]
     },
+    "exemplar_identifications": {
+      "exemplar_identification": [
+        {
+          "id": 1,
+          "cached_votes_total": 0,
+          "active": true,
+          "identification": {
+            "id": 102,
+            "body": "taxon 3 no votes",
+            "taxon": {
+              "id": 3,
+              "ancestor_ids": [1001, 1, 2, 3]
+            },
+            "observation": {
+              "id": 1
+            }
+          }
+        },
+        {
+          "id": 2,
+          "cached_votes_total": 1,
+          "active": true,
+          "identification": {
+            "id": 102,
+            "body": "taxon 3 upvoted",
+            "taxon": {
+              "id": 3,
+              "ancestor_ids": [1001, 1, 2, 3]
+            },
+            "observation": {
+              "id": 1
+            }
+          }
+        },
+        {
+          "id": 3,
+          "cached_votes_total": -1,
+          "active": true,
+          "identification": {
+            "id": 102,
+            "body": "taxon 3 downvoted",
+            "taxon": {
+              "id": 3,
+              "ancestor_ids": [1001, 1, 2, 3]
+            },
+            "observation": {
+              "id": 1
+            }
+          }
+        },
+        {
+          "id": 3,
+          "cached_votes_total": -1,
+          "active": true,
+          "identification": {
+            "id": 102,
+            "body": "taxon 3 downvoted",
+            "taxon": {
+              "id": 3,
+              "ancestor_ids": [1001, 1, 2, 3]
+            },
+            "observation": {
+              "id": 1
+            }
+          }
+        },
+        {
+          "id": 4,
+          "cached_votes_total": 0,
+          "nominated_by_user_id": 1,
+          "active": true,
+          "identification": {
+            "id": 102,
+            "body": "taxon 7 nominated",
+            "taxon": {
+              "id": 7,
+              "ancestor_ids": [1001, 1, 2, 7]
+            },
+            "observation": {
+              "id": 1
+            }
+          }
+        },
+        {
+          "id": 5,
+          "cached_votes_total": 0,
+          "nominated_by_user_id": null,
+          "active": true,
+          "identification": {
+            "id": 102,
+            "body": "taxon 7 unnominated",
+            "taxon": {
+              "id": 7,
+              "ancestor_ids": [1001, 1, 2, 7]
+            },
+            "observation": {
+              "id": 1
+            }
+          }
+        },
+        {
+          "id": 6,
+          "cached_votes_total": 0,
+          "nominated_by_user_id": null,
+          "active": true,
+          "identification": {
+            "id": 102,
+            "body": "taxon 3 annotated",
+            "taxon": {
+              "id": 3,
+              "ancestor_ids": [1001, 1, 2, 3]
+            },
+            "observation": {
+              "id": 1,
+              "annotations": [{
+                "uuid": "e20db8c5-0310-4f63-9931-4ec41ec327bb",
+                "controlled_attribute_id": 1,
+                "controlled_value_id": 2,
+                "concatenated_attr_val": "1|2"
+              }]
+            }
+          }
+        }
+      ]
+    },
     "places": {
       "place": [
         {

@@ -7,6 +7,7 @@ module.exports = Joi.object( ).keys( {
     observation_id: Joi.string( ).guid( ).required( ),
     taxon_id: Joi.number( ).integer( ).required( ),
     vision: Joi.boolean( ),
-    disagreement: Joi.boolean( )
+    disagreement: Joi.boolean( ),
+    nominate: Joi.boolean( )
   } ).required( )
 } );
