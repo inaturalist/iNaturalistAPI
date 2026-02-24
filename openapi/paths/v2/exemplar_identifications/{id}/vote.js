@@ -1,19 +1,20 @@
 const Joi = require( "joi" );
 const transform = require( "../../../../joi_to_openapi_parameter" );
-const IdentificationsController = require( "../../../../../lib/controllers/v2/identifications_controller" );
+const ExemplarIdentificationsController = require( "../../../../../lib/controllers/v2/exemplar_identifications_controller" );
 
 module.exports = sendWrapper => {
   async function POST( req, res ) {
-    const results = await IdentificationsController.vote( req );
+    const results = await ExemplarIdentificationsController.vote( req );
     sendWrapper( req, res.status( 204 ), null, results );
   }
 
   POST.apiDoc = {
-    tags: ["Identifications"],
-    summary: "Vote on an identification",
+    tags: ["ExemplarIdentifications"],
+    summary: "Vote on an exemplar identification",
     security: [{
       userJwtRequired: []
     }],
+    "x-unpublished": true,
     parameters: [
       transform(
         Joi.number( ).integer( )
@@ -31,16 +32,17 @@ module.exports = sendWrapper => {
   };
 
   async function DELETE( req, res ) {
-    const results = await IdentificationsController.unvote( req );
+    const results = await ExemplarIdentificationsController.unvote( req );
     sendWrapper( req, res.status( 204 ), null, results );
   }
 
   DELETE.apiDoc = {
-    tags: ["Identifications"],
-    summary: "Remove the authenticated user's vote on an identification",
+    tags: ["ExemplarIdentifications"],
+    summary: "Remove the authenticated user's vote on an exemplar identification",
     security: [{
       userJwtRequired: []
     }],
+    "x-unpublished": true,
     parameters: [
       transform(
         Joi.number( ).integer( )

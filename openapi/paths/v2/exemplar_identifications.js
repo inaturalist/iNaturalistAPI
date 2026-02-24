@@ -1,20 +1,20 @@
 const _ = require( "lodash" );
 const Joi = require( "joi" );
-const taxonIdentificationsSearchSchema = require( "../../schema/request/taxon_identifications_search" );
+const exemplarIdentificationsSearchSchema = require( "../../schema/request/exemplar_identifications_search" );
 // This is a custom method to convert Joi schema definitions to swagger/openapi
 // parameter definitions, which are different from the response definitions that
 // hapi-join-to-swagger handles
 const transform = require( "../../joi_to_openapi_parameter" );
-const TaxonIdentificationsController = require( "../../../lib/controllers/v2/taxon_identifications_controller" );
+const ExemplarIdentificationsController = require( "../../../lib/controllers/v2/exemplar_identifications_controller" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    const results = await TaxonIdentificationsController.search( req );
+    const results = await ExemplarIdentificationsController.search( req );
     sendWrapper( req, res, null, results );
   }
 
   const getParameters = _.map(
-    taxonIdentificationsSearchSchema.$_terms.keys, child => (
+    exemplarIdentificationsSearchSchema.$_terms.keys, child => (
       transform( child.schema.label( child.key ) )
     )
   );
@@ -23,19 +23,20 @@ module.exports = sendWrapper => {
   );
 
   GET.apiDoc = {
-    tags: ["TaxonIdentifications"],
-    summary: "Search taxon identifications",
+    tags: ["ExemplarIdentifications"],
+    summary: "Search exemplar identifications",
     security: [{
       userJwtOptional: []
     }],
+    "x-unpublished": true,
     parameters: getParameters,
     responses: {
       200: {
-        description: "A list of taxon identifications.",
+        description: "A list of exemplar identifications.",
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/ResultsTaxonIdentifications"
+              $ref: "#/components/schemas/ResultsExemplarIdentifications"
             }
           }
         }

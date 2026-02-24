@@ -1,6 +1,9 @@
 {
   "dynamic": "false",
   "properties": {
+    "active": {
+      "type": "boolean"
+    },
     "cached_votes_total": {
       "type": "short"
     },

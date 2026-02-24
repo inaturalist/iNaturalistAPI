@@ -27,12 +27,6 @@ module.exports = sendWrapper => {
           .required( )
           .description( "A single taxon UUID or ID, or a comma-separated list of them" )
       ),
-      transform(
-        Joi.array( )
-          .items( Joi.number( ).integer( ) )
-          .label( "populated_by" )
-          .meta( { in: "query" } )
-      ),
       transform( Joi.string( ).label( "fields" ).meta( { in: "query" } ) ),
       transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
     ],

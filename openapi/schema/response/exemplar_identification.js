@@ -15,7 +15,7 @@ module.exports = Joi.object( ).keys( {
       annotations: Joi.array( ).items( annotation ),
       photos: Joi.array( ).items( photo )
     } )
-  } ).meta( { className: "TaxonIdentificationIdentification" } ),
+  } ).meta( { className: "ExemplarIdentificationIdentification" } ),
   nominated_by_user: Joi.object( {
     id: Joi.number( ).integer( ),
     login: Joi.string( ),
@@ -25,5 +25,5 @@ module.exports = Joi.object( ).keys( {
   nominated_at: Joi.string( ).valid( null ),
   votes: Joi.array( ).items( vote ),
   cached_votes_total: Joi.number( ).integer( )
-} ).unknown( true ).meta( { className: "TaxonIdentification" } )
+} ).unknown( true ).meta( { className: "ExemplarIdentification" } )
   .valid( null );

@@ -1,11 +1,11 @@
 const Joi = require( "joi" );
-const taxonIdentification = require( "./taxon_identification" );
+const exemplarIdentification = require( "./exemplar_identification" );
 
 module.exports = Joi.object( ).keys( {
   total_results: Joi.number( ).integer( ).required( ),
   page: Joi.number( ).integer( ).required( ),
   per_page: Joi.number( ).integer( ).required( ),
-  results: Joi.array( ).items( taxonIdentification ).required( ),
+  results: Joi.array( ).items( exemplarIdentification ).required( ),
   category_counts: Joi.object( ).keys( {
     upvoted: Joi.number( ).integer( ),
     no_votes: Joi.number( ).integer( ),
