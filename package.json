@@ -23,7 +23,7 @@
     "@elastic/elasticsearch": "8.9.1",
     "@joi/date": "^2.1.1",
     "@mapbox/sphericalmercator": "^1.2.0",
-    "body-parser": "^1.20.2",
+    "body-parser": "^2.2.2",
     "carto": "github:inaturalist/carto#c90d129e533838b04b608b97630b523c62b14786",
     "chalk": "^4.1.2",
     "chroma-js": "^2.4.2",
