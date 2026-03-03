@@ -710,6 +710,28 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
+    it( "filters by term_id and term_value_id in pairs when requested", function ( done ) {
+      request( this.app ).get( "/v1/observations?term_id=10,10,12&term_value_id=20,21,22&read_term_id_and_value_id_as_pairs=true" )
+        .expect( res => {
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( res.body.results.map( r => r.id ) ).to.contain( 2025102201 );
+        } ).expect( 200, done );
+    } );
+
+    it( "filters by term_id and term_value_id in pairs when requested -- multiple results", function ( done ) {
+      request( this.app ).get( "/v1/observations?term_id=10,12&term_value_id=20,22&read_term_id_and_value_id_as_pairs=true" )
+        .expect( res => {
+          expect( res.body.results.length ).to.eq( 2 );
+          expect( res.body.results.map( r => r.id ) ).to.contain( 2025102201 );
+          expect( res.body.results.map( r => r.id ) ).to.contain( 2025102202 );
+        } ).expect( 200, done );
+    } );
+
+    it( "throws 400 when filtering by term_id and term_value_id are unequal length when requesting to read them as pairs", function ( done ) {
+      request( this.app ).get( "/v1/observations?term_id=10,10,12&term_value_id=20,21&read_term_id_and_value_id_as_pairs=true" )
+        .expect( 400, done );
+    } );
+
     it( "filters by without_term_id", function ( done ) {
       request( this.app ).get( "/v1/observations?without_term_id=1&id=6,7,9" )
         .expect( res => {
@@ -737,6 +759,15 @@ describe( "Observations", ( ) => {
 
     it( "filters by without_term_value_id", function ( done ) {
       request( this.app ).get( "/v1/observations?term_id=1&without_term_value_id=1" )
+        .expect( res => {
+          expect( res.body.results.map( r => r.id ) ).to.contain( 8 );
+          expect( res.body.results.map( r => r.id ) ).not.to.contain( 7 );
+          expect( res.body.results.map( r => r.id ) ).not.to.contain( 6 );
+        } ).expect( 200, done );
+    } );
+
+    it( "filters by without_term_value_id unaffected by read_term_id_and_value_id_as_pairs", function ( done ) {
+      request( this.app ).get( "/v1/observations?term_id=1&without_term_value_id=1&read_term_id_and_value_id_as_pairs=true" )
         .expect( res => {
           expect( res.body.results.map( r => r.id ) ).to.contain( 8 );
           expect( res.body.results.map( r => r.id ) ).not.to.contain( 7 );
