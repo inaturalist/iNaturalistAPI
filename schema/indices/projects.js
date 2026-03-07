@@ -92,6 +92,10 @@
       "index": false,
       "type": "keyword"
     },
+    "hide_leaderboard": {
+      "index": false,
+      "type": "boolean"
+    },
     "hide_title": {
       "index": false,
       "type": "boolean"
