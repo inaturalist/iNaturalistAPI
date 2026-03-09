@@ -1,4 +1,3 @@
-version: "2"
 services:
   inaturalist_api:
     container_name: inaturalist_api
@@ -10,6 +9,9 @@ services:
       INAT_ES_HOST: es
       INAT_REDIS_HOST: redis
       INAT_RAILS_URL: http://host.docker.internal:3000
+      INAT_VISION_URL: http://host.docker.internal:6006
+      NODE_DEBUG: true
+      NODE_LOG_LEVEL: debug
     ports:
       - 4000:4000
     command: node app.js

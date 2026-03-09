@@ -3,6 +3,7 @@ const fs = require( "fs" );
 const {
   NODE_ENV,
   NODE_DEBUG,
+  NODE_LOG_LEVEL,
   INAT_DB_HOST,
   INAT_DB_USER,
   INAT_DB_PASS,
@@ -33,6 +34,7 @@ module.exports = {
   jwtApplicationSecret: INAT_JWT_APPLICATION_SECRET || "application_secret",
   tileSize: 512,
   debug: NODE_DEBUG || false,
+  logLevel: NODE_LOG_LEVEL || "info", // only "debug" does anything right now
   database: {
     user: INAT_DB_USER || "inaturalist",
     host: INAT_DB_HOST || "127.0.0.1",
