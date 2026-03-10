@@ -29,6 +29,7 @@ If you use a Mac w/ an Apple processor but run into dependency build issues w/ m
 1. `nvm install`
 1. Quit the terminal
 1. Get info and uncheck `Open using Rosetta`
+1. Update NVM to use the version listed in `nvm use 20.15.1`
 1. Open the terminal
 1. `npm install`
 
