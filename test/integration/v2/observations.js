@@ -430,6 +430,33 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
+    it( "accepts stateofmatter as lrank", function ( done ) {
+      const rank = "stateofmatter";
+      request( this.app ).get( `/v2/observations?lrank=${rank}` ).expect( res => {
+        expect( res.body.results[0].uuid ).to.eq( "dc568fef-2030-4079-9661-88a5f5e30bc2" );
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "accepts stateofmatter as hrank", function ( done ) {
+      const rank = "stateofmatter";
+      request( this.app ).get( `/v2/observations?hrank=${rank}` ).expect( res => {
+        expect( res.body.results[0].uuid ).to.not.be.undefined;
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "accepts stateofmatter as rank", function ( done ) {
+      const rank = "stateofmatter";
+      request( this.app ).get( `/v2/observations?rank=${rank}` ).expect( res => {
+        expect( res.body.results[0].uuid ).to.not.be.undefined;
+      } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
     it( "can return fields not returned by v1", function ( done ) {
       // application can only be returned by v2, if requested
       request( this.app ).get( "/v2/observations?oauth_application_id=3&fields=application" ).expect( res => {
