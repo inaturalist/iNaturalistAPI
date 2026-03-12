@@ -1347,6 +1347,17 @@
             }
           ],
           "sounds_count": 1
+        },
+        {
+          "id": 4321,
+          "uuid": "dc568fef-2030-4079-9661-88a5f5e30bc2",
+          "user": { "id": 123 },
+          "taxon": {
+            "id": 1001,
+            "ancestor_ids": [1001],
+            "rank": "stateofmatter",
+            "rank_level": 100
+          }
         }
       ]
     },
