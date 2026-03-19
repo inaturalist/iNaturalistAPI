@@ -79,7 +79,8 @@ const project = Joi.object( ).keys( {
   updated_at: Joi.string( ),
   user,
   user_id: Joi.number( ).integer( ),
-  user_ids: Joi.array( ).items( Joi.number( ).integer( ) )
+  user_ids: Joi.array( ).items( Joi.number( ).integer( ) ),
+  umbrella_project_list_sort: Joi.string( ).valid( null )
 } ).unknown( false ).meta( { className: "Project" } )
   .valid( null );
 
