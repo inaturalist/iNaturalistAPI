@@ -857,7 +857,7 @@ describe( "Observations", ( ) => {
       // controller will load fresh data from the ES index, so if we want to see
       // a change without actually changing data, we need to stub the v1
       // controller reponse
-      sinon.stub( ObservationsController, "update" )
+      const stub = sinon.stub( ObservationsController, "update" )
         .callsFake(
           ( ) => ( { ...fixtureObs, description: newDesc } )
         );
@@ -869,8 +869,32 @@ describe( "Observations", ( ) => {
         .expect( res => {
           expect( res.body.results[0].uuid ).to.eq( fixtureObs.uuid );
           expect( res.body.results[0].description ).to.eq( newDesc );
+          stub.restore( );
         } )
         .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "defaults ignore_photos to true", function ( done ) {
+      nock( "http://localhost:3000" )
+        .put( `/observations/${fixtureObs.uuid}`, JSON.stringify( { ignore_photos: true } ) )
+        .reply( 200, [{ id: fixtureObs.id, uuid: fixtureObs.uuid }] );
+      request( this.app ).put( `/v2/observations/${fixtureObs.uuid}` )
+        .set( "Authorization", token )
+        .set( "Content-Type", "application/json" )
+        .expect( 200, done );
+    } );
+
+    it( "can set ignore_photos to false", function ( done ) {
+      nock( "http://localhost:3000" )
+        .put( `/observations/${fixtureObs.uuid}`, JSON.stringify( { ignore_photos: false } ) )
+        .reply( 200, [{ id: fixtureObs.id, uuid: fixtureObs.uuid }] );
+      request( this.app ).put( `/v2/observations/${fixtureObs.uuid}` )
+        .send( {
+          ignore_photos: false
+        } )
+        .set( "Authorization", token )
+        .set( "Content-Type", "application/json" )
         .expect( 200, done );
     } );
   } );

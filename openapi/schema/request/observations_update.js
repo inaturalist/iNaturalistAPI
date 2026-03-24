@@ -2,7 +2,9 @@ const Joi = require( "joi" );
 
 module.exports = Joi.object( ).keys( {
   fields: Joi.any( ),
-  ignore_photos: Joi.boolean( ),
+  ignore_photos: Joi.boolean( )
+    .default( true )
+    .description( "**NOTE: if `ignore_photos` is set to false, all photos will be removed from the observation**" ),
   observation: Joi.object( ).keys( {
     uuid: Joi.string( ).guid( { version: "uuidv4" } ),
     captive_flag: Joi.boolean( ),
