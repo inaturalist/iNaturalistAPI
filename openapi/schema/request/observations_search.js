@@ -415,7 +415,6 @@ module.exports = Joi.object( ).keys( {
     .min( 0 )
     .description( "Pagination `page` number" ),
   per_page: Joi.number( ).integer( )
-    .min( 0 ).max( 200 )
     .description( "Number of results to return in a `page`" ),
   order: Joi.string( ).valid(
     "desc",
