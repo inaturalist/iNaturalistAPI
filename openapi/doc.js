@@ -29,6 +29,7 @@ fs.readdirSync( "./openapi/schema/request" ).forEach( file => {
 
 const parsedUrl = nodeUrl.parse( config.currentVersionURL );
 const url = `${parsedUrl.protocol}//${parsedUrl.host}/v2`;
+const schemaUrl = `${parsedUrl.protocol}//${parsedUrl.host}/v2/api-docs`;
 const risonUrl = `${url}/observations?fields=(species_guess:!t,user:(login:!t))`;
 
 const apiDoc = {
@@ -37,10 +38,10 @@ const apiDoc = {
     url
   }],
   info: {
-    title: "Test iNaturalist Version 2 API",
-    version: "2.0.0-alpha",
+    title: "iNaturalist Version 2 API",
+    version: "2.2.0",
     description: `## ${url}
-**UNDER ACTIVE DEVELOPMENT, USE OF THIS ALPHA RELEASE NOT RECOMMENDED**
+The OpenAPI 3.0 schema definition of this API is available at <${schemaUrl}>.
 
 These API methods return data in JSON/JSONP and PNG response formats. Visit our
 [developers page](https://www.inaturalist.org/pages/developers) for more
@@ -96,7 +97,7 @@ a URL-friendly variant of JSON. If you want to request fields like
 
 you can encode those fields as RISON:
 
-<a href="${risonUrl}">${risonUrl}</a>
+<${risonUrl}>
 
 This is our preferred way to specify fields because it maintains the caching
 benefits of URLs that are unique to their responses, and it avoids the
