@@ -1,4 +1,6 @@
 const {
+  NODE_DEBUG,
+  NODE_LOG_LEVEL,
   INAT_DB_HOST,
   INAT_DB_USER,
   INAT_DB_PASS,
@@ -30,9 +32,8 @@ module.exports = {
     ssl: false
   },
   tileSize: 512,
-  debug: true,
-  logLevel: "info", // only "debug" does anything right now
-  websiteURL: "http://localhost:3000/",
+  debug: NODE_DEBUG || false,
+  logLevel: NODE_LOG_LEVEL || "info", // only "debug" does anything right now
   staticImagePrefix: "http://localhost:3000/attachments/",
   userImagePrefix: "/attachments/users/icons/",
   jwtSecret: "secret",

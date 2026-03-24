@@ -65,6 +65,7 @@ module.exports = Joi.object( ).keys( {
       "Filter by observers who trust the project(s) specified in `project_id` OR trust the authenticated viewer"
     ),
   rank: Joi.array( ).items( Joi.string( ).valid(
+    "stateofmatter",
     "kingdom",
     "phylum",
     "subphylum",
@@ -173,6 +174,7 @@ module.exports = Joi.object( ).keys( {
     "none"
   ) ).description( "Filter by observations where the `geoprivacy` or `taxon_geoprivacy` match these values" ),
   hrank: Joi.array( ).items( Joi.string( ).valid(
+    "stateofmatter",
     "kingdom",
     "phylum",
     "subphylum",
@@ -209,6 +211,7 @@ module.exports = Joi.object( ).keys( {
     "infrahybrid"
   ) ),
   lrank: Joi.array( ).items( Joi.string( ).valid(
+    "stateofmatter",
     "kingdom",
     "phylum",
     "subphylum",
