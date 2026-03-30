@@ -24,6 +24,7 @@ const project = Joi.object( ).keys( {
   header_image_contain: Joi.boolean( ),
   header_image_file_name: Joi.string( ).valid( null ),
   header_image_url: Joi.string( ).valid( null ),
+  hide_leaderboard: Joi.boolean( ),
   hide_title: Joi.boolean( ),
   hide_umbrella_map_flags: Joi.boolean( ),
   icon: Joi.string( ).valid( null ),
