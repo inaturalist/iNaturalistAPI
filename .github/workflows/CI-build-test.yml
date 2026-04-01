@@ -37,12 +37,38 @@ jobs:
       uses: elastic/elastic-github-actions/elasticsearch@master
       with:
         stack-version: 8.15.3
-        security-enabled: false
+        security-enabled: true
+        elasticsearch_password: 'elasticsearchpassword'
         plugins: analysis-kuromoji
 
     - name: Elasticsearch is reachable
       run: |
-        curl --verbose --show-error http://localhost:9200
+        curl --verbose --show-error --fail -k -u elastic:elasticsearchpassword https://localhost:9200
+
+    - name: Create Elasticsearch API Key
+      id: create_key
+      run: |
+        API_KEY_CREATE_RESPONSE=$(
+          curl -k -u "elastic:elasticsearchpassword" \
+          -X POST "https://localhost:9200/_security/api_key" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "name": "main-key",
+            "expiration": "1825d",
+            "role_descriptors": {
+              "main-role": {
+                "cluster": ["monitor"],
+                "indices": [
+                  {
+                    "names": ["test_*"],
+                    "privileges": ["write", "read", "manage"]
+                  }
+                ]
+              }
+            }
+          }')
+        ENCODED_KEY=$(echo $API_KEY_CREATE_RESPONSE | jq -r '.encoded')
+        echo "INAT_ES_API_KEY=$ENCODED_KEY" >> $GITHUB_ENV
 
     - name: Copy config
       run: |

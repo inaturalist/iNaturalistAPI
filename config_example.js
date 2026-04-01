@@ -5,6 +5,8 @@ const {
   INAT_DB_USER,
   INAT_DB_PASS,
   INAT_ES_HOST,
+  INAT_ES_API_KEY,
+  INAT_ES_TLS_ALLOW_UNAUTHORIZED,
   INAT_REDIS_HOST,
   INAT_RAILS_URL
 } = process.env;
@@ -17,7 +19,9 @@ module.exports = {
   apiHostSSL: false,
   writeHostSSL: false,
   elasticsearch: {
-    host: INAT_ES_HOST ? `http://${INAT_ES_HOST}:9200` : "http://localhost:9200"
+    host: INAT_ES_HOST ? `http://${INAT_ES_HOST}:9200` : "http://localhost:9200",
+    apiKey: INAT_ES_API_KEY || "apiKey",
+    tlsAllowUnauthorized: INAT_ES_TLS_ALLOW_UNAUTHORIZED || false
   },
   // Note that the database name will be inferred from the NODE_ENV
   // environment variable, e.g. `inaturalist_${process.env.NODE_ENV}`, or it
