@@ -38,25 +38,24 @@ jobs:
       with:
         stack-version: 8.15.3
         security-enabled: true
-        elasticsearch_password: 'elasticsearchpassword'
+        elasticsearch_password: elasticsearchpassword
         plugins: analysis-kuromoji
 
-    - name: Elasticsearch is reachable
+    - name: Ensure elasticsearch is reachable
       run: |
         curl --verbose --show-error --fail -k -u elastic:elasticsearchpassword https://localhost:9200
 
     - name: Create Elasticsearch API Key
-      id: create_key
       run: |
         API_KEY_CREATE_RESPONSE=$(
           curl -k -u "elastic:elasticsearchpassword" \
           -X POST "https://localhost:9200/_security/api_key" \
           -H "Content-Type: application/json" \
           -d '{
-            "name": "main-key",
-            "expiration": "1825d",
+            "name": "test-key",
+            "expiration": "1d",
             "role_descriptors": {
-              "main-role": {
+              "test-role": {
                 "cluster": ["monitor"],
                 "indices": [
                   {
