@@ -5,7 +5,7 @@ const request = require( "supertest" );
 const nock = require( "nock" );
 const sinon = require( "sinon" );
 const jwt = require( "jsonwebtoken" );
-const { v4: uuidv4 } = require( "uuid" );
+const crypto = require( "crypto" );
 const config = require( "../../../config" );
 const ESModel = require( "../../../lib/models/es_model" );
 const esClient = require( "../../../lib/es_client" );
@@ -35,17 +35,17 @@ describe( "Observations", ( ) => {
     } );
 
     it( "returns 404 for unknown UUID", function ( done ) {
-      request( this.app ).get( `/v2/observations/${uuidv4()}` )
+      request( this.app ).get( `/v2/observations/${crypto.randomUUID()}` )
         .expect( 404, done );
     } );
 
     it( "returns 404 for multiple unknown UUIDs", function ( done ) {
-      request( this.app ).get( `/v2/observations/${uuidv4()},${uuidv4()}` )
+      request( this.app ).get( `/v2/observations/${crypto.randomUUID()},${crypto.randomUUID()}` )
         .expect( 404, done );
     } );
 
     it( "returns 200 for one known and one unknown UUID", function ( done ) {
-      request( this.app ).get( `/v2/observations/${fixtureObs.uuid},${uuidv4()}` ).expect( res => {
+      request( this.app ).get( `/v2/observations/${fixtureObs.uuid},${crypto.randomUUID()}` ).expect( res => {
         expect( res.body.results[0].uuid ).to.eq( fixtureObs.uuid );
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
