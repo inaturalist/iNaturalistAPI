@@ -18,7 +18,7 @@ module.exports = Joi.object( ).keys( {
   annotated_observations_count: Joi.number( ).integer( ),
   last_active: Joi.date( ).iso( ),
   login: Joi.string( ),
-  monthly_supporter: Joi.boolean( ).valid( null ),
+  monthly_supporter_badge: Joi.boolean( ).valid( null ),
   name: Joi.string( ).valid( null ),
   observations_count: Joi.number( ).integer( ),
   orcid: Joi.string( ).valid( null ),
