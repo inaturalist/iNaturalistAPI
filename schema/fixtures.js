@@ -224,6 +224,7 @@
           "name": "United States",
           "slug": "united-states",
           "display_name_autocomplete": "United States",
+          "display_name": "United States",
           "location": "48.8907012939,-116.9820022583",
           "admin_level": 0,
           "bbox_area": 5500,
