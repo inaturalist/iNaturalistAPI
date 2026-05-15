@@ -1,7 +1,6 @@
 const _ = require( "lodash" );
 const fs = require( "fs" );
 const j2s = require( "joi-to-swagger" );
-const nodeUrl = require( "url" );
 const config = require( "../config" );
 
 const schemas = { };
@@ -27,7 +26,7 @@ fs.readdirSync( "./openapi/schema/request" ).forEach( file => {
   schemas[modelName] = schemas[modelName] || swagger;
 } );
 
-const parsedUrl = nodeUrl.parse( config.currentVersionURL );
+const parsedUrl = new URL( config.currentVersionURL );
 const url = `${parsedUrl.protocol}//${parsedUrl.host}/v2`;
 const schemaUrl = `${parsedUrl.protocol}//${parsedUrl.host}/v2/api-docs`;
 const risonUrl = `${url}/observations?fields=(species_guess:!t,user:(login:!t))`;
