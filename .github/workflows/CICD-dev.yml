@@ -6,6 +6,9 @@ on:
       - '*'
       - '!main'
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
   pre-build:
     uses: ./.github/workflows/CI-pre-build.yml
@@ -18,23 +21,23 @@ jobs:
     name: Build/Push Dev Docker Image
     needs: pre-build
     runs-on: ubuntu-22.04
-    steps:    
-    - uses: actions/checkout@v4
+    steps:
+    - uses: actions/checkout@v5
 
     - name: Login to Docker Hub
-      uses: docker/login-action@v3
+      uses: docker/login-action@v4
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}  
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      uses: docker/setup-buildx-action@v4
 
     - name: Set build date
       run: echo "BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_ENV
 
     - name: Build/Push Dev inaturalistapi
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v7
       with:
         context: .
         file: ./Dockerfile
@@ -47,7 +50,7 @@ jobs:
           BUILD_DATE=${{ env.BUILD_DATE }}
 
     - name: Build/Push Dev inaturalistapi-cleanup
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v7
       with:
         context: .
         file: ./Dockerfile-cleanup
@@ -66,14 +69,14 @@ jobs:
     steps:
     - name: Create GitHub App token
       id: app-token
-      uses: actions/create-github-app-token@v1
+      uses: actions/create-github-app-token@v3
       with:
         app-id: ${{ secrets.DEPLOY_APP_ID }}
         private-key: ${{ secrets.DEPLOY_APP_PRIVATE_KEY }}
         owner: inaturalist
         repositories: staging-deployment
     - name: Refresh Dev inaturalistapi
-      uses: actions/github-script@v6
+      uses: actions/github-script@v8
       with:
         github-token: ${{steps.app-token.outputs.token}}
         script: |-
@@ -92,15 +95,3 @@ jobs:
               core.setFailed(`create workflow_dispatch received status code ${response.status}`);
             }
           });
-
-  notify-slack:
-    name: Notify Slack
-    needs: build-and-push-dev-docker-image
-    if: ${{ success() || failure() }}
-    runs-on: ubuntu-22.04
-    steps:
-    - uses: iRoachie/slack-github-actions@v2.3.2
-      if: env.SLACK_WEBHOOK_URL != null
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_BUILDS_WEBHOOK_URL }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
