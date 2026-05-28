@@ -171,6 +171,11 @@
             },
             "observation": {
               "id": 1
+            },
+            "user": {
+              "id": 121,
+              "login": "user121",
+              "login_autocomplete": "user121"
             }
           }
         },
@@ -188,6 +193,11 @@
             },
             "observation": {
               "id": 1
+            },
+            "user": {
+              "id": 122,
+              "login": "user122",
+              "login_autocomplete": "user122"
             }
           }
         },

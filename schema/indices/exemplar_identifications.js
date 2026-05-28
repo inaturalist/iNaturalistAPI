@@ -127,6 +127,18 @@
                   "type": "keyword"
                 }
               }
+            },
+            "login": {
+              "type": "text",
+              "analyzer": "ascii_snowball_analyzer"
+            },
+            "login_autocomplete": {
+              "type": "text",
+              "analyzer": "autocomplete_analyzer",
+              "search_analyzer": "standard_analyzer"
+            },
+            "login_exact": {
+              "type": "keyword"
             }
           }
         },
