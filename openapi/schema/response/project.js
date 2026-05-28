@@ -34,6 +34,7 @@ const project = Joi.object( ).keys( {
   latitude: Joi.string( ),
   location: Joi.string( ).valid( null ),
   longitude: Joi.string( ),
+  membership_model: Joi.string( ).valid( null ),
   observation_requirements_updated_at: Joi.date( ).valid( null ),
   place_id: Joi.number( ).integer( ).valid( null ),
   prefers_user_trust: Joi.boolean( ).valid( null ),
