@@ -200,6 +200,21 @@ describe( "ExemplarIdentifications", ( ) => {
           .expect( 200, done );
       } );
 
+      it( "can filter by partial query", function ( done ) {
+        request( this.app ).get( "/v2/exemplar_identifications?direct_taxon_id=3&q=upvo&fields=all" )
+          .set( "Authorization", adminToken )
+          .set( "Content-Type", "application/json" )
+          .expect( "Content-Type", /json/ )
+          .expect( res => {
+            expect( res.body.total_results ).to.eq( 1 );
+            expect( res.body.results.length ).to.eq( 1 );
+            res.body.results.forEach( result => {
+              expect( result.identification.body ).to.include( "upvoted" );
+            } );
+          } )
+          .expect( 200, done );
+      } );
+
       it( "can filter by partial query and user login", function ( done ) {
         request( this.app ).get( "/v2/exemplar_identifications?direct_taxon_id=7&q=nom user12&fields=all" )
           .set( "Authorization", adminToken )

@@ -27,6 +27,11 @@
         "body_character_length": {
           "type": "integer"
         },
+        "body_search" : {
+          "type" : "text",
+          "analyzer" : "autocomplete_analyzer",
+          "search_analyzer" : "standard_analyzer"
+        },
         "body_word_length": {
           "type": "integer"
         },
