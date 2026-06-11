@@ -25,7 +25,7 @@
     "@mapbox/sphericalmercator": "^1.2.0",
     "@mapnik/mapnik": "~4.7.8",
     "body-parser": "^2.2.2",
-    "carto": "github:inaturalist/carto#c90d129e533838b04b608b97630b523c62b14786",
+    "carto": "github:inaturalist/carto#ef94bc39ff785417a22a49133adb8155830bb099",
     "chalk": "^4.1.2",
     "chroma-js": "^2.4.2",
     "compression": "^1.7.4",
