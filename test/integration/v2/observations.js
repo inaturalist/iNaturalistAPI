@@ -329,6 +329,20 @@ describe( "Observations", ( ) => {
       } ).expect( 200, done );
     } );
 
+    it( "accepts the include_additional_observers param", function ( done ) {
+      request( this.app )
+        .get( `/v2/observations?user_id=${fixtureObs.user.id}&include_additional_observers=true&fields=user` )
+        .expect( res => {
+          expect( res.body.results ).to.not.be.undefined;
+        } ).expect( 200, done );
+    } );
+
+    it( "returns the additional_observers field when requested", function ( done ) {
+      request( this.app ).get( "/v2/observations?fields=additional_observers" ).expect( res => {
+        expect( res.body.results[0].additional_observers ).to.not.be.undefined;
+      } ).expect( 200, done );
+    } );
+
     it( "should error when you POST with X-HTTP-Method-Override set to GET and a multipart/form-data payload", function ( done ) {
       request( this.app )
         .post( "/v2/observations" )

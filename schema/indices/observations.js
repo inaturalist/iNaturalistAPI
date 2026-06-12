@@ -395,6 +395,14 @@
     "identifications_some_agree": {
       "type": "boolean"
     },
+    "additional_observer_ids": {
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      },
+      "type": "integer"
+    },
     "identifier_user_ids": {
       "fields": {
         "keyword": {

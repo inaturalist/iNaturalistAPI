@@ -62,6 +62,28 @@ describe( "ObservationPreload", ( ) => {
     } );
   } );
 
+  describe( "additionalObservers", ( ) => {
+    it( "hydrates user objects from additional_observer_ids", async ( ) => {
+      const observation = _.find( fixtures.elasticsearch.observations.observation,
+        o => o.id === 1 );
+      const obs = [new Observation( observation )];
+      obs[0].additional_observer_ids = [1, 5];
+      await ObservationPreload.additionalObservers( obs );
+      const ids = _.map( obs[0].additional_observers, "id" ).sort( );
+      expect( ids ).to.deep.eq( [1, 5] );
+      expect( _.map( obs[0].additional_observers, "login" ) ).to.include( "userlogin" );
+    } );
+
+    it( "defaults to an empty array when there are no additional observers", async ( ) => {
+      const observation = _.find( fixtures.elasticsearch.observations.observation,
+        o => o.id === 1 );
+      const obs = [new Observation( observation )];
+      obs[0].additional_observer_ids = [];
+      await ObservationPreload.additionalObservers( obs );
+      expect( obs[0].additional_observers ).to.deep.eq( [] );
+    } );
+  } );
+
   describe( "observationSounds", ( ) => {
     it( "fills original_filename when logged in as sound owner", async ( ) => {
       const observation = _.find( fixtures.elasticsearch.observations.observation,

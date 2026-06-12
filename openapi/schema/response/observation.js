@@ -21,6 +21,8 @@ module.exports = Joi.object( ).keys( {
   id: Joi.number( ).integer( )
     .description( "Unique auto-increment integer identifier." )
     .valid( null ),
+  additional_observers: Joi.array( ).items( user ),
+  additional_observer_ids: Joi.array( ).items( Joi.number( ).integer( ) ),
   annotations: Joi.array( ).items( annotation ),
   application: Joi.object( ).keys( {
     id: Joi.number( ).integer( ).required( ),

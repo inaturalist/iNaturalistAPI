@@ -258,6 +258,23 @@ describe( "ObservationsController", ( ) => {
       ], f => asyncTest( f ) ) );
     } );
 
+    it( "filters by user_id alone by default", async ( ) => {
+      const q = await Q( { user_id: "99" } );
+      expect( q.filters ).to.deep.include( { terms: { "user.id.keyword": ["99"] } } );
+    } );
+
+    it( "ORs user_id with additional_observer_ids when include_additional_observers is set", async ( ) => {
+      const q = await Q( { user_id: "99", include_additional_observers: "true" } );
+      expect( q.filters ).to.deep.include( {
+        bool: {
+          should: [
+            { terms: { "user.id.keyword": ["99"] } },
+            { terms: { "additional_observer_ids.keyword": ["99"] } }
+          ]
+        }
+      } );
+    } );
+
     it( "filters by booleans", async ( ) => {
       const asyncTest = async filter => {
         const qp = { };

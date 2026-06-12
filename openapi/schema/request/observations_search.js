@@ -12,6 +12,8 @@ module.exports = Joi.object( ).keys( {
   id_please: Joi.boolean( ).meta( { deprecated: true } ),
   identified: Joi.boolean( )
     .description( "Filter by observations that have community identifications" ),
+  include_additional_observers: Joi.boolean( )
+    .description( "When filtering by `user_id`, also include observations the user was added to as an additional observer" ),
   introduced: Joi.boolean( )
     .description( "Filter by observations of taxa that are introduced in their location" ),
   mappable: Joi.boolean( )
