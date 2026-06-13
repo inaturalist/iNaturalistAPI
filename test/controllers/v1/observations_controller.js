@@ -268,11 +268,27 @@ describe( "ObservationsController", ( ) => {
       expect( q.filters ).to.deep.include( {
         bool: {
           should: [
-            { terms: { "user.id.keyword": ["99"] } },
-            { terms: { "additional_observer_ids.keyword": ["99"] } }
+            { terms: { "user.id": ["99"] } },
+            { terms: { additional_observer_ids: ["99"] } }
           ]
         }
       } );
+    } );
+
+    it( "resolves a login string to a numeric ID for include_additional_observers", async ( ) => {
+      // "userlogin" is id=1 in fixtures; must resolve to numeric so the integer
+      // additional_observer_ids field can be matched via the OR filter.
+      const q = await Q( { user_id: "userlogin", include_additional_observers: "true" } );
+      const orFilter = q.filters.find(
+        f => f.bool && f.bool.should && f.bool.should.length === 2
+      );
+      expect( orFilter ).to.not.be.undefined;
+      expect( orFilter.bool.should ).to.deep.include( { terms: { "user.id": ["1"] } } );
+      expect( orFilter.bool.should ).to.deep.include( {
+        terms: { additional_observer_ids: ["1"] }
+      } );
+      // login-based filter should NOT appear separately (it's replaced by numeric ID)
+      expect( q.filters ).to.not.deep.include( { terms: { "user.login": ["userlogin"] } } );
     } );
 
     it( "filters by booleans", async ( ) => {
@@ -942,6 +958,21 @@ describe( "ObservationsController", ( ) => {
     it( "sorts by geo_score", async ( ) => {
       const q = await Q( { order_by: "geo_score" } );
       expect( q.sort ).to.eql( { geo_score: "desc" } );
+    } );
+  } );
+
+  describe( "show", ( ) => {
+    it( "includes hydrated additional_observers when additional_observer_ids are present", async ( ) => {
+      const result = await ObservationsController.show( {
+        params: { id: "1" },
+        query: { },
+        inat: { }
+      } );
+      const obs = result.results[0];
+      expect( obs.additional_observers ).to.not.be.undefined;
+      expect( obs.additional_observers ).to.not.be.empty;
+      const userIds = _.map( obs.additional_observers, "id" );
+      expect( userIds ).to.include( 1 );
     } );
   } );
 

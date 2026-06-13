@@ -658,6 +658,7 @@
             "rank_level": 10
           },
           "project_ids": [ 543, 2024072601 ],
+          "additional_observer_ids": [ 1 ],
           "private_geojson": { "type": "Point", "coordinates": [ 2, 1 ] }
         },
         {
