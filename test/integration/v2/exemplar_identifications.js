@@ -147,19 +147,6 @@ describe( "ExemplarIdentifications", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "can filter by query", function ( done ) {
-      request( this.app ).get( "/v2/exemplar_identifications?direct_taxon_id=7&q=unnominated&fields=all" )
-        .set( "Authorization", adminToken )
-        .set( "Content-Type", "application/json" )
-        .expect( "Content-Type", /json/ )
-        .expect( res => {
-          expect( res.body.total_results ).to.eq( 1 );
-          expect( res.body.results.length ).to.eq( 1 );
-          expect( res.body.results[0].identification.body ).to.eq( "taxon 7 unnominated" );
-        } )
-        .expect( 200, done );
-    } );
-
     it( "can filter by term_value_id", function ( done ) {
       request( this.app ).get( "/v2/exemplar_identifications?direct_taxon_id=3&term_value_id=2&fields=all" )
         .set( "Authorization", adminToken )
@@ -171,6 +158,77 @@ describe( "ExemplarIdentifications", ( ) => {
           expect( res.body.results[0].identification.body ).to.eq( "taxon 3 annotated" );
         } )
         .expect( 200, done );
+    } );
+
+    describe( "q", ( ) => {
+      it( "can filter by query", function ( done ) {
+        request( this.app ).get( "/v2/exemplar_identifications?direct_taxon_id=7&q=unnominated&fields=all" )
+          .set( "Authorization", adminToken )
+          .set( "Content-Type", "application/json" )
+          .expect( "Content-Type", /json/ )
+          .expect( res => {
+            expect( res.body.total_results ).to.eq( 1 );
+            expect( res.body.results.length ).to.eq( 1 );
+            expect( res.body.results[0].identification.body ).to.eq( "taxon 7 unnominated" );
+          } )
+          .expect( 200, done );
+      } );
+
+      it( "can filter by user login", function ( done ) {
+        request( this.app ).get( "/v2/exemplar_identifications?direct_taxon_id=7&q=user121&fields=all" )
+          .set( "Authorization", adminToken )
+          .set( "Content-Type", "application/json" )
+          .expect( "Content-Type", /json/ )
+          .expect( res => {
+            expect( res.body.total_results ).to.eq( 1 );
+            expect( res.body.results.length ).to.eq( 1 );
+            expect( res.body.results[0].identification.user.login ).to.eq( "user121" );
+          } )
+          .expect( 200, done );
+      } );
+
+      it( "can filter by query and user login", function ( done ) {
+        request( this.app ).get( "/v2/exemplar_identifications?direct_taxon_id=7&q=unnominated user121&fields=all" )
+          .set( "Authorization", adminToken )
+          .set( "Content-Type", "application/json" )
+          .expect( "Content-Type", /json/ )
+          .expect( res => {
+            expect( res.body.total_results ).to.eq( 1 );
+            expect( res.body.results.length ).to.eq( 1 );
+            expect( res.body.results[0].identification.user.login ).to.eq( "user121" );
+          } )
+          .expect( 200, done );
+      } );
+
+      it( "can filter by partial query", function ( done ) {
+        request( this.app ).get( "/v2/exemplar_identifications?direct_taxon_id=3&q=upvo&fields=all" )
+          .set( "Authorization", adminToken )
+          .set( "Content-Type", "application/json" )
+          .expect( "Content-Type", /json/ )
+          .expect( res => {
+            expect( res.body.total_results ).to.eq( 1 );
+            expect( res.body.results.length ).to.eq( 1 );
+            res.body.results.forEach( result => {
+              expect( result.identification.body ).to.include( "upvoted" );
+            } );
+          } )
+          .expect( 200, done );
+      } );
+
+      it( "can filter by partial query and user login", function ( done ) {
+        request( this.app ).get( "/v2/exemplar_identifications?direct_taxon_id=7&q=nom user12&fields=all" )
+          .set( "Authorization", adminToken )
+          .set( "Content-Type", "application/json" )
+          .expect( "Content-Type", /json/ )
+          .expect( res => {
+            expect( res.body.total_results ).to.eq( 2 );
+            expect( res.body.results.length ).to.eq( 2 );
+            res.body.results.forEach( result => {
+              expect( result.identification.user.login ).to.be.oneOf( ["user121", "user122"] );
+            } );
+          } )
+          .expect( 200, done );
+      } );
     } );
   } );
 } );

@@ -2781,7 +2781,9 @@ CREATE TABLE public.moderator_actions (
     resource_user_id integer,
     resource_parent_id integer,
     resource_parent_type character varying,
-    resource_content text
+    resource_content text,
+    suspended_until timestamp without time zone,
+    last_edited_by_user_id integer
 );
 
 
@@ -6118,7 +6120,8 @@ CREATE TABLE public.users (
     virtuous_donor_contact_id integer,
     fundraiseup_plan_frequency character varying,
     fundraiseup_plan_status character varying,
-    fundraiseup_plan_started_at date
+    fundraiseup_plan_started_at date,
+    suspended_until timestamp without time zone
 );
 
 
@@ -9181,7 +9184,7 @@ CREATE INDEX index_custom_projects_on_project_id ON public.custom_projects USING
 -- Name: index_delayed_jobs_on_unique_hash; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_delayed_jobs_on_unique_hash ON public.delayed_jobs USING btree (unique_hash);
+CREATE UNIQUE INDEX index_delayed_jobs_on_unique_hash ON public.delayed_jobs USING btree (unique_hash);
 
 
 --
@@ -11365,7 +11368,7 @@ CREATE INDEX index_users_on_curator_sponsor_id ON public.users USING btree (cura
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_users_on_email ON public.users USING btree (email);
+CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
 
 
 --
@@ -11471,6 +11474,13 @@ CREATE INDEX index_users_on_spammer ON public.users USING btree (spammer);
 --
 
 CREATE INDEX index_users_on_state ON public.users USING btree (state);
+
+
+--
+-- Name: index_users_on_suspended_until; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_suspended_until ON public.users USING btree (suspended_until);
 
 
 --
@@ -12180,6 +12190,13 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20251119043443'),
 ('20251119130558'),
 ('20251202224705'),
-('20260119093529');
+('20260119093529'),
+('20260319212735'),
+('20260326000001'),
+('20260326000002'),
+('20260406164708'),
+('20260511210120'),
+('20260514211433'),
+('20260514215925');
 
 

@@ -100,6 +100,7 @@
           "identification": {
             "id": 102,
             "body": "taxon 3 no votes",
+            "body_search": "taxon 3 no votes",
             "taxon": {
               "id": 3,
               "ancestor_ids": [1001, 1, 2, 3]
@@ -116,6 +117,7 @@
           "identification": {
             "id": 102,
             "body": "taxon 3 upvoted",
+            "body_search": "taxon 3 upvoted",
             "taxon": {
               "id": 3,
               "ancestor_ids": [1001, 1, 2, 3]
@@ -132,6 +134,7 @@
           "identification": {
             "id": 102,
             "body": "taxon 3 downvoted",
+            "body_search": "taxon 3 downvoted",
             "taxon": {
               "id": 3,
               "ancestor_ids": [1001, 1, 2, 3]
@@ -148,6 +151,7 @@
           "identification": {
             "id": 102,
             "body": "taxon 3 downvoted",
+            "body_search": "taxon 3 downvoted",
             "taxon": {
               "id": 3,
               "ancestor_ids": [1001, 1, 2, 3]
@@ -165,12 +169,18 @@
           "identification": {
             "id": 102,
             "body": "taxon 7 nominated",
+            "body_search": "taxon 7 nominated",
             "taxon": {
               "id": 7,
               "ancestor_ids": [1001, 1, 2, 7]
             },
             "observation": {
               "id": 1
+            },
+            "user": {
+              "id": 121,
+              "login": "user121",
+              "login_autocomplete": "user121"
             }
           }
         },
@@ -182,12 +192,18 @@
           "identification": {
             "id": 102,
             "body": "taxon 7 unnominated",
+            "body_search": "taxon 7 unnominated",
             "taxon": {
               "id": 7,
               "ancestor_ids": [1001, 1, 2, 7]
             },
             "observation": {
               "id": 1
+            },
+            "user": {
+              "id": 122,
+              "login": "user122",
+              "login_autocomplete": "user122"
             }
           }
         },
@@ -199,6 +215,7 @@
           "identification": {
             "id": 102,
             "body": "taxon 3 annotated",
+            "body_search": "taxon 3 annotated",
             "taxon": {
               "id": 3,
               "ancestor_ids": [1001, 1, 2, 3]
