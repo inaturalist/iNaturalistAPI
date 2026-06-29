@@ -59,6 +59,36 @@ describe( "Logstasher", ( ) => {
     ) ).to.eq( "192.168.1.1" );
   } );
 
+  describe( "beforeRequestPayload", ( ) => {
+    it( "includes X-HTTP-Method-Override headers", ( ) => {
+      const req = { headers: { "x-http-method-override": "GET" }, method: "POST" };
+      const payload = Logstasher.beforeRequestPayload( req );
+      expect( payload.method ).to.eq( "POST" );
+      expect( payload.x_http_method_override ).to.eq( "GET" );
+    } );
+
+    it( "excludes fields from post bodies", ( ) => {
+      const req = {
+        headers: { },
+        method: "POST",
+        body: {
+          preferred_place_id: 1,
+          taxon_id: 1,
+          fields: {
+            field1: "true",
+            field2: "true"
+          }
+        }
+      };
+      const payload = Logstasher.beforeRequestPayload( req );
+      expect( payload.body_string ).to.include( "preferred_place_id" );
+      expect( payload.body_string ).to.include( "taxon_id" );
+      expect( payload.body_string ).not.to.include( "fields" );
+      expect( payload.body_string ).not.to.include( "field1" );
+      expect( payload.body_string ).not.to.include( "field2" );
+    } );
+  } );
+
   describe( "afterRequestPayload", ( ) => {
     it( "includes request context", ( ) => {
       const req = { inat: { requestContext: "inatContext" } };
