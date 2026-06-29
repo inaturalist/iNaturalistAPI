@@ -479,6 +479,25 @@ describe( "ObservationsController", ( ) => {
         { terms: { quality_grade: ["casual"] } }] );
     } );
 
+    it( "filters by not_casual_excluding_captive", async ( ) => {
+      const q = await Q( { not_casual_excluding_captive: "true" } );
+      expect( q.inverse_filters ).to.eql( [{
+        bool: {
+          must: [
+            { terms: { quality_grade: ["casual"] } },
+            {
+              bool: {
+                should: [
+                  { terms: { quality_grade_if_not_captive: ["casual"] } },
+                  { bool: { must_not: { exists: { field: "quality_grade_if_not_captive" } } } }
+                ]
+              }
+            }
+          ]
+        }
+      }] );
+    } );
+
     it( "filters by identifications most_agree", async ( ) => {
       const q = await Q( { identifications: "most_agree" } );
       expect( q.filters ).to.eql( [{ terms: { identifications_most_agree: [true] } }] );

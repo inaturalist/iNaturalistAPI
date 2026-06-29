@@ -625,5 +625,20 @@ describe( "Project", ( ) => {
       observation = { };
       expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.true;
     } );
+
+    it( "not_casual_excluding_captive disallows non-captive casuals", ( ) => {
+      project = buildProject( { not_casual_excluding_captive: true } );
+      observation = { quality_grade: "casual" };
+      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
+      observation = { quality_grade: "casual", quality_grade_if_not_captive: "casual" };
+      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.false;
+      observation = { quality_grade: "casual", quality_grade_if_not_captive: "needs_id" };
+      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.true;
+      observation = { quality_grade: "research" };
+      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.true;
+
+      observation = { };
+      expect( Project.collectionProjectRulesAllowObservation( project, observation ) ).to.be.true;
+    } );
   } );
 } );
