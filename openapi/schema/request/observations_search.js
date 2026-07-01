@@ -368,6 +368,8 @@ module.exports = Joi.object( ).keys( {
     "needs_id",
     "research"
   ) ).description( "Include observations with this quality grade" ),
+  not_casual_excluding_captive: Joi.boolean( )
+    .description( "Exclude observations that are casual for any reason other than being marked captive" ),
   without_field: Joi.string( )
     .description( "Exclude observations with this observation field" ),
   outlink_source: Joi.string( )
