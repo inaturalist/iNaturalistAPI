@@ -1465,9 +1465,17 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "iconic_taxa_counts", ( ) => {
-    it( "returns json", function ( done ) {
-      request( this.app ).get( "/v1/observations/iconic_taxa_counts" )
-        .expect( "Content-Type", /json/ ).expect( 200, done );
+    it( "returns observation counts by iconic taxon sorted by count", function ( done ) {
+      request( this.app ).get( "/v1/observations/iconic_taxa_counts" ).expect( res => {
+        expect( res.body.results ).to.not.be.empty;
+        _.each( res.body.results, r => {
+          expect( r.taxon_id ).to.be.a( "number" );
+          expect( r.count ).to.be.above( 0 );
+          expect( r.taxon ).to.not.be.undefined;
+        } );
+        const counts = _.map( res.body.results, "count" );
+        expect( counts ).to.eql( _.clone( counts ).sort( ( a, b ) => b - a ) );
+      } ).expect( "Content-Type", /json/ ).expect( 200, done );
     } );
   } );
 

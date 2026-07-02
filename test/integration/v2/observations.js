@@ -1054,6 +1054,35 @@ describe( "Observations", ( ) => {
     } );
   } );
 
+  describe( "iconicTaxaCounts", ( ) => {
+    it( "returns counts by iconic taxon including an unknown bucket", function ( done ) {
+      request( this.app ).get( "/v2/observations/iconic_taxa_counts?fields=all" ).expect( res => {
+        expect( res.body.results ).to.not.be.empty;
+        const counts = _.map( res.body.results, "count" );
+        expect( counts ).to.eql( _.clone( counts ).sort( ( a, b ) => b - a ) );
+        const unknown = _.filter( res.body.results, r => r.taxon === null );
+        expect( unknown.length ).to.eq( 1 );
+        expect( unknown[0].count ).to.be.above( 0 );
+        const known = _.reject( res.body.results, r => r.taxon === null );
+        expect( known ).to.not.be.empty;
+        _.each( known, r => {
+          expect( r.count ).to.be.above( 0 );
+          expect( r.taxon.id ).to.be.a( "number" );
+        } );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns count and taxon by default", function ( done ) {
+      request( this.app ).get( "/v2/observations/iconic_taxa_counts" ).expect( res => {
+        const withTaxon = _.find( res.body.results, r => r.taxon );
+        expect( withTaxon.count ).to.be.above( 0 );
+        expect( withTaxon.taxon.id ).to.be.a( "number" );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
   describe( "observers", ( ) => {
     it( "returns json", function ( done ) {
       request( this.app ).get( "/v2/observations/observers?user_id=1" ).expect( res => {
