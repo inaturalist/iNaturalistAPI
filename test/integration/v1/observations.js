@@ -1475,7 +1475,8 @@ describe( "Observations", ( ) => {
         } );
         const counts = _.map( res.body.results, "count" );
         expect( counts ).to.eql( _.clone( counts ).sort( ( a, b ) => b - a ) );
-      } ).expect( "Content-Type", /json/ ).expect( 200, done );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
     } );
   } );
 
