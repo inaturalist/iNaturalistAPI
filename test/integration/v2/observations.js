@@ -10,6 +10,7 @@ const config = require( "../../../config" );
 const ESModel = require( "../../../lib/models/es_model" );
 const esClient = require( "../../../lib/es_client" );
 const ObservationsController = require( "../../../lib/controllers/v1/observations_controller" );
+const Taxon = require( "../../../lib/models/taxon" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 let obs;
@@ -1055,6 +1056,24 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "iconicTaxaCounts", ( ) => {
+    const sandbox = sinon.createSandbox( );
+    afterEach( ( ) => sandbox.restore( ) );
+
+    it( "requests enough aggregation buckets for all iconic taxa plus unknown", function ( done ) {
+      sandbox.spy( ESModel, "elasticResults" );
+      request( this.app ).get( "/v2/observations/iconic_taxa_counts" ).expect( ( ) => {
+        const call = _.find( ESModel.elasticResults.getCalls( ), c => (
+          c.args[0].query && c.args[0].query.aggs && c.args[0].query.aggs.iconic_taxa
+        ) );
+        expect( call ).to.not.be.undefined;
+        const iconicTaxaTerms = call.args[0].query.aggs.iconic_taxa.terms;
+        expect( iconicTaxaTerms.field ).to.eq( "taxon.iconic_taxon_id" );
+        expect( iconicTaxaTerms.size ).to.be.at.least( Taxon.ICONIC_TAXON_NAMES.length + 1 );
+        expect( iconicTaxaTerms.missing ).to.eq( 0 );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
     it( "returns counts by iconic taxon including an unknown bucket", function ( done ) {
       request( this.app ).get( "/v2/observations/iconic_taxa_counts?fields=all" ).expect( res => {
         expect( res.body.results ).to.not.be.empty;

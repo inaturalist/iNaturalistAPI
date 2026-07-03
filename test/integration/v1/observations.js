@@ -8,6 +8,8 @@ const jwt = require( "jsonwebtoken" );
 const sinon = require( "sinon" );
 const config = require( "../../../config" );
 const esClient = require( "../../../lib/es_client" );
+const ESModel = require( "../../../lib/models/es_model" );
+const Taxon = require( "../../../lib/models/taxon" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 
@@ -1465,6 +1467,9 @@ describe( "Observations", ( ) => {
   } );
 
   describe( "iconic_taxa_counts", ( ) => {
+    const sandbox = sinon.createSandbox( );
+    afterEach( ( ) => sandbox.restore( ) );
+
     it( "returns observation counts by iconic taxon sorted by count", function ( done ) {
       request( this.app ).get( "/v1/observations/iconic_taxa_counts" ).expect( res => {
         expect( res.body.results ).to.not.be.empty;
@@ -1478,12 +1483,44 @@ describe( "Observations", ( ) => {
       } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
+
+    it( "requests enough aggregation buckets for all iconic taxa", function ( done ) {
+      sandbox.spy( ESModel, "elasticResults" );
+      request( this.app ).get( "/v1/observations/iconic_taxa_counts" ).expect( ( ) => {
+        const call = _.find( ESModel.elasticResults.getCalls( ), c => (
+          c.args[0].query && c.args[0].query.aggs && c.args[0].query.aggs.iconic_taxa
+        ) );
+        expect( call ).to.not.be.undefined;
+        const iconicTaxaTerms = call.args[0].query.aggs.iconic_taxa.terms;
+        expect( iconicTaxaTerms.field ).to.eq( "taxon.iconic_taxon_id" );
+        expect( iconicTaxaTerms.size ).to.be.at.least( Taxon.ICONIC_TAXON_NAMES.length + 1 );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
   } );
 
   describe( "iconic_taxa_species_counts", ( ) => {
+    const sandbox = sinon.createSandbox( );
+    afterEach( ( ) => sandbox.restore( ) );
+
     it( "returns json", function ( done ) {
       request( this.app ).get( "/v1/observations/iconic_taxa_species_counts" )
         .expect( "Content-Type", /json/ ).expect( 200, done );
+    } );
+
+    it( "requests enough aggregation buckets for all iconic taxa", function ( done ) {
+      sandbox.spy( ESModel, "elasticResults" );
+      request( this.app ).get( "/v1/observations/iconic_taxa_species_counts" ).expect( ( ) => {
+        const call = _.find( ESModel.elasticResults.getCalls( ), c => (
+          c.args[0].query && c.args[0].query.aggs && c.args[0].query.aggs.iconic_taxa
+        ) );
+        expect( call ).to.not.be.undefined;
+        const iconicTaxaAgg = call.args[0].query.aggs.iconic_taxa;
+        expect( iconicTaxaAgg.terms.field ).to.eq( "taxon.iconic_taxon_id" );
+        expect( iconicTaxaAgg.terms.size ).to.be.at.least( Taxon.ICONIC_TAXON_NAMES.length + 1 );
+        expect( iconicTaxaAgg.aggs.ancestries ).to.not.be.undefined;
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
     } );
   } );
 
