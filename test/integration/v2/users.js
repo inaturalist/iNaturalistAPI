@@ -165,50 +165,47 @@ describe( "Users", ( ) => {
         } )
         .expect( 200, done );
     } );
+
     it( "should filter by following", function ( done ) {
-      const friendship = fixtures.postgresql.friendships[0];
-      const followingUserId = friendship.user_id;
-      const followingUserIds = _.filter(
-        fixtures.postgresql.friendships,
-        f => f.friend_id === friendship.friend_id
-      ).map( f => f.user_id );
-      const notFollowingUserId = _.find(
-        fixtures.postgresql.users,
-        u => ( followingUserIds.indexOf( u.id ) < 0 )
-      ).id;
-      request( this.app ).get( `/v2/users?per_page=100&following=${friendship.friend_id}` )
+      const firstFriendship = fixtures.postgresql.friendships[0];
+      const inverseFriendships = _.filter( fixtures.postgresql.friendships, f => (
+        f.friend_id === firstFriendship.friend_id
+      ) );
+      const followers = _.map( _.filter( inverseFriendships, f => (
+        !!f.following
+      ) ), "user_id" );
+      expect( _.size( inverseFriendships ) ).to.be.above( _.size( followers ) );
+
+      request( this.app ).get( `/v2/users?per_page=100&following=${firstFriendship.friend_id}` )
         .expect( 200 )
         .expect( res => {
           expect( res.body.results ).not.to.be.empty;
-          expect(
-            _.find( res.body.results, u => u.id === followingUserId )
-          ).not.to.be.undefined;
-          expect(
-            _.find( res.body.results, u => u.id === notFollowingUserId )
-          ).to.be.undefined;
+          expect( res.body.total_results ).to.eq( _.size( followers ) );
+          expect( _.sortBy( _.map( res.body.results, "id" ) ) ).to.deep.eq(
+            _.sortBy( followers )
+          );
         } )
         .expect( 200, done );
     } );
+
     it( "should filter by followed_by", function ( done ) {
-      const friendship = fixtures.postgresql.friendships[0];
-      const friendIds = _.filter(
-        fixtures.postgresql.friendships,
-        f => f.user_id === friendship.user_id
-      );
-      const notFollowedByUserId = _.find(
-        fixtures.postgresql.users,
-        u => friendIds.indexOf( u.id ) < 0
-      ).id;
-      request( this.app ).get( `/v2/users?per_page=100&followed_by=${friendship.user_id}` )
+      const firstFriendship = fixtures.postgresql.friendships[0];
+      const friendships = _.filter( fixtures.postgresql.friendships, f => (
+        f.user_id === firstFriendship.user_id
+      ) );
+      const followees = _.map( _.filter( friendships, f => (
+        !!f.following
+      ) ), "friend_id" );
+      expect( _.size( friendships ) ).to.be.above( _.size( followees ) );
+
+      request( this.app ).get( `/v2/users?per_page=100&followed_by=${firstFriendship.user_id}` )
         .expect( 200 )
         .expect( res => {
           expect( res.body.results ).not.to.be.empty;
-          expect(
-            _.find( res.body.results, u => u.id === friendship.friend_id )
-          ).not.to.be.undefined;
-          expect(
-            _.find( res.body.results, u => u.id === notFollowedByUserId )
-          ).to.be.undefined;
+          expect( res.body.total_results ).to.eq( _.size( followees ) );
+          expect( _.sortBy( _.map( res.body.results, "id" ) ) ).to.deep.eq(
+            _.sortBy( followees )
+          );
         } )
         .expect( 200, done );
     } );

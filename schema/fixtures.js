@@ -2437,6 +2437,7 @@
         "user_id": 126,
         "friend_id": 125,
         "trust": true,
+        "following": true,
         "created_at": "2021-10-08 01:00:00",
         "updated_at": "2021-10-08 01:00:00"
       },
@@ -2445,6 +2446,7 @@
         "user_id": 127,
         "friend_id": 123,
         "trust": true,
+        "following": true,
         "created_at": "2021-10-08 01:00:00",
         "updated_at": "2021-10-08 01:00:00"
       },
@@ -2481,6 +2483,22 @@
         "friend_id": 126,
         "trust": false,
         "following": true,
+        "created_at": "2021-10-08 01:00:00",
+        "updated_at": "2021-10-08 01:00:00"
+      },
+      {
+        "id": 7,
+        "user_id": 127,
+        "friend_id": 125,
+        "following": false,
+        "created_at": "2021-10-08 01:00:00",
+        "updated_at": "2021-10-08 01:00:00"
+      },
+      {
+        "id": 8,
+        "user_id": 126,
+        "friend_id": 127,
+        "following": false,
         "created_at": "2021-10-08 01:00:00",
         "updated_at": "2021-10-08 01:00:00"
       }
