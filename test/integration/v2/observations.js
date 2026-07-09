@@ -10,6 +10,7 @@ const config = require( "../../../config" );
 const ESModel = require( "../../../lib/models/es_model" );
 const esClient = require( "../../../lib/es_client" );
 const ObservationsController = require( "../../../lib/controllers/v1/observations_controller" );
+const Taxon = require( "../../../lib/models/taxon" );
 
 const fixtures = JSON.parse( fs.readFileSync( "schema/fixtures.js" ) );
 let obs;
@@ -1050,6 +1051,53 @@ describe( "Observations", ( ) => {
         expect( res.body.results[0].taxon.ancestors ).to.not.be.undefined;
       } )
         .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "iconicTaxaCounts", ( ) => {
+    const sandbox = sinon.createSandbox( );
+    afterEach( ( ) => sandbox.restore( ) );
+
+    it( "requests enough aggregation buckets for all iconic taxa plus unknown", function ( done ) {
+      sandbox.spy( ESModel, "elasticResults" );
+      request( this.app ).get( "/v2/observations/iconic_taxa_counts" ).expect( ( ) => {
+        const call = _.find( ESModel.elasticResults.getCalls( ), c => (
+          c.args[0].query && c.args[0].query.aggs && c.args[0].query.aggs.iconic_taxa
+        ) );
+        expect( call ).to.not.be.undefined;
+        const iconicTaxaTerms = call.args[0].query.aggs.iconic_taxa.terms;
+        expect( iconicTaxaTerms.field ).to.eq( "taxon.iconic_taxon_id" );
+        expect( iconicTaxaTerms.size ).to.be.at.least( Taxon.ICONIC_TAXON_NAMES.length + 1 );
+        expect( iconicTaxaTerms.missing ).to.eq( 0 );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns counts by iconic taxon including an unknown bucket", function ( done ) {
+      request( this.app ).get( "/v2/observations/iconic_taxa_counts?fields=all" ).expect( res => {
+        expect( res.body.results ).to.not.be.empty;
+        const counts = _.map( res.body.results, "count" );
+        expect( counts ).to.eql( _.clone( counts ).sort( ( a, b ) => b - a ) );
+        const unknown = _.filter( res.body.results, r => r.taxon === null );
+        expect( unknown.length ).to.eq( 1 );
+        expect( unknown[0].count ).to.be.above( 0 );
+        const known = _.reject( res.body.results, r => r.taxon === null );
+        expect( known ).to.not.be.empty;
+        _.each( known, r => {
+          expect( r.count ).to.be.above( 0 );
+          expect( r.taxon.id ).to.be.a( "number" );
+        } );
+      } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns count and taxon by default", function ( done ) {
+      request( this.app ).get( "/v2/observations/iconic_taxa_counts" ).expect( res => {
+        const withTaxon = _.find( res.body.results, r => r.taxon );
+        expect( withTaxon.count ).to.be.above( 0 );
+        expect( withTaxon.taxon.id ).to.be.a( "number" );
+      } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
   } );
