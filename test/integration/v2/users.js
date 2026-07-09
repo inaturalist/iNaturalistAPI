@@ -499,4 +499,72 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "posts", ( ) => {
+    it( "returns user posts", function ( done ) {
+      const posts = _.sortBy( _.filter( fixtures.postgresql.posts, p => (
+        p.user_id === 1 && p.parent_type === "User"
+      ) ), "published_at" ).reverse( );
+      request( this.app ).get( "/v2/users/1/posts?fields=all" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 10 );
+          expect( res.body.total_results ).to.eq( posts.length );
+          expect( res.body.results.length ).to.eq( posts.length );
+          expect( res.body.results[0].body ).to.eq( posts[0].body );
+          expect( res.body.results[0].latitude ).to.eq( posts[0].latitude );
+          expect( res.body.results[0].longitude ).to.eq( posts[0].longitude );
+          expect( _.sortBy( _.map( res.body.results, "id" ) ) ).to.deep
+            .eq( _.sortBy( _.map( posts, "id" ) ) );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns user posts by login", function ( done ) {
+      const user = _.find( fixtures.postgresql.users, u => u.id === 1 );
+      const posts = _.sortBy( _.filter( fixtures.postgresql.posts, p => (
+        p.user_id === 1 && p.parent_type === "User"
+      ) ), "published_at" ).reverse( );
+      request( this.app ).get( `/v2/users/${user.login}/posts?fields=all` )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 10 );
+          expect( res.body.total_results ).to.eq( posts.length );
+          expect( res.body.results.length ).to.eq( posts.length );
+          expect( res.body.results[0].body ).to.eq( posts[0].body );
+          expect( res.body.results[0].latitude ).to.eq( posts[0].latitude );
+          expect( res.body.results[0].longitude ).to.eq( posts[0].longitude );
+          expect( _.sortBy( _.map( res.body.results, "id" ) ) ).to.deep
+            .eq( _.sortBy( _.map( posts, "id" ) ) );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns an empty response if no matching user is found", function ( done ) {
+      request( this.app ).get( "/v2/users/nonsense/posts?fields=all" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 10 );
+          expect( res.body.total_results ).to.eq( 0 );
+          expect( res.body.results.length ).to.eq( 0 );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns an empty response if matching user has no posts", function ( done ) {
+      const user = _.last( fixtures.postgresql.users );
+      request( this.app ).get( `/v2/users/${user.id}/posts?fields=all` )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 10 );
+          expect( res.body.total_results ).to.eq( 0 );
+          expect( res.body.results.length ).to.eq( 0 );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
 } );

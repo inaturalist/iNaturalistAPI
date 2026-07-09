@@ -1,12 +1,12 @@
 const _ = require( "lodash" );
 const Joi = require( "joi" );
 const transform = require( "../../../../joi_to_openapi_parameter" );
-const ProjectsController = require( "../../../../../lib/controllers/v1/projects_controller" );
+const UsersController = require( "../../../../../lib/controllers/v1/users_controller" );
 const modelPostsSchema = require( "../../../../schema/request/model_posts" );
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    const results = await ProjectsController.posts( req );
+    const results = await UsersController.posts( req );
     sendWrapper( req, res, null, results );
   }
 
@@ -29,15 +29,15 @@ module.exports = sendWrapper => {
   );
 
   GET.apiDoc = {
-    tags: ["Projects"],
-    summary: "Fetch project posts",
+    tags: ["Users"],
+    summary: "Fetch user posts",
     security: [{
       userJwtOptional: []
     }],
     parameters,
     responses: {
       200: {
-        description: "An array of project posts.",
+        description: "An array of user posts.",
         content: {
           "application/json": {
             schema: {
