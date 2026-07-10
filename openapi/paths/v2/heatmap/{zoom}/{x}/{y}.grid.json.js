@@ -14,26 +14,25 @@ const transformedObsSearchParams = _.map( inheritdObsSearchParams, p => (
 module.exports = sendWrapper => {
   async function GET( req, res ) {
     req.params.style = "heatmap";
-    req.params.format = "png";
+    req.params.format = "grid.json";
     await InaturalistMapserver.defaultRoute( req, res );
     sendWrapper( req, res );
   }
 
   GET.apiDoc = {
-    tags: ["Observation Tiles"],
-    summary: "Heatmap Tiles",
+    tags: ["UTFGrid"],
+    summary: "JSON for heatmap tiles",
     security: [{
       userJwtOptional: []
     }],
     parameters: tilePathParams.concat( transformedObsSearchParams ),
     responses: {
       200: {
-        description: "Returns heatmap tiles.",
+        description: "Returns a UTFGrid.",
         content: {
-          "image/png": {
+          "application/json": {
             schema: {
-              type: "string",
-              format: "binary"
+              $ref: "#/components/schemas/UtfGrid"
             }
           }
         }
