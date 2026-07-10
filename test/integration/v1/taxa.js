@@ -370,6 +370,33 @@ describe( "Taxa", ( ) => {
     } );
   } );
 
+  describe( "map_layers", ( ) => {
+    it( "returns taxon map layers", function ( done ) {
+      request( this.app )
+        .get( "/v1/taxa/123/map_layers" )
+        .expect( res => {
+          expect( res.body.id ).to.eq( 123 );
+          expect( res.body.ranges ).to.be.true;
+          expect( res.body.gbif_id ).to.eq( 12345 );
+          expect( res.body.listed_places ).to.be.true;
+          expect( res.body.geomodel ).to.be.true;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns a 404 for unknown taxa", function ( done ) {
+      request( this.app )
+        .get( "/v1/taxa/987654321/map_layers" )
+        .expect( res => {
+          expect( res.body.status ).to.eq( 404 );
+          expect( res.body.error ).to.eq( "Not Found" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 404, done );
+    } );
+  } );
+
   describe( "suggest", ( ) => {
     it( "should succeed when source is checklist and taxon_id specified", function ( done ) {
       request( this.app ).get( "/v1/taxa/suggest?source=checklist&taxon_id=1" ).expect( 200, done );

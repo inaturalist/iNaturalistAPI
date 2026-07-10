@@ -246,4 +246,37 @@ describe( "Taxa", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "map_layers", ( ) => {
+    it( "returns taxon map layers", function ( done ) {
+      request( this.app )
+        .get( "/v2/taxa/123/map_layers" )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( res.body.results[0].id ).to.eq( 123 );
+          expect( res.body.results[0].ranges ).to.be.true;
+          expect( res.body.results[0].gbif_id ).to.eq( 12345 );
+          expect( res.body.results[0].listed_places ).to.be.true;
+          expect( res.body.results[0].geomodel ).to.be.true;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns a 404 for unknown taxa", function ( done ) {
+      request( this.app )
+        .get( "/v2/taxa/987654321/map_layers" )
+        .expect( res => {
+          expect( res.body.status ).to.eq( "404" );
+          expect( res.body.errors.length ).to.eq( 1 );
+          expect( res.body.errors[0].errorCode ).to.eq( "404" );
+          expect( res.body.errors[0].message ).to.eq( "Not Found" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 404, done );
+    } );
+  } );
 } );
