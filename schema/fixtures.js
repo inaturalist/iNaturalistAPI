@@ -2503,6 +2503,13 @@
         "updated_at": "2021-10-08 01:00:00"
       }
     ],
+    "geo_model_taxa": [
+      {
+        "taxon_id": 123,
+        "created_at": "2026-07-09 00:00:00",
+        "updated_at": "2026-07-09 00:00:00"
+      }
+    ],
     "identifications": [
       {
         "id": 102,
@@ -2584,6 +2591,10 @@
       {
         "id": 1000,
         "title": "DetailsListedTaxonList"
+      },
+      {
+        "id": 1001,
+        "title": "List for taxon places"
       }
     ],
     "listed_taxa": [
@@ -2608,6 +2619,11 @@
         "list_id": 1000,
         "place_id": 432,
         "establishment_means": "endemic"
+      },
+      {
+        "taxon_id": 123,
+        "list_id": 1001,
+        "place_id": 1
       }
     ],
     "messages": [
@@ -3100,6 +3116,13 @@
         "file_extension_id": 1,
         "width": 400,
         "height": 300
+      }
+    ],
+    "place_geometries": [
+      {
+        "id": 1,
+        "place_id": 1,
+        "geom": "POLYGON((0 0, 0 1, 1 1, 1 0, 0 0))"
       }
     ],
     "places": [
@@ -3775,6 +3798,29 @@
         "is_active": true,
         "is_iconic": true,
         "iconic_taxon_id": 113
+      }
+    ],
+    "taxon_ranges": [
+      {
+        "taxon_id": 123
+      }
+    ],
+    "taxon_scheme_taxa": [
+      {
+        "id": 1,
+        "taxon_scheme_id": 1,
+        "taxon_id": 123,
+        "source_identifier": 12345,
+        "created_at": "2026-07-09 00:00:00",
+        "updated_at": "2026-07-09 00:00:00"
+      }
+    ],
+    "taxon_schemes": [
+      {
+        "id": 1,
+        "title": "GBIF",
+        "created_at": "2026-07-09 00:00:00",
+        "updated_at": "2026-07-09 00:00:00"
       }
     ],
     "users": [

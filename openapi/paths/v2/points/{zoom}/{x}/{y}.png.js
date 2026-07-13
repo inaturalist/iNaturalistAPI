@@ -21,7 +21,7 @@ module.exports = sendWrapper => {
 
   GET.apiDoc = {
     tags: ["Observation Tiles"],
-    summary: "Grid Tiles",
+    summary: "Points Tiles",
     security: [{
       userJwtOptional: []
     }],
