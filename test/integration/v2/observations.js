@@ -256,6 +256,50 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
+    it( "returns null photo/sound for observation media referencing deleted media", function ( done ) {
+      obs = _.find( fixtures.elasticsearch.observations.observation, o => (
+        o.description && o.description.match( /referencing deleted media/ )
+      ) );
+      request( this.app ).get( `/v2/observations/${obs.uuid}?fields=all` )
+        .expect( res => {
+          const result = res.body.results[0];
+          // photos contains only photos that still exist
+          expect( result.photos.length ).to.eq( 1 );
+          expect( result.photos[0].id ).to.eq( 2026071301 );
+          // dangling observation_photo is kept with a null photo
+          expect( result.observation_photos.length ).to.eq( 2 );
+          expect( result.observation_photos[0].photo ).to.be.null;
+          expect( result.observation_photos[1].photo.id ).to.eq( 2026071301 );
+          // positions remain contiguous
+          expect( _.map( result.observation_photos, "position" ) ).to.deep.eq( [0, 1] );
+          // dangling observation_sound is kept with a null sound
+          expect( result.sounds.length ).to.eq( 1 );
+          expect( result.observation_sounds.length ).to.eq( 2 );
+          expect( _.filter( result.observation_sounds, os => os.sound === null ).length )
+            .to.eq( 1 );
+          expect( _.filter( result.observation_sounds, os => os.sound !== null )[0].sound.id )
+            .to.eq( 2026071301 );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns 200 via search for observations referencing deleted media", function ( done ) {
+      obs = _.find( fixtures.elasticsearch.observations.observation, o => (
+        o.description && o.description.match( /referencing deleted media/ )
+      ) );
+      // uses the ES search path (integer id param, as in the original bug report)
+      // rather than the show/mget path
+      request( this.app ).get( `/v2/observations?id=${obs.id}&fields=all` )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results[0].photos.length ).to.eq( 1 );
+          expect( res.body.results[0].observation_photos.length ).to.eq( 2 );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
     // the observations.show endpoint should use the ES mget method to fetch observations for the
     // show endpoint, unless there are additional parameters that will filter the observations
     // returned. This is because the mget method is not affected by the normal ES refresh cycle,

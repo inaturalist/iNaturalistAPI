@@ -1366,6 +1366,22 @@
           "sounds_count": 1
         },
         {
+          "id": 2026071301,
+          "uuid": "3f2ab1de-9f24-46a1-a1ce-9429a4bb43a1",
+          "user": { "id": 123 },
+          "description": "Observation with observation_photos and observation_sounds referencing deleted media",
+          "photo_licenses": ["cc-by"],
+          "photos_count": 1,
+          "sounds": [
+            {
+              "id": 2026071301,
+              "license_code": "CC-BY",
+              "user_id": 123
+            }
+          ],
+          "sounds_count": 1
+        },
+        {
           "id": 4321,
           "uuid": "dc568fef-2030-4079-9661-88a5f5e30bc2",
           "user": { "id": 123 },
@@ -2950,6 +2966,10 @@
       {
         "id": 2025012202,
         "uuid": "537d9290-df3c-404f-a26d-ffe07156908c"
+      },
+      {
+        "id": 2026071301,
+        "uuid": "3f2ab1de-9f24-46a1-a1ce-9429a4bb43a1"
       }
     ],
     "observation_photos": [
@@ -2997,6 +3017,24 @@
         "created_at": "2025-01-22 01:00:00",
         "updated_at": "2025-01-22 01:00:00",
         "uuid": "ad529a09-97df-4daa-bc88-8eff4881d872"
+      },
+      {
+        "id": 2026071301,
+        "observation_id": 2026071301,
+        "photo_id": 2026071399,
+        "position": 0,
+        "created_at": "2026-07-13 01:00:00",
+        "updated_at": "2026-07-13 01:00:00",
+        "uuid": "0d4a3f9b-53b1-4a55-90a1-6d92cf8f21f1"
+      },
+      {
+        "id": 2026071302,
+        "observation_id": 2026071301,
+        "photo_id": 2026071301,
+        "position": 1,
+        "created_at": "2026-07-13 01:00:00",
+        "updated_at": "2026-07-13 01:00:00",
+        "uuid": "6cf0a97b-e5e4-4f43-8bb1-8a17b8e6cdb2"
       }
     ],
     "observation_sounds": [
@@ -3015,6 +3053,22 @@
         "created_at": "2025-01-22 01:00:00",
         "updated_at": "2025-01-22 01:00:00",
         "uuid": "5eef64b4-7ca6-49c1-abe7-57fbb77c06fe"
+      },
+      {
+        "id": 2026071301,
+        "observation_id": 2026071301,
+        "sound_id": 2026071301,
+        "created_at": "2026-07-13 01:00:00",
+        "updated_at": "2026-07-13 01:00:00",
+        "uuid": "9a1f7c2e-2f9f-4f88-b93a-b1a2f0a7f5d3"
+      },
+      {
+        "id": 2026071302,
+        "observation_id": 2026071301,
+        "sound_id": 2026071399,
+        "created_at": "2026-07-13 01:00:00",
+        "updated_at": "2026-07-13 01:00:00",
+        "uuid": "4a4a4f5f-6a3f-45e1-9d5c-2f1b0c3d4e5f"
       }
     ],
     "photos": [
@@ -3112,6 +3166,23 @@
         "file_file_size": 12202,
         "file_updated_at": "2025-01-22 01:00:00",
         "uuid": "933d40cb-fde1-4f50-bfe4-a9dc2f9a34ae",
+        "file_prefix_id": 1,
+        "file_extension_id": 1,
+        "width": 400,
+        "height": 300
+      },
+      {
+        "id": 2026071301,
+        "user_id": 123,
+        "license": 4,
+        "type": "LocalPhoto",
+        "file_content_type": "image/jpeg",
+        "file_file_name": "2026071301.jpeg",
+        "file_file_size": 2040108,
+        "created_at": "2026-07-13 01:00:00",
+        "updated_at": "2026-07-13 01:00:00",
+        "file_updated_at": "2026-07-13 01:00:00",
+        "uuid": "b7f7be06-354c-4f8f-9c33-2d7d21bd90a5",
         "file_prefix_id": 1,
         "file_extension_id": 1,
         "width": 400,

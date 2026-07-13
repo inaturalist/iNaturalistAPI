@@ -60,6 +60,18 @@ describe( "ObservationPreload", ( ) => {
       await ObservationPreload.observationPhotos( obs, { } );
       expect( obs[0].photos[0].original_filename ).to.be.undefined;
     } );
+
+    it( "sets photo to null for observation_photos whose photo is missing", async ( ) => {
+      const observation = _.find( fixtures.elasticsearch.observations.observation,
+        o => o.description && o.description.match( /referencing deleted media/ ) );
+      const obs = [new Observation( observation )];
+      await ObservationPreload.observationPhotos( obs );
+      expect( _.size( obs[0].observation_photos ) ).to.eq( 2 );
+      expect( obs[0].observation_photos[0].photo ).to.be.null;
+      expect( obs[0].observation_photos[1].photo.id ).to.eq( 2026071301 );
+      expect( _.map( obs[0].observation_photos, "position" ) ).to.deep.eq( [0, 1] );
+      expect( _.size( obs[0].photos ) ).to.eq( 1 );
+    } );
   } );
 
   describe( "observationSounds", ( ) => {
@@ -87,6 +99,15 @@ describe( "ObservationPreload", ( ) => {
       const obs = [new Observation( observation )];
       await ObservationPreload.observationSounds( obs, { } );
       expect( obs[0].sounds[0].original_filename ).to.be.undefined;
+    } );
+
+    it( "sets sound to null for observation_sounds whose sound is missing", async ( ) => {
+      const observation = _.find( fixtures.elasticsearch.observations.observation,
+        o => o.description && o.description.match( /referencing deleted media/ ) );
+      const obs = [new Observation( observation )];
+      await ObservationPreload.observationSounds( obs, { } );
+      expect( _.size( obs[0].observation_sounds ) ).to.eq( 2 );
+      expect( _.filter( obs[0].observation_sounds, os => os.sound === null ).length ).to.eq( 1 );
     } );
   } );
 } );
