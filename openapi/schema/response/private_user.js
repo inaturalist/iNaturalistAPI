@@ -13,6 +13,7 @@ module.exports = user.append( {
   email: Joi.string( ).valid( null ),
   locale: Joi.string( ).valid( null ),
   login: Joi.string( ),
+  monthly_supporter: Joi.boolean( ).valid( null ),
   muted_user_ids: Joi.array( ).items(
     Joi.number( ).integer( )
   ).valid( null ),
