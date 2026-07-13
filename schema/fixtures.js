@@ -3434,7 +3434,9 @@
         "published_at": "2018-04-01 01:00:00",
         "title": "post 1 title",
         "body": "post 1 body",
-        "user_id": 1
+        "user_id": 1,
+        "created_at": "2018-04-01 01:00:00",
+        "updated_at": "2018-04-01 01:00:00"
       },
       {
         "id": 2,
@@ -3443,7 +3445,9 @@
         "published_at": "2018-04-01 02:00:00",
         "title": "post 2 title",
         "body": "post 2 body2",
-        "user_id": 1
+        "user_id": 1,
+        "created_at": "2018-04-01 02:00:00",
+        "updated_at": "2018-04-01 02:00:00"
       },
       {
         "id": 2023092501,
@@ -3471,6 +3475,43 @@
         "title": "2023092503 title",
         "body": "2023092503 body",
         "user_id": 2023092503
+      },
+      {
+        "id": 2026060901,
+        "parent_id": 1,
+        "parent_type": "User",
+        "published_at": "2026-06-09 02:00:00",
+        "title": "2023092503 title",
+        "body": "2023092503 body",
+        "latitude": 1.000001,
+        "longitude": 2.000002,
+        "radius": 2,
+        "distance": 3.000003,
+        "user_id": 1,
+        "created_at": "2026-06-09 01:00:00",
+        "updated_at": "2026-06-09 01:00:00"
+      },
+      {
+        "id": 2026060902,
+        "parent_id": 1,
+        "parent_type": "User",
+        "published_at": "2026-06-09 01:00:00",
+        "title": "2026060902 title",
+        "body": "2026060902 body",
+        "user_id": 1,
+        "created_at": "2026-06-09 01:00:00",
+        "updated_at": "2026-06-09 01:00:00"
+      },
+      {
+        "id": 2026060903,
+        "parent_id": 121,
+        "parent_type": "User",
+        "published_at": "2026-06-09 02:00:00",
+        "title": "2026060903 title",
+        "body": "2026060903 body",
+        "user_id": 121,
+        "created_at": "2026-06-09 01:00:00",
+        "updated_at": "2026-06-09 01:00:00"
       }
     ],
     "roles": [

@@ -137,6 +137,70 @@ describe( "Projects", ( ) => {
     } );
   } );
 
+  describe( "posts", ( ) => {
+    it( "returns project posts", function ( done ) {
+      const posts = _.sortBy( _.filter( fixtures.postgresql.posts, p => (
+        p.parent_id === 543 && p.parent_type === "Project"
+      ) ), "published_at" ).reverse( );
+      request( this.app ).get( "/v2/projects/543/posts?fields=all" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 10 );
+          expect( res.body.total_results ).to.eq( posts.length );
+          expect( res.body.results.length ).to.eq( posts.length );
+          expect( res.body.results[0].body ).to.eq( posts[0].body );
+          expect( _.sortBy( _.map( res.body.results, "id" ) ) ).to.deep
+            .eq( _.sortBy( _.map( posts, "id" ) ) );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns project posts by slug", function ( done ) {
+      const project = _.find( fixtures.postgresql.projects, p => p.id === 543 );
+      const posts = _.sortBy( _.filter( fixtures.postgresql.posts, p => (
+        p.parent_id === 543 && p.parent_type === "Project"
+      ) ), "published_at" ).reverse( );
+      request( this.app ).get( `/v2/projects/${project.slug}/posts?fields=all` )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 10 );
+          expect( res.body.total_results ).to.eq( posts.length );
+          expect( res.body.results.length ).to.eq( posts.length );
+          expect( res.body.results[0].body ).to.eq( posts[0].body );
+          expect( _.sortBy( _.map( res.body.results, "id" ) ) ).to.deep
+            .eq( _.sortBy( _.map( posts, "id" ) ) );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns an empty response if no matching project is found", function ( done ) {
+      request( this.app ).get( "/v2/projects/nonsense/posts?fields=all" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 10 );
+          expect( res.body.total_results ).to.eq( 0 );
+          expect( res.body.results.length ).to.eq( 0 );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns an empty response if matching project has no posts", function ( done ) {
+      const project = _.find( fixtures.postgresql.projects, p => p.id === 2005 );
+      request( this.app ).get( `/v2/projects/${project.id}/posts?fields=all` )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 10 );
+          expect( res.body.total_results ).to.eq( 0 );
+          expect( res.body.results.length ).to.eq( 0 );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
   describe( "feature", ( ) => {
     const project = fixtures.elasticsearch.projects.project[0];
 
