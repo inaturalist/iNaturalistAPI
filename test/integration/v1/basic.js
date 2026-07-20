@@ -37,9 +37,18 @@ describe( "routes", ( ) => {
 
   describe( "robots", ( ) => {
     it( "renders a robots.txt file", function ( done ) {
+      const rules = [
+        "User-agent: *",
+        "Allow: /favicon.ico",
+        "Allow: /v1/docs",
+        "Allow: /v2/docs",
+        "Disallow: /v2/docs?",
+        "Disallow: /*?",
+        "Disallow: /"
+      ];
       request( this.app ).get( "/robots.txt" )
         .expect( res => {
-          expect( res.text ).to.eq( "User-agent: *\nAllow: /v1/docs\nAllow: /v2/docs\nDisallow: /" );
+          expect( res.text ).to.eq( rules.join( "\n" ) );
         } ).expect( "Content-Type", /plain/ )
         .expect( 200, done );
     } );
