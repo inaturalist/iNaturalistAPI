@@ -1,5 +1,6 @@
 const _ = require( "lodash" );
 const { expect } = require( "chai" );
+const sinon = require( "sinon" );
 const Logstasher = require( "../lib/logstasher" );
 
 describe( "Logstasher", ( ) => {
@@ -104,6 +105,33 @@ describe( "Logstasher", ( ) => {
         }
       };
       expect( Logstasher.afterRequestPayload( req ).context ).to.eq( "logContext" );
+    } );
+  } );
+
+  describe( "writeMissingMediaLog", ( ) => {
+    afterEach( ( ) => {
+      sinon.restore( );
+    } );
+
+    it( "does nothing when the log stream is not set", ( ) => {
+      sinon.stub( Logstasher, "logWriteStream" ).returns( undefined );
+      expect( ( ) => Logstasher.writeMissingMediaLog( "photo", 1, 2, 3 ) ).not.to.throw( );
+    } );
+
+    it( "writes a JSON line when the log stream is set", ( ) => {
+      const written = [];
+      sinon.stub( Logstasher, "logWriteStream" ).returns( {
+        write: line => written.push( line )
+      } );
+      Logstasher.writeMissingMediaLog( "photo", 1001, 2002, 3003 );
+      expect( written.length ).to.eq( 1 );
+      const payload = JSON.parse( written[0] );
+      expect( payload.subtype ).to.eq( "MissingMedia" );
+      expect( payload.media_type ).to.eq( "photo" );
+      expect( payload.observation_id ).to.eq( 1001 );
+      expect( payload.media_id ).to.eq( 2002 );
+      expect( payload.join_record_id ).to.eq( 3003 );
+      expect( payload["@timestamp"] ).to.not.be.undefined;
     } );
   } );
 } );
