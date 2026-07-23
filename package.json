@@ -37,6 +37,7 @@
     "fast-csv": "^5.0.1",
     "flat": "^5.0.2",
     "geoip-lite": "^2.0.2",
+    "geojson-antimeridian-cut": "0.1.0",
     "h3-js": "^4.1.0",
     "inaturalistjs": "github:inaturalist/inaturalistjs",
     "joi": "^18.2.1",
