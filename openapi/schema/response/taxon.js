@@ -52,7 +52,7 @@ module.exports = Joi.object( ).keys( {
     unresolved: Joi.number( ).integer( )
   } ).unknown( false ),
   iconic_taxon_id: Joi.number( ).integer( ).valid( null ),
-  iconic_taxon_name: Joi.string( ),
+  iconic_taxon_name: Joi.string( ).valid( null ),
   introduced: Joi.boolean( ),
   is_active: Joi.boolean( ),
   listed_taxa: Joi.array( ).items(
