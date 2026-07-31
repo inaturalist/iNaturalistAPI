@@ -136,6 +136,45 @@ describe( "Users", ( ) => {
   } );
 
   describe( "projects", ( ) => {
+    it( "returns a 422 for unknown users", function ( done ) {
+      request( this.app ).get( "/v2/users/998877/projects" )
+        .expect( "Content-Type", /json/ ).expect( 422, done );
+    } );
+
+    it( "returns a 422 given a user login instead of an ID", function ( done ) {
+      const user = _.find( fixtures.elasticsearch.users.user, u => u.id === 1 );
+      request( this.app ).get( `/v2/users/${user.login}/projects` )
+        .expect( "Content-Type", /json/ ).expect( 422, done );
+    } );
+
+    it( "returns projects given a user ID", function ( done ) {
+      request( this.app ).get( "/v2/users/1/projects?fields=all" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( _.find( res.body.results, p => p.slug === "project-one" ) ).not.to.be.undefined;
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns projects given a page parameter", function ( done ) {
+      request( this.app ).get( "/v2/users/1/projects?per_page=1&page=2&fields=all" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 2 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( _.find( res.body.results, p => p.slug === "project-one" ) ).not.to.be.undefined;
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "returns page 1 given a page=0 parameter", function ( done ) {
+      request( this.app ).get( "/v2/users/1/projects?per_page=1&page=0&fields=all" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
     it( "never returns email or IP for user in project", function ( done ) {
       request( this.app ).get( "/v2/users/2023092501/projects?fields=all" )
         .expect( res => {
