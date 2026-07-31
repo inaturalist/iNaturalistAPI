@@ -161,6 +161,7 @@ describe( "Users", ( ) => {
         .expect( res => {
           expect( res.body.page ).to.eq( 2 );
           expect( res.body.per_page ).to.eq( 1 );
+          expect( _.find( res.body.results, p => p.slug === "project-one" ) ).not.to.be.undefined;
         } ).expect( "Content-Type", /json/ )
         .expect( 200, done );
     } );
