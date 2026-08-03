@@ -279,4 +279,35 @@ describe( "Taxa", ( ) => {
         .expect( 404, done );
     } );
   } );
+
+  describe( "lifelist_metadata", ( ) => {
+    it( "requires a user_id parameter", function ( done ) {
+      request( this.app ).get( "/v2/taxa/lifelist_metadata" )
+        .expect( res => {
+          expect( res.body.errors ).to.not.be.empty;
+          expect( res.body.errors[0].path ).to.eq( "observed_by_user_id" );
+          expect( res.body.errors[0].message ).to.eq( "must have required property 'observed_by_user_id'" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 422, done );
+    } );
+
+    it( "returns taxa", function ( done ) {
+      const taxa = _.fromPairs( _.map( fixtures.postgresql.taxa, t => [t.id, t] ) );
+      request( this.app ).get( "/v2/taxa/lifelist_metadata?observed_by_user_id=123&fields=all" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.be.above( 0 );
+          expect( res.body.total_results ).to.eq( res.body.per_page );
+          expect( res.body.results.length ).to.eq( res.body.total_results );
+          _.each( res.body.results, result => {
+            const taxon = taxa[result.id];
+            expect( result.id ).to.be.above( 0 );
+            expect( result.name ).to.eq( taxon.name );
+          } );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
 } );

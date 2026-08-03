@@ -1224,4 +1224,59 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "taxonomy", ( ) => {
+    it( "returns taxa", function ( done ) {
+      const taxa = _.fromPairs( _.map( fixtures.postgresql.taxa, t => [t.id, t] ) );
+      request( this.app ).get( "/v2/observations/taxonomy?fields=all" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.be.above( 0 );
+          expect( res.body.total_results ).to.eq( res.body.per_page );
+          expect( res.body.count_without_taxon ).to.be.above( 0 );
+          expect( res.body.results.length ).to.eq( res.body.total_results );
+          _.each( res.body.results, result => {
+            const taxon = taxa[result.id];
+            expect( result.id ).to.be.above( 0 );
+            expect( result.name ).to.eq( taxon.name );
+            expect( result.rank_level ).to.eq( taxon.rank_level );
+            expect( result.is_active ).to.eq( taxon.is_active );
+            expect( result.iconic_taxon_name ).to.be.null;
+            expect( result.descendant_obs_count ).to.be.a( "number" );
+            expect( result.direct_obs_count ).to.be.a( "number" );
+          } );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
+
+  describe( "taxa", ( ) => {
+    it( "requires a user_id parameter", function ( done ) {
+      request( this.app ).get( "/v2/observations/taxa" )
+        .expect( res => {
+          expect( res.body.errors ).to.not.be.empty;
+          expect( res.body.errors[0].path ).to.eq( "user_id" );
+          expect( res.body.errors[0].message ).to.eq( "must have required property 'user_id'" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 422, done );
+    } );
+
+    it( "returns taxon_ids and counts", function ( done ) {
+      request( this.app ).get( "/v2/observations/taxa?user_id=123" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.be.above( 0 );
+          expect( res.body.total_results ).to.eq( res.body.per_page );
+          expect( res.body.results.length ).to.eq( res.body.total_results );
+          _.each( res.body.results, result => {
+            expect( result.taxon_id ).to.be.above( 0 );
+            expect( result.count ).to.be.above( 0 );
+          } );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
 } );

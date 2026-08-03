@@ -1682,6 +1682,7 @@
         {
           "id": 4,
           "uuid": "6da04f2f-8906-4589-83a8-5d77a104b993",
+          "name": "Taxon4",
           "names": [{
             "name_autocomplete": "眼紋疏廣蠟蟬",
             "exact": "眼紋疏廣蠟蟬",
@@ -1693,6 +1694,7 @@
         {
           "id": 5,
           "uuid": "e5567150-66fd-4e20-b291-662701e9d4c1",
+          "name": "Taxon5",
           "iconic_taxon_id": 101,
           "is_active": true,
           "ancestor_ids": [1,2,3,4,5],
@@ -1703,6 +1705,7 @@
         {
           "id": 6,
           "uuid": "94dbefce-e621-4aae-85e0-c2f644c99091",
+          "name": "Taxon6",
           "iconic_taxon_id": 101,
           "is_active": true,
           "ancestor_ids": [1,2,3,4,6],
@@ -3742,28 +3745,66 @@
       {
         "id": 1001,
         "uuid": "9cdac31a-87fa-4361-8b7f-348ccebbe2f1",
-        "name": "Life"
+        "name": "Life",
+        "rank": "stateofmatter",
+        "rank_level": 100,
+        "is_active": true
       },
       {
         "id": 1,
         "uuid": "94c3e33b-ad67-41af-96cd-a91a58a2c4eb",
-        "name": "Los"
+        "name": "Los",
+        "rank": "genus",
+        "rank_level": 20,
+        "is_active": true
       },
       {
         "id": 2,
         "uuid": "a23748a0-65e3-40e8-a455-40a233ce7587",
         "name": "Los",
-        "ancestry": "1"
+        "ancestry": "1",
+        "rank": "genus",
+        "rank_level": 20,
+        "is_active": false
+      },
+      {
+        "id": 3,
+        "name": "Los lobos",
+        "rank": "genus",
+        "rank_level": 20,
+        "is_active": true
       },
       {
         "id": 4,
         "uuid": "a23748a0-65e3-40e8-a455-40a433ce7587",
-        "ancestry": "1/2/3"
+        "ancestry": "1/2/3",
+        "name": "Taxon4",
+        "rank": "genus",
+        "rank_level": 20,
+        "is_active": true
       },
       {
         "id": 5,
         "uuid": "a23748a0-65e3-40e8-a455-40a533ce7587",
-        "ancestry": "1/2/3/4"
+        "ancestry": "1/2/3/4",
+        "name": "Taxon5",
+        "rank": "species",
+        "rank_level": 10,
+        "is_active": true
+      },
+      {
+        "id": 6,
+        "name": "Taxon6",
+        "rank": "genus",
+        "rank_level": 20,
+        "is_active": true
+      },
+      {
+        "id": 7,
+        "name": "Taxon7",
+        "rank": "genus",
+        "rank_level": 20,
+        "is_active": true
       },
       {
         "id": 101,
@@ -3869,6 +3910,13 @@
         "is_active": true,
         "is_iconic": true,
         "iconic_taxon_id": 113
+      },
+      {
+        "id": 123,
+        "name": "Taxon123",
+        "rank": "genus",
+        "rank_level": 20,
+        "is_active": true
       }
     ],
     "taxon_ranges": [
