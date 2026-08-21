@@ -10,6 +10,7 @@ const jwt = require( "jsonwebtoken" );
 const config = require( "../../../config" );
 const ComputervisionControllerV1 = require( "../../../lib/controllers/v1/computervision_controller" );
 const Taxon = require( "../../../lib/models/taxon" );
+const ESModel = require( "../../../lib/models/es_model" );
 
 chai.use( sinonChai );
 
@@ -305,6 +306,48 @@ describe( "Taxa", ( ) => {
             expect( result.id ).to.be.above( 0 );
             expect( result.name ).to.eq( taxon.name );
           } );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "removes taxa without names", function ( done ) {
+      const fetchBelongsToSub = sinon.stub( ESModel, "fetchBelongsTo" ).callsFake( objects => {
+        const replacements = [{
+          id: 1
+        },
+        {
+          id: 2,
+          taxon: null
+        },
+        {
+          id: 3,
+          taxon: {
+            id: 3
+          }
+        },
+        {
+          id: 4,
+          taxon: {
+            id: 4,
+            name: "Taxon name"
+          }
+        }];
+        // replace, in-place, the contents of objects
+        objects.splice( 0, objects.length, ...replacements );
+      } );
+
+      request( this.app ).get( "/v2/taxa/lifelist_metadata?observed_by_user_id=123&fields=all" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 1 );
+          expect( res.body.total_results ).to.eq( res.body.per_page );
+          expect( res.body.results.length ).to.eq( res.body.total_results );
+          _.each( res.body.results, result => {
+            expect( result.id ).to.eq( 4 );
+            expect( result.name ).to.eq( "Taxon name" );
+          } );
+          fetchBelongsToSub.restore( );
         } )
         .expect( "Content-Type", /json/ )
         .expect( 200, done );
