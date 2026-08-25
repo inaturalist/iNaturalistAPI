@@ -1391,6 +1391,42 @@
             "rank": "stateofmatter",
             "rank_level": 100
           }
+        },
+        {
+          "id": 2026082501,
+          "uuid": "b065f6e8-eb32-4334-8914-8e54301efd7a",
+          "user": { "id": 2026082501 },
+          "taxon": {
+            "id": 5,
+            "ancestor_ids": [1,2,3,4,5],
+            "min_species_taxon_id": 5
+          },
+          "observed_on_details": {
+            "date": "2026-07-01"
+          }
+        },
+        {
+          "id": 2026082502,
+          "uuid": "f210ee73-75b1-43ec-82e6-06552d429a34",
+          "user": { "id": 2026082501 },
+          "taxon": {
+            "id": 6,
+            "ancestor_ids": [1,2,3,4,6],
+            "min_species_taxon_id": 6
+          },
+          "observed_on_details": {
+            "date": "2026-08-01"
+          }
+        },
+        {
+          "id": 2026082503,
+          "uuid": "9d714b28-06e8-4b0c-9b64-f9c6027a9c8a",
+          "user": { "id": 2026082501 },
+          "taxon": {
+            "id": 7,
+            "ancestor_ids": [1001, 1, 2, 7],
+            "min_species_taxon_id": 7
+          }
         }
       ]
     },
@@ -2196,6 +2232,12 @@
           "name": "User2023092503 with email and IP",
           "email": "user2023092503@gmail.com",
           "last_ip": "192.168.0.3",
+          "suspended": false
+        },
+        {
+          "id": 2026082501,
+          "login": "user2026082501",
+          "name": "User2026082501",
           "suspended": false
         }
       ]
@@ -4116,6 +4158,12 @@
         "login": "user2024071702",
         "name": "User2024071702 with 2023 donation",
         "created_at": "2020-01-01 00:00:00"
+      },
+      {
+        "id": 2026082501,
+        "login": "user2026082501",
+        "name": "User2026082501",
+        "created_at": "2026-08-25 00:00:00"
       }
     ],
     "user_blocks": [

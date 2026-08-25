@@ -606,4 +606,61 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
   } );
+
+  describe( "taxaObserved", ( ) => {
+    it( "returns a 404 for unknown users by ID", function ( done ) {
+      request( this.app ).get( "/v2/users/123123/taxa_observed" )
+        .expect( "Content-Type", /json/ ).expect( 404, done );
+    } );
+
+    it( "returns a 404 for unknown users by login", function ( done ) {
+      request( this.app ).get( "/v2/users/nonsense/taxa_observed" )
+        .expect( "Content-Type", /json/ ).expect( 404, done );
+    } );
+
+    it( "returns taxa with a count and first_observed_on date", function ( done ) {
+      request( this.app ).get( "/v2/users/2026082501/taxa_observed" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 30 );
+          expect( res.body.total_results ).to.eq( 3 );
+          expect( res.body.results.length ).to.eq( 3 );
+          expect( res.body.results[0].count ).to.eq( 1 );
+          expect( res.body.results[0].taxon.id ).to.eq( 6 );
+          expect( res.body.results[0].first_observed_on ).to.eq( "2026-08-01" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "orders results by first_observed_on desc with nulls last", function ( done ) {
+      request( this.app ).get( "/v2/users/2026082501/taxa_observed" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 30 );
+          expect( res.body.total_results ).to.eq( 3 );
+          expect( res.body.results.length ).to.eq( 3 );
+          expect( res.body.results[0].first_observed_on ).to.eq( "2026-08-01" );
+          expect( res.body.results[1].first_observed_on ).to.eq( "2026-07-01" );
+          expect( res.body.results[2].first_observed_on ).to.be.null;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "can filter by any observation search parameter", function ( done ) {
+      request( this.app ).get( "/v2/users/2026082501/taxa_observed?taxon_id=5" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 30 );
+          expect( res.body.total_results ).to.eq( 1 );
+          expect( res.body.results.length ).to.eq( 1 );
+          expect( res.body.results[0].count ).to.eq( 1 );
+          expect( res.body.results[0].taxon.id ).to.eq( 5 );
+          expect( res.body.results[0].first_observed_on ).to.eq( "2026-07-01" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+  } );
 } );
