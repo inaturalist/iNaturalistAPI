@@ -36,6 +36,24 @@ describe( "Announcements", ( ) => {
         .expect( 200, done );
     } );
 
+    it( "sets a no-cache header", function ( done ) {
+      const nockScope = nock( "http://localhost:3000" )
+        .get( "/announcements/active" )
+        .query( true )
+        .reply( 200, announcementsActiveResponse );
+      request( this.app ).get( "/v2/announcements?fields=all" ).expect( ( ) => {
+        // Raise an exception if the nocked endpoint doesn't get called
+        nockScope.done( );
+      } )
+        .expect( res => {
+          expect( res.get( "Cache-Control" ) ).to.eq( "private, no-cache, no-store, must-revalidate" );
+          expect( res.get( "Expires" ) ).to.eq( "-1" );
+          expect( res.get( "Pragma" ) ).to.eq( "no-cache" );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
     it( "passes through the client param", function ( done ) {
       const nockScope = nock( "http://localhost:3000" )
         .get( "/announcements/active?client=inat-ios" )
