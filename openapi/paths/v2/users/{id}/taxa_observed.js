@@ -15,6 +15,14 @@ module.exports = sendWrapper => {
     child => transform( child.schema.label( child.key ) )
   ), p => !_.includes( ["order_by", "only_id"], p.name ) );
   parameters.push(
+    transform(
+      Joi.string( ).label( "order_by" ).valid(
+        "count",
+        "first_observed_on"
+      ).default( "count" )
+        .description( "Attribute to sort on" )
+        .meta( { in: "query" } )
+    ),
     transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
   );
 

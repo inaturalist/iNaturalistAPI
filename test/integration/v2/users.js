@@ -625,7 +625,7 @@ describe( "Users", ( ) => {
           expect( res.body.per_page ).to.eq( 30 );
           expect( res.body.total_results ).to.eq( 3 );
           expect( res.body.results.length ).to.eq( 3 );
-          expect( res.body.results[0].count ).to.eq( 1 );
+          expect( res.body.results[0].count ).to.eq( 2 );
           expect( res.body.results[0].taxon.id ).to.eq( 6 );
           expect( res.body.results[0].first_observed_on ).to.eq( "2026-08-01" );
         } )
@@ -633,8 +633,42 @@ describe( "Users", ( ) => {
         .expect( 200, done );
     } );
 
-    it( "orders results by first_observed_on desc with nulls last", function ( done ) {
+    it( "orders results by count desc by default", function ( done ) {
       request( this.app ).get( "/v2/users/2026082501/taxa_observed" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 30 );
+          expect( res.body.total_results ).to.eq( 3 );
+          expect( res.body.results.length ).to.eq( 3 );
+          expect( res.body.results[0].count ).to.eq( 2 );
+          expect( res.body.results[1].count ).to.eq( 1 );
+          expect( res.body.results[1].taxon.id ).to.eq( 5 );
+          expect( res.body.results[2].count ).to.eq( 1 );
+          expect( res.body.results[2].taxon.id ).to.eq( 7 );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "can order results by count asc", function ( done ) {
+      request( this.app ).get( "/v2/users/2026082501/taxa_observed?order=asc" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 30 );
+          expect( res.body.total_results ).to.eq( 3 );
+          expect( res.body.results.length ).to.eq( 3 );
+          expect( res.body.results[0].count ).to.eq( 1 );
+          expect( res.body.results[0].taxon.id ).to.eq( 5 );
+          expect( res.body.results[1].count ).to.eq( 1 );
+          expect( res.body.results[1].taxon.id ).to.eq( 7 );
+          expect( res.body.results[2].count ).to.eq( 2 );
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "can order results by first_observed_on with nulls last", function ( done ) {
+      request( this.app ).get( "/v2/users/2026082501/taxa_observed?order_by=first_observed_on" )
         .expect( res => {
           expect( res.body.page ).to.eq( 1 );
           expect( res.body.per_page ).to.eq( 30 );
@@ -642,6 +676,21 @@ describe( "Users", ( ) => {
           expect( res.body.results.length ).to.eq( 3 );
           expect( res.body.results[0].first_observed_on ).to.eq( "2026-08-01" );
           expect( res.body.results[1].first_observed_on ).to.eq( "2026-07-01" );
+          expect( res.body.results[2].first_observed_on ).to.be.null;
+        } )
+        .expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
+    it( "can order results by first_observed_on asc with nulls last", function ( done ) {
+      request( this.app ).get( "/v2/users/2026082501/taxa_observed?order_by=first_observed_on&order=asc" )
+        .expect( res => {
+          expect( res.body.page ).to.eq( 1 );
+          expect( res.body.per_page ).to.eq( 30 );
+          expect( res.body.total_results ).to.eq( 3 );
+          expect( res.body.results.length ).to.eq( 3 );
+          expect( res.body.results[0].first_observed_on ).to.eq( "2026-07-01" );
+          expect( res.body.results[1].first_observed_on ).to.eq( "2026-08-01" );
           expect( res.body.results[2].first_observed_on ).to.be.null;
         } )
         .expect( "Content-Type", /json/ )

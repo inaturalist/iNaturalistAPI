@@ -1420,6 +1420,19 @@
         },
         {
           "id": 2026082503,
+          "uuid": "7af8111c-12f1-427c-85c9-3e2f7f0cc1ca",
+          "user": { "id": 2026082501 },
+          "taxon": {
+            "id": 6,
+            "ancestor_ids": [1,2,3,4,6],
+            "min_species_taxon_id": 6
+          },
+          "observed_on_details": {
+            "date": "2026-08-02"
+          }
+        },
+        {
+          "id": 2026082504,
           "uuid": "9d714b28-06e8-4b0c-9b64-f9c6027a9c8a",
           "user": { "id": 2026082501 },
           "taxon": {
