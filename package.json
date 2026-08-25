@@ -73,7 +73,7 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "mocha": "^10.6.0",
-    "nock": "github:nock/nock#beta",
+    "nock": "^14.0.17",
     "nyc": "^18.0.0",
     "sinon": "^18.0.0",
     "sinon-chai": "^3.7.0",
