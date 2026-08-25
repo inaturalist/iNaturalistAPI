@@ -1,0 +1,2851 @@
+{
+  "info": {
+    "name": "iNat API — WEB-1060 lifelist endpoints",
+    "description": "Requests for the lifelist-related endpoints added in WEB-1060 (observations/taxa, observations/taxonomy, taxa/lifelist_metadata). Import into the iNaturalist `API` collection, or merge the v1/v2 folders into it. Requests carry no auth so they inherit the collection's; `{{base_url}}` is an origin with no version segment.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://host.docker.internal:4000"
+    }
+  ],
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "GET Observations Taxa",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/observations/taxa?user_id=383144",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "observations",
+                "taxa"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "383144",
+                  "description": "Include observations observed by users that have this ID or login"
+                },
+                {
+                  "key": "acc",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by whether `positional_accuracy` is set or not (true | false)"
+                },
+                {
+                  "key": "captive",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by captive / cultivated status (true | false)"
+                },
+                {
+                  "key": "endemic",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by whether the observation is in a place with a check list entry indicating the establishment means is `endemic` (true | false)"
+                },
+                {
+                  "key": "geo",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations that are georeferenced (true | false)"
+                },
+                {
+                  "key": "id_please",
+                  "value": "",
+                  "disabled": true,
+                  "description": "(true | false)"
+                },
+                {
+                  "key": "identified",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations that have community identifications (true | false)"
+                },
+                {
+                  "key": "introduced",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations of taxa that are introduced in their location (true | false)"
+                },
+                {
+                  "key": "mappable",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations that show on map tiles (true | false)"
+                },
+                {
+                  "key": "native",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations of taxa that are native to their location (true | false)"
+                },
+                {
+                  "key": "out_of_range",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations of taxa that outside their known ranges (true | false)"
+                },
+                {
+                  "key": "pcid",
+                  "value": "",
+                  "disabled": true,
+                  "description": "(true | false)"
+                },
+                {
+                  "key": "photos",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations with photos (true | false)"
+                },
+                {
+                  "key": "popular",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations that have been favorited by at least one user (true | false)"
+                },
+                {
+                  "key": "sounds",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations with sounds (true | false)"
+                },
+                {
+                  "key": "taxon_is_active",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations of active taxa (true | false)"
+                },
+                {
+                  "key": "threatened",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by whether the observed taxon has a conservation status of \"threatened\" or worse (true | false)"
+                },
+                {
+                  "key": "verifiable",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by whether observations are 'verifiable' (i.e. have quality grades `research` or `needs_id`) (true | false)"
+                },
+                {
+                  "key": "id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this ID"
+                },
+                {
+                  "key": "not_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations with this ID"
+                },
+                {
+                  "key": "license",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this license (cc-by | cc-by-nc | cc-by-nd | cc-by-sa | cc-by-nc-nd | cc-by-nc-sa | cc0)"
+                },
+                {
+                  "key": "photo_license",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with least one photo with this license (cc-by | cc-by-nc | cc-by-nd | cc-by-sa | cc-by-nc-nd | cc-by-nc-sa | cc0)"
+                },
+                {
+                  "key": "licensed",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where the license attribute is not null, i.e. it is licensed (true | false)"
+                },
+                {
+                  "key": "photo_licensed",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with at least one photo with a license attribute that is not null (true | false)"
+                },
+                {
+                  "key": "place_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within the place with this ID"
+                },
+                {
+                  "key": "project_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations added to the project with this ID or slug"
+                },
+                {
+                  "key": "coords_viewable_for_proj",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observers who trust the project(s) specified in `project_id` OR trust the authenticated viewer (true | false)"
+                },
+                {
+                  "key": "rank",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa with this rank"
+                },
+                {
+                  "key": "site_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations affiliated with the iNaturalist network website with this ID"
+                },
+                {
+                  "key": "sound_license",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations that have at least one sound with this license (cc-by | cc-by-nc | cc-by-nd | cc-by-sa | cc-by-nc-nd | cc-by-nc-sa | cc0)"
+                },
+                {
+                  "key": "taxon_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of this taxon and its descendants"
+                },
+                {
+                  "key": "without_taxon_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations of this taxon and its descendants"
+                },
+                {
+                  "key": "taxon_name",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa that have a scientific or common name matching this string"
+                },
+                {
+                  "key": "user_login",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed by users that have this login"
+                },
+                {
+                  "key": "hour",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within this hour of the day"
+                },
+                {
+                  "key": "day",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within this day of the month"
+                },
+                {
+                  "key": "month",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within this month"
+                },
+                {
+                  "key": "year",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within this year"
+                },
+                {
+                  "key": "created_day",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created within this day of the month"
+                },
+                {
+                  "key": "created_month",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created within this month"
+                },
+                {
+                  "key": "created_year",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created within this year"
+                },
+                {
+                  "key": "term_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with annotations using this controlled term ID"
+                },
+                {
+                  "key": "term_value_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with annotations using this controlled value ID. Must be combined with the `term_id` parameter"
+                },
+                {
+                  "key": "without_term_value_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations with annotations using this controlled value ID. Must be combined with the `term_id` parameter"
+                },
+                {
+                  "key": "term_id_or_unknown",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with annotations using this controlled term ID and associated term value IDs, or be missing annotations using this controlled term ID. Must be combined with the `term_value_id` or `without_term_value_id` parameters"
+                },
+                {
+                  "key": "annotation_user_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with an annotation created by this user"
+                },
+                {
+                  "key": "acc_above",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with a positional accuracy above this value (meters)"
+                },
+                {
+                  "key": "acc_below",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with a positional accuracy below this value (meters)"
+                },
+                {
+                  "key": "acc_below_or_unknown",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with a positional accuracy below this value (in meters) or with an unknown positional accuracy"
+                },
+                {
+                  "key": "d1",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed on or after this date/time"
+                },
+                {
+                  "key": "d2",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed on or before this date/time"
+                },
+                {
+                  "key": "created_d1",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created on or after this date/time"
+                },
+                {
+                  "key": "created_d2",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created on or before this date/time"
+                },
+                {
+                  "key": "created_on",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created on this date"
+                },
+                {
+                  "key": "observed_on",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed on this date"
+                },
+                {
+                  "key": "unobserved_by_user_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations of taxa previously observed by this user"
+                },
+                {
+                  "key": "apply_project_rules_for",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations that match the rules of the project with this ID or slug"
+                },
+                {
+                  "key": "observation_accuracy_experiment_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations included in this observation accuracy experiment"
+                },
+                {
+                  "key": "cs",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa that have this conservation status code. If the `place_id` parameter is also specified, this will only consider statuses specific to that place"
+                },
+                {
+                  "key": "csa",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa that have a conservation status from this authority. If the `place_id` parameter is also specified, this will only consider statuses specific to that place"
+                },
+                {
+                  "key": "csi",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa that have this IUCN conservation status. If the `place_id` parameter is also specified, this will only consider statuses specific to that place (LC | NT | VU | EN | CR | EW | EX)"
+                },
+                {
+                  "key": "geoprivacy",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this geoprivacy setting (obscured | obscured_private | open | private)"
+                },
+                {
+                  "key": "taxon_geoprivacy",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where this is the most conservative geoprivacy applied by a conservation status associated with one of the taxa proposed in the current identifications (obscured | obscured_private | open | private)"
+                },
+                {
+                  "key": "obscuration",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where `geoprivacy` or `taxon_geoprivacy` match these values (obscured | private | none)"
+                },
+                {
+                  "key": "hrank",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa with this rank or lower"
+                },
+                {
+                  "key": "lrank",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa with this rank or higher"
+                },
+                {
+                  "key": "iconic_taxa",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa within this iconic taxon"
+                },
+                {
+                  "key": "id_above",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with an ID above this value"
+                },
+                {
+                  "key": "id_below",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with an ID below this value"
+                },
+                {
+                  "key": "identifications",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations based on level of agreement among identifications:\n\n* **most_agree:** includes observations where there are more active identifications of taxa that agree with the Observation Taxon than active identifications that disagree with the Observation Taxon\n* **some_agree:** includes observations where there are some active identifications of taxa that agree with the Observation Taxon\n* **most_disagree:** includes observations where there are more active identifications of taxa that disagree with the Observation Taxon than active identifications that agree with the Observation Taxon (most_agree | most_disagree | some_agree)"
+                },
+                {
+                  "key": "disagreements",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where there is disagreement among active identifications (true | false)"
+                },
+                {
+                  "key": "lat",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a {`radius`} kilometer circle around the specified `lat`/`lng` parameters"
+                },
+                {
+                  "key": "lng",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a {`radius`} kilometer circle around the specified `lat`/`lng` parameters"
+                },
+                {
+                  "key": "radius",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a {`radius`} kilometer circle around the specified `lat`/`lng` parameters"
+                },
+                {
+                  "key": "nelat",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a bounding box specified by the `nelat`, `nelng`, `swlat`, and `swlng` parameters"
+                },
+                {
+                  "key": "nelng",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a bounding box specified by the `nelat`, `nelng`, `swlat`, and `swlng` parameters"
+                },
+                {
+                  "key": "swlat",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a bounding box specified by the `nelat`, `nelng`, `swlat`, and `swlng` parameters"
+                },
+                {
+                  "key": "swlng",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a bounding box specified by the `nelat`, `nelng`, `swlat`, and `swlng` parameters"
+                },
+                {
+                  "key": "list_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa in a list with this ID"
+                },
+                {
+                  "key": "not_in_project",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations added to the project this ID or slug"
+                },
+                {
+                  "key": "not_matching_project_rules_for",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations that match the rules of the project with this ID or slug"
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with a description, tags, or place_guess matching this query. Can be combined with `search_on`"
+                },
+                {
+                  "key": "search_on",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where any of these properties match the value of the `q` parameter (names | tags | description | place | taxon_page_obs_photos)"
+                },
+                {
+                  "key": "quality_grade",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this quality grade (casual | needs_id | research)"
+                },
+                {
+                  "key": "not_casual_excluding_captive",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations that are casual for any reason other than being marked captive (true | false)"
+                },
+                {
+                  "key": "without_field",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations with this observation field"
+                },
+                {
+                  "key": "outlink_source",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with outlinks from this source"
+                },
+                {
+                  "key": "updated_since",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations updated since this time"
+                },
+                {
+                  "key": "viewer_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Must be combined with the `reviewed` parameter"
+                },
+                {
+                  "key": "reviewed",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations reviewed by the user with ID matching the value of the `viewer_id` parameter (true | false)"
+                },
+                {
+                  "key": "expected_nearby",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations expected to occur nearby their location according to the latest iNaturalist Geomodel (true | false)"
+                },
+                {
+                  "key": "fails_dqa_accurate",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not accurately depicting an organism or scene (true | false)"
+                },
+                {
+                  "key": "fails_dqa_date",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not having an accurate date (true | false)"
+                },
+                {
+                  "key": "fails_dqa_evidence",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not evidence of an organism (true | false)"
+                },
+                {
+                  "key": "fails_dqa_location",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not having an accurate location (true | false)"
+                },
+                {
+                  "key": "fails_dqa_needs_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as the community ID cannot be improved (true | false)"
+                },
+                {
+                  "key": "fails_dqa_recent",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not recent evidence of an organism (true | false)"
+                },
+                {
+                  "key": "fails_dqa_subject",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not having evidence related to a single subject (true | false)"
+                },
+                {
+                  "key": "fails_dqa_wild",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not wild (true | false)"
+                },
+                {
+                  "key": "user_after",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created by users created after a date. Accepts dates with or without times, e.g. 2025-01-01, as well as relative day, month, or year, e.g. 10d, 2w, 1y"
+                },
+                {
+                  "key": "user_before",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created by users created before a date. Accepts dates with or without times, e.g. 2025-01-01, as well as relative day, month, or year, e.g. 10d, 2w, 1y"
+                },
+                {
+                  "key": "locale",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Returned taxon common names will be from this locale"
+                },
+                {
+                  "key": "preferred_place_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Returned taxon common names will prioritize common names from this place"
+                },
+                {
+                  "key": "ttl",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Set the `Cache-Control` HTTP header with this value as `max-age`, in seconds. This means subsequent identical requests may be cached on  iNaturalist servers, and commonly within web browsers"
+                },
+                {
+                  "key": "page",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Pagination `page` number"
+                },
+                {
+                  "key": "per_page",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Number of results to return in a `page`"
+                },
+                {
+                  "key": "order",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Sort order (desc | asc)"
+                },
+                {
+                  "key": "order_by",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Attribute to sort on (created_at | geo_score | id | observed_on | random | species_guess | updated_at | votes)"
+                },
+                {
+                  "key": "only_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this ID (true | false)"
+                },
+                {
+                  "key": "fields",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Attribute fields to return in the response"
+                }
+              ]
+            },
+            "description": "`GET /v1/observations/taxa` — ObservationsController.taxa (lib/controllers/v1/observations_controller.js).\n\nAggregates matching observations by `taxon.id` and returns `{ taxon_id, count }` pairs.\n\n- `user_id` is REQUIRED — omitting it returns 422 (verified against the running API).\n- Accepts the full observation search parameter set (the query is passed straight to\n  `ObservationsController.elasticResults`).\n- NOT paginated. The controller forces `per_page: 0` and reports\n  `page: 1, per_page: <number of buckets>`; the terms agg is capped at size 700000.\n- No `setTTL` / `defaultTTL` on the v1 route."
+          },
+          "response": []
+        },
+        {
+          "name": "GET Observations Taxonomy",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/observations/taxonomy?user_id=383144",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "observations",
+                "taxonomy"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "383144",
+                  "description": "Include observations observed by users that have this ID or login"
+                },
+                {
+                  "key": "acc",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by whether `positional_accuracy` is set or not (true | false)"
+                },
+                {
+                  "key": "captive",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by captive / cultivated status (true | false)"
+                },
+                {
+                  "key": "endemic",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by whether the observation is in a place with a check list entry indicating the establishment means is `endemic` (true | false)"
+                },
+                {
+                  "key": "geo",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations that are georeferenced (true | false)"
+                },
+                {
+                  "key": "id_please",
+                  "value": "",
+                  "disabled": true,
+                  "description": "(true | false)"
+                },
+                {
+                  "key": "identified",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations that have community identifications (true | false)"
+                },
+                {
+                  "key": "introduced",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations of taxa that are introduced in their location (true | false)"
+                },
+                {
+                  "key": "mappable",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations that show on map tiles (true | false)"
+                },
+                {
+                  "key": "native",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations of taxa that are native to their location (true | false)"
+                },
+                {
+                  "key": "out_of_range",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations of taxa that outside their known ranges (true | false)"
+                },
+                {
+                  "key": "pcid",
+                  "value": "",
+                  "disabled": true,
+                  "description": "(true | false)"
+                },
+                {
+                  "key": "photos",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations with photos (true | false)"
+                },
+                {
+                  "key": "popular",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations that have been favorited by at least one user (true | false)"
+                },
+                {
+                  "key": "sounds",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations with sounds (true | false)"
+                },
+                {
+                  "key": "taxon_is_active",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations of active taxa (true | false)"
+                },
+                {
+                  "key": "threatened",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by whether the observed taxon has a conservation status of \"threatened\" or worse (true | false)"
+                },
+                {
+                  "key": "verifiable",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by whether observations are 'verifiable' (i.e. have quality grades `research` or `needs_id`) (true | false)"
+                },
+                {
+                  "key": "id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this ID"
+                },
+                {
+                  "key": "not_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations with this ID"
+                },
+                {
+                  "key": "license",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this license (cc-by | cc-by-nc | cc-by-nd | cc-by-sa | cc-by-nc-nd | cc-by-nc-sa | cc0)"
+                },
+                {
+                  "key": "photo_license",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with least one photo with this license (cc-by | cc-by-nc | cc-by-nd | cc-by-sa | cc-by-nc-nd | cc-by-nc-sa | cc0)"
+                },
+                {
+                  "key": "licensed",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where the license attribute is not null, i.e. it is licensed (true | false)"
+                },
+                {
+                  "key": "photo_licensed",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with at least one photo with a license attribute that is not null (true | false)"
+                },
+                {
+                  "key": "place_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within the place with this ID"
+                },
+                {
+                  "key": "project_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations added to the project with this ID or slug"
+                },
+                {
+                  "key": "coords_viewable_for_proj",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observers who trust the project(s) specified in `project_id` OR trust the authenticated viewer (true | false)"
+                },
+                {
+                  "key": "rank",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa with this rank"
+                },
+                {
+                  "key": "site_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations affiliated with the iNaturalist network website with this ID"
+                },
+                {
+                  "key": "sound_license",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations that have at least one sound with this license (cc-by | cc-by-nc | cc-by-nd | cc-by-sa | cc-by-nc-nd | cc-by-nc-sa | cc0)"
+                },
+                {
+                  "key": "taxon_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of this taxon and its descendants"
+                },
+                {
+                  "key": "without_taxon_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations of this taxon and its descendants"
+                },
+                {
+                  "key": "taxon_name",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa that have a scientific or common name matching this string"
+                },
+                {
+                  "key": "user_login",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed by users that have this login"
+                },
+                {
+                  "key": "hour",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within this hour of the day"
+                },
+                {
+                  "key": "day",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within this day of the month"
+                },
+                {
+                  "key": "month",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within this month"
+                },
+                {
+                  "key": "year",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within this year"
+                },
+                {
+                  "key": "created_day",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created within this day of the month"
+                },
+                {
+                  "key": "created_month",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created within this month"
+                },
+                {
+                  "key": "created_year",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created within this year"
+                },
+                {
+                  "key": "term_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with annotations using this controlled term ID"
+                },
+                {
+                  "key": "term_value_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with annotations using this controlled value ID. Must be combined with the `term_id` parameter"
+                },
+                {
+                  "key": "without_term_value_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations with annotations using this controlled value ID. Must be combined with the `term_id` parameter"
+                },
+                {
+                  "key": "term_id_or_unknown",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with annotations using this controlled term ID and associated term value IDs, or be missing annotations using this controlled term ID. Must be combined with the `term_value_id` or `without_term_value_id` parameters"
+                },
+                {
+                  "key": "annotation_user_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with an annotation created by this user"
+                },
+                {
+                  "key": "acc_above",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with a positional accuracy above this value (meters)"
+                },
+                {
+                  "key": "acc_below",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with a positional accuracy below this value (meters)"
+                },
+                {
+                  "key": "acc_below_or_unknown",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with a positional accuracy below this value (in meters) or with an unknown positional accuracy"
+                },
+                {
+                  "key": "d1",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed on or after this date/time"
+                },
+                {
+                  "key": "d2",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed on or before this date/time"
+                },
+                {
+                  "key": "created_d1",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created on or after this date/time"
+                },
+                {
+                  "key": "created_d2",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created on or before this date/time"
+                },
+                {
+                  "key": "created_on",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created on this date"
+                },
+                {
+                  "key": "observed_on",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed on this date"
+                },
+                {
+                  "key": "unobserved_by_user_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations of taxa previously observed by this user"
+                },
+                {
+                  "key": "apply_project_rules_for",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations that match the rules of the project with this ID or slug"
+                },
+                {
+                  "key": "observation_accuracy_experiment_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations included in this observation accuracy experiment"
+                },
+                {
+                  "key": "cs",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa that have this conservation status code. If the `place_id` parameter is also specified, this will only consider statuses specific to that place"
+                },
+                {
+                  "key": "csa",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa that have a conservation status from this authority. If the `place_id` parameter is also specified, this will only consider statuses specific to that place"
+                },
+                {
+                  "key": "csi",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa that have this IUCN conservation status. If the `place_id` parameter is also specified, this will only consider statuses specific to that place (LC | NT | VU | EN | CR | EW | EX)"
+                },
+                {
+                  "key": "geoprivacy",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this geoprivacy setting (obscured | obscured_private | open | private)"
+                },
+                {
+                  "key": "taxon_geoprivacy",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where this is the most conservative geoprivacy applied by a conservation status associated with one of the taxa proposed in the current identifications (obscured | obscured_private | open | private)"
+                },
+                {
+                  "key": "obscuration",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where `geoprivacy` or `taxon_geoprivacy` match these values (obscured | private | none)"
+                },
+                {
+                  "key": "hrank",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa with this rank or lower"
+                },
+                {
+                  "key": "lrank",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa with this rank or higher"
+                },
+                {
+                  "key": "iconic_taxa",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa within this iconic taxon"
+                },
+                {
+                  "key": "id_above",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with an ID above this value"
+                },
+                {
+                  "key": "id_below",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with an ID below this value"
+                },
+                {
+                  "key": "identifications",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations based on level of agreement among identifications:\n\n* **most_agree:** includes observations where there are more active identifications of taxa that agree with the Observation Taxon than active identifications that disagree with the Observation Taxon\n* **some_agree:** includes observations where there are some active identifications of taxa that agree with the Observation Taxon\n* **most_disagree:** includes observations where there are more active identifications of taxa that disagree with the Observation Taxon than active identifications that agree with the Observation Taxon (most_agree | most_disagree | some_agree)"
+                },
+                {
+                  "key": "disagreements",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where there is disagreement among active identifications (true | false)"
+                },
+                {
+                  "key": "lat",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a {`radius`} kilometer circle around the specified `lat`/`lng` parameters"
+                },
+                {
+                  "key": "lng",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a {`radius`} kilometer circle around the specified `lat`/`lng` parameters"
+                },
+                {
+                  "key": "radius",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a {`radius`} kilometer circle around the specified `lat`/`lng` parameters"
+                },
+                {
+                  "key": "nelat",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a bounding box specified by the `nelat`, `nelng`, `swlat`, and `swlng` parameters"
+                },
+                {
+                  "key": "nelng",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a bounding box specified by the `nelat`, `nelng`, `swlat`, and `swlng` parameters"
+                },
+                {
+                  "key": "swlat",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a bounding box specified by the `nelat`, `nelng`, `swlat`, and `swlng` parameters"
+                },
+                {
+                  "key": "swlng",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a bounding box specified by the `nelat`, `nelng`, `swlat`, and `swlng` parameters"
+                },
+                {
+                  "key": "list_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa in a list with this ID"
+                },
+                {
+                  "key": "not_in_project",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations added to the project this ID or slug"
+                },
+                {
+                  "key": "not_matching_project_rules_for",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations that match the rules of the project with this ID or slug"
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with a description, tags, or place_guess matching this query. Can be combined with `search_on`"
+                },
+                {
+                  "key": "search_on",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where any of these properties match the value of the `q` parameter (names | tags | description | place | taxon_page_obs_photos)"
+                },
+                {
+                  "key": "quality_grade",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this quality grade (casual | needs_id | research)"
+                },
+                {
+                  "key": "not_casual_excluding_captive",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations that are casual for any reason other than being marked captive (true | false)"
+                },
+                {
+                  "key": "without_field",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations with this observation field"
+                },
+                {
+                  "key": "outlink_source",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with outlinks from this source"
+                },
+                {
+                  "key": "updated_since",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations updated since this time"
+                },
+                {
+                  "key": "viewer_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Must be combined with the `reviewed` parameter"
+                },
+                {
+                  "key": "reviewed",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations reviewed by the user with ID matching the value of the `viewer_id` parameter (true | false)"
+                },
+                {
+                  "key": "expected_nearby",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations expected to occur nearby their location according to the latest iNaturalist Geomodel (true | false)"
+                },
+                {
+                  "key": "fails_dqa_accurate",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not accurately depicting an organism or scene (true | false)"
+                },
+                {
+                  "key": "fails_dqa_date",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not having an accurate date (true | false)"
+                },
+                {
+                  "key": "fails_dqa_evidence",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not evidence of an organism (true | false)"
+                },
+                {
+                  "key": "fails_dqa_location",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not having an accurate location (true | false)"
+                },
+                {
+                  "key": "fails_dqa_needs_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as the community ID cannot be improved (true | false)"
+                },
+                {
+                  "key": "fails_dqa_recent",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not recent evidence of an organism (true | false)"
+                },
+                {
+                  "key": "fails_dqa_subject",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not having evidence related to a single subject (true | false)"
+                },
+                {
+                  "key": "fails_dqa_wild",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not wild (true | false)"
+                },
+                {
+                  "key": "user_after",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created by users created after a date. Accepts dates with or without times, e.g. 2025-01-01, as well as relative day, month, or year, e.g. 10d, 2w, 1y"
+                },
+                {
+                  "key": "user_before",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created by users created before a date. Accepts dates with or without times, e.g. 2025-01-01, as well as relative day, month, or year, e.g. 10d, 2w, 1y"
+                },
+                {
+                  "key": "locale",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Returned taxon common names will be from this locale"
+                },
+                {
+                  "key": "preferred_place_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Returned taxon common names will prioritize common names from this place"
+                },
+                {
+                  "key": "ttl",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Set the `Cache-Control` HTTP header with this value as `max-age`, in seconds. This means subsequent identical requests may be cached on  iNaturalist servers, and commonly within web browsers"
+                },
+                {
+                  "key": "page",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Pagination `page` number"
+                },
+                {
+                  "key": "per_page",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Number of results to return in a `page`"
+                },
+                {
+                  "key": "order",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Sort order (desc | asc)"
+                },
+                {
+                  "key": "order_by",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Attribute to sort on (created_at | geo_score | id | observed_on | random | species_guess | updated_at | votes)"
+                },
+                {
+                  "key": "only_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this ID (true | false)"
+                },
+                {
+                  "key": "fields",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Attribute fields to return in the response"
+                }
+              ]
+            },
+            "description": "`GET /v1/observations/taxonomy` — ObservationsController.taxonomy.\n\nReturns every taxon in the ancestry of matching observations with\n`descendant_obs_count` / `direct_obs_count`, plus `count_without_taxon`.\n\n- NO required params — an unfiltered call scans the whole index, so always filter\n  (e.g. `user_id`).\n- `count_without_taxon` is only computed when `taxon_id` is NOT supplied; it costs a\n  second ES query.\n- NOT paginated. v1 returns `{ count_without_taxon, size, results }` — note `size`,\n  not `page`/`per_page`.\n- Route option `defaultTTL: 300`."
+          },
+          "response": []
+        },
+        {
+          "name": "GET Taxa Lifelist Metadata",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/taxa/lifelist_metadata?observed_by_user_id=383144&locale=en",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v1",
+                "taxa",
+                "lifelist_metadata"
+              ],
+              "query": [
+                {
+                  "key": "observed_by_user_id",
+                  "value": "383144"
+                },
+                {
+                  "key": "locale",
+                  "value": "en"
+                },
+                {
+                  "key": "preferred_place_id",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "`GET /v1/taxa/lifelist_metadata` — TaxaController.lifelistMetadata.\n\nReturns the taxon name / common name / default photo for every taxon the user has\nobserved (via `ESModel.userObservedTaxonIDsCached`).\n\n- `observed_by_user_id` is REQUIRED; it is resolved through\n  `User.findByLoginOrID` (lib/api_util.js), so a **login** works as well as a numeric id\n  — `observed_by_user_id=tonyrebelo` returns 200 (verified).\n- Missing/unknown user -> `throw new Error( 422 )`. Empty observed-taxon set ->\n  `throw new Error( 500 )`. The sentinel `[-1]` returns `{}`.\n- NOT paginated — v1 returns `{ total_results, results }` with no page/per_page.\n- Route option `defaultTTL: 300`."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "v2",
+      "item": [
+        {
+          "name": "GET Observations Taxa",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/observations/taxa?user_id=383144&fields=all",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "observations",
+                "taxa"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "383144",
+                  "description": "Include observations observed by users that have this ID or login"
+                },
+                {
+                  "key": "fields",
+                  "value": "all",
+                  "description": "Attribute fields to return in the response"
+                },
+                {
+                  "key": "acc",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by whether `positional_accuracy` is set or not (true | false)"
+                },
+                {
+                  "key": "captive",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by captive / cultivated status (true | false)"
+                },
+                {
+                  "key": "endemic",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by whether the observation is in a place with a check list entry indicating the establishment means is `endemic` (true | false)"
+                },
+                {
+                  "key": "geo",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations that are georeferenced (true | false)"
+                },
+                {
+                  "key": "id_please",
+                  "value": "",
+                  "disabled": true,
+                  "description": "(true | false)"
+                },
+                {
+                  "key": "identified",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations that have community identifications (true | false)"
+                },
+                {
+                  "key": "introduced",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations of taxa that are introduced in their location (true | false)"
+                },
+                {
+                  "key": "mappable",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations that show on map tiles (true | false)"
+                },
+                {
+                  "key": "native",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations of taxa that are native to their location (true | false)"
+                },
+                {
+                  "key": "out_of_range",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations of taxa that outside their known ranges (true | false)"
+                },
+                {
+                  "key": "pcid",
+                  "value": "",
+                  "disabled": true,
+                  "description": "(true | false)"
+                },
+                {
+                  "key": "photos",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations with photos (true | false)"
+                },
+                {
+                  "key": "popular",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations that have been favorited by at least one user (true | false)"
+                },
+                {
+                  "key": "sounds",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations with sounds (true | false)"
+                },
+                {
+                  "key": "taxon_is_active",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations of active taxa (true | false)"
+                },
+                {
+                  "key": "threatened",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by whether the observed taxon has a conservation status of \"threatened\" or worse (true | false)"
+                },
+                {
+                  "key": "verifiable",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by whether observations are 'verifiable' (i.e. have quality grades `research` or `needs_id`) (true | false)"
+                },
+                {
+                  "key": "id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this ID"
+                },
+                {
+                  "key": "not_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations with this ID"
+                },
+                {
+                  "key": "license",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this license (cc-by | cc-by-nc | cc-by-nd | cc-by-sa | cc-by-nc-nd | cc-by-nc-sa | cc0)"
+                },
+                {
+                  "key": "photo_license",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with least one photo with this license (cc-by | cc-by-nc | cc-by-nd | cc-by-sa | cc-by-nc-nd | cc-by-nc-sa | cc0)"
+                },
+                {
+                  "key": "licensed",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where the license attribute is not null, i.e. it is licensed (true | false)"
+                },
+                {
+                  "key": "photo_licensed",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with at least one photo with a license attribute that is not null (true | false)"
+                },
+                {
+                  "key": "place_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within the place with this ID"
+                },
+                {
+                  "key": "project_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations added to the project with this ID or slug"
+                },
+                {
+                  "key": "coords_viewable_for_proj",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observers who trust the project(s) specified in `project_id` OR trust the authenticated viewer (true | false)"
+                },
+                {
+                  "key": "rank",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa with this rank"
+                },
+                {
+                  "key": "site_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations affiliated with the iNaturalist network website with this ID"
+                },
+                {
+                  "key": "sound_license",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations that have at least one sound with this license (cc-by | cc-by-nc | cc-by-nd | cc-by-sa | cc-by-nc-nd | cc-by-nc-sa | cc0)"
+                },
+                {
+                  "key": "taxon_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of this taxon and its descendants"
+                },
+                {
+                  "key": "without_taxon_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations of this taxon and its descendants"
+                },
+                {
+                  "key": "taxon_name",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa that have a scientific or common name matching this string"
+                },
+                {
+                  "key": "user_login",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed by users that have this login"
+                },
+                {
+                  "key": "hour",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within this hour of the day"
+                },
+                {
+                  "key": "day",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within this day of the month"
+                },
+                {
+                  "key": "month",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within this month"
+                },
+                {
+                  "key": "year",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within this year"
+                },
+                {
+                  "key": "created_day",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created within this day of the month"
+                },
+                {
+                  "key": "created_month",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created within this month"
+                },
+                {
+                  "key": "created_year",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created within this year"
+                },
+                {
+                  "key": "term_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with annotations using this controlled term ID"
+                },
+                {
+                  "key": "term_value_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with annotations using this controlled value ID. Must be combined with the `term_id` parameter"
+                },
+                {
+                  "key": "without_term_value_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations with annotations using this controlled value ID. Must be combined with the `term_id` parameter"
+                },
+                {
+                  "key": "term_id_or_unknown",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with annotations using this controlled term ID and associated term value IDs, or be missing annotations using this controlled term ID. Must be combined with the `term_value_id` or `without_term_value_id` parameters"
+                },
+                {
+                  "key": "annotation_user_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with an annotation created by this user"
+                },
+                {
+                  "key": "acc_above",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with a positional accuracy above this value (meters)"
+                },
+                {
+                  "key": "acc_below",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with a positional accuracy below this value (meters)"
+                },
+                {
+                  "key": "acc_below_or_unknown",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with a positional accuracy below this value (in meters) or with an unknown positional accuracy"
+                },
+                {
+                  "key": "d1",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed on or after this date/time"
+                },
+                {
+                  "key": "d2",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed on or before this date/time"
+                },
+                {
+                  "key": "created_d1",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created on or after this date/time"
+                },
+                {
+                  "key": "created_d2",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created on or before this date/time"
+                },
+                {
+                  "key": "created_on",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created on this date"
+                },
+                {
+                  "key": "observed_on",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed on this date"
+                },
+                {
+                  "key": "unobserved_by_user_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations of taxa previously observed by this user"
+                },
+                {
+                  "key": "apply_project_rules_for",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations that match the rules of the project with this ID or slug"
+                },
+                {
+                  "key": "observation_accuracy_experiment_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations included in this observation accuracy experiment"
+                },
+                {
+                  "key": "cs",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa that have this conservation status code. If the `place_id` parameter is also specified, this will only consider statuses specific to that place"
+                },
+                {
+                  "key": "csa",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa that have a conservation status from this authority. If the `place_id` parameter is also specified, this will only consider statuses specific to that place"
+                },
+                {
+                  "key": "csi",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa that have this IUCN conservation status. If the `place_id` parameter is also specified, this will only consider statuses specific to that place (LC | NT | VU | EN | CR | EW | EX)"
+                },
+                {
+                  "key": "geoprivacy",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this geoprivacy setting (obscured | obscured_private | open | private)"
+                },
+                {
+                  "key": "taxon_geoprivacy",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where this is the most conservative geoprivacy applied by a conservation status associated with one of the taxa proposed in the current identifications (obscured | obscured_private | open | private)"
+                },
+                {
+                  "key": "obscuration",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where `geoprivacy` or `taxon_geoprivacy` match these values (obscured | private | none)"
+                },
+                {
+                  "key": "hrank",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa with this rank or lower"
+                },
+                {
+                  "key": "lrank",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa with this rank or higher"
+                },
+                {
+                  "key": "iconic_taxa",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa within this iconic taxon"
+                },
+                {
+                  "key": "id_above",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with an ID above this value"
+                },
+                {
+                  "key": "id_below",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with an ID below this value"
+                },
+                {
+                  "key": "identifications",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations based on level of agreement among identifications:\n\n* **most_agree:** includes observations where there are more active identifications of taxa that agree with the Observation Taxon than active identifications that disagree with the Observation Taxon\n* **some_agree:** includes observations where there are some active identifications of taxa that agree with the Observation Taxon\n* **most_disagree:** includes observations where there are more active identifications of taxa that disagree with the Observation Taxon than active identifications that agree with the Observation Taxon (most_agree | most_disagree | some_agree)"
+                },
+                {
+                  "key": "disagreements",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where there is disagreement among active identifications (true | false)"
+                },
+                {
+                  "key": "lat",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a {`radius`} kilometer circle around the specified `lat`/`lng` parameters"
+                },
+                {
+                  "key": "lng",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a {`radius`} kilometer circle around the specified `lat`/`lng` parameters"
+                },
+                {
+                  "key": "radius",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a {`radius`} kilometer circle around the specified `lat`/`lng` parameters"
+                },
+                {
+                  "key": "nelat",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a bounding box specified by the `nelat`, `nelng`, `swlat`, and `swlng` parameters"
+                },
+                {
+                  "key": "nelng",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a bounding box specified by the `nelat`, `nelng`, `swlat`, and `swlng` parameters"
+                },
+                {
+                  "key": "swlat",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a bounding box specified by the `nelat`, `nelng`, `swlat`, and `swlng` parameters"
+                },
+                {
+                  "key": "swlng",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a bounding box specified by the `nelat`, `nelng`, `swlat`, and `swlng` parameters"
+                },
+                {
+                  "key": "list_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa in a list with this ID"
+                },
+                {
+                  "key": "not_in_project",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations added to the project this ID or slug"
+                },
+                {
+                  "key": "not_matching_project_rules_for",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations that match the rules of the project with this ID or slug"
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with a description, tags, or place_guess matching this query. Can be combined with `search_on`"
+                },
+                {
+                  "key": "search_on",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where any of these properties match the value of the `q` parameter (names | tags | description | place | taxon_page_obs_photos)"
+                },
+                {
+                  "key": "quality_grade",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this quality grade (casual | needs_id | research)"
+                },
+                {
+                  "key": "not_casual_excluding_captive",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations that are casual for any reason other than being marked captive (true | false)"
+                },
+                {
+                  "key": "without_field",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations with this observation field"
+                },
+                {
+                  "key": "outlink_source",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with outlinks from this source"
+                },
+                {
+                  "key": "updated_since",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations updated since this time"
+                },
+                {
+                  "key": "viewer_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Must be combined with the `reviewed` parameter"
+                },
+                {
+                  "key": "reviewed",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations reviewed by the user with ID matching the value of the `viewer_id` parameter (true | false)"
+                },
+                {
+                  "key": "expected_nearby",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations expected to occur nearby their location according to the latest iNaturalist Geomodel (true | false)"
+                },
+                {
+                  "key": "fails_dqa_accurate",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not accurately depicting an organism or scene (true | false)"
+                },
+                {
+                  "key": "fails_dqa_date",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not having an accurate date (true | false)"
+                },
+                {
+                  "key": "fails_dqa_evidence",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not evidence of an organism (true | false)"
+                },
+                {
+                  "key": "fails_dqa_location",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not having an accurate location (true | false)"
+                },
+                {
+                  "key": "fails_dqa_needs_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as the community ID cannot be improved (true | false)"
+                },
+                {
+                  "key": "fails_dqa_recent",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not recent evidence of an organism (true | false)"
+                },
+                {
+                  "key": "fails_dqa_subject",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not having evidence related to a single subject (true | false)"
+                },
+                {
+                  "key": "fails_dqa_wild",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not wild (true | false)"
+                },
+                {
+                  "key": "user_after",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created by users created after a date. Accepts dates with or without times, e.g. 2025-01-01, as well as relative day, month, or year, e.g. 10d, 2w, 1y"
+                },
+                {
+                  "key": "user_before",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created by users created before a date. Accepts dates with or without times, e.g. 2025-01-01, as well as relative day, month, or year, e.g. 10d, 2w, 1y"
+                },
+                {
+                  "key": "locale",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Returned taxon common names will be from this locale"
+                },
+                {
+                  "key": "preferred_place_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Returned taxon common names will prioritize common names from this place"
+                },
+                {
+                  "key": "ttl",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Set the `Cache-Control` HTTP header with this value as `max-age`, in seconds. This means subsequent identical requests may be cached on  iNaturalist servers, and commonly within web browsers"
+                },
+                {
+                  "key": "page",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Pagination `page` number"
+                },
+                {
+                  "key": "per_page",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Number of results to return in a `page`"
+                },
+                {
+                  "key": "order",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Sort order (desc | asc)"
+                },
+                {
+                  "key": "order_by",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Attribute to sort on (created_at | geo_score | id | observed_on | random | species_guess | updated_at | votes)"
+                },
+                {
+                  "key": "only_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this ID (true | false)"
+                }
+              ]
+            },
+            "description": "`GET /v2/observations/taxa` — openapi/paths/v2/observations/taxa.js\ndelegates directly to v1 `ObservationsController.taxa` (no v2 wrapper method).\n\nDocumented params = openapi/schema/request/observations_taxa.js, which is\nobservations_search with `user_id` made REQUIRED.\n\n- `x-default-ttl: 300`.\n- Response schema `ResultsObservationsTaxa` is `unknown( false )` — only\n  `total_results`, `page`, `per_page`, `results[{ taxon_id, count }]`.\n- Send `fields` or the response comes back sparse.\n- NOT paginated (see the v1 request)."
+          },
+          "response": []
+        },
+        {
+          "name": "GET Observations Taxonomy",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/observations/taxonomy?user_id=383144&fields=all",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "observations",
+                "taxonomy"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "383144",
+                  "description": "Include observations observed by users that have this ID or login"
+                },
+                {
+                  "key": "fields",
+                  "value": "all",
+                  "description": "Attribute fields to return in the response"
+                },
+                {
+                  "key": "acc",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by whether `positional_accuracy` is set or not (true | false)"
+                },
+                {
+                  "key": "captive",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by captive / cultivated status (true | false)"
+                },
+                {
+                  "key": "endemic",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by whether the observation is in a place with a check list entry indicating the establishment means is `endemic` (true | false)"
+                },
+                {
+                  "key": "geo",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations that are georeferenced (true | false)"
+                },
+                {
+                  "key": "id_please",
+                  "value": "",
+                  "disabled": true,
+                  "description": "(true | false)"
+                },
+                {
+                  "key": "identified",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations that have community identifications (true | false)"
+                },
+                {
+                  "key": "introduced",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations of taxa that are introduced in their location (true | false)"
+                },
+                {
+                  "key": "mappable",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations that show on map tiles (true | false)"
+                },
+                {
+                  "key": "native",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations of taxa that are native to their location (true | false)"
+                },
+                {
+                  "key": "out_of_range",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations of taxa that outside their known ranges (true | false)"
+                },
+                {
+                  "key": "pcid",
+                  "value": "",
+                  "disabled": true,
+                  "description": "(true | false)"
+                },
+                {
+                  "key": "photos",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations with photos (true | false)"
+                },
+                {
+                  "key": "popular",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations that have been favorited by at least one user (true | false)"
+                },
+                {
+                  "key": "sounds",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations with sounds (true | false)"
+                },
+                {
+                  "key": "taxon_is_active",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations of active taxa (true | false)"
+                },
+                {
+                  "key": "threatened",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by whether the observed taxon has a conservation status of \"threatened\" or worse (true | false)"
+                },
+                {
+                  "key": "verifiable",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by whether observations are 'verifiable' (i.e. have quality grades `research` or `needs_id`) (true | false)"
+                },
+                {
+                  "key": "id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this ID"
+                },
+                {
+                  "key": "not_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations with this ID"
+                },
+                {
+                  "key": "license",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this license (cc-by | cc-by-nc | cc-by-nd | cc-by-sa | cc-by-nc-nd | cc-by-nc-sa | cc0)"
+                },
+                {
+                  "key": "photo_license",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with least one photo with this license (cc-by | cc-by-nc | cc-by-nd | cc-by-sa | cc-by-nc-nd | cc-by-nc-sa | cc0)"
+                },
+                {
+                  "key": "licensed",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where the license attribute is not null, i.e. it is licensed (true | false)"
+                },
+                {
+                  "key": "photo_licensed",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with at least one photo with a license attribute that is not null (true | false)"
+                },
+                {
+                  "key": "place_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within the place with this ID"
+                },
+                {
+                  "key": "project_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations added to the project with this ID or slug"
+                },
+                {
+                  "key": "coords_viewable_for_proj",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observers who trust the project(s) specified in `project_id` OR trust the authenticated viewer (true | false)"
+                },
+                {
+                  "key": "rank",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa with this rank"
+                },
+                {
+                  "key": "site_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations affiliated with the iNaturalist network website with this ID"
+                },
+                {
+                  "key": "sound_license",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations that have at least one sound with this license (cc-by | cc-by-nc | cc-by-nd | cc-by-sa | cc-by-nc-nd | cc-by-nc-sa | cc0)"
+                },
+                {
+                  "key": "taxon_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of this taxon and its descendants"
+                },
+                {
+                  "key": "without_taxon_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations of this taxon and its descendants"
+                },
+                {
+                  "key": "taxon_name",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa that have a scientific or common name matching this string"
+                },
+                {
+                  "key": "user_login",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed by users that have this login"
+                },
+                {
+                  "key": "hour",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within this hour of the day"
+                },
+                {
+                  "key": "day",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within this day of the month"
+                },
+                {
+                  "key": "month",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within this month"
+                },
+                {
+                  "key": "year",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed within this year"
+                },
+                {
+                  "key": "created_day",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created within this day of the month"
+                },
+                {
+                  "key": "created_month",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created within this month"
+                },
+                {
+                  "key": "created_year",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created within this year"
+                },
+                {
+                  "key": "term_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with annotations using this controlled term ID"
+                },
+                {
+                  "key": "term_value_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with annotations using this controlled value ID. Must be combined with the `term_id` parameter"
+                },
+                {
+                  "key": "without_term_value_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations with annotations using this controlled value ID. Must be combined with the `term_id` parameter"
+                },
+                {
+                  "key": "term_id_or_unknown",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with annotations using this controlled term ID and associated term value IDs, or be missing annotations using this controlled term ID. Must be combined with the `term_value_id` or `without_term_value_id` parameters"
+                },
+                {
+                  "key": "annotation_user_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with an annotation created by this user"
+                },
+                {
+                  "key": "acc_above",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with a positional accuracy above this value (meters)"
+                },
+                {
+                  "key": "acc_below",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with a positional accuracy below this value (meters)"
+                },
+                {
+                  "key": "acc_below_or_unknown",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with a positional accuracy below this value (in meters) or with an unknown positional accuracy"
+                },
+                {
+                  "key": "d1",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed on or after this date/time"
+                },
+                {
+                  "key": "d2",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed on or before this date/time"
+                },
+                {
+                  "key": "created_d1",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created on or after this date/time"
+                },
+                {
+                  "key": "created_d2",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created on or before this date/time"
+                },
+                {
+                  "key": "created_on",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created on this date"
+                },
+                {
+                  "key": "observed_on",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations observed on this date"
+                },
+                {
+                  "key": "unobserved_by_user_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations of taxa previously observed by this user"
+                },
+                {
+                  "key": "apply_project_rules_for",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations that match the rules of the project with this ID or slug"
+                },
+                {
+                  "key": "observation_accuracy_experiment_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations included in this observation accuracy experiment"
+                },
+                {
+                  "key": "cs",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa that have this conservation status code. If the `place_id` parameter is also specified, this will only consider statuses specific to that place"
+                },
+                {
+                  "key": "csa",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa that have a conservation status from this authority. If the `place_id` parameter is also specified, this will only consider statuses specific to that place"
+                },
+                {
+                  "key": "csi",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa that have this IUCN conservation status. If the `place_id` parameter is also specified, this will only consider statuses specific to that place (LC | NT | VU | EN | CR | EW | EX)"
+                },
+                {
+                  "key": "geoprivacy",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this geoprivacy setting (obscured | obscured_private | open | private)"
+                },
+                {
+                  "key": "taxon_geoprivacy",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where this is the most conservative geoprivacy applied by a conservation status associated with one of the taxa proposed in the current identifications (obscured | obscured_private | open | private)"
+                },
+                {
+                  "key": "obscuration",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where `geoprivacy` or `taxon_geoprivacy` match these values (obscured | private | none)"
+                },
+                {
+                  "key": "hrank",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa with this rank or lower"
+                },
+                {
+                  "key": "lrank",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa with this rank or higher"
+                },
+                {
+                  "key": "iconic_taxa",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa within this iconic taxon"
+                },
+                {
+                  "key": "id_above",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with an ID above this value"
+                },
+                {
+                  "key": "id_below",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with an ID below this value"
+                },
+                {
+                  "key": "identifications",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations based on level of agreement among identifications:\n\n* **most_agree:** includes observations where there are more active identifications of taxa that agree with the Observation Taxon than active identifications that disagree with the Observation Taxon\n* **some_agree:** includes observations where there are some active identifications of taxa that agree with the Observation Taxon\n* **most_disagree:** includes observations where there are more active identifications of taxa that disagree with the Observation Taxon than active identifications that agree with the Observation Taxon (most_agree | most_disagree | some_agree)"
+                },
+                {
+                  "key": "disagreements",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where there is disagreement among active identifications (true | false)"
+                },
+                {
+                  "key": "lat",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a {`radius`} kilometer circle around the specified `lat`/`lng` parameters"
+                },
+                {
+                  "key": "lng",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a {`radius`} kilometer circle around the specified `lat`/`lng` parameters"
+                },
+                {
+                  "key": "radius",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a {`radius`} kilometer circle around the specified `lat`/`lng` parameters"
+                },
+                {
+                  "key": "nelat",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a bounding box specified by the `nelat`, `nelng`, `swlat`, and `swlng` parameters"
+                },
+                {
+                  "key": "nelng",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a bounding box specified by the `nelat`, `nelng`, `swlat`, and `swlng` parameters"
+                },
+                {
+                  "key": "swlat",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a bounding box specified by the `nelat`, `nelng`, `swlat`, and `swlng` parameters"
+                },
+                {
+                  "key": "swlng",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations within a bounding box specified by the `nelat`, `nelng`, `swlat`, and `swlng` parameters"
+                },
+                {
+                  "key": "list_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations of taxa in a list with this ID"
+                },
+                {
+                  "key": "not_in_project",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations added to the project this ID or slug"
+                },
+                {
+                  "key": "not_matching_project_rules_for",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations that match the rules of the project with this ID or slug"
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with a description, tags, or place_guess matching this query. Can be combined with `search_on`"
+                },
+                {
+                  "key": "search_on",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations where any of these properties match the value of the `q` parameter (names | tags | description | place | taxon_page_obs_photos)"
+                },
+                {
+                  "key": "quality_grade",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this quality grade (casual | needs_id | research)"
+                },
+                {
+                  "key": "not_casual_excluding_captive",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations that are casual for any reason other than being marked captive (true | false)"
+                },
+                {
+                  "key": "without_field",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exclude observations with this observation field"
+                },
+                {
+                  "key": "outlink_source",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with outlinks from this source"
+                },
+                {
+                  "key": "updated_since",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations updated since this time"
+                },
+                {
+                  "key": "viewer_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Must be combined with the `reviewed` parameter"
+                },
+                {
+                  "key": "reviewed",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations reviewed by the user with ID matching the value of the `viewer_id` parameter (true | false)"
+                },
+                {
+                  "key": "expected_nearby",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations expected to occur nearby their location according to the latest iNaturalist Geomodel (true | false)"
+                },
+                {
+                  "key": "fails_dqa_accurate",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not accurately depicting an organism or scene (true | false)"
+                },
+                {
+                  "key": "fails_dqa_date",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not having an accurate date (true | false)"
+                },
+                {
+                  "key": "fails_dqa_evidence",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not evidence of an organism (true | false)"
+                },
+                {
+                  "key": "fails_dqa_location",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not having an accurate location (true | false)"
+                },
+                {
+                  "key": "fails_dqa_needs_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as the community ID cannot be improved (true | false)"
+                },
+                {
+                  "key": "fails_dqa_recent",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not recent evidence of an organism (true | false)"
+                },
+                {
+                  "key": "fails_dqa_subject",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not having evidence related to a single subject (true | false)"
+                },
+                {
+                  "key": "fails_dqa_wild",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter by observations voted as not wild (true | false)"
+                },
+                {
+                  "key": "user_after",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created by users created after a date. Accepts dates with or without times, e.g. 2025-01-01, as well as relative day, month, or year, e.g. 10d, 2w, 1y"
+                },
+                {
+                  "key": "user_before",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations created by users created before a date. Accepts dates with or without times, e.g. 2025-01-01, as well as relative day, month, or year, e.g. 10d, 2w, 1y"
+                },
+                {
+                  "key": "locale",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Returned taxon common names will be from this locale"
+                },
+                {
+                  "key": "preferred_place_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Returned taxon common names will prioritize common names from this place"
+                },
+                {
+                  "key": "ttl",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Set the `Cache-Control` HTTP header with this value as `max-age`, in seconds. This means subsequent identical requests may be cached on  iNaturalist servers, and commonly within web browsers"
+                },
+                {
+                  "key": "page",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Pagination `page` number"
+                },
+                {
+                  "key": "per_page",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Number of results to return in a `page`"
+                },
+                {
+                  "key": "order",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Sort order (desc | asc)"
+                },
+                {
+                  "key": "order_by",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Attribute to sort on (created_at | geo_score | id | observed_on | random | species_guess | updated_at | votes)"
+                },
+                {
+                  "key": "only_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Include observations with this ID (true | false)"
+                }
+              ]
+            },
+            "description": "`GET /v2/observations/taxonomy` — openapi/paths/v2/observations/taxonomy.js\ncalls v2 `ObservationsController.taxonomy`, which wraps v1 and re-shapes the envelope to\n`{ page: 1, per_page: results.length, total_results: results.length, count_without_taxon, results }`\n(the v1 `size` key is dropped).\n\n- Documented params = the full observations_search schema; nothing is required.\n- `x-default-ttl: 300` and **`x-unpublished: true`** — this endpoint is deliberately\n  hidden from the published API docs.\n- Response schema `ResultsObservationsTaxonomy` is `unknown( false )`; each result is\n  limited to id, name, rank, rank_level, is_active, iconic_taxon_name, parent_id,\n  descendant_obs_count, direct_obs_count.\n- NOT paginated."
+          },
+          "response": []
+        },
+        {
+          "name": "GET Taxa Lifelist Metadata",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/taxa/lifelist_metadata?observed_by_user_id=383144&locale=en&fields=all",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "taxa",
+                "lifelist_metadata"
+              ],
+              "query": [
+                {
+                  "key": "observed_by_user_id",
+                  "value": "383144"
+                },
+                {
+                  "key": "locale",
+                  "value": "en"
+                },
+                {
+                  "key": "fields",
+                  "value": "all"
+                },
+                {
+                  "key": "preferred_place_id",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "`GET /v2/taxa/lifelist_metadata` — openapi/paths/v2/taxa/lifelist_metadata.js\ncalls v2 `TaxaController.lifelistMetadata`, which wraps v1 and adds the envelope\n`{ page: 1, per_page: results.length, total_results: results.length, results }`.\n\n- Documented params = openapi/schema/request/taxa_lifelist_metadata.js — a small,\n  hand-written schema: `observed_by_user_id` (required, integer OR string login),\n  `locale`, `preferred_place_id`, `fields`. This is the whole set; unlike the\n  observations endpoints it does NOT accept the search schema.\n- `x-default-ttl: 300`.\n- Response schema `ResultsTaxaLifelistMetadata` is `unknown( false )` — results are\n  limited to id, name, default_photo.medium_url, preferred_common_name.\n- NOT paginated."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
