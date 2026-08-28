@@ -5,6 +5,8 @@ const {
   INAT_DB_USER,
   INAT_DB_PASS,
   INAT_ES_HOST,
+  INAT_QDRANT_URL,
+  INAT_QDRANT_API_KEY,
   INAT_REDIS_HOST,
   INAT_RAILS_URL
 } = process.env;
@@ -30,6 +32,10 @@ module.exports = {
     srid: 4326,
     password: INAT_DB_PASS || "inaturalist",
     ssl: false
+  },
+  qdrant: {
+    url: INAT_QDRANT_URL || "http://localhost:6333",
+    apiKey: INAT_QDRANT_API_KEY || "1234567890"
   },
   tileSize: 512,
   debug: NODE_DEBUG || false,
