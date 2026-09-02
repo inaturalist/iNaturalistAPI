@@ -24,6 +24,7 @@
     "@joi/date": "^2.1.1",
     "@mapbox/sphericalmercator": "^1.2.0",
     "@mapnik/mapnik": "~4.7.8",
+    "@qdrant/js-client-rest": "^1.19.0",
     "body-parser": "^2.2.2",
     "carto": "github:inaturalist/carto#ef94bc39ff785417a22a49133adb8155830bb099",
     "chalk": "^4.1.2",

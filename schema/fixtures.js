@@ -3972,6 +3972,54 @@
         "rank": "genus",
         "rank_level": 20,
         "is_active": true
+      },
+      {
+        "id": 1002,
+        "name": "Chordata",
+        "rank": "phylum",
+        "rank_level": 60,
+        "ancestry": "103",
+        "is_active": true
+      },
+      {
+        "id": 1003,
+        "name": "Mammalia",
+        "rank": "class",
+        "rank_level": 50,
+        "ancestry": "103/1002",
+        "is_active": true
+      },
+      {
+        "id": 1004,
+        "name": "Primates",
+        "rank": "order",
+        "rank_level": 40,
+        "ancestry": "103/1002/1003",
+        "is_active": true
+      },
+      {
+        "id": 1005,
+        "name": "Hominidae",
+        "rank": "family",
+        "rank_level": 30,
+        "ancestry": "103/1002/1003/1004",
+        "is_active": true
+      },
+      {
+        "id": 1006,
+        "name": "Homo",
+        "rank": "genus",
+        "rank_level": 20,
+        "ancestry": "103/1002/1003/1004/1005",
+        "is_active": true
+      },
+      {
+        "id": 1007,
+        "name": "Homo sapiens",
+        "rank": "species",
+        "rank_level": 10,
+        "ancestry": "103/1002/1003/1004/1005/1006",
+        "is_active": true
       }
     ],
     "taxon_ranges": [
