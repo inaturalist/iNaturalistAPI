@@ -134,4 +134,40 @@ describe( "Logstasher", ( ) => {
       expect( payload["@timestamp"] ).to.not.be.undefined;
     } );
   } );
+  describe( "writeFeatureFlagsUpstreamErrorLog", ( ) => {
+    afterEach( ( ) => {
+      sinon.restore( );
+    } );
+
+    it( "does nothing when the log stream is not set", ( ) => {
+      sinon.stub( Logstasher, "logWriteStream" ).returns( undefined );
+      expect( ( ) => Logstasher.writeFeatureFlagsUpstreamErrorLog( new Error( "boom" ) ) )
+        .not.to.throw( );
+    } );
+
+    it( "writes a JSON line with the upstream status", ( ) => {
+      const written = [];
+      sinon.stub( Logstasher, "logWriteStream" ).returns( {
+        write: line => written.push( line )
+      } );
+      const err = new Error( "Internal Server Error" );
+      err.response = { status: 503 };
+      Logstasher.writeFeatureFlagsUpstreamErrorLog( err );
+      expect( written.length ).to.eq( 1 );
+      const payload = JSON.parse( written[0] );
+      expect( payload.subtype ).to.eq( "FeatureFlagsUpstreamError" );
+      expect( payload.status ).to.eq( 503 );
+      expect( payload.message ).to.eq( "Internal Server Error" );
+      expect( payload["@timestamp"] ).to.not.be.undefined;
+    } );
+
+    it( "defaults to status 500 for network errors", ( ) => {
+      const written = [];
+      sinon.stub( Logstasher, "logWriteStream" ).returns( {
+        write: line => written.push( line )
+      } );
+      Logstasher.writeFeatureFlagsUpstreamErrorLog( new Error( "fetch failed" ) );
+      expect( JSON.parse( written[0] ).status ).to.eq( 500 );
+    } );
+  } );
 } );
