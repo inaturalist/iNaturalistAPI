@@ -9,7 +9,7 @@ const {
   INAT_DB_PASS,
   INAT_ES_HOST,
   INAT_QDRANT_URL,
-  INAT_QDRANT_API_KEY,
+  INAT_QDRANT_READ_ONLY_API_KEY,
   INAT_REDIS_HOST,
   INAT_API_URL,
   INAT_RAILS_URL,
@@ -52,7 +52,7 @@ module.exports = {
   },
   qdrant: {
     url: INAT_QDRANT_URL || "http://localhost:6333",
-    apiKey: INAT_QDRANT_API_KEY || "1234567890"
+    apiKey: INAT_QDRANT_READ_ONLY_API_KEY || "1234567890"
   },
   staticImagePrefix: INAT_STATIC_IMAGE_URL || "http://localhost:3000/attachments/",
   websiteURL: INAT_RAILS_URL ? `${INAT_RAILS_URL}/` : "http://localhost:3000/",
