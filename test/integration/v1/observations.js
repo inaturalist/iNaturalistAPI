@@ -855,6 +855,14 @@ describe( "Observations", ( ) => {
         } ).expect( 200, done );
     } );
 
+    it( "does not accept filter parameters", function ( done ) {
+      const observationCount = fixtures.elasticsearch.observations.observation.length;
+      request( this.app ).get( "/v1/observations?filters[0][term][id]=1" )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( observationCount );
+        } ).expect( 200, done );
+    } );
+
     it( "should error with internal server error as result window is too large for elastic search", function ( done ) {
       request( this.app )
         .get( "/v1/observations?page=700" )
@@ -1488,10 +1496,10 @@ describe( "Observations", ( ) => {
       sandbox.spy( ESModel, "elasticResults" );
       request( this.app ).get( "/v1/observations/iconic_taxa_counts" ).expect( ( ) => {
         const call = _.find( ESModel.elasticResults.getCalls( ), c => (
-          c.args[0].query && c.args[0].query.aggs && c.args[0].query.aggs.iconic_taxa
+          c.args[0].inat && c.args[0].inat.aggregations && c.args[0].inat.aggregations.iconic_taxa
         ) );
         expect( call ).to.not.be.undefined;
-        const iconicTaxaTerms = call.args[0].query.aggs.iconic_taxa.terms;
+        const iconicTaxaTerms = call.args[0].inat.aggregations.iconic_taxa.terms;
         expect( iconicTaxaTerms.field ).to.eq( "taxon.iconic_taxon_id" );
         expect( iconicTaxaTerms.size ).to.be.at.least( Taxon.ICONIC_TAXON_NAMES.length + 1 );
       } ).expect( "Content-Type", /json/ )
@@ -1512,10 +1520,10 @@ describe( "Observations", ( ) => {
       sandbox.spy( ESModel, "elasticResults" );
       request( this.app ).get( "/v1/observations/iconic_taxa_species_counts" ).expect( ( ) => {
         const call = _.find( ESModel.elasticResults.getCalls( ), c => (
-          c.args[0].query && c.args[0].query.aggs && c.args[0].query.aggs.iconic_taxa
+          c.args[0].inat && c.args[0].inat.aggregations && c.args[0].inat.aggregations.iconic_taxa
         ) );
         expect( call ).to.not.be.undefined;
-        const iconicTaxaAgg = call.args[0].query.aggs.iconic_taxa;
+        const iconicTaxaAgg = call.args[0].inat.aggregations.iconic_taxa;
         expect( iconicTaxaAgg.terms.field ).to.eq( "taxon.iconic_taxon_id" );
         expect( iconicTaxaAgg.terms.size ).to.be.at.least( Taxon.ICONIC_TAXON_NAMES.length + 1 );
         expect( iconicTaxaAgg.aggs.ancestries ).to.not.be.undefined;

@@ -85,7 +85,7 @@ describe( "IdentificationsController", ( ) => {
 
     it( "filters by without_taxon_id", async ( ) => {
       const q = await Q( { without_taxon_id: 89 } );
-      expect( _.find( q.inverse_filters, f => (
+      expect( _.find( q.inverseFilters, f => (
         f.terms && f.terms["taxon.ancestor_ids.keyword"]
           && f.terms["taxon.ancestor_ids.keyword"][0] === 89
       ) ) ).to.not.be.undefined;
@@ -93,7 +93,7 @@ describe( "IdentificationsController", ( ) => {
 
     it( "filters by without_observation_taxon_id", async ( ) => {
       const q = await Q( { without_observation_taxon_id: 90 } );
-      expect( _.find( q.inverse_filters, f => (
+      expect( _.find( q.inverseFilters, f => (
         f.terms && f.terms["observation.taxon.ancestor_ids.keyword"]
           && f.terms["observation.taxon.ancestor_ids.keyword"][0] === 90
       ) ) ).to.not.be.undefined;
@@ -125,7 +125,7 @@ describe( "IdentificationsController", ( ) => {
 
     it( "filters by not_in_place", async ( ) => {
       const q = await Q( { not_in_place: 89 } );
-      expect( _.find( q.inverse_filters, f => (
+      expect( _.find( q.inverseFilters, f => (
         f.terms && f.terms["observation.place_ids.keyword"]
           && f.terms["observation.place_ids.keyword"][0] === 89
       ) ) ).to.not.be.undefined;
@@ -140,7 +140,7 @@ describe( "IdentificationsController", ( ) => {
 
     it( "filters by booleans false", async ( ) => {
       const q = await Q( { is_change: "false" } );
-      expect( _.find( q.inverse_filters, f => (
+      expect( _.find( q.inverseFilters, f => (
         f.exists && f.exists.field === "taxon_change.id"
       ) ) ).to.not.be.undefined;
     } );

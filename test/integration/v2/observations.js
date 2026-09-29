@@ -594,6 +594,33 @@ describe( "Observations", ( ) => {
         .expect( 200, done );
     } );
 
+    it( "does not accept filter parameters", function ( done ) {
+      const observationCount = fixtures.elasticsearch.observations.observation.length;
+      request( this.app ).get( "/v2/observations?filters[0][term][id]=1" )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( observationCount );
+        } ).expect( 200, done );
+    } );
+
+    it( "does not accept filter parameters with X-HTTP-Method-Override", function ( done ) {
+      const observationCount = fixtures.elasticsearch.observations.observation.length;
+      request( this.app )
+        .post( "/v2/observations" )
+        .set( "Content-Type", "application/json" )
+        .send( {
+          filters: [{
+            term: {
+              id: 1
+            }
+          }]
+        } )
+        .set( "X-HTTP-Method-Override", "GET" )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( observationCount );
+        } )
+        .expect( 200, done );
+    } );
+
     describe( "sandbox", ( ) => {
       const sandbox = sinon.createSandbox( );
 
@@ -610,7 +637,6 @@ describe( "Observations", ( ) => {
         request( this.app ).get( "/v2/observations?lat=1&lng=1&radius=10.1" ).expect( ( ) => {
           expect( ESModel.elasticResults ).to.have.been.calledWith(
             sinon.match.any, {
-              where: undefined,
               filters: [{
                 geo_distance: {
                   distance: "10.1km",
@@ -620,8 +646,8 @@ describe( "Observations", ( ) => {
                   }
                 }
               }],
-              inverse_filters: [],
-              grouped_inverse_filters: [],
+              inverseFilters: [],
+              groupedInverseFilters: [],
               per_page: 30,
               page: 1,
               sort: {
@@ -637,7 +663,6 @@ describe( "Observations", ( ) => {
         request( this.app ).get( "/v2/observations?lat=1&lng=1&radius=0.001" ).expect( ( ) => {
           expect( ESModel.elasticResults ).to.have.been.calledWith(
             sinon.match.any, {
-              where: undefined,
               filters: [{
                 geo_distance: {
                   distance: "0.001km",
@@ -647,8 +672,8 @@ describe( "Observations", ( ) => {
                   }
                 }
               }],
-              inverse_filters: [],
-              grouped_inverse_filters: [],
+              inverseFilters: [],
+              groupedInverseFilters: [],
               per_page: 30,
               page: 1,
               sort: {
@@ -664,7 +689,6 @@ describe( "Observations", ( ) => {
         request( this.app ).get( "/v2/observations?lat=0&lng=0" ).expect( ( ) => {
           expect( ESModel.elasticResults ).to.have.been.calledWith(
             sinon.match.any, {
-              where: undefined,
               filters: [{
                 geo_distance: {
                   distance: "10km",
@@ -674,8 +698,8 @@ describe( "Observations", ( ) => {
                   }
                 }
               }],
-              inverse_filters: [],
-              grouped_inverse_filters: [],
+              inverseFilters: [],
+              groupedInverseFilters: [],
               per_page: 30,
               page: 1,
               sort: {
@@ -714,7 +738,6 @@ describe( "Observations", ( ) => {
           .expect( ( ) => {
             expect( ESModel.elasticResults ).to.have.been.calledWith(
               sinon.match.any, {
-                where: undefined,
                 filters: [{
                   nested: {
                     path: "ofvs",
@@ -729,8 +752,8 @@ describe( "Observations", ( ) => {
                     }
                   }
                 }],
-                inverse_filters: [],
-                grouped_inverse_filters: [],
+                inverseFilters: [],
+                groupedInverseFilters: [],
                 per_page: 30,
                 page: 1,
                 sort: {
@@ -753,7 +776,6 @@ describe( "Observations", ( ) => {
           .expect( ( ) => {
             expect( ESModel.elasticResults ).to.have.been.calledWith(
               sinon.match.any, {
-                where: undefined,
                 filters: [{
                   nested: {
                     path: "ofvs",
@@ -768,8 +790,8 @@ describe( "Observations", ( ) => {
                     }
                   }
                 }],
-                inverse_filters: [],
-                grouped_inverse_filters: [],
+                inverseFilters: [],
+                groupedInverseFilters: [],
                 per_page: 30,
                 page: 1,
                 sort: {
@@ -1107,10 +1129,10 @@ describe( "Observations", ( ) => {
       sandbox.spy( ESModel, "elasticResults" );
       request( this.app ).get( "/v2/observations/iconic_taxa_counts" ).expect( ( ) => {
         const call = _.find( ESModel.elasticResults.getCalls( ), c => (
-          c.args[0].query && c.args[0].query.aggs && c.args[0].query.aggs.iconic_taxa
+          c.args[0].inat && c.args[0].inat.aggregations && c.args[0].inat.aggregations.iconic_taxa
         ) );
         expect( call ).to.not.be.undefined;
-        const iconicTaxaTerms = call.args[0].query.aggs.iconic_taxa.terms;
+        const iconicTaxaTerms = call.args[0].inat.aggregations.iconic_taxa.terms;
         expect( iconicTaxaTerms.field ).to.eq( "taxon.iconic_taxon_id" );
         expect( iconicTaxaTerms.size ).to.be.at.least( Taxon.ICONIC_TAXON_NAMES.length + 1 );
         expect( iconicTaxaTerms.missing ).to.eq( 0 );
