@@ -115,21 +115,21 @@ describe( "ObservationsController", ( ) => {
     it( "can apply inverse project rules", async ( ) => {
       const p = await Project.findByID( 543 );
       const q = await Q( { inat: { not_matching_project_rules_for: p } } );
-      expect( q.grouped_inverse_filters ).to.deep.include( {
+      expect( q.groupedInverseFilters ).to.deep.include( {
         terms: { "place_ids.keyword": [222, 333] }
       } );
-      expect( q.grouped_inverse_filters ).to.deep.include( {
+      expect( q.groupedInverseFilters ).to.deep.include( {
         terms: { "taxon.ancestor_ids.keyword": [444, 555, 876, 987] }
       } );
-      expect( q.grouped_inverse_filters ).to.deep.include( { term: { captive: false } } );
-      expect( q.grouped_inverse_filters ).to.deep.include( {
+      expect( q.groupedInverseFilters ).to.deep.include( { term: { captive: false } } );
+      expect( q.groupedInverseFilters ).to.deep.include( {
         range: { photos_count: { gte: 1 } }
       } );
-      expect( q.grouped_inverse_filters ).to.deep.include( {
+      expect( q.groupedInverseFilters ).to.deep.include( {
         range: { sounds_count: { gte: 1 } }
       } );
-      expect( q.grouped_inverse_filters ).to.deep.include( { exists: { field: "geojson" } } );
-      expect( q.grouped_inverse_filters ).to.deep.include( { exists: { field: "taxon.id" } } );
+      expect( q.groupedInverseFilters ).to.deep.include( { exists: { field: "geojson" } } );
+      expect( q.groupedInverseFilters ).to.deep.include( { exists: { field: "taxon.id" } } );
       // plus a complicated date filter
     } );
 
@@ -303,7 +303,7 @@ describe( "ObservationsController", ( ) => {
           // false values
           qp[filter.http_param] = "false";
           q = await Q( qp );
-          expect( q.inverse_filters ).to.eql( [f] );
+          expect( q.inverseFilters ).to.eql( [f] );
         } else {
           // true values
           qp[filter.http_param] = "true";
@@ -313,7 +313,7 @@ describe( "ObservationsController", ( ) => {
           // false values
           qp[filter.http_param] = "false";
           q = await Q( qp );
-          expect( q.inverse_filters ).to.eql( [f] );
+          expect( q.inverseFilters ).to.eql( [f] );
         }
       };
       await Promise.all( _.map( [
@@ -344,13 +344,13 @@ describe( "ObservationsController", ( ) => {
         qp[`fails_dqa_${metric}`] = "true";
         q = await Q( qp );
         expect( q.filters ).to.eql( nestedFilters );
-        expect( q.inverse_filters ).to.be.empty;
+        expect( q.inverseFilters ).to.be.empty;
 
         // false values
         qp[`fails_dqa_${metric}`] = "false";
         q = await Q( qp );
         expect( q.filters ).to.be.empty;
-        expect( q.inverse_filters ).to.eql( nestedFilters );
+        expect( q.inverseFilters ).to.eql( nestedFilters );
       };
       await Promise.all( _.map( [
         "wild", "location", "date", "evidence", "recent", "subject", "accurate", "needs_id"
@@ -367,7 +367,7 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by verifiable true", async ( ) => {
       const q = await Q( { verifiable: "true" } );
-      expect( q.inverse_filters ).to.eql( [
+      expect( q.inverseFilters ).to.eql( [
         { terms: { quality_grade: ["casual"] } }] );
     } );
 
@@ -469,19 +469,19 @@ describe( "ObservationsController", ( ) => {
     it( "applies no filters with quality_grade=research,needs_id,casual'", async ( ) => {
       const q = await Q( { quality_grade: "research,needs_id,casual" } );
       expect( q.filters ).to.be.empty;
-      expect( q.inverse_filters ).to.be.empty;
+      expect( q.inverseFilters ).to.be.empty;
     } );
 
     it( "applies a more efficient filter for quality_grade=research,needs_id'", async ( ) => {
       const q = await Q( { quality_grade: "research,needs_id" } );
       expect( q.filters ).to.be.empty;
-      expect( q.inverse_filters ).to.eql( [
+      expect( q.inverseFilters ).to.eql( [
         { terms: { quality_grade: ["casual"] } }] );
     } );
 
     it( "filters by not_casual_excluding_captive", async ( ) => {
       const q = await Q( { not_casual_excluding_captive: "true" } );
-      expect( q.inverse_filters ).to.eql( [{
+      expect( q.inverseFilters ).to.eql( [{
         bool: {
           must: [
             { terms: { quality_grade: ["casual"] } },
@@ -649,12 +649,12 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by not_in_project", async ( ) => {
       const q = await Q( { not_in_project: [6, 7] } );
-      expect( q.inverse_filters ).to.eql( [{ terms: { "project_ids.keyword": [6, 7] } }] );
+      expect( q.inverseFilters ).to.eql( [{ terms: { "project_ids.keyword": [6, 7] } }] );
     } );
 
     it( "filters by featured observation", async ( ) => {
       const q = await Q( { featured_observation_id: 8 } );
-      expect( q.inverse_filters ).to.eql( [{ term: { id: 8 } }] );
+      expect( q.inverseFilters ).to.eql( [{ term: { id: 8 } }] );
     } );
 
     it( "filters by updated_since", async ( ) => {
@@ -691,8 +691,8 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by missing observation field", async ( ) => {
       const q = await Q( { without_field: "habitat" } );
-      expect( q.inverse_filters[0].nested.query.bool.filter.length ).to.eql( 1 );
-      expect( q.inverse_filters[0].nested.query.bool.filter[0].terms["ofvs.name"] )
+      expect( q.inverseFilters[0].nested.query.bool.filter.length ).to.eql( 1 );
+      expect( q.inverseFilters[0].nested.query.bool.filter[0].terms["ofvs.name"] )
         .to.deep.eql( ["habitat"] );
     } );
 
@@ -754,7 +754,7 @@ describe( "ObservationsController", ( ) => {
 
     it( "filters by reviewed false", async ( ) => {
       const q = await Q( { reviewed: "false", viewer_id: 21 } );
-      expect( q.inverse_filters ).to.eql( [{ terms: { reviewed_by: [21] } }] );
+      expect( q.inverseFilters ).to.eql( [{ terms: { reviewed_by: [21] } }] );
     } );
 
     it( "ignored bad values for reviewed", async ( ) => {
@@ -805,14 +805,14 @@ describe( "ObservationsController", ( ) => {
       let q = await Q( { licensed: "true" } );
       expect( q.filters ).to.eql( [{ exists: { field: "license_code" } }] );
       q = await Q( { licensed: "false" } );
-      expect( q.inverse_filters ).to.eql( [{ exists: { field: "license_code" } }] );
+      expect( q.inverseFilters ).to.eql( [{ exists: { field: "license_code" } }] );
     } );
 
     it( "filters by photo_licensed", async ( ) => {
       let q = await Q( { photo_licensed: "true" } );
       expect( q.filters ).to.eql( [{ exists: { field: "photo_licenses" } }] );
       q = await Q( { photo_licensed: "false" } );
-      expect( q.inverse_filters ).to.eql( [{ exists: { field: "photo_licenses" } }] );
+      expect( q.inverseFilters ).to.eql( [{ exists: { field: "photo_licenses" } }] );
     } );
 
     it( "filters by expected_nearby", async ( ) => {
@@ -887,6 +887,11 @@ describe( "ObservationsController", ( ) => {
           }
         }
       }] );
+    } );
+
+    it( "does not accept filter parameters", async ( ) => {
+      const q = await Q( { filters: [{ term: { id: 1 } }] } );
+      expect( q.filters ).to.eql( [] );
     } );
 
     //
