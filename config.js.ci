@@ -10,6 +10,10 @@ module.exports = {
     port: 5432,
     geometry_field: "geom"
   },
+  qdrant: {
+    url: "http://localhost:6333",
+    apiKey: "1234567890"
+  },
   websiteURL: "http://localhost:3000/",
   staticImagePrefix: "http://localhost:3000/attachments/",
   userImagePrefix: "/attachments/users/icons/",
