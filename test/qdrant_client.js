@@ -59,6 +59,9 @@ describe( "qdrantClient", ( ) => {
       sinon.stub( qdrantClient, "connection" ).value( null );
       sinon.stub( qdrantClient, "lastConnectCheck" ).value( 0 );
       expect( qdrantClient.connected( ) ).to.be.false;
+      sinon.stub( qdrantClient, "connection" ).value( {
+        query: sinon.stub( ).resolves( { } )
+      } );
 
       await qdrantClient.query( "taxon_photos", { } );
       expect( qdrantClient.connected( ) ).to.be.true;
