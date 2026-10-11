@@ -35,8 +35,8 @@ module.exports = Joi.object( ).keys( {
         + "try to choose a single taxon based on this string, but it may fail if "
         + "there's some taxonomic amgiguity." ),
     tag_list: Joi.string( ),
-    taxon_id: Joi.number( ),
-    taxon_name: Joi.number( ),
+    taxon_id: Joi.number( ).integer( ),
+    taxon_name: Joi.string( ),
     time_zone: Joi.string( )
   } )
 } );
