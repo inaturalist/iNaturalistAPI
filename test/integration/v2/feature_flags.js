@@ -83,7 +83,6 @@ describe( "FeatureFlags", ( ) => {
         .expect( 200, done );
     } );
 
-    // Per-actor payload in a shared cache would expose user A's flags to user B
     it( "ignores the ttl param and never marks the response public", function ( done ) {
       const nockScope = nock( "http://localhost:3000" )
         .get( "/feature_flags" )

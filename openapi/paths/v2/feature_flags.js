@@ -2,8 +2,7 @@ const FeatureFlagsController = require( "../../../lib/controllers/v2/feature_fla
 
 module.exports = sendWrapper => {
   async function GET( req, res ) {
-    // A ttl param would let setCacheControlHeaders mark this per-actor payload
-    // public and shared-cacheable; drop it before it reaches the wrapper or Rails
+    // ttl would make this per-actor response publicly cacheable
     delete req.query.ttl;
     const results = await FeatureFlagsController.index( req );
     res.setHeader( "Cache-Control", "private, max-age=60" );
