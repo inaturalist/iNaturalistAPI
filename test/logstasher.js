@@ -157,7 +157,7 @@ describe( "Logstasher", ( ) => {
       const payload = JSON.parse( written[0] );
       expect( payload.subtype ).to.eq( "FeatureFlagsUpstreamError" );
       expect( payload.status ).to.eq( 503 );
-      expect( payload.message ).to.eq( "Internal Server Error" );
+      expect( payload.error_message ).to.eq( "Internal Server Error" );
       expect( payload["@timestamp"] ).to.not.be.undefined;
     } );
 
