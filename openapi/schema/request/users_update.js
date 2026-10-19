@@ -9,6 +9,24 @@ module.exports = Joi.object( ).keys( {
         is to delete the account.
       ` ),
     description: Joi.string( ).valid( null ),
+    email_suppression_types: Joi
+      .array( ).items(
+        Joi.string( ).valid(
+          "account_emails",
+          "activity",
+          "blocks",
+          "bounces",
+          "donation_emails",
+          "feedback",
+          "invalid_emails",
+          "messages",
+          "news_from_inaturalist",
+          "spam_reports",
+          "transactional_emails",
+          "unsubscribes"
+        )
+      )
+      .description( "List of email suppression types" ),
     faved_project_ids: Joi.array( ).items( Joi.number( ) )
       .description( `
         Ordered list of IDs of projects the user has faved. Order of IDs in
