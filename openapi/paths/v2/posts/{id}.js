@@ -23,7 +23,13 @@ module.exports = sendWrapper => {
           .required( )
           .description( "ID of the record, optionally followed by a slug, e.g. 123-some-title" )
       ),
-      transform( Joi.string( ).label( "fields" ).meta( { in: "query" } ) ),
+      transform(
+        Joi.string( )
+          .label( "fields" )
+          .meta( { in: "query" } )
+          .description( "Attribute fields to return in the response" )
+          .example( "title,user,body" )
+      ),
       transform( Joi.string( ).label( "X-HTTP-Method-Override" ).meta( { in: "header" } ) )
     ],
     responses: {
