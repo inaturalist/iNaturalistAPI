@@ -266,6 +266,16 @@ describe( "Taxa", ( ) => {
         .expect( 200, done );
     } );
 
+    it( "returns only exact matches when exact=true", function ( done ) {
+      request( this.app ).get( "/v1/taxa?q=los&exact=true" )
+        .expect( res => {
+          expect( res.body.total_results ).to.eq( 2 );
+          expect( res.body.results[0].matched_term ).to.eq( "Los" );
+          expect( res.body.results[1].matched_term ).to.eq( "Los" );
+        } ).expect( "Content-Type", /json/ )
+        .expect( 200, done );
+    } );
+
     it( "can return only ids", function ( done ) {
       request( this.app ).get( "/v1/taxa?id=1&only_id=true&per_page=1" )
         .expect( res => {

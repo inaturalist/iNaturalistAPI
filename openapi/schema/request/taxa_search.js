@@ -3,6 +3,7 @@ const Joi = require( "joi" );
 module.exports = Joi.object( ).keys( {
   q: Joi.string( ),
   is_active: Joi.boolean( ).default( true ),
+  exact: Joi.boolean( ),
   iconic: Joi.boolean( ),
   taxon_id: Joi.number( ).integer( ),
   parent_id: Joi.number( ).integer( ),
