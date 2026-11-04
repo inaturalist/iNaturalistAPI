@@ -25,6 +25,12 @@ module.exports = sendWrapper => {
           .description( "A single observation UUID" )
       ),
       transform(
+        Joi.number( ).integer( )
+          .label( "photo_id" )
+          .meta( { in: "query" } )
+          .description( "The photo id associated with the observation to use for suggestions." )
+      ),
+      transform(
         Joi.string( ).label( "fields" ).meta( { in: "query" } )
           .description( `
 Fields are the fields of the nested taxon object in the results, so to specify
