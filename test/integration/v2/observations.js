@@ -873,6 +873,30 @@ describe( "Observations", ( ) => {
           .expect( 200, done );
       } );
     } );
+
+    describe( "order_by=observed_on", ( ) => {
+      // user 2026112301's observations all have the same date, time and
+      // created_at, and are not indexed in id order
+      const tiedObservationIDs = [2026112301, 2026112302, 2026112303];
+
+      it( "breaks ties by id descending by default", function ( done ) {
+        request( this.app ).get(
+          "/v2/observations?user_id=2026112301&order_by=observed_on&fields=id"
+        ).expect( res => {
+          expect( _.map( res.body.results, "id" ) ).to.eql( [...tiedObservationIDs].reverse( ) );
+        } ).expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+
+      it( "breaks ties by id ascending when order=asc", function ( done ) {
+        request( this.app ).get(
+          "/v2/observations?user_id=2026112301&order_by=observed_on&order=asc&fields=id"
+        ).expect( res => {
+          expect( _.map( res.body.results, "id" ) ).to.eql( tiedObservationIDs );
+        } ).expect( "Content-Type", /json/ )
+          .expect( 200, done );
+      } );
+    } );
   } );
 
   describe( "create", ( ) => {
