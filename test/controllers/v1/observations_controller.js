@@ -910,25 +910,35 @@ describe( "ObservationsController", ( ) => {
     it( "sorts by observed_on desc", async ( ) => {
       const q = await Q( { order_by: "observed_on" } );
       expect( q.sort ).to.eql( {
-        created_at: "desc",
         "observed_on_details.date": "desc",
         time_observed_at: {
           missing: "_last",
           order: "desc"
-        }
+        },
+        created_at: "desc",
+        id: "desc"
       } );
+      expect( Object.keys( q.sort ) ).to.eql( [
+        "observed_on_details.date", "time_observed_at", "created_at", "id"
+      ] );
     } );
 
     it( "sorts by observed_on asc", async ( ) => {
       const q = await Q( { order_by: "observed_on", order: "asc" } );
       expect( q.sort ).to.eql( {
-        created_at: "asc",
         "observed_on_details.date": "asc",
         time_observed_at: {
           missing: "_first",
           order: "asc"
-        }
+        },
+        created_at: "asc",
+        id: "asc"
       } );
+      // eql ignores key order, but Elasticsearch applies sort keys in
+      // insertion order, so the id tie-breaker must come last
+      expect( Object.keys( q.sort ) ).to.eql( [
+        "observed_on_details.date", "time_observed_at", "created_at", "id"
+      ] );
     } );
 
     it( "sorts by species_guess", async ( ) => {

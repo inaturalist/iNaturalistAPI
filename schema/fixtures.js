@@ -1440,6 +1440,42 @@
             "ancestor_ids": [1001, 1, 2, 7],
             "min_species_taxon_id": 7
           }
+        },
+        {
+          "id": 2026112302,
+          "uuid": "6f1c941e-8e39-4a85-abe1-b577fde04310",
+          "description": "Ties with the other observations by user 2026112301 on date, time and created_at",
+          "user": { "id": 2026112301 },
+          "created_at": "2018-06-02T12:00:00+00:00",
+          "time_observed_at": "2018-06-01T10:00:00+00:00",
+          "observed_on": "2018-06-01",
+          "observed_on_details": {
+            "date": "2018-06-01"
+          }
+        },
+        {
+          "id": 2026112303,
+          "uuid": "8210e9f8-1317-40f7-8e88-6ce5413078cf",
+          "description": "Ties with the other observations by user 2026112301 on date, time and created_at",
+          "user": { "id": 2026112301 },
+          "created_at": "2018-06-02T12:00:00+00:00",
+          "time_observed_at": "2018-06-01T10:00:00+00:00",
+          "observed_on": "2018-06-01",
+          "observed_on_details": {
+            "date": "2018-06-01"
+          }
+        },
+        {
+          "id": 2026112301,
+          "uuid": "1a7e2e58-d1ff-4735-bbc9-e85179168568",
+          "description": "Ties with the other observations by user 2026112301 on date, time and created_at",
+          "user": { "id": 2026112301 },
+          "created_at": "2018-06-02T12:00:00+00:00",
+          "time_observed_at": "2018-06-01T10:00:00+00:00",
+          "observed_on": "2018-06-01",
+          "observed_on_details": {
+            "date": "2018-06-01"
+          }
         }
       ]
     },
@@ -2251,6 +2287,12 @@
           "id": 2026082501,
           "login": "user2026082501",
           "name": "User2026082501",
+          "suspended": false
+        },
+        {
+          "id": 2026112301,
+          "login": "user2026112301",
+          "name": "User2026112301",
           "suspended": false
         }
       ]
@@ -4225,6 +4267,12 @@
         "login": "user2026082501",
         "name": "User2026082501",
         "created_at": "2026-08-25 00:00:00"
+      },
+      {
+        "id": 2026112301,
+        "login": "user2026112301",
+        "name": "User2026112301",
+        "created_at": "2026-11-23 00:00:00"
       }
     ],
     "user_blocks": [
